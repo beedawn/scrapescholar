@@ -7,9 +7,10 @@ export default function Home() {
   const [results, setResults] = useState('');
   const [inputs, setInputs] = useState(['']);
   const [displayInputs, setDisplayInputs] = useState<string[]>([]);
+  const emptyString = '';
 
   const addInput = () => {
-    setInputs([...inputs, '']);
+    setInputs([...inputs, emptyString]);
   }
   const removeInput = (index: number) => {
     const newInput = inputs.filter((_,input_index)=> input_index !== index)
@@ -32,7 +33,7 @@ export default function Home() {
     const stringFilteredInputs = filteredInputs.join(', ')
     setDisplayInputs([stringFilteredInputs]);
     if (filteredInputs.length ===0)
-      setInputs([''])
+      setInputs([emptyString])
     else
       setInputs([...filteredInputs])
   }
@@ -52,13 +53,13 @@ export default function Home() {
         </form>
       </div>
       <div style={{ maxWidth: "fit-content", padding: "50px", float: "left" }}>
-        {results !== '' && displayInputs[0] !== '' ? (
+        {results !== emptyString && displayInputs[0] !== emptyString ? (
           <>
             <p>You searched {
               displayInputs
             }
             </p>
-          </>): ( results !== '' && <p>Please enter a keyword</p>)}
+          </>): ( results !== emptyString && <p>Please enter a keyword</p>)}
         <div> {results}</div>
 
       </div>
