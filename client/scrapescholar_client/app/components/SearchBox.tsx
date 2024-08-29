@@ -2,7 +2,7 @@ import React from 'react';
 
 interface SearchBoxProps {
   value:string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
   disabled?: boolean;
@@ -17,17 +17,16 @@ const SearchBox: React.FC<SearchBoxProps> =
     className='',
     disabled=false }) => {
   return (
-    <textarea
+    <input
       onChange={onChange}
       className={className}
       value={value}
       disabled={disabled}
-      rows={rows}
       placeholder={placeholder}
       style={{color:'black'}}
     >
      
-    </textarea>
+    </input>
   );
 };
 

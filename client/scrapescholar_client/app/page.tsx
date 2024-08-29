@@ -24,7 +24,8 @@ export default function Home() {
 
   }
 
-  const handleResults = () => {
+  const handleResults = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
     //run off and get results somewhere
     setResults('No results found.');
     const filteredInputs = [...inputs].filter((input)=>{return(input)}).join(', ')
@@ -33,14 +34,16 @@ export default function Home() {
   return (
     <div>
       <div style={{ maxWidth: "20%", padding: "50px", marginRight: "auto", float: "left" }}>
+        <form onSubmit={handleResults}>
         <Button children="+" onClick={addInput} className="m-5" />
-        <Button children="Search" onClick={handleResults} />
+        <Button children="Search" type="submit" />
         {inputs.map((input, index) => {
           return (<div key={index}>
             <SearchBox value={input} onChange={(e) => { handleSearchChange(index, e) }} />
             <Button children="-" onClick={() =>{removeInput(index)} } className="m-1 text-sm"  />
           </div>)
         })}
+        </form>
       </div>
       <div style={{ maxWidth: "80%", padding: "50px", float: "left" }}>
         {results !== '' && (
