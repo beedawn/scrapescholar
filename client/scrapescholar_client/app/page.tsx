@@ -29,7 +29,7 @@ const newInputs = [...inputs];
  
  </div>)
     })}
-    <Button children="+" onClick={addInput}/>
+    <Button children="+" onClick={addInput} className="m-5"/>
     <Button children="Search" onClick={handleResults} />
     <div>
       {results}
