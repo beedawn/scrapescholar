@@ -17,7 +17,7 @@ export default function Home() {
   }
 
 
-  const handleSearchChange = (index: number, e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleSearchChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const newInputs = [...inputs];
     newInputs[index] = e.target.value;
     setInputs(newInputs);
@@ -41,12 +41,12 @@ export default function Home() {
       <div style={{ maxWidth: "25%", padding: "50px", marginRight: "auto", float: "left" }}>
         <h1 className="text-4xl font-bold">ScrapeScholar</h1>
         <form onSubmit={handleResults}>
-        <Button children="+" onClick={addInput} className="m-5" />
-        <Button children="Search" type="submit" />
+        <Button onClick={addInput} className="m-5">+</Button>
+        <Button type="submit" >Search</Button>
         {inputs.map((input, index) => {
           return (<div key={index}>
             <SearchBox value={input} onChange={(e) => { handleSearchChange(index, e) }} />
-            <Button children="-" onClick={() =>{removeInput(index)} } className="m-1 text-sm"  />
+            <Button onClick={() =>{removeInput(index)} } className="m-1 text-sm">-</Button>
           </div>)
         })}
         </form>
