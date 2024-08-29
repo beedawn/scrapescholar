@@ -2,14 +2,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Home from '../app/page'; 
-import {handleSearchChange} from '../app/page';
 import React from 'react';
 
 describe('Home Component', () => {
-  test('renders initial hello world text', () => {
-    render(<Home />);
-    expect(screen.getByText('hello world!')).toBeInTheDocument();
-  });
 
   test('check + button loads', () => {
     render(<Home />);
@@ -35,4 +30,14 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: 'test input' } });
     expect(inputs[0]).toHaveValue('test input');
   });
+
+  test('shows No results found after search press', () =>{
+    render(<Home />);
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+    expect(screen.getByText('No results found.')).toBeInTheDocument()
+
+
+
+  })
 });

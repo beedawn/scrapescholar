@@ -4,11 +4,9 @@ import React, {useState} from 'react';
 import Button from './components/Button';
 import SearchBox from "./components/SearchBox";
 export default function Home() {
-  const [text, setText]= useState('');
+  const [results, setResults]= useState('');
   const [inputs, setInputs]= useState(['']);
   const addInput = () =>{
-    console.log("pizza");
-    console.log(inputs);
       setInputs([...inputs,'']);
   }
 
@@ -16,11 +14,15 @@ export default function Home() {
 const newInputs = [...inputs];
  newInputs[index] =e.target.value;
  setInputs(newInputs);
-console.log(inputs)
+  }
+
+  const handleResults = () =>{
+
+      setResults('No results found.')
+
   }
   return ( 
-    <>
-    <p>hello world!</p>
+    <div style={{maxWidth:"fit-content", padding:"50px", marginLeft:"auto", marginRight:"auto"}}>
     {inputs.map((input, index) =>{
       return(<div  key={index}>
  <SearchBox value={input} onChange={(e)=>{handleSearchChange(index, e)}}/>
@@ -28,7 +30,10 @@ console.log(inputs)
  </div>)
     })}
     <Button children="+" onClick={addInput}/>
-    <Button children="Button" onClick={()=>(console.log(inputs))} />
-    </>
+    <Button children="Search" onClick={handleResults} />
+    <div>
+      {results}
+      </div>
+    </div>
   );
 }
