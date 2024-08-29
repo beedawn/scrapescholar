@@ -28,6 +28,8 @@ describe('Home Component', () => {
 
   test('check - button loads', () => {
     render(<Home />);
+    const addButton = screen.getByText('+');
+    fireEvent.click(addButton)
     //finds - button
     const deleteButton = screen.getByText('-');
     expect(deleteButton).toBeInTheDocument(); 
@@ -69,17 +71,21 @@ describe('Home Component', () => {
   test('removes input when delete button clicked', () => {
     render(<Home />);
     const addButton = screen.getByText('+');
-    const deleteButton = screen.getAllByText('-');
+   
     fireEvent.click(addButton);
+    fireEvent.click(addButton);
+    const deleteButton = screen.getAllByText('-');
     const inputs = screen.getAllByRole('textbox');
     const firstInput = inputs[0]
     const secondInput = inputs[1]
+    const thirdInput = inputs[2]
     const firstDeleteButton = deleteButton[0]
     fireEvent.change(firstInput, { target: { value: testInput } });
     fireEvent.change(secondInput, { target: { value: testInput +' 2' } });
+    fireEvent.change(thirdInput, { target: { value: testInput +' 3' } });
     fireEvent.click(firstDeleteButton);
-    expect(screen.getAllByRole('textbox')).toHaveLength(1); 
-    expect(screen.getAllByRole('textbox')[0]).toHaveValue(testInput +' 2' )
+    expect(screen.getAllByRole('textbox')).toHaveLength(2); 
+    expect(screen.getAllByRole('textbox')[1]).toHaveValue(testInput +' 3' )
   });
 
   test('deletes empty inputs', () => {

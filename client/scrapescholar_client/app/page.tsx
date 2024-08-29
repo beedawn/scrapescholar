@@ -47,7 +47,7 @@ export default function Home() {
         {inputs.map((input, index) => {
           return (<div key={index}>
             <SearchBox value={input} onChange={(e) => { handleSearchChange(index, e) }} />
-            <Button onClick={() =>{removeInput(index)} } className="m-1 text-sm">-</Button>
+            {index !=0 &&<Button onClick={() =>{removeInput(index)} } className="m-1 text-sm">-</Button>}
           </div>)
         })}
         </form>
@@ -61,9 +61,7 @@ export default function Home() {
             </p>
           </>): ( results !== emptyString && <p>Please enter a keyword</p>)}
         <div> {results}</div>
-
       </div>
-
     </div>
   );
 }
