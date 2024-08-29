@@ -17,23 +17,25 @@ const newInputs = [...inputs];
   }
 
   const handleResults = () =>{
-
+    //run off and get results somewhere
       setResults('No results found.')
-
   }
   return ( 
-    <div style={{maxWidth:"fit-content", padding:"50px", marginLeft:"auto", marginRight:"auto"}}>
+    <div>
+    <div style={{maxWidth:"20%", padding:"50px", marginRight:"auto", float:"left"}}>
+        <Button children="+" onClick={addInput} className="m-5"/>
+        <Button children="Search" onClick={handleResults} />
     {inputs.map((input, index) =>{
       return(<div  key={index}>
  <SearchBox value={input} onChange={(e)=>{handleSearchChange(index, e)}}/>
  
  </div>)
     })}
-    <Button children="+" onClick={addInput} className="m-5"/>
-    <Button children="Search" onClick={handleResults} />
-    <div>
+ </div>
+    <div style = {{maxWidth:"80%", padding:"50px", float:"left"}}>
       {results}
       </div>
+   
     </div>
   );
 }
