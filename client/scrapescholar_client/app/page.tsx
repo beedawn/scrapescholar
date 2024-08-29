@@ -20,7 +20,7 @@ console.log(inputs)
   }
   return ( 
     <>
-    <p>hello world !</p>
+    <p>hello world!</p>
     {inputs.map((input, index) =>{
       return(<div >
  <SearchBox key={index} value={input} onChange={(e)=>{handleSearchChange(index, e)}}/>
