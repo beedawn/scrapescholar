@@ -59,7 +59,7 @@ export default function Home() {
               displayInputs
             }
             </p>
-          </>): ( results !== emptyString && <p>Please enter a keyword</p>)}
+          </>): ( results !== emptyString && <p className="bg-red-800 p-2 rounded">Please enter a keyword</p>)}
         <div> {results}</div>
       </div>
     </div>
