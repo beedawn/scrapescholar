@@ -47,7 +47,7 @@ export default function Home() {
         {inputs.map((input, index) => {
           return (<div key={index}>
             <SearchBox value={input} onChange={(e) => { handleSearchChange(index, e) }} className="m-2 px-2 py-2 " />
-            {index !=0 &&<Button onClick={() =>{removeInput(index)} } className="m-1 text-sm">-</Button>}
+            {index !=0 &&<Button onClick={() =>{removeInput(index)} } className="m-1 text-sm bg-red-600">-</Button>}
           </div>)
         })}
         </form>
