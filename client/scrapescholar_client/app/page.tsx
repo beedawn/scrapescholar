@@ -28,12 +28,18 @@ export default function Home() {
     event.preventDefault();
     //run off and get results somewhere
     setResults('No results found.');
-    const filteredInputs = [...inputs].filter((input)=>{return(input)}).join(', ')
-    setDisplayInputs([filteredInputs]);
+    const filteredInputs = [...inputs].filter((input)=>{return(input)})
+    const stringFilteredInputs = filteredInputs.join(', ')
+    setDisplayInputs([stringFilteredInputs]);
+    if (filteredInputs.length ===0)
+      setInputs([''])
+    else
+      setInputs([...filteredInputs])
   }
   return (
     <div>
-      <div style={{ maxWidth: "20%", padding: "50px", marginRight: "auto", float: "left" }}>
+      <div style={{ maxWidth: "25%", padding: "50px", marginRight: "auto", float: "left" }}>
+        <h1 className="text-4xl font-bold">ScrapeScholar</h1>
         <form onSubmit={handleResults}>
         <Button children="+" onClick={addInput} className="m-5" />
         <Button children="Search" type="submit" />
@@ -45,14 +51,14 @@ export default function Home() {
         })}
         </form>
       </div>
-      <div style={{ maxWidth: "80%", padding: "50px", float: "left" }}>
-        {results !== '' && (
+      <div style={{ maxWidth: "fit-content", padding: "50px", float: "left" }}>
+        {results !== '' && displayInputs[0] !== '' ? (
           <>
             <p>You searched {
               displayInputs
             }
             </p>
-          </>)}
+          </>): ( results !== '' && <p>Please enter a keyword</p>)}
         <div> {results}</div>
 
       </div>

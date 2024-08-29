@@ -5,12 +5,19 @@ import Home from '../app/page';
 import React from 'react';
 
 describe('Home Component', () => {
-
+    const testInput = "test input"
   test('check + button loads', () => {
     render(<Home />);
     //finds + button
     const addButton = screen.getByText('+');
     expect(addButton).toBeInTheDocument(); 
+  });
+
+
+  test('check ScrapeScholar heading loads', () => {
+    render(<Home />);
+    //checks how many input boxes there are 
+    expect(screen.getByText('ScrapeScholar')).toBeInTheDocument(); 
   });
 
   test('check SearchBox loads', () => {
@@ -39,8 +46,8 @@ describe('Home Component', () => {
   test('updates input value correctly', () => {
     render(<Home />);
     const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: 'test input' } });
-    expect(inputs[0]).toHaveValue('test input');
+    fireEvent.change(inputs[0], { target: { value: testInput} });
+    expect(inputs[0]).toHaveValue(testInput);
   });
 
   test('shows No results found after search press', () =>{
@@ -53,10 +60,10 @@ describe('Home Component', () => {
   test('shows you searched test input after search press', () =>{
     render(<Home />);
     const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: 'test input' } });
+    fireEvent.change(inputs[0], { target: { value: testInput } });
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-    expect(screen.getByText('You searched test input')).toBeInTheDocument()
+    expect(screen.getByText('You searched '+ testInput)).toBeInTheDocument()
   })
 
   test('removes input when delete button clicked', () => {
@@ -68,10 +75,44 @@ describe('Home Component', () => {
     const firstInput = inputs[0]
     const secondInput = inputs[1]
     const firstDeleteButton = deleteButton[0]
-    fireEvent.change(firstInput, { target: { value: 'test input' } });
-    fireEvent.change(secondInput, { target: { value: 'test input 2' } });
+    fireEvent.change(firstInput, { target: { value: testInput } });
+    fireEvent.change(secondInput, { target: { value: testInput +' 2' } });
     fireEvent.click(firstDeleteButton);
     expect(screen.getAllByRole('textbox')).toHaveLength(1); 
-    expect(screen.getAllByRole('textbox')[0]).toHaveValue('test input 2')
+    expect(screen.getAllByRole('textbox')[0]).toHaveValue(testInput +' 2' )
   });
+
+  test('deletes empty inputs', () => {
+    render(<Home />);
+    const addButton = screen.getByText('+');
+    let i =0;
+    while (i<6){
+    fireEvent.click(addButton);
+    i++}
+    expect(screen.getAllByRole('textbox')).toHaveLength(i+1);
+
+    const inputs = screen.getAllByRole('textbox');
+    const firstInput = inputs[0]
+    const secondInput = inputs[4]
+    fireEvent.change(firstInput, { target: { value: testInput } });
+    fireEvent.change(secondInput, { target: { value: testInput+' 4' } });
+
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+   
+    expect(screen.getAllByRole('textbox')).toHaveLength(2); 
+    expect(screen.getAllByRole('textbox')[0]).toHaveValue(testInput)
+    expect(screen.getAllByRole('textbox')[1]).toHaveValue(testInput+' 4')
+  });
+
+
+  test('blank search prompts to enter a keyword search', () => {
+    render(<Home />);
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+    expect(screen.getByText('Please enter a keyword')).toBeInTheDocument(); 
+ 
+  });
+
+
 });
