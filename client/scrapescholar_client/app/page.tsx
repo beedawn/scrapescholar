@@ -39,7 +39,7 @@ export default function Home() {
   }
   return (
     <div>
-      <div style={{ maxWidth: "25%", padding: "50px", marginRight: "auto", float: "left" }}>
+      <div style={{ maxWidth: "400px", padding: "50px", marginRight: "auto", float: "left" }}>
         <h1 className="text-4xl font-bold">ScrapeScholar</h1>
         <form onSubmit={handleResults}>
         <Button onClick={addInput} className="m-5">+</Button>
