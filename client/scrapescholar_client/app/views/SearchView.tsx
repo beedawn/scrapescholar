@@ -1,10 +1,14 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from 'react';
+import React, { useState, Dispatch,SetStateAction } from 'react';
 import SearchResults from "../components/SearchResults";
 import NavBar from "../components/NavBar";
 
-export default function SearchView() {
+interface SearchViewProps {
+    setLoggedIn:Dispatch<SetStateAction<boolean>>;
+  }
+
+const SearchView : React.FC<SearchViewProps>=({setLoggedIn}) => {
     const [results, setResults] = useState<string>('');
     const [inputs, setInputs] = useState<string[]>(['']);
     const [displayInputs, setDisplayInputs] = useState<string[]>([]);
@@ -37,11 +41,15 @@ export default function SearchView() {
             setInputs([...filteredInputs])
     }
 
+
     return (
         <div>
-                <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs} handleSearchChange={handleSearchChange} removeInput={removeInput} />
+            
+                <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs} 
+                handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn}/>
                 <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} />
             
         </div>
     );
 }
+export default SearchView;
