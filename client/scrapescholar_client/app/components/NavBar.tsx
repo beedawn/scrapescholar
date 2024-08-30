@@ -16,9 +16,6 @@ interface NavBarProps {
     setLoggedIn:Dispatch<SetStateAction<boolean>>;
 }
 
-
-
-
 const NavBar: React.FC<NavBarProps> = ({ children, onClick, className, handleResults,
     addInput, inputs, handleSearchChange, removeInput, setLoggedIn }) => {
 
@@ -31,7 +28,6 @@ const NavBar: React.FC<NavBarProps> = ({ children, onClick, className, handleRes
             <Button onClick={handleLogout} className="">Logout</Button>
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
                 <form onSubmit={handleResults}>
-                    
                     <Button onClick={addInput} className="m-5">+</Button>
                     <Button type="submit" >Search</Button>
                     {inputs.map((input: string, index: number) => {

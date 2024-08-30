@@ -8,9 +8,10 @@ interface SearchResultsProps {
     onClick?: () => void;
     className?: string;
     emptyString?: string;
+    disableD3?:boolean;
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({ children, results, displayInputs, onClick, className, emptyString }) => {
+const SearchResults: React.FC<SearchResultsProps> = ({ children, results, displayInputs, onClick, className, emptyString, disableD3=false }) => {
     return (
         <>
         <div style={{ maxWidth: "fit-content", padding: "50px", float: "left" }}>
@@ -22,7 +23,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ children, results, displa
                     </p>
                     <div> {results}</div>
                     <div>
-                        <LinePlot data={[20, 40, 50, 60]} width={200} height={200} />
+                        {disableD3?(<></>):(<LinePlot data={[20, 40, 50, 60]} width={200} height={200} />)}
                     </div>
                 </>
             ) : (

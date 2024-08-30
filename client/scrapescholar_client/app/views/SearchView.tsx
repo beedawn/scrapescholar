@@ -6,9 +6,10 @@ import NavBar from "../components/NavBar";
 
 interface SearchViewProps {
     setLoggedIn:Dispatch<SetStateAction<boolean>>;
+    disableD3?:boolean;
   }
 
-const SearchView : React.FC<SearchViewProps>=({setLoggedIn}) => {
+const SearchView : React.FC<SearchViewProps>=({setLoggedIn, disableD3=false}) => {
     const [results, setResults] = useState<string>('');
     const [inputs, setInputs] = useState<string[]>(['']);
     const [displayInputs, setDisplayInputs] = useState<string[]>([]);
@@ -17,6 +18,7 @@ const SearchView : React.FC<SearchViewProps>=({setLoggedIn}) => {
     const addInput = () => {
         setInputs([...inputs, emptyString]);
     }
+
     const removeInput = (index: number) => {
         const newInput = inputs.filter((_, input_index) => input_index !== index)
         setInputs([...newInput]);
@@ -41,14 +43,11 @@ const SearchView : React.FC<SearchViewProps>=({setLoggedIn}) => {
             setInputs([...filteredInputs])
     }
 
-
     return (
         <div>
-            
                 <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs} 
                 handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn}/>
-                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} />
-            
+                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} />
         </div>
     );
 }

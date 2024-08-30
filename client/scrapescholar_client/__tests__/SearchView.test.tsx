@@ -5,9 +5,10 @@ import SearchView from '../app/views/SearchView';
 import React from 'react';
 
 describe('Home Component', () => {
+  const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
   test('check + button loads', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     //finds + button
     const addButton = screen.getByText('+');
     expect(addButton).toBeInTheDocument();
@@ -15,19 +16,19 @@ describe('Home Component', () => {
 
 
   test('check ScrapeScholar heading loads', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn} />);
     //checks how many input boxes there are 
     expect(screen.getByText('ScrapeScholar')).toBeInTheDocument();
   });
 
   test('check SearchBox loads', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     //checks how many input boxes there are 
     expect(screen.getAllByRole('textbox')).toHaveLength(1);
   });
 
   test('check - button loads', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const addButton = screen.getByText('+');
     fireEvent.click(addButton)
     //finds - button
@@ -36,7 +37,7 @@ describe('Home Component', () => {
   });
 
   test('adds new input field on "+" button click', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const addButton = screen.getByText('+');
     //clicks + button
     fireEvent.click(addButton);
@@ -46,14 +47,14 @@ describe('Home Component', () => {
   });
 
   test('updates input value correctly', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     expect(inputs[0]).toHaveValue(testInput);
   });
 
   test('shows No results found after search press', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     const searchButton = screen.getByText('Search');
 
     const inputs = screen.getAllByRole('textbox');
@@ -63,7 +64,7 @@ describe('Home Component', () => {
   })
 
   test('shows you searched test input after search press', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     const searchButton = screen.getByText('Search');
@@ -72,7 +73,7 @@ describe('Home Component', () => {
   })
 
   test('removes input when delete button clicked', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const addButton = screen.getByText('+');
 
     fireEvent.click(addButton);
@@ -92,7 +93,7 @@ describe('Home Component', () => {
   });
 
   test('deletes empty inputs', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     const addButton = screen.getByText('+');
     let i = 0;
     while (i < 6) {
@@ -117,7 +118,7 @@ describe('Home Component', () => {
 
 
   test('blank search prompts to enter a keyword search', () => {
-    render(<SearchView />);
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     expect(screen.getByText('Please enter a keyword')).toBeInTheDocument();
