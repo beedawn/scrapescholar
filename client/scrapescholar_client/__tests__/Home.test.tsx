@@ -5,7 +5,6 @@ import Home from '../app/page';
 import React from 'react';
 
 describe('Home Component', () => {
-  const testInput = "test input"
   test('check login button loads', () => {
     render(<Home />);
     //finds + button
@@ -13,7 +12,7 @@ describe('Home Component', () => {
     expect(loginButton).toBeInTheDocument();
   });
 
-  test('adds new input field on "+" button click', () => {
+  test('check login button click works', () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
     //clicks + button
@@ -25,5 +24,32 @@ describe('Home Component', () => {
     //maybe should test there are two + buttons too?
   });
 
+
+  test('check logout button renders in SearchView', () => {
+    render(<Home />);
+    const loginButton = screen.getByText('Login');
+    //clicks + button
+    fireEvent.click(loginButton);
+    //should be 2 inputs now
+    const logoutButton = screen.getByText('Logout');
+
+    expect(logoutButton).toBeInTheDocument();
+
+  });
+
+  test('check logout button works in SearchView', () => {
+    render(<Home />);
+    const loginButton = screen.getByText('Login');
+    //clicks + button
+    fireEvent.click(loginButton);
+    //should be 2 inputs now
+    const logoutButton = screen.getByText('Logout');
+
+    expect(logoutButton).toBeInTheDocument();
+    fireEvent.click(logoutButton);
+    const loginButton2 = screen.getByText('Login');
+    expect(loginButton2).toBeInTheDocument();
+
+  });
 
 });
