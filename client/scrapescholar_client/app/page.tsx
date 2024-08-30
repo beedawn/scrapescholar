@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useState } from 'react';
 import Button from './components/Button';
 import SearchBox from "./components/SearchBox";
+import LinePlot from "./components/d3/LinePlot";
 export default function Home() {
   const [results, setResults] = useState('');
   const [inputs, setInputs] = useState(['']);
@@ -61,6 +62,9 @@ export default function Home() {
             </p>
           </>): ( results !== emptyString && <p className="bg-red-800 p-2 rounded">Please enter a keyword</p>)}
         <div> {results}</div>
+
+
+        <div><LinePlot data={[20,40,50,60]} /></div>
       </div>
     </div>
   );
