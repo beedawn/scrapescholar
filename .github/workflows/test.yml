@@ -16,6 +16,12 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Debug - List root directory contents
+      run: ls -al
+
+    - name: Debug - List client directory contents
+      run: ls -al ./client
+
     - name: Install dependencies
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: npm install
