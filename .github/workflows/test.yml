@@ -15,10 +15,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-
-    - name: Debug - List root directory contents
-      run: ls -al
-
+    
     - name: Debug - List client directory contents
       run: ls -al ./client
 
