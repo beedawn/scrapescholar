@@ -42,7 +42,7 @@ const NavBar: React.FC<NavBarProps> = ({ children, onClick, className, handleRes
                                 }} className="m-1 text-sm bg-red-600">
                                     -
                                 </Button>}<br />
-                                {inputs.length > 1 && index != inputs.length-1 && <DropdownSearchBox value={dropdown[index]} className="p-2" onDropdownChange={(e)=>{handleDropdownChange(index, e.target.value as Dropdown)}}></DropdownSearchBox>}
+                                {inputs.length > 1 && index != inputs.length-1 && inputs[index].length>0 &&<DropdownSearchBox value={dropdown[index]} className="p-2" onDropdownChange={(e)=>{handleDropdownChange(index, e.target.value as Dropdown)}}></DropdownSearchBox>}
                            
                         </div>)
                     })}
