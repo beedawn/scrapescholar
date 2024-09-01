@@ -117,11 +117,27 @@ describe('Home Component', () => {
   });
 
 
-  test('blank search prompts to enter a keyword search', () => {
+  test('2 inputs with text in first field displays and/or dropdown', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     expect(screen.getByText('Please enter a keyword')).toBeInTheDocument();
+
+  });
+
+
+  test('and/or shows in results after search submitted', () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const addButton = screen.getByText('+');
+    fireEvent.click(addButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
+    const andDropdown = screen.getByDisplayValue('AND');
+    expect(andDropdown).toBeInTheDocument();
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+    expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
 
   });
 
