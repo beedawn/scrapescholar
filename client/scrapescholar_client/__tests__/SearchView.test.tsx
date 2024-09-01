@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../app/views/SearchView';
 import React from 'react';
+import Dropdown from '../app/types/DropdownType';
 
 describe('Home Component', () => {
   const mockSetLoggedIn = jest.fn();
@@ -117,11 +118,84 @@ describe('Home Component', () => {
   });
 
 
+
   test('blank search prompts to enter a keyword search', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     expect(screen.getByText('Please enter a keyword')).toBeInTheDocument();
+
+  });
+
+  test('2 inputs with text in first field displays and/or dropdown', () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+    const addButton = screen.getByText('+');
+    fireEvent.click(addButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
+    const andDropdown = screen.getByDisplayValue('AND');
+    expect(andDropdown).toBeInTheDocument();
+
+  });
+
+
+  test('and shows in results after search submitted', () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const addButton = screen.getByText('+');
+    fireEvent.click(addButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
+    const andDropdown = screen.getByDisplayValue('AND');
+    expect(andDropdown).toBeInTheDocument();
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+    expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
+
+  });
+
+
+  test('or shows in results after search submitted', () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const addButton = screen.getByText('+');
+    fireEvent.click(addButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
+    const dropdown = screen.getByDisplayValue('AND');
+
+  
+
+      // Simulate selecting the second option (OR)
+      fireEvent.change(dropdown, { target: { value: Dropdown.OR } });
+  
+    expect(dropdown).toBeInTheDocument();
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+    expect(screen.getByText('You searched ' + testInput+ ' OR '+testInput+' 2')).toBeInTheDocument()
+
+  });
+
+
+  test('not shows in results after search submitted', () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const addButton = screen.getByText('+');
+    fireEvent.click(addButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
+    const dropdown = screen.getByDisplayValue('AND');
+
+  
+
+      // Simulate selecting the second option (OR)
+      fireEvent.change(dropdown, { target: { value: Dropdown.NOT } });
+  
+    expect(dropdown).toBeInTheDocument();
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+    expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()
 
   });
 
