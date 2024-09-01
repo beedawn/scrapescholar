@@ -1,8 +1,8 @@
 import React,  {  Dispatch,SetStateAction } from 'react';
 import Button from './Button';
 import SearchBox from './SearchBox';
-
-
+import DropdownSearchBox from './DropdownSearchBox';
+import Dropdown from '../types/DropdownType';
 interface NavBarProps {
     children?: React.ReactNode;
     onClick?: () => void;
@@ -12,12 +12,14 @@ interface NavBarProps {
     addInput: () => void;
     inputs: string[];
     handleSearchChange: (index: number, event: React<HTMLInputElement>) => void;
+    handleDropdownChange: (index:number, option:Dropdown)=> void;
     removeInput: (index: number) => void;
     setLoggedIn:Dispatch<SetStateAction<boolean>>;
+    dropdown:Dropdown[];
 }
 
 const NavBar: React.FC<NavBarProps> = ({ children, onClick, className, handleResults,
-    addInput, inputs, handleSearchChange, removeInput, setLoggedIn }) => {
+    addInput, inputs, handleSearchChange, removeInput, setLoggedIn, dropdown, handleDropdownChange }) => {
 
         const handleLogout = () => {
             setLoggedIn(false); // Set the loggedIn state to false
@@ -33,13 +35,15 @@ const NavBar: React.FC<NavBarProps> = ({ children, onClick, className, handleRes
                     {inputs.map((input: string, index: number) => {
                         return (<div key={index}>
                             <SearchBox value={input} onChange={(e) => { handleSearchChange(index, e) }} className="m-2 px-2 py-2 " />
-                            {index != 0
+                         {index != 0
                                 &&
                                 <Button onClick={() => {
                                     removeInput(index)
                                 }} className="m-1 text-sm bg-red-600">
                                     -
-                                </Button>}
+                                </Button>}<br />
+                                {inputs.length > 1 && index != inputs.length-1 && <DropdownSearchBox value={dropdown[index]} className="p-2" onDropdownChange={(e)=>{handleDropdownChange(index, e.target.value as Dropdown)}}></DropdownSearchBox>}
+                           
                         </div>)
                     })}
                 </form>
