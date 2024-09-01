@@ -42,21 +42,15 @@ const SearchView : React.FC<SearchViewProps>=({setLoggedIn, disableD3=false}) =>
     }
     const handleResults = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        //run off and get results somewhere
-        setResults('No results found.');
+ 
         const filteredInputs = [...inputs].filter((input) => { return (input) })
         let combinedQuery:string[]=[];
         for (let i = 0; i < filteredInputs.length; i++) {
-        
              combinedQuery.push(filteredInputs[i]);
              if(i<filteredInputs.length-1&&filteredInputs[i]!=emptyString&&filteredInputs.length>1){
-                console.log(inputs.length)
-            console.log(filteredInputs.length)
-            console.log(i)
                 combinedQuery.push(dropdown[i])
              }
           }
-          console.log(combinedQuery)
 
         const stringFilteredInputs = combinedQuery.join(' ')
         setDisplayInputs([stringFilteredInputs]);
@@ -64,6 +58,9 @@ const SearchView : React.FC<SearchViewProps>=({setLoggedIn, disableD3=false}) =>
             setInputs([emptyString])
         else
             setInputs([...filteredInputs])
+
+        //run off and get results somewhere
+        setResults('No results found.');
     }
 
     return (
