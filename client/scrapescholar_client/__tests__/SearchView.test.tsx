@@ -117,6 +117,15 @@ describe('Home Component', () => {
   });
 
 
+
+  test('blank search prompts to enter a keyword search', () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+    const searchButton = screen.getByText('Search');
+    fireEvent.click(searchButton);
+    expect(screen.getByText('Please enter a keyword')).toBeInTheDocument();
+
+  });
+
   test('2 inputs with text in first field displays and/or dropdown', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const searchButton = screen.getByText('Search');
