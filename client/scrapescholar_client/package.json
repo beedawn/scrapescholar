@@ -12,10 +12,14 @@
     "postbuild": "npm test"
   },
   "dependencies": {
+    "@eslint/config-array": "^0.18.0",
+    "@eslint/object-schema": "^2.1.4",
     "d3": "^7.9.0",
+    "glob": "^11.0.0",
     "next": "14.2.7",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "rimraf": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
