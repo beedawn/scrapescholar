@@ -2,7 +2,17 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+NPM and node must be installed to compile this package, for more information see the NPM Docs:
+https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+
+First install the npm packages with:
+
+```bash
+npm install
+```
+
+
+Then, run the development server:
 
 ```bash
 npm run dev
