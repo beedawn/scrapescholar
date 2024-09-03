@@ -1,7 +1,7 @@
 enum Dropdown{
    AND="AND",
    OR="OR",
-   NOT="NOT"
+   NOT="NOT",
   }
 
   export default Dropdown;
