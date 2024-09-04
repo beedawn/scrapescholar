@@ -67,7 +67,7 @@ const SearchView : React.FC<SearchViewProps>=({setLoggedIn, disableD3=false}) =>
         <div>
                 <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs} 
                 handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}/>
-                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} />
+                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} />
         </div>
     );
 }
