@@ -11,12 +11,9 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ children, results, displayInputs, onClick, className, emptyString, disableD3=false, inputs }) => {
-   console.log(inputs);
-   console.log(displayInputs);
    let bubbleInputs = [{x:0, y:0, radius:0, color:"", label:""}];
    if(displayInputs[0]!==undefined){
     const filteredInputs = displayInputs[0].split(' ');
-   console.log(filteredInputs)
    const filteredInputsAND = filteredInputs.filter((item)=>{
     return item !== "AND"
    })
