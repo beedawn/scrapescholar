@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch,SetStateAction, } from 'react';
 import SearchResults from "../components/SearchResults";
 import NavBar from "../components/NavBar";
 import Dropdown from "../types/DropdownType";
@@ -55,9 +55,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     return (
         <div>
-            <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs}
-                handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} />
-            <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} />
+                <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs} 
+                handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}/>
+                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} />
+
         </div>
     );
 }
