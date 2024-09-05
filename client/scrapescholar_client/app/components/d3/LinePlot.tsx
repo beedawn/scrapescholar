@@ -10,7 +10,6 @@ interface LinePlotProps {
     marginRight?: number,
     marginBottom?: number,
     marginLeft?: number
-
     className?: string;
 }
 
@@ -29,12 +28,14 @@ const LinePlot: React.FC<LinePlotProps> = ({ data,
         .range([height - marginBottom, marginTop]);
     const line = d3.line((d, i) => x(i), y);
     return (
-        <svg width={width} height={height}>
-            <path fill="none" stroke="currentColor" strokeWidth="1.5" d={line(data)} />
-            <g fill="white" stroke="currentColor" strokeWidth="1.5">
-                {data.map((d, i) => (<circle key={i} cx={x(i)} cy={y(d)} r="2.5" />))}
-            </g>
-        </svg>
+        <div className={className}>
+            <svg width={width} height={height}>
+                <path fill="none" stroke="currentColor" strokeWidth="1.5" d={line(data)} />
+                <g fill="white" stroke="currentColor" strokeWidth="1.5">
+                    {data.map((d, i) => (<circle key={i} cx={x(i)} cy={y(d)} r="2.5" />))}
+                </g>
+            </svg>
+        </div>
     );
 };
 
