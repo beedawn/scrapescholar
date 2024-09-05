@@ -32,8 +32,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ children, results, displa
    })
    bubbleInputs=filteredInputsNOT.map((input, i)=>({
     x: i, 
-    y: i, 
-    radius:15, 
+    y: 50, 
+    radius:50, 
     color: "green", 
     label:input
    })); 
