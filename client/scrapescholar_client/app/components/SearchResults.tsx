@@ -42,10 +42,18 @@ const SearchResults: React.FC<SearchResultsProps> = ({ children, results, displa
         <div className={className}>
             <div className="float-left p-12 max-w-fit">
                 {results !== emptyString && displayInputs[0] !== emptyString ? (
+                     <div>
+                     <p>
+                         You searched {displayInputs}
+                     </p>
+                     <div>
+                         {results}
+                     </div>
                     <div>
 
                         {disableD3?(<></>):(<><LinePlot data={[20, 40, 50, 60]} width={200} height={200} /> <BubblePlot data={bubbleInputs}></BubblePlot></>)}
 
+                    </div>
                     </div>
                 ) : (
                     results !== emptyString
