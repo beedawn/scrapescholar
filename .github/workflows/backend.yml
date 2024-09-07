@@ -23,6 +23,7 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         python -m venv .venv
+        pwd
         . .venv/bin/activate
         pip install -r requirements.txt
 
