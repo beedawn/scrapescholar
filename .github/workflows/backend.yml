@@ -22,8 +22,7 @@ jobs:
     - name: Install dependencies
       working-directory: ./backend  # Adjust to the correct directory
       run: |
-        ls
-        # pip install -r ./backend/requirements.txt
+        pip install -r requirements.txt
 
     - name: Run Python Unit Tests
       working-directory: ./backend  # Adjust to the correct directory
