@@ -17,18 +17,14 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.11'
 
     - name: Install dependencies
       working-directory: ./backend  # Adjust to the correct directory
       run: |
-        python -m venv .venv
-        pwd
-        # . .venv/bin/activate
-        #pip install -r ./backend/requirements.txt
+        pip install -r ./backend/requirements.txt
 
     - name: Run Python Unit Tests
       working-directory: ./backend  # Adjust to the correct directory
       run: |
-        #. .venv/bin/activate
-        # python -m pytest tests/
+        python -m pytest tests/
