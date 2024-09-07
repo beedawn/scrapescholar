@@ -23,11 +23,11 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         python -m venv .venv
-        source .venv/bin/activate
+        . .venv/bin/activate
         pip install -r requirements.txt
 
     - name: Run Python Unit Tests
       working-directory: ./backend  # Adjust to the correct directory
       run: |
-        source .venv/bin/activate
+        . .venv/bin/activate
         python -m pytest tests/
