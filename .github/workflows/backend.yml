@@ -25,7 +25,7 @@ jobs:
         python -m venv .venv
         pwd
         . .venv/bin/activate
-        pip install -r requirements.txt
+        pip install -r ./backend/requirements.txt
 
     - name: Run Python Unit Tests
       working-directory: ./backend  # Adjust to the correct directory
