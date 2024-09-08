@@ -6,7 +6,10 @@ To run the front end navigate to client/scrape_scholar_client and run
 npm install
 npm run dev
 ```
-
+To run the front end tests run
+```bash
+npm test
+```
 
 To run the backend navigate to backend/ and create a virtual environment with:
 
@@ -22,7 +25,8 @@ c:\>Python35\python -m venv c:\path\to\myenv
 ```
 
 
-Then activate the virtual environment
+Then activate the virtual environment:
+
 Linux
 
 ```bash
@@ -44,4 +48,9 @@ pip install -r requirements.txt
 Then to launch the backend run
 ```bash
 fastapi run
+```
+
+To run the backend tests run
+```bash
+python -m pytest tests/
 ```
