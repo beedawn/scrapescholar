@@ -10,7 +10,7 @@ interface SearchResultsProps {
     inputs:string[];
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({ children, results, displayInputs, onClick, className, emptyString, disableD3=false, inputs }) => {
+const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, className, emptyString, disableD3=false, inputs }) => {
    let bubbleInputs = [{x:0, y:0, radius:0, color:"", label:""}];
    if(displayInputs[0]!==undefined){
     const filteredInputs = displayInputs[0].split(' ');

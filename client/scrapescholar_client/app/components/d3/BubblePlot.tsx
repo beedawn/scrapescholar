@@ -47,21 +47,22 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
       .append("g")
       .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
-
-    let x = d3.scaleLinear().domain([0, d3.max(data, d => d.x)])
+    let xMax = d3.max(data, d=> d.x) ?? 0;
+    let x = d3.scaleLinear().domain([0, xMax])
       .range([0, width - 100]);
-    let y = d3.scaleLinear().domain([0, d3.max(data, d => d.y)])
-      .range([height - 100, 20]);
+    let yMax = d3.max(data, d=> d.y) ?? 0;
+    let y = d3.scaleLinear().domain([0, yMax]).range([height - 100, 20]);
 
     // Add a scale for bubble size
+    let zMax = d3.max(data, d=> d.x) ?? 0;
     const z = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.x)])
+      .domain([0, zMax])
       .range([1, 30]);
 
     // Define force simulation
     const simulation = d3.forceSimulation(data)
       .force("x", d3.forceX((d, i) => x(i)).strength(0.2))
-      .force("y", d3.forceY(d => y(d.y)).strength(0.2))
+      .force("y", d3.forceY(d => y(d.y??0)).strength(0.2))
       .force("collide", d3.forceCollide(d => z(d.x)))
       .on("tick", ticked);
     // Add bubbles
