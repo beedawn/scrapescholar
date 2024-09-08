@@ -9,5 +9,5 @@ async def health_check():
 
 
 @app.get("/sciencedirect")
-async def get_sciencedirect_data():
-    return sciencedirect.request_api()
+async def get_sciencedirect_data(query: str):
+    return sciencedirect.request_api(query)
