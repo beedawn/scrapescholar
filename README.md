@@ -13,7 +13,7 @@ npm test
 
 To run the backend navigate to backend/ and create a virtual environment with:
 
-Linux
+Linux Bash
 ```bash
 
 python -m venv .venv
@@ -27,8 +27,7 @@ c:\>Python35\python -m venv c:\path\to\myenv
 
 Then activate the virtual environment:
 
-Linux
-
+Linux Bash
 ```bash
 
 source .venv/bin/activate
