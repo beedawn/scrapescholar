@@ -26,3 +26,7 @@ jobs:
     - name: Run Unit Tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: npm test
+
+    - name: Run Build
+      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      run: npm run build
