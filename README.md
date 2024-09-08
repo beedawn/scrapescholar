@@ -19,7 +19,7 @@ Linux
 python -m venv .venv
 ```
 
-Windows
+Windows Powershell
 ```powershell
 c:\>Python35\python -m venv c:\path\to\myenv
 ```
@@ -34,7 +34,7 @@ Linux
 source .venv/bin/activate
 ```
 
-Windows
+Windows Powershell
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
