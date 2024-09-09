@@ -26,11 +26,20 @@ jobs:
 
 
         
-    - name: Run Python Unit Tests
+    - name: Run FastAPI Server
       working-directory: ./  # Adjust to the correct directory
       run: |
         uvicorn backend.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://localhost:8000/health_check
+
+
+    - name: Run npm install
+      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      run: npm install
+
+    - name: Run Build
+      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      run: npm run build
 
     - name: Run Build
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
