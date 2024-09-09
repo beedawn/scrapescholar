@@ -10,8 +10,13 @@ interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
 }
+
+export interface ResultItem{
+    title:string;
+    link:string;
+}
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
-    const [results, setResults] = useState<string>('');
+    const [results, setResults] = useState<ResultItem[]>([]);
     const [inputs, setInputs] = useState<string[]>(['']);
     const [displayInputs, setDisplayInputs] = useState<string[]>([]);
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
@@ -34,7 +39,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         newDropdown[index] = option;
         setDropdown(newDropdown);
     }
-    const handleResults = (event: { preventDefault: () => void; }) => {
+   const handleResults = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
         const filteredInputs = [...inputs].filter((input) => { return (input) })
         let combinedQuery: string[] = [];
@@ -51,7 +56,15 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         else
             setInputs([...filteredInputs])
         //run off and get results somewhere
-        setResults('No results found.');
+
+
+        let data = await fetch('http://localhost:8000/sciencedirect?query=test')
+        let posts = await data.json()
+       
+        if(posts.length>0)
+            setResults(posts)
+        else
+            setResults([{title:"No results found", link:""}]);
     }
     return (
         <div>
