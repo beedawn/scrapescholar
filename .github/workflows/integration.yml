@@ -1,0 +1,45 @@
+name: Run Integration Tests
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - '*'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      working-directory: ./backend  # Adjust to the correct directory
+      run: |
+        pip install -r requirements.txt
+
+
+        
+    - name: Run Python Unit Tests
+      working-directory: ./  # Adjust to the correct directory
+      run: |
+        uvicorn backend.main:app --host 0.0.0.0 --port 8000 & sleep 5
+        curl -X GET http://localhost:8000/health_check
+
+    - name: Run Build
+      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      run: npm run build
+
+    - name: Serve next.js app
+      working-directory: ./client/scrapescholar_client
+      run: |
+        npm run start &
+        sleep 10
+      curl -X GET https://localhost:3000/
+
