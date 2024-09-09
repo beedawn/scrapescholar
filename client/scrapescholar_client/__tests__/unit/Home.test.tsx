@@ -1,7 +1,7 @@
 // __tests__/SearchView.test.tsx
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Home from '../app/page';
+import Home from '../../app/page';
 import React from 'react';
 
 describe('Home Component', () => {

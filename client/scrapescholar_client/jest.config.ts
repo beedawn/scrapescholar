@@ -13,6 +13,10 @@ const config: Config = {
   moduleNameMapper: {
     'd3': '<rootDir>/node_modules/d3/dist/d3.min.js',
   },
+  testMatch: [
+    "**/__tests__/unit/**/*.test.tsx",
+    "**/__tests__/integration/**/*.test.tsx"
+  ],
 
   // Add more setup options before each test is run
    setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
