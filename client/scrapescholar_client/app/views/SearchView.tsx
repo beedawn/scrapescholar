@@ -52,7 +52,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         const stringFilteredInputs = combinedQuery.join(' ')
         setDisplayInputs([stringFilteredInputs]);
 
-        let data = [];
+        let data:Response;
         let posts = [];
         if (combinedQuery.length === 0)
             setInputs([emptyString])
@@ -62,7 +62,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             data = await fetch('http://localhost:8000/sciencedirect?query=test')
             posts = await data.json()
             }
-            catch(error){
+            catch(error:any){
                 posts = [{"title":error.message,link:''}]
             }
         }
