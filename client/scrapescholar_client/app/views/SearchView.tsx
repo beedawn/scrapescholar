@@ -58,8 +58,13 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             setInputs([emptyString])
         else{
             setInputs([...filteredInputs])
+            try{
             data = await fetch('http://localhost:8000/sciencedirect?query=test')
             posts = await data.json()
+            }
+            catch(error){
+                posts = [{"title":error.message,link:''}]
+            }
         }
         //run off and get results somewhere
 
