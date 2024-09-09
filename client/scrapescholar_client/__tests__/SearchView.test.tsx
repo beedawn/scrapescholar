@@ -72,7 +72,6 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-    screen.debug();
     await waitFor(() => {
       expect(screen.getByText('You searched ' + testInput)).toBeInTheDocument()
     });
@@ -160,7 +159,7 @@ describe('Home Component', () => {
     await waitFor(()=>{
       expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
     });
-    screen.debug();
+  
 
   });
 
