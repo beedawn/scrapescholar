@@ -27,7 +27,7 @@ jobs:
     - name: Run Python Integration Tests
       working-directory: ./backend  # Adjust to the correct directory
       run: |
-        pytest tests/integration
+        pytest ./tests/integration
     
         
     - name: Run FastAPI Server
