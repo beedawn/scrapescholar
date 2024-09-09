@@ -51,15 +51,20 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
         const stringFilteredInputs = combinedQuery.join(' ')
         setDisplayInputs([stringFilteredInputs]);
+
+        let data = [];
+        let posts = [];
         if (combinedQuery.length === 0)
             setInputs([emptyString])
-        else
+        else{
             setInputs([...filteredInputs])
+            data = await fetch('http://localhost:8000/sciencedirect?query=test')
+            posts = await data.json()
+        }
         //run off and get results somewhere
 
 
-        let data = await fetch('http://localhost:8000/sciencedirect?query=test')
-        let posts = await data.json()
+        
        
         if(posts.length>0)
             setResults(posts)
