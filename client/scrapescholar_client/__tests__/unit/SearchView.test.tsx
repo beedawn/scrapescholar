@@ -1,9 +1,9 @@
 // __tests__/SearchView.test.tsx
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchView from '../app/views/SearchView';
+import SearchView from '../../app/views/SearchView';
 import React from 'react';
-import Dropdown from '../app/types/DropdownType';
+import Dropdown from '../../app/types/DropdownType';
 
 describe('Home Component', () => {
   const mockSetLoggedIn = jest.fn();
@@ -157,9 +157,10 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     const expectedText = 'You searched ' + testInput+ ' AND '+testInput+' 2';
     await waitFor(()=>{
-      expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
+      //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
+      expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
     });
-  
+
 
   });
 
