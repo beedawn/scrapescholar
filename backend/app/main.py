@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-import backend.sciencedirect.sciencedirect as sciencedirect
+import sciencedirect.sciencedirect as sciencedirect
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
