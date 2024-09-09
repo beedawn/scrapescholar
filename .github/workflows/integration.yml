@@ -41,7 +41,7 @@ jobs:
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: npm install
 
-    - name: Run Unit Tests
+    - name: Run Next.js Integration Tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: npm run test:integration   
 
