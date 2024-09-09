@@ -23,8 +23,12 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         pip install -r requirements.txt
-
-
+        
+    - name: Run Python Integration Tests
+      working-directory: ./backend  # Adjust to the correct directory
+      run: |
+        python -m pytest tests/integration
+    
         
     - name: Run FastAPI Server
       working-directory: ./  # Adjust to the correct directory
@@ -37,9 +41,11 @@ jobs:
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: npm install
 
-    - name: Run Build
+    - name: Run Unit Tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-      run: npm run build
+      run: npm run test:integration   
+
+
 
     - name: Run Build
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
