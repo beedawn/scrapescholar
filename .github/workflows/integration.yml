@@ -41,5 +41,5 @@ jobs:
       run: |
         npm run start &
         sleep 10
-      curl -X GET https://localhost:3000/
+        curl -X GET https://localhost:3000/
 
