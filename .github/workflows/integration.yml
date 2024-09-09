@@ -31,9 +31,9 @@ jobs:
     
         
     - name: Run FastAPI Server
-      working-directory: ./  # Adjust to the correct directory
+      working-directory: ./backend  # Adjust to the correct directory
       run: |
-        uvicorn backend.main:app --host 0.0.0.0 --port 8000 & sleep 5
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://localhost:8000/health_check
 
 
