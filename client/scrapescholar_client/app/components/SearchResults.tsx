@@ -1,9 +1,10 @@
 import React from 'react';
 import LinePlot from './d3/LinePlot';
 import BubblePlot from './d3/BubblePlot';
+import { ResultItem } from '../views/SearchView';
 interface SearchResultsProps {
     displayInputs: string[];
-    results: string;
+    results: ResultItem[];
     className?: string;
     emptyString?: string;
     disableD3?:boolean;
@@ -38,22 +39,31 @@ const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, cl
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-fit">
-                {results !== emptyString && displayInputs[0] !== emptyString ? (
+                {results.length !== 0 && displayInputs[0] !== emptyString ? (
                      <div>
                      <p>
                          You searched {displayInputs}
                      </p>
-                     <div>
-                         {results}
-                     </div>
+                  
                     <div>
 
                         {disableD3?(<></>):(<><LinePlot data={[20, 40, 50, 60]} width={200} height={200} /> <BubblePlot data={bubbleInputs}></BubblePlot></>)}
 
                     </div>
+
+                    <div>
+                    <ul>
+      {results.map((result) => (
+        <>
+        <li><a href={result.link}>{result.title}</a></li>
+    
+        </>
+      ))}
+    </ul>
+                     </div>
                     </div>
                 ) : (
-                    results !== emptyString
+                    results.length !== 0
                     &&
                     <p className="bg-red-800 p-2 rounded">
                         Please enter a keyword
