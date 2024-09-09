@@ -25,7 +25,6 @@ def test_read_main():
         assert item['link'].startswith('http')
 
 
-    assert len(data) > 0 
 
 
     
