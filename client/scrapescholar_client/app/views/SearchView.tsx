@@ -12,8 +12,11 @@ interface SearchViewProps {
 }
 
 export interface ResultItem{
+    id:number;
     title:string;
     link:string;
+    date:string;
+    source:string;
 }
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
     const [results, setResults] = useState<ResultItem[]>([]);
@@ -58,8 +61,11 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             setInputs([emptyString])
         else{
             setInputs([...filteredInputs])
+            
+            const apiQuery = combinedQuery.join('+')
+            console.log(apiQuery)
             try{
-            data = await fetch('http://localhost:8000/sciencedirect?query=test')
+            data = await fetch(`http://localhost:8000/sciencedirect?query=${apiQuery}`)
             posts = await data.json()
             }
             catch(error:any){

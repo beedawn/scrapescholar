@@ -52,14 +52,53 @@ const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, cl
                     </div>
 
                     <div>
-                    <ul>
-      {results.map((result) => (
-        <>
-        <li><a href={result.link}>{result.title}</a></li>
-    
-        </>
-      ))}
-    </ul>
+
+                    <table>
+  <tr>
+    <th>Title</th>
+    <th>Year</th>
+    <th>Cited By</th>
+    <th>URL</th>
+    <th>Abstract</th>
+    <th>Document Type</th>
+    <th>Source</th>
+    <th>Evaluation Criteria</th>
+        <th>Methodology</th> 	
+        <th>Clarity</th>
+        <th>Completeness</th>	
+        <th>Transparency</th>
+  </tr>
+
+  {results.map((result) => (
+       <tr key={result.id}>
+        <td><a href={result.link}>{result.title}</a></td>
+        <td>{result.date}</td>
+       <td>#</td>
+       <td>{result.link}</td>
+       <td></td>
+       <td></td>
+       <td>{result.source}</td>
+       <td>accept</td>
+       <td>0</td>
+       <td>0</td>
+       <td>0</td>
+       <td>0</td>
+        </tr> 
+      
+     ))}
+
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  <tr>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+  </tr>
+</table>
+
                      </div>
                     </div>
                 ) : (
