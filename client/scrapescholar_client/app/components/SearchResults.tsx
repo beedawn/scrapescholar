@@ -4,7 +4,7 @@ import BubblePlot from './d3/BubblePlot';
 import { ResultItem } from '../views/SearchView';
 interface SearchResultsProps {
     displayInputs: string[];
-    results: ResultItem[];
+    results: ResultItem[]|string;
     className?: string;
     emptyString?: string;
     disableD3?: boolean;
