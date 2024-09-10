@@ -73,7 +73,6 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
       .append("circle")
       .attr("cx", function (d, i) { return (i) })
       .attr("cy", function (d, i) { 
-        console.log(i)
         return (i<6) ? 50:150;
         
       })

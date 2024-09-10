@@ -33,6 +33,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                         </div>
                         <div>
                             <table>
+                                <thead>
                                 <tr>
                                     <th>Title</th>
                                     <th>Year</th>
@@ -48,7 +49,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                                     <th>Completeness</th>
                                     <th>Transparency</th>
                                 </tr>
-
+</thead>
+<tbody>
                                 {results.map((result) => (
                                     <tr key={result.id}>
                                         <td><a href={result.link}>{result.title}</a></td>
@@ -73,16 +75,17 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                                     </tr>
 
                                 ))}
+                                </tbody>
                             </table>
                         </div>
                     </div>
-                ) : (
-                    results.length !== 0
-                    &&
-                    <p className="bg-red-800 p-2 rounded">
+                ) : 
+                    results.length === 0 && displayInputs[0]===''
+                    ?
+                    (<p className="bg-red-800 p-2 rounded">
                         Please enter a keyword
-                    </p>
-                )}
+                    </p>)
+                 : ( results.length===0 && displayInputs[0]!=='' ?(<p>No Results Found</p>):(<p>Loading...</p>))}
             </div>
         </div>
     );

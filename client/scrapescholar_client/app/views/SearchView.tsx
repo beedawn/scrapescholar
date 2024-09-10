@@ -24,6 +24,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [bubbleInputs, setBubbleInputs] = useState<{ x: number, y: number, radius: number, color: string, label: string }[]>([]);
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
+    const [loading, setLoading]=useState<boolean>(false);
     const emptyString = '';
     const addInput = () => {
         setInputs([...inputs, emptyString]);
@@ -45,6 +46,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
    const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
+        setLoading(true);
         const filterBlankInputs = inputs.filter((input)=>(input!==''))
         console.log(filterBlankInputs)
         let inputsAndLogicalOperators: string[] = [];
@@ -70,20 +72,20 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
        
 
         let data:Response;
-        let posts = [];
+        let jsonData;
         if (inputsAndLogicalOperators.length === 0)
             setInputs([emptyString])
         else{
             setInputs([...filterBlankInputs])
             
             const apiQuery = inputsAndLogicalOperators.join('+')
-            console.log(apiQuery)
+  
             try{
             data = await fetch(`http://localhost:8000/sciencedirect?query=${apiQuery}`)
-            posts = await data.json()
+            jsonData = await data.json()
             }
             catch(error:any){
-                posts = [{"title":error.message,link:''}]
+                jsonData = [{"title":error.message,link:''}]
             }
         }
         //run off and get results somewhere
@@ -91,17 +93,18 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
         
        
-        if(posts.length>0)
-            setResults(posts)
+        if(jsonData !== undefined && jsonData.length>0)
+            setResults(jsonData)
         else
         //set better error message
-            setResults([{title:"No results found", link:"", source:"", id:0, date:"" }]);
+            setResults([]);
+            setLoading(false);
     }
     return (
         <div>
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs} 
                 handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}/>
-                <SearchResults displayInputs={joinedInputsString} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} bubbleInputs={bubbleInputs}/>
+                {loading?<p>Loading</p>:<SearchResults displayInputs={joinedInputsString} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} bubbleInputs={bubbleInputs}/>}
 
         </div>
     );
