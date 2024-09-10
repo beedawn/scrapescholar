@@ -19,7 +19,7 @@ export interface ResultItem{
     source:string;
 }
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
-    const [results, setResults] = useState<ResultItem[]>([]);
+    const [results, setResults] = useState<ResultItem[]| string>([]);
     const [inputs, setInputs] = useState<string[]>(['']);
     const [bubbleInputs, setBubbleInputs] = useState<{ x: number, y: number, radius: number, color: string, label: string }[]>(['']);
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
@@ -94,6 +94,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         if(posts.length>0)
             setResults(posts)
         else
+        //set better error message
             setResults([{title:"No results found", link:"", source:"", id:0, date:"" }]);
     }
     return (

@@ -20,6 +20,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md max-w-screen-sm">
+                
                 {results.length !== 0 && displayInputs[0] !== emptyString ? (
                     <div>
                         <p>
