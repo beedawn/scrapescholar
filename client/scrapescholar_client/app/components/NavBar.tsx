@@ -21,7 +21,11 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     };
     return (
         <>
+<<<<<<< HEAD
             <div className="p-5 max-w-md mr-auto float-left">
+=======
+            <div className="p-5 max-w-sm mr-auto float-left">
+>>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article
                 <div className="float-right pb-6" >
                     <Button onClick={handleLogout} className="">Logout</Button>
                 </div>

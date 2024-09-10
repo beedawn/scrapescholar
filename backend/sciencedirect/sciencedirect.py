@@ -23,18 +23,27 @@ def request_api(query: str):
     print(entries)
     returnList = []
     x = 0
+
     for entry in entries:
-        title = entry.get('dc:title')
-        links = entry.get('link')
-        link = links[1].get('@href')
-        date = entry.get('prism:coverDate')
-        returnList.append({
-            'id':x,
-            'title':title, 
-            'link':link, 
-            'date':date, 
-            'source': "Science Direct",
-            })
+        error = entry.get('error')
+        if error is None:
+            title = entry.get('dc:title')
+            links = entry.get('link')
+
+
+            if links:
+                link = links[1].get('@href')
+            else:
+                link = ""
+            date = entry.get('prism:coverDate')
+        
+            returnList.append({
+                    'id':x,
+                    'title':title, 
+                    'link':link, 
+                    'date':date, 
+                    'source': "Science Direct",
+                    })
         x += 1
  
     return returnList

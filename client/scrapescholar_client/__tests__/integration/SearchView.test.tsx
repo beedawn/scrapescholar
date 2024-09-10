@@ -74,15 +74,11 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     await waitFor(() => {
       expect(screen.getByText('You searched ' + testInput)).toBeInTheDocument()
-<<<<<<< HEAD
 <<<<<<<< HEAD:client/scrapescholar_client/__tests__/unit/SearchView.test.tsx
     });
 ========
     }, {timeout: 5000});
 >>>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article:client/scrapescholar_client/__tests__/integration/SearchView.test.tsx
-=======
-    }, {timeout: 5000});
->>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article
   })
 
   test('removes input when delete button clicked', () => {
@@ -131,15 +127,11 @@ describe('Home Component', () => {
 
 
 
-<<<<<<< HEAD
 <<<<<<<< HEAD:client/scrapescholar_client/__tests__/unit/SearchView.test.tsx
   test('blank search prompts to enter a keyword search', () => {
 ========
   test('blank search prompts to enter a keyword search', async () => {
 >>>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article:client/scrapescholar_client/__tests__/integration/SearchView.test.tsx
-=======
-  test('blank search prompts to enter a keyword search', async () => {
->>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
@@ -162,7 +154,6 @@ describe('Home Component', () => {
 
   });
 
-<<<<<<< HEAD
   test('2 inputs with text in first field displays and/or dropdown', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const addButton = screen.getByText('+');
@@ -245,8 +236,6 @@ describe('Home Component', () => {
 
   });
 
-=======
->>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article
 
   test('and shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);

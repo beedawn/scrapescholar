@@ -1,0 +1,977 @@
+{
+    "search-results": {
+      "opensearch:totalResults": "15670",
+      "opensearch:startIndex": "0",
+      "opensearch:itemsPerPage": "25",
+      "opensearch:Query": {
+        "@role": "request",
+        "@searchTerms": "cybersecurity",
+        "@startPage": "0"
+      },
+      "link": [
+        {
+          "@_fa": "true",
+          "@ref": "self",
+          "@href": "https://api.elsevier.com/content/search/sciencedirect?start=0&count=25&query=cybersecurity&apiKey=7f59af901d2d86f78a1fd60c1bf9426a",
+          "@type": "application/json"
+        },
+        {
+          "@_fa": "true",
+          "@ref": "first",
+          "@href": "https://api.elsevier.com/content/search/sciencedirect?start=0&count=25&query=cybersecurity&apiKey=7f59af901d2d86f78a1fd60c1bf9426a",
+          "@type": "application/json"
+        },
+        {
+          "@_fa": "true",
+          "@ref": "next",
+          "@href": "https://api.elsevier.com/content/search/sciencedirect?start=25&count=25&query=cybersecurity&apiKey=7f59af901d2d86f78a1fd60c1bf9426a",
+          "@type": "application/json"
+        },
+        {
+          "@_fa": "true",
+          "@ref": "last",
+          "@href": "https://api.elsevier.com/content/search/sciencedirect?start=5975&count=25&query=cybersecurity&apiKey=7f59af901d2d86f78a1fd60c1bf9426a",
+          "@type": "application/json"
+        }
+      ],
+      "entry": [
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-26T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0160791X24002185"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0160791X24002185?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.techsoc.2024.102670",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0160791X24002185",
+          "dc:title": "Exploring the economic role of cybersecurity in SMEs: A case study of the UK",
+          "dc:creator": "Marta F. Arroyabe",
+          "prism:publicationName": "Technology in Society",
+          "prism:volume": "78",
+          "prism:coverDate": "2024-09-30",
+          "prism:startingPage": "102670",
+          "prism:doi": "10.1016/j.techsoc.2024.102670",
+          "openaccess": true,
+          "pii": "S0160791X24002185",
+          "authors": {
+            "author": [
+              {
+                "$": "Marta F. Arroyabe"
+              },
+              {
+                "$": "Carlos F. A. Arranz"
+              },
+              {
+                "$": "Juan Carlos Fernandez de Arroyabe"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-22T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0167404824003201"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0167404824003201?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cose.2024.104015",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0167404824003201",
+          "dc:title": "Charting new waters with CRAMMTS: A survey-driven cybersecurity risk analysis method for maritime stakeholders",
+          "dc:creator": "Unal Tatar",
+          "prism:publicationName": "Computers & Security",
+          "prism:volume": "145",
+          "prism:coverDate": "2024-10-31",
+          "prism:startingPage": "104015",
+          "prism:doi": "10.1016/j.cose.2024.104015",
+          "openaccess": false,
+          "pii": "S0167404824003201",
+          "authors": {
+            "author": [
+              {
+                "$": "Unal Tatar"
+              },
+              {
+                "$": "Bilge Karabacak"
+              },
+              {
+                "$": "Dominick P. Foti"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-11T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S1467089524000290"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S1467089524000290?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.accinf.2024.100696",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S1467089524000290",
+          "dc:title": "The impact of cybersecurity risk management strategy disclosure on investors’ judgments and decisions",
+          "dc:creator": "Jiehui (Annabella) Huang",
+          "prism:publicationName": "International Journal of Accounting Information Systems",
+          "prism:volume": "54",
+          "prism:coverDate": "2024-09-30",
+          "prism:startingPage": "100696",
+          "prism:doi": "10.1016/j.accinf.2024.100696",
+          "openaccess": false,
+          "pii": "S1467089524000290",
+          "authors": {
+            "author": [
+              {
+                "$": "Jiehui (Annabella) Huang"
+              },
+              {
+                "$": "Uday Murthy"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-29T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0360835224006405"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0360835224006405?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cie.2024.110519",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0360835224006405",
+          "dc:title": "Cybersecurity investments in supply chains with two-stage risk propagation",
+          "dc:creator": "Aishwarya Dash",
+          "prism:publicationName": "Computers & Industrial Engineering",
+          "prism:coverDate": "2024-08-29",
+          "prism:startingPage": "110519",
+          "prism:doi": "10.1016/j.cie.2024.110519",
+          "openaccess": true,
+          "pii": "S0360835224006405",
+          "authors": {
+            "author": [
+              {
+                "$": "Aishwarya Dash"
+              },
+              {
+                "$": "S. P. Sarmah"
+              },
+              {
+                "$": "Christoph Glock"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-29T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S277291842400033X"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S277291842400033X?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.csa.2024.100067",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S277291842400033X",
+          "dc:title": "Securing industry 4.0: Assessing cybersecurity challenges and proposing strategies for manufacturing management",
+          "dc:creator": "Adel Alqudhaibi",
+          "prism:publicationName": "Cyber Security and Applications",
+          "prism:volume": "3",
+          "prism:coverDate": "2025-12-31",
+          "prism:startingPage": "100067",
+          "prism:doi": "10.1016/j.csa.2024.100067",
+          "openaccess": true,
+          "pii": "S277291842400033X",
+          "authors": {
+            "author": [
+              {
+                "$": "Adel Alqudhaibi"
+              },
+              {
+                "$": "Majed Albarrak"
+              },
+              {
+                "$": "Konstantinos Salonitis"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-04-16T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0167404824001469"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0167404824001469?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cose.2024.103845",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0167404824001469",
+          "dc:title": "Strategic cybersecurity",
+          "dc:creator": "Saleh AlDaajeh",
+          "prism:publicationName": "Computers & Security",
+          "prism:volume": "141",
+          "prism:coverDate": "2024-06-30",
+          "prism:startingPage": "103845",
+          "prism:doi": "10.1016/j.cose.2024.103845",
+          "openaccess": false,
+          "pii": "S0167404824001469",
+          "authors": {
+            "author": [
+              {
+                "$": "Saleh AlDaajeh"
+              },
+              {
+                "$": "Saed Alrabaee"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-30T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0167404824003316"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0167404824003316?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cose.2024.104026",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0167404824003316",
+          "dc:title": "Cybersecurity preparedness of small-to-medium businesses: A Western Australia study with broader implications",
+          "dc:creator": "Alladean Chidukwani",
+          "prism:publicationName": "Computers & Security",
+          "prism:volume": "145",
+          "prism:coverDate": "2024-10-31",
+          "prism:startingPage": "104026",
+          "prism:doi": "10.1016/j.cose.2024.104026",
+          "openaccess": true,
+          "pii": "S0167404824003316",
+          "authors": {
+            "author": [
+              {
+                "$": "Alladean Chidukwani"
+              },
+              {
+                "$": "Sebastian Zander"
+              },
+              {
+                "$": "Polychronis Koutsakis"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-23T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0267364924000980"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0267364924000980?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.clsr.2024.106032",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0267364924000980",
+          "dc:title": "The New F-word: The case of fragmentation in Dutch cybersecurity governance",
+          "dc:creator": "Parto Mirzaei",
+          "prism:publicationName": "Computer Law & Security Review",
+          "prism:volume": "55",
+          "prism:coverDate": "2024-11-30",
+          "prism:startingPage": "106032",
+          "prism:doi": "10.1016/j.clsr.2024.106032",
+          "openaccess": true,
+          "pii": "S0267364924000980",
+          "authors": {
+            "author": [
+              {
+                "$": "Parto Mirzaei"
+              },
+              {
+                "$": "Els De Busser"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-04-25T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0167404824001597"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0167404824001597?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cose.2024.103858",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0167404824001597",
+          "dc:title": "Driving behaviour change with cybersecurity awareness",
+          "dc:creator": "Sunil Chaudhary",
+          "prism:publicationName": "Computers & Security",
+          "prism:volume": "142",
+          "prism:coverDate": "2024-07-31",
+          "prism:startingPage": "103858",
+          "prism:doi": "10.1016/j.cose.2024.103858",
+          "openaccess": true,
+          "pii": "S0167404824001597",
+          "authors": {
+            "author": "Sunil Chaudhary"
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-11T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S1467089524000289"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S1467089524000289?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.accinf.2024.100695",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S1467089524000289",
+          "dc:title": "Does cybersecurity maturity level assurance improve cybersecurity risk management in supply chains?",
+          "dc:creator": "Ju Myung Song",
+          "prism:publicationName": "International Journal of Accounting Information Systems",
+          "prism:volume": "54",
+          "prism:coverDate": "2024-09-30",
+          "prism:startingPage": "100695",
+          "prism:doi": "10.1016/j.accinf.2024.100695",
+          "openaccess": false,
+          "pii": "S1467089524000289",
+          "authors": {
+            "author": [
+              {
+                "$": "Ju Myung Song"
+              },
+              {
+                "$": "Tawei Wang"
+              },
+              {
+                "$": "Yu-Hung Chen"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-06-25T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0167404824002736"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0167404824002736?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cose.2024.103968",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0167404824002736",
+          "dc:title": "Exploring gender dynamics in cybersecurity education: A self-determination theory and social cognitive theory perspective",
+          "dc:creator": "Saneesh P. Francis",
+          "prism:publicationName": "Computers & Security",
+          "prism:volume": "144",
+          "prism:coverDate": "2024-09-30",
+          "prism:startingPage": "103968",
+          "prism:doi": "10.1016/j.cose.2024.103968",
+          "openaccess": false,
+          "pii": "S0167404824002736",
+          "authors": {
+            "author": [
+              {
+                "$": "Saneesh P. Francis"
+              },
+              {
+                "$": "Vysakh Kani Kolil"
+              },
+              {
+                "$": "Krishnashree Achuthan"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-22T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S2949948824000362"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S2949948824000362?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.ject.2024.08.004",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S2949948824000362",
+          "dc:title": "Resilience and risk management in cybersecurity: A grounded theory study of emotional, psychological, and organizational dynamics",
+          "dc:creator": "Farheen Fatima",
+          "prism:publicationName": "Journal of Economy and Technology",
+          "prism:volume": "2",
+          "prism:coverDate": "2024-11-30",
+          "prism:startingPage": "247",
+          "prism:endingPage": "257",
+          "prism:doi": "10.1016/j.ject.2024.08.004",
+          "openaccess": true,
+          "pii": "S2949948824000362",
+          "authors": {
+            "author": [
+              {
+                "$": "Farheen Fatima"
+              },
+              {
+                "$": "James C. Hyatt"
+              },
+              {
+                "$": "Karthik Meduri"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-24T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0275531924003350"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0275531924003350?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.ribaf.2024.102542",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0275531924003350",
+          "dc:title": "The audit committee’s IT expertise and its impact on the disclosure of cybersecurity risk",
+          "dc:creator": "Zheng Guohong",
+          "prism:publicationName": "Research in International Business and Finance",
+          "prism:volume": "73",
+          "prism:coverDate": "2025-01-31",
+          "prism:startingPage": "102542",
+          "prism:doi": "10.1016/j.ribaf.2024.102542",
+          "openaccess": false,
+          "pii": "S0275531924003350",
+          "authors": {
+            "author": [
+              {
+                "$": "Zheng Guohong"
+              },
+              {
+                "$": "Xia Zhongwei"
+              },
+              {
+                "$": "Xiao Zhongyi"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-22T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0167404824003699"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0167404824003699?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cose.2024.104064",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0167404824003699",
+          "dc:title": "Protecting the play: An integrative review of cybersecurity in and for sports events",
+          "dc:creator": "Ivano Bongiovanni",
+          "prism:publicationName": "Computers & Security",
+          "prism:volume": "146",
+          "prism:coverDate": "2024-11-30",
+          "prism:startingPage": "104064",
+          "prism:doi": "10.1016/j.cose.2024.104064",
+          "openaccess": true,
+          "pii": "S0167404824003699",
+          "authors": {
+            "author": [
+              {
+                "$": "Ivano Bongiovanni"
+              },
+              {
+                "$": "David M. Herold"
+              },
+              {
+                "$": "Simon J. Wilde"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-09-06T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S240584402413602X"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S240584402413602X?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.heliyon.2024.e37571",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S240584402413602X",
+          "dc:title": "Integrating machine learning for sustaining cybersecurity in digital banks",
+          "dc:creator": "Muath Asmar",
+          "prism:publicationName": "Heliyon",
+          "prism:volume": "10",
+          "prism:coverDate": "2024-09-15",
+          "prism:startingPage": "e37571",
+          "prism:doi": "10.1016/j.heliyon.2024.e37571",
+          "openaccess": true,
+          "pii": "S240584402413602X",
+          "authors": {
+            "author": [
+              {
+                "$": "Muath Asmar"
+              },
+              {
+                "$": "Alia Tuqan"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-05T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0267364924000761"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0267364924000761?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.clsr.2024.106009",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0267364924000761",
+          "dc:title": "Cyber Resilience Act 2022: A silver bullet for cybersecurity of IoT devices or a shot in the dark?",
+          "dc:creator": "Mohammed Raiz Shaffique",
+          "prism:publicationName": "Computer Law & Security Review",
+          "prism:volume": "54",
+          "prism:coverDate": "2024-09-30",
+          "prism:startingPage": "106009",
+          "prism:doi": "10.1016/j.clsr.2024.106009",
+          "openaccess": true,
+          "pii": "S0267364924000761",
+          "authors": {
+            "author": "Mohammed Raiz Shaffique"
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-02T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0378720624000971"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0378720624000971?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.im.2024.104015",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0378720624000971",
+          "dc:title": "Case-based learning for cybersecurity leaders: A systematic review and research agenda",
+          "dc:creator": "Ashley Anderson",
+          "prism:publicationName": "Information & Management",
+          "prism:volume": "61",
+          "prism:coverDate": "2024-11-30",
+          "prism:startingPage": "104015",
+          "prism:doi": "10.1016/j.im.2024.104015",
+          "openaccess": true,
+          "pii": "S0378720624000971",
+          "authors": {
+            "author": [
+              {
+                "$": "Ashley Anderson"
+              },
+              {
+                "$": "Atif Ahmad"
+              },
+              {
+                "$": "Shanton Chang"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-01T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0160791X24001982"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0160791X24001982?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.techsoc.2024.102650",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0160791X24001982",
+          "dc:title": "When traditional SME managers encounter cybersecurity: Discourse analysis of opportunities and dilemmas in meeting the demands",
+          "dc:creator": "Yang Hoong",
+          "prism:publicationName": "Technology in Society",
+          "prism:volume": "78",
+          "prism:coverDate": "2024-09-30",
+          "prism:startingPage": "102650",
+          "prism:doi": "10.1016/j.techsoc.2024.102650",
+          "openaccess": true,
+          "pii": "S0160791X24001982",
+          "authors": {
+            "author": [
+              {
+                "$": "Yang Hoong"
+              },
+              {
+                "$": "Davar Rezania"
+              },
+              {
+                "$": "Ron Baker"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-22T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0167404824003560"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0167404824003560?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.cose.2024.104051",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0167404824003560",
+          "dc:title": "Data privacy and cybersecurity challenges in the digital transformation of the banking sector",
+          "dc:creator": "Shuang Wang",
+          "prism:publicationName": "Computers & Security",
+          "prism:volume": "147",
+          "prism:coverDate": "2024-12-31",
+          "prism:startingPage": "104051",
+          "prism:doi": "10.1016/j.cose.2024.104051",
+          "openaccess": false,
+          "pii": "S0167404824003560",
+          "authors": {
+            "author": [
+              {
+                "$": "Shuang Wang"
+              },
+              {
+                "$": "Muhammad Asif"
+              },
+              {
+                "$": "Muhammad Ashfaq"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-06-15T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S1875952124001216"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S1875952124001216?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.entcom.2024.100753",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S1875952124001216",
+          "dc:title": "Co-designing cybersecurity-related stories with children: Perceptions on cybersecurity risks and parental involvement",
+          "dc:creator": "Farzana Quayyum",
+          "prism:publicationName": "Entertainment Computing",
+          "prism:volume": "52",
+          "prism:coverDate": "2025-01-31",
+          "prism:startingPage": "100753",
+          "prism:doi": "10.1016/j.entcom.2024.100753",
+          "openaccess": true,
+          "pii": "S1875952124001216",
+          "authors": {
+            "author": "Farzana Quayyum"
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-09T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0363018824001221"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0363018824001221?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1067/j.cpradiol.2024.07.010",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0363018824001221",
+          "dc:title": "Cybersecurity in radiology: Cautionary Tales, Proactive Prevention, and What to do When You Get Hacked",
+          "dc:creator": "Xuan V. Nguyen",
+          "prism:publicationName": "Current Problems in Diagnostic Radiology",
+          "prism:coverDate": "2024-07-09",
+          "prism:doi": "10.1067/j.cpradiol.2024.07.010",
+          "openaccess": true,
+          "pii": "S0363018824001221",
+          "authors": {
+            "author": [
+              {
+                "$": "Xuan V. Nguyen"
+              },
+              {
+                "$": "Jonelle M. Petscavage-Thomas"
+              },
+              {
+                "$": "Ichiro Ikuta"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-05-25T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S0267364924000542"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S0267364924000542?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.clsr.2024.105987",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S0267364924000542",
+          "dc:title": "Reporting cybersecurity to stakeholders: A review of CSRD and the EU cyber legal framework",
+          "dc:creator": "Clara Boggini",
+          "prism:publicationName": "Computer Law & Security Review",
+          "prism:volume": "53",
+          "prism:coverDate": "2024-07-31",
+          "prism:startingPage": "105987",
+          "prism:doi": "10.1016/j.clsr.2024.105987",
+          "openaccess": true,
+          "pii": "S0267364924000542",
+          "authors": {
+            "author": "Clara Boggini"
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-06-29T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S2772503024000379"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S2772503024000379?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.teler.2024.100151",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S2772503024000379",
+          "dc:title": "Balancing talent and technology: Navigating cybersecurity and privacy in SMEs",
+          "dc:creator": "Yang Hoong",
+          "prism:publicationName": "Telematics and Informatics Reports",
+          "prism:volume": "15",
+          "prism:coverDate": "2024-09-30",
+          "prism:startingPage": "100151",
+          "prism:doi": "10.1016/j.teler.2024.100151",
+          "openaccess": true,
+          "pii": "S2772503024000379",
+          "authors": {
+            "author": [
+              {
+                "$": "Yang Hoong"
+              },
+              {
+                "$": "Davar Rezania"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-07-31T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S1875952124001940"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S1875952124001940?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.entcom.2024.100826",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S1875952124001940",
+          "dc:title": "CyberFamily: A collaborative family game to increase children’s cybersecurity awareness",
+          "dc:creator": "Farzana Quayyum",
+          "prism:publicationName": "Entertainment Computing",
+          "prism:volume": "52",
+          "prism:coverDate": "2025-01-31",
+          "prism:startingPage": "100826",
+          "prism:doi": "10.1016/j.entcom.2024.100826",
+          "openaccess": true,
+          "pii": "S1875952124001940",
+          "authors": {
+            "author": [
+              {
+                "$": "Farzana Quayyum"
+              },
+              {
+                "$": "Letizia Jaccheri"
+              }
+            ]
+          }
+        },
+        {
+          "@_fa": "true",
+          "load-date": "2024-08-02T00:00:00.000Z",
+          "link": [
+            {
+              "@_fa": "true",
+              "@ref": "self",
+              "@href": "https://api.elsevier.com/content/article/pii/S2405844024115186"
+            },
+            {
+              "@_fa": "true",
+              "@ref": "scidir",
+              "@href": "https://www.sciencedirect.com/science/article/pii/S2405844024115186?dgcid=api_sd_search-api-endpoint"
+            }
+          ],
+          "dc:identifier": "DOI:10.1016/j.heliyon.2024.e35487",
+          "prism:url": "https://api.elsevier.com/content/article/pii/S2405844024115186",
+          "dc:title": "Prioritizing cybersecurity initiatives in aviation: A dematel-QSFS methodology",
+          "dc:creator": "Filiz Mizrak",
+          "prism:publicationName": "Heliyon",
+          "prism:volume": "10",
+          "prism:coverDate": "2024-08-30",
+          "prism:startingPage": "e35487",
+          "prism:doi": "10.1016/j.heliyon.2024.e35487",
+          "openaccess": true,
+          "pii": "S2405844024115186",
+          "authors": {
+            "author": [
+              {
+                "$": "Filiz Mizrak"
+              },
+              {
+                "$": "Gonca Reyhan Akkartal"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
