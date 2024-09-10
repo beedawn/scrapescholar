@@ -13,20 +13,10 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, className, emptyString, disableD3=false, inputs }) => {
    let bubbleInputs = [{x:0, y:0, radius:0, color:"", label:""}];
-   if(displayInputs[0]!==undefined){
-    const filteredInputs = displayInputs[0].split(' ');
-   const filteredInputsAND = filteredInputs.filter((item)=>{
-    return item !== "AND"
-   })
+   if(inputs!==undefined){
+    
 
-   const filteredInputsOR = filteredInputsAND.filter((item)=>{
-    return item !== "OR"
-   })
-
-   const filteredInputsNOT = filteredInputsOR.filter((item)=>{
-    return item !== "NOT"
-   })
-   bubbleInputs=filteredInputsNOT.map((input, i)=>({
+   bubbleInputs=inputs.map((input, i)=>({
     x: i, 
     y: 50, 
     radius:50, 
@@ -38,7 +28,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, cl
 
     return (
         <div className={className}>
-            <div className="float-left p-12 max-w-fit">
+            <div className="float-left p-12 max-w-md max-w-screen-sm">
                 {results.length !== 0 && displayInputs[0] !== emptyString ? (
                      <div>
                      <p>
@@ -47,7 +37,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, cl
                   
                     <div>
 
-                        {disableD3?(<></>):(<><LinePlot data={[20, 40, 50, 60]} width={200} height={200} /> <BubblePlot data={bubbleInputs}></BubblePlot></>)}
+                        {disableD3?(<></>):(<>
+                        
+                        <BubblePlot data={bubbleInputs}></BubblePlot></>)}
 
                     </div>
 
@@ -63,6 +55,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, cl
     <th>Document Type</th>
     <th>Source</th>
     <th>Evaluation Criteria</th>
+    <th>Color</th>
         <th>Methodology</th> 	
         <th>Clarity</th>
         <th>Completeness</th>	
@@ -74,11 +67,18 @@ const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, cl
         <td><a href={result.link}>{result.title}</a></td>
         <td>{result.date}</td>
        <td>#</td>
-       <td>{result.link}</td>
+       <td><a href={result.link}>{result.link}</a></td>
        <td></td>
        <td></td>
        <td>{result.source}</td>
        <td>accept</td>
+       <td>
+        <select className="text-black" >
+        <option value="red" className='bg-red-600'>Red</option>
+        <option value="yellow" className="bg-yellow">Yellow</option>
+        <option className="bg-green" value="green">Green</option>
+        </select>
+        </td>
        <td>0</td>
        <td>0</td>
        <td>0</td>
@@ -86,17 +86,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, cl
         </tr> 
       
      ))}
-
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>Mexico</td>
-  </tr>
 </table>
 
                      </div>
