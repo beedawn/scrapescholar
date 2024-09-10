@@ -71,6 +71,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         event.preventDefault();
         //sets loading to true which triggers "Loading" to show in UI
         setLoading(true);
+        setError(null);
         //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
         //declare empty array to combien user inputs and values from drop downs
