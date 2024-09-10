@@ -123,11 +123,14 @@ describe('Home Component', () => {
 
 
 
-  test('blank search prompts to enter a keyword search', () => {
+  test('blank search prompts to enter a keyword search', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-    expect(screen.getByText('Please enter a keyword')).toBeInTheDocument();
+    await waitFor(()=>{
+      expect(screen.getByText('Please enter a keyword')).toBeInTheDocument();
+    });
+    
 
   });
 

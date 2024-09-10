@@ -22,7 +22,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [results, setResults] = useState<ResultItem[]>([]);
     const [inputs, setInputs] = useState<string[]>(['']);
     const [bubbleInputs, setBubbleInputs] = useState<{ x: number, y: number, radius: number, color: string, label: string }[]>(['']);
-    const [displayInputs, setDisplayInputs] = useState<string[]>([]);
+    const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
     const emptyString = '';
     const addInput = () => {
@@ -43,22 +43,23 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         newDropdown[index] = option;
         setDropdown(newDropdown);
     }
-   const handleResults = async (event: { preventDefault: () => void; }) => {
+   const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        const filteredInputs = [...inputs].filter((input) => { return (input) })
-        let combinedQuery: string[] = [];
-        for (let i = 0; i < filteredInputs.length; i++) {
-            combinedQuery.push(filteredInputs[i]);
-            if (i < filteredInputs.length - 1 && filteredInputs[i] != emptyString && filteredInputs.length > 1) {
-                combinedQuery.push(dropdown[i])
+        const filterBlankInputs = inputs.filter((input)=>(input!==''))
+        console.log(filterBlankInputs)
+        let inputsAndLogicalOperators: string[] = [];
+        for (let i = 0; i < filterBlankInputs.length; i++) {
+            inputsAndLogicalOperators.push(filterBlankInputs[i]);
+            if (i < filterBlankInputs.length - 1 && filterBlankInputs[i] != emptyString && filterBlankInputs.length > 1) {
+                inputsAndLogicalOperators.push(dropdown[i])
             }
         }
-        const stringFilteredInputs = combinedQuery.join(' ')
-        setDisplayInputs([stringFilteredInputs]);
+        const inputsAndLogicalOperatorsString = inputsAndLogicalOperators.join(' ')
+        setJoinedInputsString([inputsAndLogicalOperatorsString]);
 
 
       
-            const newBubbleInputs = inputs.map((input, i) => ({
+            const newBubbleInputs = filterBlankInputs.map((input, i) => ({
               x: i,
               y: 50,
               radius: 50,
@@ -70,12 +71,12 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
         let data:Response;
         let posts = [];
-        if (combinedQuery.length === 0)
+        if (inputsAndLogicalOperators.length === 0)
             setInputs([emptyString])
         else{
-            setInputs([...filteredInputs])
+            setInputs([...filterBlankInputs])
             
-            const apiQuery = combinedQuery.join('+')
+            const apiQuery = inputsAndLogicalOperators.join('+')
             console.log(apiQuery)
             try{
             data = await fetch(`http://localhost:8000/sciencedirect?query=${apiQuery}`)
@@ -97,9 +98,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     return (
         <div>
-                <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs} 
+                <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs} 
                 handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}/>
-                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} bubbleInputs={bubbleInputs}/>
+                <SearchResults displayInputs={joinedInputsString} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} bubbleInputs={bubbleInputs}/>
 
         </div>
     );
