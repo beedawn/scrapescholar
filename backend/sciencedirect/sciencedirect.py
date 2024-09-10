@@ -20,17 +20,22 @@ def request_api(query: str):
     #get entries list
     entries = search_results.get('entry',[])
     #return entries to sciencedirect endpoint response
- 
+    print(entries)
     returnList = []
- 
+    x = 0
     for entry in entries:
         title = entry.get('dc:title')
         links = entry.get('link')
         link = links[1].get('@href')
+        date = entry.get('prism:coverDate')
         returnList.append({
+            'id':x,
             'title':title, 
-            'link':link
+            'link':link, 
+            'date':date, 
+            'source': "Science Direct",
             })
+        x += 1
  
     return returnList
 
