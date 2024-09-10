@@ -80,7 +80,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         if(posts.length>0)
             setResults(posts)
         else
-            setResults([{title:"No results found", link:""}]);
+            setResults([{title:"No results found", link:"", source:"", id:0, date:"" }]);
     }
     return (
         <div>
