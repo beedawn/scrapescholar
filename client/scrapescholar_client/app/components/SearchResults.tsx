@@ -51,8 +51,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                                 </tr>
 </thead>
 <tbody>
-                                {results.map((result) => (
-                                    <tr key={result.id}>
+                                {results.map((result,index) => (
+                                    <tr key={result.id||index}>
                                         <td><a href={result.link}>{result.title}</a></td>
                                         <td>{result.date}</td>
                                         <td>#</td>

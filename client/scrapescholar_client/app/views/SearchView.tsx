@@ -38,6 +38,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
     //triggers when search is pressed so that UI is updated to loading
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError]=useState<any>();
 
     //empty string variable to make code easier to read
     const emptyString = '';
@@ -80,8 +81,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             inputsAndLogicalOperators.push(filterBlankInputs[i]);
             //make sure we aren't at end of array
             if (i < filterBlankInputs.length - 1 
-                // make sure item isn't an empty string, do we need this?
-                // && filterBlankInputs[i] != emptyString
                 //make sure there is more than 1 item in the inputs, if there is only one item we don't need a logical operator 
                 && filterBlankInputs.length > 1) {
                     //add logical operator under input field to array
@@ -91,14 +90,21 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         const inputsAndLogicalOperatorsString = inputsAndLogicalOperators.join(' ')
         setJoinedInputsString([inputsAndLogicalOperatorsString]);
         //can probably move this to bubbleplot
-        const newBubbleInputs = filterBlankInputs.map((input, i) => ({
+        const newBubbleInputs = filterBlankInputs.map((keyword, i) => ({
+            //set x value as the index, because i dont know a better way to lay these out yet
             x: i,
+            //all circles are on same y axis
             y: 50,
+            //same radius
             radius: 50,
+            //same color
             color: "green",
-            label: input
+            //label is set to keyword
+            label: keyword
         }));
+        //update state with our new array
         setBubbleInputs(newBubbleInputs);
+        //initialize data variable to fill up with api response
         let data: Response;
         let jsonData;
         if (inputsAndLogicalOperators.length === 0)
@@ -111,7 +117,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 jsonData = await data.json()
             }
             catch (error: any) {
-                jsonData = [{ "title": error.message, link: '' }]
+                // jsonData = [{ "title": error.message, link: '' }]
+                setError(error);
             }
         }
         if (jsonData !== undefined && jsonData.length > 0) {
@@ -128,7 +135,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                 handleSearchChange={handleSearchChange} removeInput={removeInput} 
                 setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} />
-            {loading ? <p>Loading</p> : 
+            {error? <p>{error.message}</p>:loading ? <p>Loading</p> : 
             <SearchResults displayInputs={joinedInputsString} 
             results={results} emptyString={emptyString} disableD3={disableD3} 
             inputs={inputs} bubbleInputs={bubbleInputs} />}
