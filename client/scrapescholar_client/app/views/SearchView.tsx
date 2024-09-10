@@ -21,6 +21,7 @@ export interface ResultItem{
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
     const [results, setResults] = useState<ResultItem[]>([]);
     const [inputs, setInputs] = useState<string[]>(['']);
+    const [bubbleInputs, setBubbleInputs] = useState<{ x: number, y: number, radius: number, color: string, label: string }[]>(['']);
     const [displayInputs, setDisplayInputs] = useState<string[]>([]);
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
     const emptyString = '';
@@ -55,6 +56,18 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         const stringFilteredInputs = combinedQuery.join(' ')
         setDisplayInputs([stringFilteredInputs]);
 
+
+      
+            const newBubbleInputs = inputs.map((input, i) => ({
+              x: i,
+              y: 50,
+              radius: 50,
+              color: "green",
+              label: input
+            }));
+            setBubbleInputs(newBubbleInputs);
+       
+
         let data:Response;
         let posts = [];
         if (combinedQuery.length === 0)
@@ -86,7 +99,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         <div>
                 <NavBar handleResults={handleResults} addInput={addInput} inputs={inputs} 
                 handleSearchChange={handleSearchChange} removeInput={removeInput} setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}/>
-                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} />
+                <SearchResults displayInputs={displayInputs} results={results} emptyString={emptyString} disableD3={disableD3} inputs={inputs} bubbleInputs={bubbleInputs}/>
 
         </div>
     );
