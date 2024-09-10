@@ -21,7 +21,7 @@ export interface ResultItem{
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
     const [results, setResults] = useState<ResultItem[]| string>([]);
     const [inputs, setInputs] = useState<string[]>(['']);
-    const [bubbleInputs, setBubbleInputs] = useState<{ x: number, y: number, radius: number, color: string, label: string }[]>(['']);
+    const [bubbleInputs, setBubbleInputs] = useState<{ x: number, y: number, radius: number, color: string, label: string }[]>([]);
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
     const emptyString = '';
