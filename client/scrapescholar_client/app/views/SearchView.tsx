@@ -19,7 +19,7 @@ export interface ResultItem{
     source:string;
 }
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
-    const [results, setResults] = useState<ResultItem[]| string>([]);
+    const [results, setResults] = useState<ResultItem[]>([]);
     const [inputs, setInputs] = useState<string[]>(['']);
     const [bubbleInputs, setBubbleInputs] = useState<{ x: number, y: number, radius: number, color: string, label: string }[]>([]);
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
