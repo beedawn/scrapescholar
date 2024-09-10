@@ -74,16 +74,10 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     await waitFor(() => {
       expect(screen.getByText('You searched ' + testInput)).toBeInTheDocument()
-<<<<<<< HEAD
-<<<<<<<< HEAD:client/scrapescholar_client/__tests__/unit/SearchView.test.tsx
-    });
-========
+
     }, {timeout: 5000});
->>>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article:client/scrapescholar_client/__tests__/integration/SearchView.test.tsx
-=======
-    }, {timeout: 5000});
->>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article
   })
+
 
   test('removes input when delete button clicked', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
@@ -131,16 +125,10 @@ describe('Home Component', () => {
 
 
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:client/scrapescholar_client/__tests__/unit/SearchView.test.tsx
-  test('blank search prompts to enter a keyword search', () => {
-========
+
+
   test('blank search prompts to enter a keyword search', async () => {
->>>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article:client/scrapescholar_client/__tests__/integration/SearchView.test.tsx
-=======
-  test('blank search prompts to enter a keyword search', async () => {
->>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article
-    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+   render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     await waitFor(()=>{
@@ -162,91 +150,6 @@ describe('Home Component', () => {
 
   });
 
-<<<<<<< HEAD
-  test('2 inputs with text in first field displays and/or dropdown', () => {
-    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
-    const addButton = screen.getByText('+');
-    fireEvent.click(addButton);
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
-    const andDropdown = screen.getByDisplayValue('AND');
-    expect(andDropdown).toBeInTheDocument();
-
-  });
-
-
-  test('and shows in results after search submitted', async () => {
-    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-    const addButton = screen.getByText('+');
-    fireEvent.click(addButton);
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
-    const andDropdown = screen.getByDisplayValue('AND');
-    expect(andDropdown).toBeInTheDocument();
-    const searchButton = screen.getByText('Search');
-    fireEvent.click(searchButton);
-    const expectedText = 'You searched ' + testInput+ ' AND '+testInput+' 2';
-    await waitFor(()=>{
-      //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
-      expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
-    });
-
-
-  });
-
-
-  test('or shows in results after search submitted', async () => {
-    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-    const addButton = screen.getByText('+');
-    fireEvent.click(addButton);
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
-    const dropdown = screen.getByDisplayValue('AND');
-
-  
-
-      // Simulate selecting the second option (OR)
-      fireEvent.change(dropdown, { target: { value: Dropdown.OR } });
-  
-    expect(dropdown).toBeInTheDocument();
-    const searchButton = screen.getByText('Search');
-    fireEvent.click(searchButton);
-
-    await waitFor(()=>{
-      expect(screen.getByText('You searched ' + testInput+ ' OR '+testInput+' 2')).toBeInTheDocument()
-    });
-   
-
-  });
-
-
-  test('not shows in results after search submitted', async () => {
-    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-    const addButton = screen.getByText('+');
-    fireEvent.click(addButton);
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
-    const dropdown = screen.getByDisplayValue('AND');
-
-  
-
-      // Simulate selecting the second option (OR)
-      fireEvent.change(dropdown, { target: { value: Dropdown.NOT } });
-  
-    expect(dropdown).toBeInTheDocument();
-    const searchButton = screen.getByText('Search');
-    fireEvent.click(searchButton);
-    await waitFor(()=>{expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()})
-    
-
-  });
-
-=======
->>>>>>> 29-us-11--fr-11---the-system-shall-provide-a-field-in-the-results-that-shows-the-source-link-for-each-academic-article
 
   test('and shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
