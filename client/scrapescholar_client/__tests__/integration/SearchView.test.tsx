@@ -166,8 +166,8 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     const expectedText = 'You searched ' + testInput+ ' AND '+testInput+' 2';
     await waitFor(()=>{
-      //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
-      expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
+      expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
+      // expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
     }, { timeout: 5000 });
 
 

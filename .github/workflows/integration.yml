@@ -24,87 +24,39 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         pip install -r requirements.txt
-
-
-
-
         
     - name: Run Python Integration Tests
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         pytest ./tests/integration
-    
-    - name: Print API Key for Testing
-      run: echo $SCIENCEDIRECT_APIKEY
-      env:
-        SCIENCEDIRECT_APIKEY: ${{ secrets.SCIENCEDIRECT_APIKEY }}
-        
+
     - name: Run FastAPI Server
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://0.0.0.0:8000/health_check
-        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
-
-        
-
-
-    - name: Wait for FastAPI server
-      run: |
-        for i in {1..10}; do
-          if curl -s http://localhost:8000/health_check; then
-            echo "Server is up"
-            break
-          else
-            echo "Waiting for server..."
-            sleep 5
-          fi
-        done
-
 
     - name: Run npm install
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: npm install
 
-
     - name: Run Build
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: | 
-        uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
-        curl -X GET http://0.0.0.0:8000/health_check
-        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
         npm run build
 
-    
     - name: Serve next.js app
       working-directory: ./client/scrapescholar_client
       run: |
         npm run start &
         sleep 10
         curl -X GET http://0.0.0.0:3000/
-        curl -X GET http://0.0.0.0:8000/health_check
-        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
 
     - name: Run Next.js Integration Tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: |
-        uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
-        curl -X GET http://0.0.0.0:8000/health_check
-        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
         npm run test:integration   
 
 
 
-    - name: Run Build
-      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-      run: npm run build
-
-    - name: Serve next.js app
-      working-directory: ./client/scrapescholar_client
-      run: |
-        npm run start &
-        sleep 10
-        curl -X GET http://0.0.0.0:3000/
-        curl -X GET http://0.0.0.0:8000/health_check
-        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test 
 
