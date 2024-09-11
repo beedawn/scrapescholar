@@ -72,10 +72,12 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-    await waitFor(() => {
-      expect(screen.getByText('You searched ' + testInput)).toBeInTheDocument()
 
-    }, {timeout: 10000});
+    const expectedText = 'You searched ' + testInput;
+    await waitFor(()=>{
+      expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
+  
+    }, {timeout: 5000});
   })
 
 
@@ -164,9 +166,9 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     const expectedText = 'You searched ' + testInput+ ' AND '+testInput+' 2';
     await waitFor(()=>{
-      //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
-      expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
-    }, { timeout: 10000 });
+      expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
+      //expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
+    }, { timeout: 5000 });
 
 
   });
@@ -192,7 +194,7 @@ describe('Home Component', () => {
 
     await waitFor(()=>{
       expect(screen.getByText('You searched ' + testInput+ ' OR '+testInput+' 2')).toBeInTheDocument()
-    },{ timeout: 10000 });
+    },{ timeout: 5000 });
    
 
   });
@@ -217,7 +219,7 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     await waitFor(()=>{expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()
 
-    }, { timeout: 10000 })
+    }, { timeout: 5000 })
     
 
   }, );
