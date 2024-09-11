@@ -40,8 +40,8 @@ jobs:
       
       run: |
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
-        curl -X GET http://localhost:8000/health_check
-        curl -X GET http://localhost:8000/sciencedirect?query=test
+        curl -X GET http://0.0.0.0:8000/health_check
+        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
 
         
 
@@ -55,8 +55,8 @@ jobs:
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: | 
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
-        curl -X GET http://localhost:8000/health_check
-        curl -X GET http://localhost:8000/sciencedirect?query=test
+        curl -X GET http://0.0.0.0:8000/health_check
+        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
         npm run build
 
     
@@ -65,16 +65,16 @@ jobs:
       run: |
         npm run start &
         sleep 10
-        curl -X GET http://localhost:3000/
-        curl -X GET http://localhost:8000/health_check
-        curl -X GET http://localhost:8000/sciencedirect?query=test
+        curl -X GET http://0.0.0.0:3000/
+        curl -X GET http://0.0.0.0:8000/health_check
+        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
 
     - name: Run Next.js Integration Tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: |
-        uvicorn app.main:app --host localhost --port 8000 & sleep 5
-        curl -X GET http://localhost:8000/health_check
-        curl -X GET http://localhost:8000/sciencedirect?query=test
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
+        curl -X GET http://0.0.0.0:8000/health_check
+        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test
         npm run test:integration   
 
 
@@ -88,7 +88,7 @@ jobs:
       run: |
         npm run start &
         sleep 10
-        curl -X GET http://localhost:3000/
-        curl -X GET http://localhost:8000/health_check
-        curl -X GET http://localhost:8000/sciencedirect?query=test 
+        curl -X GET http://0.0.0.0:3000/
+        curl -X GET http://0.0.0.0:8000/health_check
+        curl -X GET http://0.0.0.0:8000/sciencedirect?query=test 
 
