@@ -5,7 +5,7 @@ import SearchView from '../../app/views/SearchView';
 import React from 'react';
 import Dropdown from '../../app/types/DropdownType';
 
-
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 beforeEach(() => {
   // Reset mocks before each test
@@ -14,9 +14,6 @@ beforeEach(() => {
       ok: true,
       status: 200,
       json: () => Promise.resolve(
-      
-        
-        
         [
           {
             "id": "0",
@@ -34,10 +31,6 @@ beforeEach(() => {
           }
           
         ]
-      
-      
-  
-      
       ),
       headers: new Headers(),  // Mock other properties as needed
       redirected: false,
@@ -100,17 +93,37 @@ describe('Home Component', () => {
     expect(inputs[0]).toHaveValue(testInput);
   });
 
-//need to revisit this test for when no data is returned
 
-  // test('shows No results found after search press', () => {
-  //   render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-  //   const searchButton = screen.getByText('Search');
+test('shows No results found after search press', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(
+          []
+        ),
+        headers: new Headers(),  
+        redirected: false,
+        statusText: 'OK',
+ 
+      })
+    ) as jest.Mock;
 
-  //   const inputs = screen.getAllByRole('textbox');
-  //   fireEvent.change(inputs[0], { target: { value: testInput } });
-  //   fireEvent.click(searchButton);
-  //   expect(screen.getByText('No results found.')).toBeInTheDocument()
-  // })
+
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const searchButton = screen.getByText('Search');
+
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    // await sleep(1000);
+    // console.log(screen.debug())
+    await waitFor(() => {
+      expect(screen.getByText('No Results Found')).toBeInTheDocument()
+
+    }, {timeout: 5000});
+   
+  })
 
   test('shows you searched test input after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
@@ -213,7 +226,7 @@ describe('Home Component', () => {
       //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
       expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
     }, { timeout: 5000 });
-    console.log(screen.debug());
+
 
   });
 
