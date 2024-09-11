@@ -45,12 +45,9 @@ jobs:
       run: | 
         npm run build
 
-    - name: Serve next.js app
-      working-directory: ./client/scrapescholar_client
-      run: |
-        npm run start &
-        sleep 10
-        curl -X GET http://0.0.0.0:3000/
+
+
+    # build runs both unit and integration tests so could delete this
 
     # - name: Run Next.js Integration Tests
     #   working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
