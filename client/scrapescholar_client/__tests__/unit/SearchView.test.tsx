@@ -18,14 +18,14 @@ beforeEach(() => {
           {
             "id": "0",
             "title": "test 1",
-            "link": "https://www.sciencedirect.com/science/article/pii/S0377027324000611?dgcid=api_sd_search-api-endpoint",
+            "link": "link 1",
             "date": "2024-05-31",
             "source": "Science Direct"
           },
           {
             "id": "1",
             "title": "test 2",
-            "link": "https://www.sciencedirect.com/science/article/pii/S0924424724003558?dgcid=api_sd_search-api-endpoint",
+            "link": "link 2",
             "date": "2024-07-01",
             "source": "Science Direct"
           }
@@ -94,34 +94,7 @@ describe('Home Component', () => {
   });
 
 
-test('shows No results found after search press', async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve(
-          []
-        ),
-        headers: new Headers(),  
-        redirected: false,
-        statusText: 'OK',
- 
-      })
-    ) as jest.Mock;
 
-
-    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-    const searchButton = screen.getByText('Search');
-
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
-    await waitFor(() => {
-      expect(screen.getByText('No Results Found')).toBeInTheDocument()
-
-    }, {timeout: 5000});
-   
-  })
 
   test('shows you searched test input after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
@@ -264,10 +237,8 @@ test('shows No results found after search press', async () => {
     fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
     const dropdown = screen.getByDisplayValue('AND');
 
-  
-
-      // Simulate selecting the second option (OR)
-      fireEvent.change(dropdown, { target: { value: Dropdown.NOT } });
+    // Simulate selecting the second option (OR)
+    fireEvent.change(dropdown, { target: { value: Dropdown.NOT } });
   
     expect(dropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
@@ -278,6 +249,53 @@ test('shows No results found after search press', async () => {
     
 
   }, );
+
+
+  //US-11
+  test('US-11 shows No results found after search press', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(
+          []
+        ),
+        headers: new Headers(),  
+        redirected: false,
+        statusText: 'OK',
+ 
+      })
+    ) as jest.Mock;
+
+
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const searchButton = screen.getByText('Search');
+
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    await waitFor(() => {
+      expect(screen.getByText('No Results Found')).toBeInTheDocument()
+
+    }, {timeout: 5000});
+   
+  })
+
+
+  test('US-11 shows link in response after search press', async () => {
+
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const searchButton = screen.getByText('Search');
+
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    await waitFor(() => {
+      expect(screen.getByText('link 1')).toBeInTheDocument()
+      expect(screen.getByText('link 2')).toBeInTheDocument()
+    }, {timeout: 5000});
+   
+  })
 
 
 });

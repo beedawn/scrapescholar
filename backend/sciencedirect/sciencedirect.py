@@ -22,7 +22,7 @@ def request_api(query: str):
     #return entries to sciencedirect endpoint response
     returnList = []
     x = 0
-
+   
     for entry in entries:
         error = entry.get('error')
         if error is None:
@@ -44,7 +44,7 @@ def request_api(query: str):
                     'source': "Science Direct",
                     })
         x += 1
- 
+    print(returnList)
     return returnList
 
 
