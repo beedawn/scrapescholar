@@ -32,6 +32,8 @@ jobs:
         
     - name: Run FastAPI Server
       working-directory: ./backend  # Adjust to the correct directory
+      env:
+        SCIENCEDIRECT_API_KEY: ${{ secrets.SCIENCEDIRECT_API_KEY }}
       run: |
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://localhost:8000/health_check
