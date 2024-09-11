@@ -40,7 +40,7 @@ jobs:
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: npm install
 
-    - name: Run Build
+    - name: Run Build && unit and integration tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: | 
         npm run build
@@ -52,10 +52,10 @@ jobs:
         sleep 10
         curl -X GET http://0.0.0.0:3000/
 
-    - name: Run Next.js Integration Tests
-      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-      run: |
-        npm run test:integration   
+    # - name: Run Next.js Integration Tests
+    #   working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+    #   run: |
+    #     npm run test:integration   
 
 
 
