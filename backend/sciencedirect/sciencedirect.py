@@ -20,7 +20,6 @@ def request_api(query: str):
     #get entries list
     entries = search_results.get('entry',[])
     #return entries to sciencedirect endpoint response
-    print(entries)
     returnList = []
     x = 0
 
