@@ -5,6 +5,13 @@ import SearchView from '../../app/views/SearchView';
 import React from 'react';
 import Dropdown from '../../app/types/DropdownType';
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+afterEach(async () => {
+  // Sleep for 1 second after each test
+  await sleep(1000);
+});
+
 describe('Home Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
