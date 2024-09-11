@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import sciencedirect.sciencedirect as sciencedirect
+import scopus.scopus as scopus
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -23,3 +24,9 @@ async def health_check():
 @app.get("/sciencedirect")
 async def get_sciencedirect_data(query: str):
     return sciencedirect.request_api(query)
+
+
+
+@app.get("/scopus")
+async def get_sciencedirect_data(query: str):
+    return scopus.request_api(query)

@@ -114,7 +114,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             setInputs([...filterBlankInputs])
             const apiQuery = inputsAndLogicalOperators.join('+')
             try {
-                data = await fetch(`http://0.0.0.0:8000/sciencedirect?query=${apiQuery}`)
+                data = await fetch(`http://0.0.0.0:8000/scopus?query=${apiQuery}`)
                 jsonData = await data.json()
             }
             catch (error: any) {
