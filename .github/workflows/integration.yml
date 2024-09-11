@@ -72,7 +72,7 @@ jobs:
     - name: Run Next.js Integration Tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: |
-        uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
+        uvicorn app.main:app --host localhost --port 8000 & sleep 5
         curl -X GET http://localhost:8000/health_check
         curl -X GET http://localhost:8000/sciencedirect?query=test
         npm run test:integration   
