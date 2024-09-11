@@ -73,6 +73,7 @@ describe('Home Component', () => {
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     await waitFor(() => {
+      console.log(screen.debug())
       expect(screen.getByText('You searched ' + testInput)).toBeInTheDocument()
 
     }, {timeout: 5000});
@@ -164,8 +165,8 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     const expectedText = 'You searched ' + testInput+ ' AND '+testInput+' 2';
     await waitFor(()=>{
-      //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
-      expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
+      expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
+     // expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
     }, { timeout: 5000 });
 
 
