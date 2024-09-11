@@ -29,6 +29,10 @@ jobs:
       run: |
         pytest ./tests/integration
     
+    - name: Print API Key for Testing
+      run: echo $SCIENCEDIRECT_APIKEY
+      env:
+        SCIENCEDIRECT_APIKEY: ${{ secrets.SCIENCEDIRECT_APIKEY }}
         
     - name: Run FastAPI Server
       working-directory: ./backend  # Adjust to the correct directory
