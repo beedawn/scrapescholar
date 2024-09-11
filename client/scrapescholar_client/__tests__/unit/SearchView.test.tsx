@@ -5,6 +5,52 @@ import SearchView from '../../app/views/SearchView';
 import React from 'react';
 import Dropdown from '../../app/types/DropdownType';
 
+
+
+beforeEach(() => {
+  // Reset mocks before each test
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve(
+      
+        
+        
+        [
+          {
+            "id": "0",
+            "title": "test 1",
+            "link": "https://www.sciencedirect.com/science/article/pii/S0377027324000611?dgcid=api_sd_search-api-endpoint",
+            "date": "2024-05-31",
+            "source": "Science Direct"
+          },
+          {
+            "id": "1",
+            "title": "test 2",
+            "link": "https://www.sciencedirect.com/science/article/pii/S0924424724003558?dgcid=api_sd_search-api-endpoint",
+            "date": "2024-07-01",
+            "source": "Science Direct"
+          }
+          
+        ]
+      
+      
+  
+      
+      ),
+      headers: new Headers(),  // Mock other properties as needed
+      redirected: false,
+      statusText: 'OK',
+      // Add more properties as required
+    })
+  ) as jest.Mock;
+});
+
+afterEach(() => {
+  jest.restoreAllMocks(); 
+});
+
 describe('Home Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
@@ -167,7 +213,7 @@ describe('Home Component', () => {
       //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
       expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
     }, { timeout: 5000 });
-
+    console.log(screen.debug());
 
   });
 

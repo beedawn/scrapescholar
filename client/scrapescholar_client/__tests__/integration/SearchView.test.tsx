@@ -54,17 +54,30 @@ describe('Home Component', () => {
     expect(inputs[0]).toHaveValue(testInput);
   });
 
-//need to revisit this test for when no data is returned
 
-  // test('shows No results found after search press', () => {
-  //   render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-  //   const searchButton = screen.getByText('Search');
+  test('shows No results found after search press', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const searchButton = screen.getByText('Search');
 
-  //   const inputs = screen.getAllByRole('textbox');
-  //   fireEvent.change(inputs[0], { target: { value: testInput } });
-  //   fireEvent.click(searchButton);
-  //   expect(screen.getByText('No results found.')).toBeInTheDocument()
-  // })
+
+    const addButton = screen.getByText('+');
+
+    fireEvent.click(addButton);
+    fireEvent.click(addButton);
+    fireEvent.click(addButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: "abcdefg" } });
+    fireEvent.change(inputs[1], { target: { value: "hijklmnop" } });
+    fireEvent.change(inputs[2], { target: { value: "12345678" } });
+    fireEvent.click(searchButton);
+    const expectedText = "No results found";
+    await waitFor(()=>{
+      expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
+    
+    }, {timeout: 5000});
+
+    // expect(screen.getByText('No results found.')).toBeInTheDocument()
+  })
 
   test('shows you searched test input after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
