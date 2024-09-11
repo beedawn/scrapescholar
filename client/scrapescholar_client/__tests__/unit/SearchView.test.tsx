@@ -116,8 +116,6 @@ test('shows No results found after search press', async () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-    // await sleep(1000);
-    // console.log(screen.debug())
     await waitFor(() => {
       expect(screen.getByText('No Results Found')).toBeInTheDocument()
 
