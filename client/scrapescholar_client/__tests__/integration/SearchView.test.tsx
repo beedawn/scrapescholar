@@ -203,8 +203,6 @@ describe('Home Component', () => {
     fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
     const dropdown = screen.getByDisplayValue('AND');
 
-  
-
       // Simulate selecting the second option (OR)
       fireEvent.change(dropdown, { target: { value: Dropdown.OR } });
   
