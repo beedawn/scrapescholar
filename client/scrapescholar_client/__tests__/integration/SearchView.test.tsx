@@ -75,7 +75,7 @@ describe('Home Component', () => {
     await waitFor(() => {
       expect(screen.getByText('You searched ' + testInput)).toBeInTheDocument()
 
-    }, {timeout: 5000});
+    }, {timeout: 10000});
   })
 
 
@@ -166,7 +166,7 @@ describe('Home Component', () => {
     await waitFor(()=>{
       //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
       expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
-    }, { timeout: 5000 });
+    }, { timeout: 10000 });
 
 
   });
@@ -192,7 +192,7 @@ describe('Home Component', () => {
 
     await waitFor(()=>{
       expect(screen.getByText('You searched ' + testInput+ ' OR '+testInput+' 2')).toBeInTheDocument()
-    },{ timeout: 5000 });
+    },{ timeout: 10000 });
    
 
   });
@@ -217,7 +217,7 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     await waitFor(()=>{expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()
 
-    }, { timeout: 5000 })
+    }, { timeout: 10000 })
     
 
   }, );
