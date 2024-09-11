@@ -23,6 +23,18 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         pip install -r requirements.txt
+
+
+
+
+    - name: Serve next.js app
+      working-directory: ./client/scrapescholar_client
+      run: |
+        npm run start &
+        sleep 10
+        curl -X GET http://localhost:3000/
+        curl -X GET http://localhost:8000/health_check
+        curl -X GET http://localhost:8000/sciencedirect?query=test  
         
     - name: Run Python Integration Tests
       working-directory: ./backend  # Adjust to the correct directory
