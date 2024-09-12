@@ -14,7 +14,7 @@ afterEach(async () => {
 
 describe('Home Component', () => {
   const mockSetLoggedIn = jest.fn();
-  const testInput = "test input"
+  const testInput = "test"
   test('check + button loads', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     //finds + button
