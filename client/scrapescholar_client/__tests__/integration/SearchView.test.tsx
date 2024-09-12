@@ -1,5 +1,5 @@
 // __tests__/SearchView.test.tsx
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
@@ -176,7 +176,6 @@ describe('Home Component', () => {
   test('and shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     
-    act(() => {
     
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
@@ -187,10 +186,8 @@ describe('Home Component', () => {
     expect(andDropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-     
-    });
     await sleep(1000)
- 
+    console.log(screen.debug())
     const expectedText = 'You searched ' + testInput+ ' AND '+testInput+' 2';
     await waitFor(()=>{
       expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
@@ -203,9 +200,6 @@ describe('Home Component', () => {
 
   test('or shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-    
-    act(() => {
-    
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
     const inputs = screen.getAllByRole('textbox');
@@ -219,8 +213,6 @@ describe('Home Component', () => {
     expect(dropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-
-    });
     await sleep(1000)
     console.log(screen.debug())
     const expectedText = 'You searched ' + testInput+ ' OR '+testInput+' 2';
@@ -235,8 +227,6 @@ describe('Home Component', () => {
 
   test('not shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-
-    act(() => {
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
     const inputs = screen.getAllByRole('textbox');
@@ -253,7 +243,7 @@ describe('Home Component', () => {
     const searchButton = screen.getByText('Search');
     
     fireEvent.click(searchButton);
-    });
+
     await sleep(1000)
     console.log(screen.debug())
     await waitFor(()=>{expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()
