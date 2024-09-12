@@ -1,11 +1,8 @@
-// __tests__/SearchView.test.tsx
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
 import Dropdown from '../../app/types/DropdownType';
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 beforeEach(() => {
   // Reset mocks before each test
@@ -29,7 +26,6 @@ beforeEach(() => {
             "date": "2024-07-01",
             "source": "Science Direct"
           }
-          
         ]
       ),
       headers: new Headers(),  // Mock other properties as needed
@@ -53,7 +49,6 @@ describe('Home Component', () => {
     const addButton = screen.getByText('+');
     expect(addButton).toBeInTheDocument();
   });
-
 
   test('check ScrapeScholar heading loads', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
@@ -93,9 +88,6 @@ describe('Home Component', () => {
     expect(inputs[0]).toHaveValue(testInput);
   });
 
-
-
-
   test('shows you searched test input after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     const inputs = screen.getAllByRole('textbox');
@@ -108,11 +100,9 @@ describe('Home Component', () => {
     }, {timeout: 5000});
   })
 
-
   test('removes input when delete button clicked', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
     const addButton = screen.getByText('+');
-
     fireEvent.click(addButton);
     fireEvent.click(addButton);
     const deleteButton = screen.getAllByText('-');
@@ -138,24 +128,17 @@ describe('Home Component', () => {
       i++
     }
     expect(screen.getAllByRole('textbox')).toHaveLength(i + 1);
-
     const inputs = screen.getAllByRole('textbox');
     const firstInput = inputs[0]
     const secondInput = inputs[4]
     fireEvent.change(firstInput, { target: { value: testInput } });
     fireEvent.change(secondInput, { target: { value: testInput + ' 4' } });
-
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-
     expect(screen.getAllByRole('textbox')).toHaveLength(2);
     expect(screen.getAllByRole('textbox')[0]).toHaveValue(testInput)
     expect(screen.getAllByRole('textbox')[1]).toHaveValue(testInput + ' 4')
   });
-
-
-
-
 
   test('blank search prompts to enter a keyword search', async () => {
    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
@@ -164,8 +147,6 @@ describe('Home Component', () => {
     await waitFor(()=>{
       expect(screen.getByText('Please enter a keyword')).toBeInTheDocument();
     });
-    
-
   });
 
   test('2 inputs with text in first field displays and/or dropdown', () => {
@@ -177,9 +158,7 @@ describe('Home Component', () => {
     fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
     const andDropdown = screen.getByDisplayValue('AND');
     expect(andDropdown).toBeInTheDocument();
-
   });
-
 
   test('and shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
@@ -197,10 +176,7 @@ describe('Home Component', () => {
       //expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
       expect(screen.getByText('You searched ' + testInput+ ' AND '+testInput+' 2')).toBeInTheDocument()
     }, { timeout: 5000 });
-
-
   });
-
 
   test('or shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
@@ -210,23 +186,15 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
     const dropdown = screen.getByDisplayValue('AND');
-
-  
-
       // Simulate selecting the second option (OR)
       fireEvent.change(dropdown, { target: { value: Dropdown.OR } });
-  
     expect(dropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-
     await waitFor(()=>{
       expect(screen.getByText('You searched ' + testInput+ ' OR '+testInput+' 2')).toBeInTheDocument()
     },{ timeout: 5000 });
-   
-
   });
-
 
   test('not shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
@@ -236,20 +204,14 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.change(inputs[1], { target: { value: testInput+" 2" } });
     const dropdown = screen.getByDisplayValue('AND');
-
     // Simulate selecting the second option (OR)
     fireEvent.change(dropdown, { target: { value: Dropdown.NOT } });
-  
     expect(dropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     await waitFor(()=>{expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()
-
     }, { timeout: 5000 })
-    
-
   }, );
-
 
   //US-11
   test('US-11 shows No results found after search press', async () => {
@@ -263,30 +225,22 @@ describe('Home Component', () => {
         headers: new Headers(),  
         redirected: false,
         statusText: 'OK',
- 
       })
     ) as jest.Mock;
 
-
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     const searchButton = screen.getByText('Search');
-
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
     await waitFor(() => {
       expect(screen.getByText('No Results Found')).toBeInTheDocument()
-
     }, {timeout: 5000});
-   
   })
 
-
   test('US-11 shows link in response after search press', async () => {
-
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     const searchButton = screen.getByText('Search');
-
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
@@ -294,8 +248,5 @@ describe('Home Component', () => {
       expect(screen.getByText('link 1')).toBeInTheDocument()
       expect(screen.getByText('link 2')).toBeInTheDocument()
     }, {timeout: 5000});
-   
   })
-
-
 });
