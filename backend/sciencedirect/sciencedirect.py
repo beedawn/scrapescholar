@@ -16,7 +16,7 @@ def request_api(query: str):
     #get entries list
     entries = search_results.get('entry',[])
     #return entries to sciencedirect endpoint response
- 
+    returnList =[]
     for entry in entries:
         title = entry.get('dc:title')
         links = entry.get('link')
