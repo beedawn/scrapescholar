@@ -56,7 +56,7 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     ## keywordPhrase = '+'.join(keywords).strip().replace(" ", "%20")
 
     ## but something better to avoid injection would be
-    ## import urllib.parse import quote
+    ## from urllib.parse import quote
     ## keywordPhrase = quote('+'.join(keywords).strip())
     ## this would convert all characters to url encoding and likely harden security
 
