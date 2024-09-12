@@ -97,7 +97,7 @@ def parse_json(json_data):
 
 #  Access an environment variable for API Key
 api_key = os.getenv('SCOPUS_APIKEY')
-#api_key_th = "737eab5d80dc68fd8dbb744fcad411b9"    #This is Tristan's API key but should be deleted before merge for security
+api_key_th = "737eab5d80dc68fd8dbb744fcad411b9"    #This is Tristan's API key but should be deleted before merge for security
 
 #   QueryParameters - keywordList is user input, the rest will be static and unique to the scienceDirect parameters
 researcherKeywordList = ["cybersecurity", "AND", "non profit", "OR", "charity"]     
