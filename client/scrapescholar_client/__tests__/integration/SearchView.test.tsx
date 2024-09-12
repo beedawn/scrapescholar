@@ -92,7 +92,7 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-
+    await sleep(1000)
     const expectedText = 'You searched ' + testInput;
     await waitFor(()=>{
       expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
@@ -184,6 +184,7 @@ describe('Home Component', () => {
     expect(andDropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
+    await sleep(1000)
     const expectedText = 'You searched ' + testInput+ ' AND '+testInput+' 2';
     await waitFor(()=>{
       expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
@@ -209,7 +210,7 @@ describe('Home Component', () => {
     expect(dropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
-
+    await sleep(1000)
     const expectedText = 'You searched ' + testInput+ ' OR '+testInput+' 2';
     await waitFor(()=>{
       expect(screen.getByText(new RegExp(expectedText,'i') )).toBeInTheDocument()
@@ -236,7 +237,10 @@ describe('Home Component', () => {
   
     expect(dropdown).toBeInTheDocument();
     const searchButton = screen.getByText('Search');
+    
     fireEvent.click(searchButton);
+
+    await sleep(1000)
     await waitFor(()=>{expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()
 
     }, { timeout: 5000 })
