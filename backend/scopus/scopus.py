@@ -1,6 +1,8 @@
 import requests
 import os
 import datetime
+import json
+import csv
 # from dotenv import load_dotenv
  
 
@@ -69,13 +71,33 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     
     return getPhrase
 
+def parse_json(json_data):
+    data = json.loads(json_data)
+    results = []
+    for entry in data["search-results"]["entry"]:
+        result = SearchResults(
+            title = entry["dc:title"],
+            year = entry["prism:coverDate"].split("-")[0],
+            citedBy = entry["citedby-count"],
+            link = next((link["@href"] for link in entry["link"] if link["@ref"] == "scopus"), None),
+            abstract = None,       #Need to upgrade to view=COMPLETE (requires subscription?)
+            documentType = entry["subtypeDescription"],
+            source = entry["prism:publicationName"],
+            evaluation=None,
+            methodology=None,
+            clarity=None,
+            completeness=None,
+            transparency=None
+        )
+        results.append(result)
+    return results
 
 #   ---main--- This is testing the variables that I will recieve from the front end
 
 
 #  Access an environment variable for API Key
 api_key = os.getenv('SCOPUS_APIKEY')
-api_key_th = "737eab5d80dc68fd8dbb744fcad411b9"    #This is Tristan's API key but should be deleted before merge for security
+#api_key_th = "737eab5d80dc68fd8dbb744fcad411b9"    #This is Tristan's API key but should be deleted before merge for security
 
 #   QueryParameters - keywordList is user input, the rest will be static and unique to the scienceDirect parameters
 researcherKeywordList = ["cybersecurity", "AND", "non profit", "OR", "charity"]     
@@ -85,6 +107,16 @@ minYear2015 = "2015"
 #   Build Query
 searchQuery = QueryParameters(keywords=researcherKeywordList, subject=subjectComp, minYear=minYear2015)
 queryURL = query_scopus_api(searchQuery.keywords, api_key_th)
+print(queryURL)
 apiResponse = requests.get(queryURL)
-print(apiResponse.json())
+jsonResults = apiResponse.text
+
 #   Store Results in Class
+search_results = (parse_json(jsonResults))
+for result in search_results:
+    print(result.__dict__)
+
+#   Create CSV file to make parsing easier? Export?
+#   Code...
+#   Code...
+#   Code...
