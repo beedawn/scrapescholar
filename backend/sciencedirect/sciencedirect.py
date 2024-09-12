@@ -1,7 +1,9 @@
 ## missing requests import
 import requests
+from dotenv import load_dotenv
 
-
+load_dotenv()    
+api_key = os.getenv('SCIENCEDIRECT_APIKEY')
 # Triggers for science direct endpoint
 def request_api(query: str):
     #request data from science direct
