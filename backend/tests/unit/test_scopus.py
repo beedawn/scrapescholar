@@ -3,13 +3,13 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.main import app
-from sciencedirect.sciencedirect import api_key
+from scopus.scopus import api_key
 
 client = TestClient(app)
 
 
 def test_sciencedirect_response_has_title_and_link():
-    response = client.get("/sciencedirect?query=test")
+    response = client.get("/scopus?query=test")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data,list)
@@ -27,7 +27,7 @@ def test_sciencedirect_response_has_title_and_link():
 
 
 def test_sciencedirect_empty_response_is_empty():
-    response = client.get("/sciencedirect?query=abcdefg+AND+hijklmnop+AND+12345")
+    response = client.get("/scopus?query=abcdefg+AND+hijklmnop+AND+12345")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data,list)
@@ -35,9 +35,10 @@ def test_sciencedirect_empty_response_is_empty():
     assert len(data) is 0   
 
 
-def test_sciencedirect_apiKey_env_is_filled():
+def test_scopus_apiKey_is_filled():
 
     assert api_key is not None
+
 
 
     

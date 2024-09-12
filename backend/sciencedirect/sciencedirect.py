@@ -7,6 +7,7 @@ load_dotenv()
                          
 # Access an environment variable
 api_key = os.getenv('SCIENCEDIRECT_APIKEY')
+
 #keyword for search      
 keyword = "cybersecurity"
 # triggers for science direct endpoint
