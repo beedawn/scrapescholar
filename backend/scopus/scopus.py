@@ -134,7 +134,7 @@ searchQuery = QueryParameters(keywords=researcherKeywordList, subject=subjectCom
 queryURL = query_scopus_api(searchQuery.keywords, api_key_th)
 print(queryURL)
 apiResponse = requests.get(queryURL)
-## could we just use .json instead? if we did then we could probably delete line 99
+## could we just use .json instead? if we did then we could probably delete line 98
 jsonResults = apiResponse.text
 
 #   Store Results in Class
