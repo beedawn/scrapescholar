@@ -31,7 +31,7 @@ def request_api(query: str):
 
 
             if links:
-                link = links[1].get('@href')
+                link = links[2].get('@href')
             else:
                 link = ""
             date = entry.get('prism:coverDate')
