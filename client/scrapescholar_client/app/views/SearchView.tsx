@@ -25,12 +25,12 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     //inputs gets user inputs, update everytime user enters character
     const [inputs, setInputs] = useState<string[]>(['']);
     //bubble inputs is passed to bubble plot, pure inputs that update when Search is pressed only
-    const [bubbleInputs, setBubbleInputs] = useState<{ 
-        x: number, 
-        y: number, 
-        radius: number, 
-        color: string, 
-        label: string 
+    const [bubbleInputs, setBubbleInputs] = useState<{
+        x: number,
+        y: number,
+        radius: number,
+        color: string,
+        label: string
     }[]>([]);
     //string of inputs joined with ' '
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
@@ -38,11 +38,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
     //triggers when search is pressed so that UI is updated to loading
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError]=useState<any>();
-
+    const [error, setError] = useState<any>();
     //empty string variable to make code easier to read
     const emptyString = '';
-
     //adds input and drop down when plus is pressed
     const addInput = () => {
         setInputs([...inputs, emptyString]);
@@ -81,10 +79,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             //add input value
             inputsAndLogicalOperators.push(filterBlankInputs[i]);
             //make sure we aren't at end of array
-            if (i < filterBlankInputs.length - 1 
+            if (i < filterBlankInputs.length - 1
                 //make sure there is more than 1 item in the inputs, if there is only one item we don't need a logical operator 
                 && filterBlankInputs.length > 1) {
-                    //add logical operator under input field to array
+                //add logical operator under input field to array
                 inputsAndLogicalOperators.push(dropdown[i])
             }
         }
@@ -134,13 +132,12 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     return (
         <div>
             <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
-                handleSearchChange={handleSearchChange} removeInput={removeInput} 
+                handleSearchChange={handleSearchChange} removeInput={removeInput}
                 setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} />
-            {error? <p>{error.message}</p>:loading ? <p>Loading</p> : 
-            <SearchResults displayInputs={joinedInputsString} 
-            results={results} emptyString={emptyString} disableD3={disableD3} 
-            inputs={inputs} bubbleInputs={bubbleInputs} />}
-
+            {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
+                <SearchResults displayInputs={joinedInputsString}
+                    results={results} emptyString={emptyString} disableD3={disableD3}
+                    inputs={inputs} bubbleInputs={bubbleInputs} />}
         </div>
     );
 }

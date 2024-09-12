@@ -1,4 +1,3 @@
-// __tests__/SearchView.test.tsx
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Home from '../../app/page';
@@ -24,7 +23,6 @@ describe('Home Component', () => {
     //maybe should test there are two + buttons too?
   });
 
-
   test('check logout button renders in SearchView', () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
@@ -32,9 +30,7 @@ describe('Home Component', () => {
     fireEvent.click(loginButton);
     //should be 2 inputs now
     const logoutButton = screen.getByText('Logout');
-
     expect(logoutButton).toBeInTheDocument();
-
   });
 
   test('check logout button works in SearchView', () => {
@@ -44,12 +40,9 @@ describe('Home Component', () => {
     fireEvent.click(loginButton);
     //should be 2 inputs now
     const logoutButton = screen.getByText('Logout');
-
     expect(logoutButton).toBeInTheDocument();
     fireEvent.click(logoutButton);
     const loginButton2 = screen.getByText('Login');
     expect(loginButton2).toBeInTheDocument();
-
   });
-
 });
