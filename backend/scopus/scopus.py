@@ -1,52 +1,36 @@
 import requests
-import os
-from dotenv import load_dotenv
- 
-# Load environment variables from .env file
-load_dotenv()            
+
+from urllib.parse import quote
+
+from api_tools.api_tools import scopus_api_key,parse_data_scopus
+        
                          
-# Access an environment variable
-api_key = os.getenv('SCOPUS_APIKEY')
+
 
 # triggers for science direct endpoint
 def request_api(query: str):
     #request data from science direct
-    response = requests.get(f"https://api.elsevier.com/content/search/scopus?query={query}&apiKey={api_key}")
-    #get json data
-    data = response.json()
-    print(data)
-    #get search-results object
-    search_results= data.get('search-results', {})
-    #get entries list
-    entries = search_results.get('entry',[])
+    query=quote(query)
+    response = requests.get(f"https://api.elsevier.com/content/search/scopus?query={query}&apiKey={scopus_api_key}")
+    articles=parse_data_scopus(response)
     #return entries to sciencedirect endpoint response
-    returnList = []
+    return_articles = []
     x = 0
-   
-    for entry in entries:
-        error = entry.get('error')
+    for article in articles:
+        error = article.get('error')
         if error is None:
-            title = entry.get('dc:title')
-            links = entry.get('link')
-
-
+            links = article.get('link')
             if links:
                 link = links[2].get('@href')
             else:
                 link = ""
-            date = entry.get('prism:coverDate')
-        
-            returnList.append({
+            return_articles.append({
                     'id':x,
-                    'title':title, 
+                    'title': article.get('dc:title'), 
                     'link':link, 
-                    'date':date, 
+                    'date':article.get('prism:coverDate'), 
+                    'citedby': article.get('citedby-count'),
                     'source': "Scopus",
                     })
         x += 1
-    print(returnList)
-    return returnList
-
-
-
-
+    return return_articles

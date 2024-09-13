@@ -17,6 +17,7 @@ export interface ResultItem {
     link: string;
     date: string;
     source: string;
+    citedby:number;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {

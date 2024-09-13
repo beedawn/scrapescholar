@@ -49,7 +49,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                                         <tr key={result.id || index}>
                                             <td><a href={result.link}>{result.title}</a></td>
                                             <td>{result.date}</td>
-                                            <td>#</td>
+                                            <td>{result.citedby}</td>
                                             <td><a href={result.link}>{result.link}</a></td>
                                             <td></td>
                                             <td></td>
