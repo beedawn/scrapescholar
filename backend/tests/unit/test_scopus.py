@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.main import app
-from scopus.scopus import api_key
+from scopus.scopus import scopus_api_key
 
 client = TestClient(app)
 
@@ -37,7 +37,7 @@ def test_scopus_empty_response_is_empty():
 
 def test_scopus_apiKey_is_filled():
 
-    assert api_key is not None
+    assert scopus_api_key is not None
 
 
 

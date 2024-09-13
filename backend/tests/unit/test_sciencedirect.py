@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.main import app
-from sciencedirect.sciencedirect import api_key
+from sciencedirect.sciencedirect import sciencedirect_api_key
 
 client = TestClient(app)
 
@@ -37,7 +37,7 @@ def test_sciencedirect_empty_response_is_empty():
 
 def test_sciencedirect_apiKey_env_is_filled():
 
-    assert api_key is not None
+    assert sciencedirect_api_key is not None
 
 
     
