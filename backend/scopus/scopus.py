@@ -3,9 +3,6 @@ import requests
 from urllib.parse import quote
 
 from api_tools.api_tools import scopus_api_key,parse_data_scopus
-        
-                         
-
 
 # triggers for science direct endpoint
 def request_api(query: str):
