@@ -60,7 +60,7 @@ describe('Home Component', () => {
   });
 
 
-  test('shows No results found after search press', async () => {
+  test('US-11 shows No results found after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
     const searchButton = screen.getByText('Search');
     const addButton = screen.getByText('+');
@@ -204,4 +204,18 @@ describe('Home Component', () => {
     await waitFor(()=>{expect(screen.getByText('You searched ' + testInput+ ' NOT '+testInput+' 2')).toBeInTheDocument()
     }, { timeout: 5000 })
   }, );
+
+
+  test('US-11 shows link in response after search press', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    await waitFor(() => {
+      //may fail as these are entirely dependent on the search results
+      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85195044861&origin=inward')).toBeInTheDocument()
+      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85202744346&origin=inward')).toBeInTheDocument()
+    }, {timeout: 5000});
+  })
 });
