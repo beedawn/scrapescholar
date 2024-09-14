@@ -160,3 +160,17 @@ CREATE TABLE "ResearchQuestionMapping" (
 COMMENT ON COLUMN "ResearchQuestionMapping".research_question_mapping_id IS 'Unique identifier for each mapping entry';
 COMMENT ON COLUMN "ResearchQuestionMapping".article_id IS 'Foreign key referencing the ID of the Article table';
 COMMENT ON COLUMN "ResearchQuestionMapping".research_question_id IS 'Foreign key referencing the ID of the ResearchQuestions table';
+
+-- Create the ResearchQuestionScore Table
+CREATE TABLE "ResearchQuestionScore" (
+    research_Question_Score_id SERIAL PRIMARY KEY,  
+    research_question_mapping_id INTEGER NOT NULL,  
+    score INTEGER NOT NULL,  
+    last_updated_by_id INT REFERENCES "User"(user_id),
+    FOREIGN KEY (research_question_mapping_id) REFERENCES "ResearchQuestionMapping"(research_question_mapping_id) ON DELETE CASCADE
+);
+
+COMMENT ON COLUMN "ResearchQuestionScore".research_Question_Score_id IS 'Unique identifier for each score entry';
+COMMENT ON COLUMN "ResearchQuestionScore".research_question_mapping_id IS 'Foreign key referencing the ID of the ResearchQuestionMapping table';
+COMMENT ON COLUMN "ResearchQuestionScore".score IS 'Score value associated with the research question in an article';
+COMMENT ON COLUMN "ResearchQuestionScore".last_updated_by_id IS 'The user who last updated the score (optional for tracking purposes)';
