@@ -100,7 +100,7 @@ COMMENT ON COLUMN "Collaboration".created_at IS 'Date and time when the collabor
 
 -- Create ArticleScore Table
 CREATE TABLE "ArticleScore" (
-    score_id SERIAL PRIMARY KEY,
+    article_score_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES "User"(user_id),
     article_id INT REFERENCES "Article"(article_id),
     search_id INT REFERENCES "Search"(search_id),
