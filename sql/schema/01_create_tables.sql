@@ -53,17 +53,21 @@ COMMENT ON COLUMN "Search".status IS 'Status of the search (e.g., active, comple
 
 -- Create Article Table
 CREATE TABLE "Article" (
-    article_id SERIAL PRIMARY KEY,
-    source_id INT REFERENCES "Source"(source_id),
-    search_id INT REFERENCES "Search"(search_id),
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(100),
-    publication_date DATE,
-    journal VARCHAR(100),
-    url VARCHAR(255),
-    relevance_score FLOAT,
-    review_status VARCHAR(20) CHECK (review_status IN ('green', 'yellow', 'red'))
+    article_id SERIAL PRIMARY KEY,  -- Unique identifier for each article
+    source_id INT REFERENCES "Source"(source_id),  -- Foreign key referencing the source of the article
+    search_id INT REFERENCES "Search"(search_id),  -- Foreign key referencing the search that retrieved this article
+    title VARCHAR(255) NOT NULL,  -- Title of the article
+    author VARCHAR(100),  -- Author of the article
+    publication_date DATE,  -- Date when the article was published
+    journal VARCHAR(100),  -- Journal where the article was published
+    url VARCHAR(255),  -- URL link to the article
+    relevance_score FLOAT,  -- Relevance score assigned to the article based on user evaluation
+    review_status VARCHAR(20) CHECK (review_status IN ('green', 'yellow', 'red')),  -- Status indicating the relevance of the article
+    abstract TEXT,  -- Abstract of the article, providing a brief summary
+    doi VARCHAR(100)  -- Digital Object Identifier (DOI) for the article, optional field
 );
+
+-- Add comments for clarity on each column
 COMMENT ON COLUMN "Article".source_id IS 'Foreign key referencing the source of the article';
 COMMENT ON COLUMN "Article".search_id IS 'Foreign key referencing the search that retrieved this article';
 COMMENT ON COLUMN "Article".title IS 'Title of the article';
@@ -73,6 +77,8 @@ COMMENT ON COLUMN "Article".journal IS 'Journal where the article was published'
 COMMENT ON COLUMN "Article".url IS 'URL link to the article';
 COMMENT ON COLUMN "Article".relevance_score IS 'Relevance score assigned to the article based on user evaluation';
 COMMENT ON COLUMN "Article".review_status IS 'Status indicating the relevance of the article (green, yellow, red)';
+COMMENT ON COLUMN "Article".abstract IS 'Abstract of the article, providing a brief summary';
+COMMENT ON COLUMN "Article".doi IS 'Digital Object Identifier (DOI) for the article, optional field';
 
 -- Create Comment Table
 CREATE TABLE "Comment" (
