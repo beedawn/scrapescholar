@@ -4,9 +4,17 @@ on:
   pull_request:
     branches:
       - '*'
+    paths:
+      - 'backend/app/models/*.py'
+      - 'backend/app/init_db.py'
+      - 'backend/app/db/*.py'
   push:
     branches:
       - '*'
+    paths:
+      - 'backend/app/models/*.py'
+      - 'backend/app/init_db.py'
+      - 'backend/app/db/*.py'
 
 jobs:
   init-db:
