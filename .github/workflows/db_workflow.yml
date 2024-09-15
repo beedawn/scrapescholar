@@ -51,4 +51,5 @@ jobs:
       - name: Run init_db script
         env:
           DATABASE_URL: postgresql://student:student@localhost:5432/scrapescholartestdb
+          PYTHONPATH: ./backend
         run: python backend/app/init_db.py
