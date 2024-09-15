@@ -2,14 +2,19 @@
 
 from pydantic_settings import BaseSettings  # Updated import
 from pydantic import Field
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 class Settings(BaseSettings):
     # Configuration for the PostgreSQL database connection
-    POSTGRES_USER: str = "student"  # replace with your actual username
-    POSTGRES_PASSWORD: str = "student"  # replace with your actual password
-    POSTGRES_DB: str = "scrapescholartestdb"  # replace with your actual database name
-    POSTGRES_SERVER: str = "localhost"  # replace with your actual server
-    POSTGRES_PORT: str = "49168"  # replace with your actual port
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER")  # Loaded from .env
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")  # Loaded from .env
+    POSTGRES_DB: str = os.getenv("POSTGRES_DB")  # Loaded from .env
+    POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER")  # Loaded from .env
+    POSTGRES_PORT: str = os.getenv("POSTGRES_PORT")  # Loaded from .env
     DATABASE_URL: str = Field(default="", description="The database URL")  # Initialize with an empty string
 
     # Generate DATABASE_URL dynamically if not provided
@@ -19,9 +24,6 @@ class Settings(BaseSettings):
             # Construct the database URL dynamically
             return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         return self.DATABASE_URL
-
-    class Config:
-        env_file = ".env"  # This will load environment variables from a .env file if available
 
 # Create a global settings object
 settings = Settings()
