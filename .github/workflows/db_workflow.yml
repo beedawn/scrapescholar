@@ -1,0 +1,68 @@
+name: Init DB Workflow
+
+on:
+  pull_request:
+    branches:
+      - '*'
+    paths:
+      - 'backend/app/models/*.py'
+      - 'backend/app/init_db.py'
+      - 'backend/app/db/*.py'
+  push:
+    branches:
+      - '*'
+    paths:
+      - 'backend/app/models/*.py'
+      - 'backend/app/init_db.py'
+      - 'backend/app/db/*.py'
+
+jobs:
+  init-db:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: student
+          POSTGRES_PASSWORD: student
+          POSTGRES_DB: scrapescholartestdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U student" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p 5432 -U student; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 5
+          done
+
+      - name: Run init_db script
+        env:
+          DATABASE_URL: postgresql://student:student@localhost:5432/scrapescholartestdb
+          PYTHONPATH: ./backend
+          POSTGRES_USER: student
+          POSTGRES_PASSWORD: student
+          POSTGRES_DB: scrapescholartestdb
+          POSTGRES_SERVER: localhost
+          POSTGRES_PORT: "5432"          
+        run: python backend/app/init_db.py
