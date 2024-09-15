@@ -39,6 +39,6 @@ uvicorn==0.30.6
 uvloop==0.20.0
 watchfiles==0.24.0
 websockets==13.0.1
-sqlalchemy=2.0.34
-alembic=1.13.2
-psycopg2-binary=2.9.9
+sqlalchemy==2.0.34
+alembic==1.13.2
+psycopg2-binary==2.9.9
