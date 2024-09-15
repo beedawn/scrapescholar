@@ -145,14 +145,14 @@ CREATE TABLE "SearchKeyword" (
 COMMENT ON COLUMN "SearchKeyword".search_id IS 'Foreign key referencing the search';
 COMMENT ON COLUMN "SearchKeyword".keyword_id IS 'Foreign key referencing the keyword';
 
--- Create the ResearchQuestions Table
-CREATE TABLE "ResearchQuestions" (
+-- Create the ResearchQuestion Table
+CREATE TABLE "ResearchQuestion" (
     research_question_id SERIAL PRIMARY KEY,
     research_question TEXT NOT NULL
 );
 
-COMMENT ON COLUMN "ResearchQuestions".research_question_id IS 'Unique identifier for each research question';
-COMMENT ON COLUMN "ResearchQuestions".research_question IS 'The text of the research question';
+COMMENT ON COLUMN "ResearchQuestion".research_question_id IS 'Unique identifier for each research question';
+COMMENT ON COLUMN "ResearchQuestion".research_question IS 'The text of the research question';
 
 -- Create the ResearchQuestionMapping Table
 CREATE TABLE "ResearchQuestionMapping" (
@@ -160,12 +160,12 @@ CREATE TABLE "ResearchQuestionMapping" (
     article_id INTEGER NOT NULL,
     research_question_id INTEGER NOT NULL,
     FOREIGN KEY (article_id) REFERENCES "Article"(article_id) ON DELETE CASCADE,
-    FOREIGN KEY (research_question_id) REFERENCES "ResearchQuestions"(research_question_id) ON DELETE CASCADE
+    FOREIGN KEY (research_question_id) REFERENCES "ResearchQuestion"(research_question_id) ON DELETE CASCADE
 );
 
 COMMENT ON COLUMN "ResearchQuestionMapping".research_question_mapping_id IS 'Unique identifier for each mapping entry';
 COMMENT ON COLUMN "ResearchQuestionMapping".article_id IS 'Foreign key referencing the ID of the Article table';
-COMMENT ON COLUMN "ResearchQuestionMapping".research_question_id IS 'Foreign key referencing the ID of the ResearchQuestions table';
+COMMENT ON COLUMN "ResearchQuestionMapping".research_question_id IS 'Foreign key referencing the ID of the ResearchQuestion table';
 
 -- Create the ResearchQuestionScore Table
 CREATE TABLE "ResearchQuestionScore" (
