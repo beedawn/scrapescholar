@@ -46,6 +46,10 @@ jobs:
       run: | 
         npm run build
 
+    - name: run Integration tests Next.js 
+      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      run: npm run test:integration
+
 
 
     # build runs both unit and integration tests so could delete this

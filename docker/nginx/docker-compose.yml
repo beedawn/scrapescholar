@@ -13,7 +13,7 @@ services:
     #ports:
       #- "3000:3000"
   
-    command: "npm run build && npm run start"  #  "npm start" for production
+    command: "npm run dev"  #  "npm start" for production
     environment:
       - NODE_ENV=development  # "production" for production builds
   
