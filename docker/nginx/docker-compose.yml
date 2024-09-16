@@ -2,7 +2,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      # - ./templates:/etc/nginx/templates
+      - ./templates:/etc/nginx/templates
       # - ./nginx.conf:/etc/nginx/nginx.conf
       - ./start_nginx.sh:/docker-entrypoint.d/start_nginx.sh:ro
       - ./:/etc/nginx/conf.d/:rw
