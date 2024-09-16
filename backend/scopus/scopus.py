@@ -3,11 +3,11 @@ import os
 import datetime
 import json
 import csv
-# from dotenv import load_dotenv
- 
+import urllib.parse 
+from urllib.parse import quote
+from dotenv import load_dotenv
 
-# Load environment variables from .env file
-# load_dotenv()            
+load_dotenv()
 
 #Create QueryParameters class
 class QueryParameters:
@@ -41,11 +41,8 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     keywordPhrase = ""
     for currentWord in keywords:
         strippedWord = currentWord.strip()
-        if ' ' in currentWord:
-            strippedWordPlus = strippedWord.replace(" ", "+")
-            keywordPhrase += strippedWordPlus
-        else:
-            keywordPhrase += strippedWord
+        encodedWord = urllib.parse.quote(strippedWord).replace(" ", "+")
+        keywordPhrase += encodedWord
         keywordPhrase += "%20"
 
     #Other Parameters
@@ -71,7 +68,7 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     
     return getPhrase
 
-def parse_json(json_data):
+def load_json_classify_results(json_data):
     data = json.loads(json_data)
     results = []
     for entry in data["search-results"]["entry"]:
@@ -92,12 +89,12 @@ def parse_json(json_data):
         results.append(result)
     return results
 
+
 #   ---main--- This is testing the variables that I will recieve from the front end
 
 
 #  Access an environment variable for API Key
-api_key = os.getenv('SCOPUS_APIKEY')
-api_key_th = "737eab5d80dc68fd8dbb744fcad411b9"    #This is Tristan's API key but should be deleted before merge for security
+api_key = os.getenv("SCOPUS_APIKEY_TH")
 
 #   QueryParameters - keywordList is user input, the rest will be static and unique to the scienceDirect parameters
 researcherKeywordList = ["cybersecurity", "AND", "non profit", "OR", "charity"]     
@@ -106,13 +103,14 @@ minYear2015 = "2015"
 
 #   Build Query
 searchQuery = QueryParameters(keywords=researcherKeywordList, subject=subjectComp, minYear=minYear2015)
-queryURL = query_scopus_api(searchQuery.keywords, api_key_th)
+
+queryURL = query_scopus_api(searchQuery.keywords, api_key)
 print(queryURL)
 apiResponse = requests.get(queryURL)
 jsonResults = apiResponse.text
 
 #   Store Results in Class
-search_results = (parse_json(jsonResults))
+search_results = (load_json_classify_results(jsonResults))
 for result in search_results:
     print(result.__dict__)
 

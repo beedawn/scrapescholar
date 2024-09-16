@@ -1,3 +1,4 @@
+import requests
 
 # Triggers for science direct endpoint
 def request_api(query: str):
