@@ -1,15 +1,21 @@
 services:
   nginx:
-    image: nginx
+    image: nginx:latest
     volumes:
-      - ./templates:/etc/nginx/templates
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      # - ./templates:/etc/nginx/templates
+      # - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./start_nginx.sh:/docker-entrypoint.d/start_nginx.sh:ro
+      - ./:/etc/nginx/conf.d/:rw
+      - ./certbot/www/:/var/www/certbot/:ro
     ports:
       - "80:80"
-      # - "443:443"
+      - "443:443"
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
+      - SERVER_NAME=scrapescholar.me
+    # chmod +x start_nginx.sh before running
+    entrypoint: ["/docker-entrypoint.d/start_nginx.sh"]
   certbot:
     image: certbot/certbot:latest
     volumes:
