@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+## I don't think we need this?
 #Create QueryParameters class
 class QueryParameters:
     def __init__(self, keywords = None, subject = None, minYear = None):
@@ -39,6 +40,24 @@ class SearchResults:
 def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     #Keyword Builder
     keywordPhrase = ""
+
+    ## its hard to tell what this does
+    ## it looks like it strips spaces off the ends of both sides of a keyword
+    ## then checks currentWord if it has spaces
+    ## then if currentWord has spaces, it replaces spaces in strippedWord with +
+    ## then appends strippedWordPlus to keywordPhrase
+    ## or if there aren't spaces then it appends the word to keyword phrase?
+    ## would it be simpler to do keywords.replace(" ", "%20")??
+    ## i mostly say this because im worried if someone searched "non profit" what would come out?
+    ## i tried it and it gives me "non+profit%20" when i think it should be "non%20profit+"?
+    ## something like:
+    ## keywordPhrase = '+'.join(keywords).strip().replace(" ", "%20")
+
+    ## but something better to avoid injection would be
+    ## from urllib.parse import quote
+    ## keywordPhrase = quote('+'.join(keywords).strip())
+    ## this would convert all characters to url encoding and likely harden security
+
     for currentWord in keywords:
         strippedWord = currentWord.strip()
         encodedWord = urllib.parse.quote(strippedWord).replace(" ", "+")
@@ -102,11 +121,13 @@ subjectComp = "COMP"
 minYear2015 = "2015"
 
 #   Build Query
+## I don't think we need to store the keywords in an object, just the article info
 searchQuery = QueryParameters(keywords=researcherKeywordList, subject=subjectComp, minYear=minYear2015)
 
 queryURL = query_scopus_api(searchQuery.keywords, api_key)
 print(queryURL)
 apiResponse = requests.get(queryURL)
+## could we just use .json instead? if we did then we could probably delete line 98
 jsonResults = apiResponse.text
 
 #   Store Results in Class

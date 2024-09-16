@@ -1,5 +1,10 @@
+## missing requests import
 import requests
+import os
+from dotenv import load_dotenv
 
+load_dotenv()    
+api_key = os.getenv('SCIENCEDIRECT_APIKEY')
 # Triggers for science direct endpoint
 def request_api(query: str):
     #request data from science direct
@@ -11,7 +16,7 @@ def request_api(query: str):
     #get entries list
     entries = search_results.get('entry',[])
     #return entries to sciencedirect endpoint response
- 
+    returnList =[]
     for entry in entries:
         title = entry.get('dc:title')
         links = entry.get('link')
