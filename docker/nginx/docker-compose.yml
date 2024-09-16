@@ -4,7 +4,7 @@ services:
     # image: node:20 
     build:
       context: ../../client/scrapescholar_client  # Context for Dockerfile
-      dockerfile: ../../nextjs/Dockerfile  # Use your existing Dockerfile
+      dockerfile: ../../docker/nextjs/Dockerfile  # Use your existing Dockerfile
     working_dir: /app
     volumes:
       - ../../client/scrapescholar_client:/app
