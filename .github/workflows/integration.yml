@@ -54,6 +54,29 @@ jobs:
       run: |
         curl https://scrapescholar.me
 
+    - name: test http redirection to https
+      run: |
+
+        # Perform an HTTP request and follow redirects
+        REDIRECTS=$(curl -I -L -s -w "%{http_code} %{url_effective}\n" http://scrapescholar.me)
+
+        # Extract HTTP status code and final URL from last line of output
+        STATUS_CODE=$(echo "$REDIRECTS" | tail -n 1 | awk '{print $1}')
+        FINAL_URL=$(echo "$REDIRECTS" | tail -n 1 | awk '{print $2}')
+
+        # Print status code and final redirected url for debugging purposes
+        echo "Status Code: $STATUS_CODE"
+        echo "Final URL: $FINAL_URL"
+
+        # check if final url is https, and status code is 200, otherwise exit with 1 
+        if [[ "$FINAL_URL" == https://*  &&  "$STATUS_CODE" -eq 200 ]]; then
+            echo "Redirection from HTTP to HTTPS is working correctly."
+        else
+            echo "Redirection does not go to HTTPS."
+        exit 1
+        fi
+
+
 
 
 
