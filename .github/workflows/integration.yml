@@ -81,15 +81,17 @@ jobs:
     - name: test cert not expired
       run: |
         CERT_EXPIRE=$(curl https://$DOMAIN -vI --stderr - | grep "expire date" | awk '{print $4 " " $5 " " $7}')
+        CERT_DOMAIN=$(curl https://$DOMAIN -vI --stderr - | grep "subject" | head -n 1|awk '{print $3}'| cut -d'=' -f2)
         TODAY=$(date | awk '{print $2 " " $3 " " $6}')
         CERT_EXPIRE_SECONDS=$(date -d "$CERT_EXPIRE" +%s)
         TODAY_SECONDS=$(date -d "$TODAY" +%s)
         echo "Cert expires $CERT_EXPIRE"
-        if [[ $TODAY_SECONDS -lt $CERT_EXPIRE_SECONDS ]]; then
+        echo "cert domain $CERT_DOMAIN"
+        if [[ $TODAY_SECONDS -lt $CERT_EXPIRE_SECONDS && $CERT_DOMAIN == $DOMAIN ]]; then
           echo "valid"
         else
           echo "not valid"
-
+          echo "expired or domain mismatch"
           exit 1
         fi  
 
