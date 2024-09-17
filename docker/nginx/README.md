@@ -17,3 +17,5 @@ This script checks if the nginx docker container is running, and then gets certi
 After completion of this script, restart the nginx server which will trigger the start_nginx.sh script which has two different nginx templates configured to run depending on if certs are located in that folder for that domain.
 
 After this, your site should be accessible via https
+
+To renew the cert you can run the renew_cert.sh script
