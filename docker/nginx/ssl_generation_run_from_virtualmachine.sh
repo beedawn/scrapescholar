@@ -3,6 +3,7 @@
 # run docker container with
 # docker compose up -d
 # then run this script with www.yourdomain.com
+docker compose up -d
 printf "%s" "enter domain name: "
 read server_name
 docker compose run --rm certbot certonly --webroot \

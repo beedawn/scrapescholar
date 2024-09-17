@@ -13,3 +13,4 @@ server {
         return 301 https://${SERVER_NAME}$request_uri;
     }
 }
+
