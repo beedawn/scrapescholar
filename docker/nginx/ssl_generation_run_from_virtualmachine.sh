@@ -3,12 +3,12 @@
 # run docker container with
 # docker compose up -d
 # then run this script with www.yourdomain.com
-docker compose up -d
+
 printf "%s" "enter domain name: "
 read server_name
 docker compose run --rm certbot certonly --webroot \
     --webroot-path /var/www/certbot \
-    -d scrapescholar.me -d www.scrapescholar.me
+    -d $server_name -d www.$server_name
 
 if [ $? -eq 0 ]; then
     echo "Dry run successful. Proceeding to obtain the certificate."

@@ -7,6 +7,9 @@ services:
       - ./start_nginx.sh:/docker-entrypoint.d/start_nginx.sh:ro
       - ./:/etc/nginx/conf.d/:rw
       - ./certbot/www/:/var/www/certbot/:ro
+      # if certbot/conf has the following dirs: accounts, archive, live, renewal, renewal-hooks 
+      # then we need this turned on
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
       - "443:443"
@@ -15,6 +18,8 @@ services:
       - NGINX_PORT=80
       - SERVER_NAME=scrapescholar.me
     # chmod +x start_nginx.sh before running
+    # if certbot/conf has the following dirs: accounts, archive, live, renewal, renewal-hooks 
+    # then we need this turned off and to run a different script to generate the nginx config template
     entrypoint: ["/docker-entrypoint.d/start_nginx.sh"]
   certbot:
     image: certbot/certbot:latest
