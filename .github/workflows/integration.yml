@@ -52,15 +52,10 @@ jobs:
     
     - name: test ssl
       run: |
-        curl https://apiari.dev
+        curl https://scrapescholar.me
 
 
-    # build runs both unit and integration tests so could delete this
 
-    # - name: Run Next.js Integration Tests
-    #   working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-    #   run: |
-    #     npm run test:integration   
 
 
 
