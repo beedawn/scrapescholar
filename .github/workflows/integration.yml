@@ -10,8 +10,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
+      # used in fastapi, academic API Keys
       SCIENCEDIRECT_APIKEY: ${{secrets.SCIENCEDIRECT_APIKEY}}
       SCOPUS_APIKEY: ${{secrets.SCOPUS_APIKEY}}
+      #used in AR-3 tests
+      DOMAIN: apiari.dev
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
@@ -46,14 +49,53 @@ jobs:
       run: | 
         npm run build
 
+    - name: run Integration tests Next.js 
+      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      run: npm run test:integration
+    # these three tests reach out to real domain and test ssl validity for AR-3
+    - name: test ssl
+      run: |
+        curl https://$DOMAIN
+
+    - name: test http redirection to https
+      run: |
+
+        # Perform an HTTP request and follow redirects
+        REDIRECTS=$(curl -I -L -s -w "%{http_code} %{url_effective}\n" http://$DOMAIN)
+
+        # Extract HTTP status code and final URL from last line of output
+        STATUS_CODE=$(echo "$REDIRECTS" | tail -n 1 | awk '{print $1}')
+        FINAL_URL=$(echo "$REDIRECTS" | tail -n 1 | awk '{print $2}')
+
+        # Print status code and final redirected url for debugging purposes
+        echo "Status Code: $STATUS_CODE"
+        echo "Final URL: $FINAL_URL"
+
+        # check if final url is https, and status code is 200, otherwise exit with 1 
+        if [[ "$FINAL_URL" == https://*  &&  "$STATUS_CODE" -eq 200 ]]; then
+            echo "Redirection from HTTP to HTTPS is working correctly."
+        else
+            echo "Redirection does not go to HTTPS."
+        exit 1
+        fi
+    - name: test cert not expired
+      run: |
+        CERT_EXPIRE=$(curl https://$DOMAIN -vI --stderr - | grep "expire date" | awk '{print $4 " " $5 " " $7}')
+        CERT_DOMAIN=$(curl https://$DOMAIN -vI --stderr - | grep "subject" | head -n 1|awk '{print $3}'| cut -d'=' -f2)
+        TODAY=$(date | awk '{print $2 " " $3 " " $6}')
+        CERT_EXPIRE_SECONDS=$(date -d "$CERT_EXPIRE" +%s)
+        TODAY_SECONDS=$(date -d "$TODAY" +%s)
+        echo "Cert expires $CERT_EXPIRE"
+        echo "cert domain $CERT_DOMAIN"
+        if [[ $TODAY_SECONDS -lt $CERT_EXPIRE_SECONDS && $CERT_DOMAIN == $DOMAIN ]]; then
+          echo "valid"
+        else
+          echo "not valid"
+          echo "expired or domain mismatch"
+          exit 1
+        fi  
 
 
-    # build runs both unit and integration tests so could delete this
-
-    # - name: Run Next.js Integration Tests
-    #   working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-    #   run: |
-    #     npm run test:integration   
 
 
 
