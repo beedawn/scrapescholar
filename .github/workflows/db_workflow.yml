@@ -8,6 +8,7 @@ on:
       - 'backend/app/models/*.py'
       - 'backend/app/init_db.py'
       - 'backend/app/db/*.py'
+      - 'backend/app/tests/*.py'
   push:
     branches:
       - '*'
@@ -15,6 +16,7 @@ on:
       - 'backend/app/models/*.py'
       - 'backend/app/init_db.py'
       - 'backend/app/db/*.py'
+      - 'backend/app/tests/*.py'
 
 jobs:
   init-db:
@@ -66,3 +68,9 @@ jobs:
           POSTGRES_SERVER: localhost
           POSTGRES_PORT: "5432"          
         run: python backend/app/init_db.py
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql://student:student@localhost:5432/scrapescholartestdb
+          PYTHONPATH: ./backend
+        run: pytest backend/tests --disable-warnings
