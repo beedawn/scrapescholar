@@ -6,11 +6,9 @@ import csv
 import urllib.parse 
 from urllib.parse import quote
 from dotenv import load_dotenv
-
 load_dotenv()
 
-## I don't think we need this?
-#Create QueryParameters class
+#   Create QueryParameters class
 class QueryParameters:
     def __init__(self, keywords = None, subject = None, minYear = None):
         if keywords is None:
@@ -19,7 +17,7 @@ class QueryParameters:
         self.subject = subject
         self.minYear = minYear
 
-#Create SearchResults class
+#   Create SearchResults class
 class SearchResults:
     def __init__(self, title = None, year = None, citedBy = None, link = None, abstract = None, documentType = None, 
                  source = None, evaluation = None, methodology = None, clarity = None, completeness = None, transparency = None):
@@ -36,27 +34,10 @@ class SearchResults:
         self.completeness = completeness
         self.transparency = transparency
 
-#Create Query Execute Function
+#   Create Query Execute Function
 def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     #Keyword Builder
     keywordPhrase = ""
-
-    ## its hard to tell what this does
-    ## it looks like it strips spaces off the ends of both sides of a keyword
-    ## then checks currentWord if it has spaces
-    ## then if currentWord has spaces, it replaces spaces in strippedWord with +
-    ## then appends strippedWordPlus to keywordPhrase
-    ## or if there aren't spaces then it appends the word to keyword phrase?
-    ## would it be simpler to do keywords.replace(" ", "%20")??
-    ## i mostly say this because im worried if someone searched "non profit" what would come out?
-    ## i tried it and it gives me "non+profit%20" when i think it should be "non%20profit+"?
-    ## something like:
-    ## keywordPhrase = '+'.join(keywords).strip().replace(" ", "%20")
-
-    ## but something better to avoid injection would be
-    ## from urllib.parse import quote
-    ## keywordPhrase = quote('+'.join(keywords).strip())
-    ## this would convert all characters to url encoding and likely harden security
 
     for currentWord in keywords:
         strippedWord = currentWord.strip()
@@ -70,7 +51,7 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     today = datetime.date.today()
     currentYear = today.year
     dateRange = minYear + "-" + str(currentYear)
-    count = "2"
+    count = "25"
     sort = "relevancy"
     subj = subject
 
@@ -84,30 +65,40 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
         + "&count=" + count \
         + "&sort=" + sort \
         + "&subj=" + subject
-    
     return getPhrase
 
-def load_json_classify_results(json_data):
-    data = json.loads(json_data)
-    results = []
-    for entry in data["search-results"]["entry"]:
-        result = SearchResults(
-            title = entry["dc:title"],
-            year = entry["prism:coverDate"].split("-")[0],
-            citedBy = entry["citedby-count"],
-            link = next((link["@href"] for link in entry["link"] if link["@ref"] == "scopus"), None),
-            abstract = None,       #Need to upgrade to view=COMPLETE (requires subscription?)
-            documentType = entry["subtypeDescription"],
-            source = entry["prism:publicationName"],
-            evaluation=None,
-            methodology=None,
-            clarity=None,
-            completeness=None,
-            transparency=None
-        )
-        results.append(result)
-    return results
+#   Create Function that Acessess the Research Article Link. This requires a loop because the json has multiple @ref elements
+def get_entry_link(json_data):
+    for entry in json_data["search-results"].get("entry", []):
+        for link in entry.get("link", []):
+            if link.get("@ref") == "scopus":
+                href_value = link.get("@href")
+                return href_value
 
+#   Create function to 'get' all elements needed for the front end and print results to a CSV
+def load_json_scrape_results(json_data):        
+    with open("search_results.csv", mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Title","Year","Cited By","Link","Abstract","Document Type","Source","Evaluation","Methodology","Clarity","Completeness","Transparency"])
+        for entry in json_data["search-results"].get("entry", []):
+            result = SearchResults(
+                title = entry.get("dc:title"),
+                year = entry.get("prism:coverDate", "Not Listed")[:4],
+                citedBy = entry.get("citedby-count"),
+                link = get_entry_link(json_data),
+                abstract = None,       #Need to upgrade to view=COMPLETE (requires subscription?)
+                documentType = entry.get("subtypeDescription"),
+                source = "Scopus",
+                evaluation="0",
+                methodology="0",
+                clarity="0",
+                completeness="0",
+                transparency="0"
+            )
+            rowArray = [result.title, result.year, result.citedBy, result.link, str(result.abstract), result.documentType, 
+                        result.source, result.evaluation, result.methodology, result.clarity, result.completeness, result.transparency]
+            writer.writerow(rowArray)
+        file.close()
 
 #   ---main--- This is testing the variables that I will recieve from the front end
 
@@ -121,21 +112,11 @@ subjectComp = "COMP"
 minYear2015 = "2015"
 
 #   Build Query
-## I don't think we need to store the keywords in an object, just the article info
 searchQuery = QueryParameters(keywords=researcherKeywordList, subject=subjectComp, minYear=minYear2015)
-
 queryURL = query_scopus_api(searchQuery.keywords, api_key)
 print(queryURL)
 apiResponse = requests.get(queryURL)
-## could we just use .json instead? if we did then we could probably delete line 98
-jsonResults = apiResponse.text
+jsonResults = apiResponse.json()
 
 #   Store Results in Class
-search_results = (load_json_classify_results(jsonResults))
-for result in search_results:
-    print(result.__dict__)
-
-#   Create CSV file to make parsing easier? Export?
-#   Code...
-#   Code...
-#   Code...
+search_results = (load_json_scrape_results(jsonResults))
