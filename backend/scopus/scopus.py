@@ -67,25 +67,22 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
         + "&subj=" + subject
     return getPhrase
 
-#   Create Function that Acessess the Research Article Link. This requires a loop because the json has multiple @ref elements
-def get_entry_link(json_data):
-    for entry in json_data["search-results"].get("entry", []):
-        for link in entry.get("link", []):
-            if link.get("@ref") == "scopus":
-                href_value = link.get("@href")
-                return href_value
-
 #   Create function to 'get' all elements needed for the front end and print results to a CSV
 def load_json_scrape_results(json_data):        
     with open("search_results.csv", mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Title","Year","Cited By","Link","Abstract","Document Type","Source","Evaluation","Methodology","Clarity","Completeness","Transparency"])
         for entry in json_data["search-results"].get("entry", []):
+            # Find URL link before parsing the rest of the data
+            for link in entry.get("link", []):
+                if link.get("@ref") == "scopus":
+                    href_value = link.get("@href")
+            # Classify the remaining attributes
             result = SearchResults(
                 title = entry.get("dc:title"),
-                year = entry.get("prism:coverDate", "Not Listed")[:4],
+                year = str(entry.get("prism:coverDate", "Not Listed")[:4]),
                 citedBy = entry.get("citedby-count"),
-                link = get_entry_link(json_data),
+                link = href_value,
                 abstract = None,       #Need to upgrade to view=COMPLETE (requires subscription?)
                 documentType = entry.get("subtypeDescription"),
                 source = "Scopus",
