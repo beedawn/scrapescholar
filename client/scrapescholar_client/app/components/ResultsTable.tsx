@@ -11,27 +11,34 @@ interface ResultsTableProps {
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
 
 
-const sortResults = (array: ResultItem[], field: keyof ResultItem ):ResultItem[] => {
-
+const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDirection:string ):ResultItem[] => {
+    if(sortDirection==="asc")
     return array.sort((a, b) => {
      if (a[field] < b[field]) return -1;
      if (a[field] > b[field]) return 1;
      return 0; 
    });
+   else
+   return array.sort((a, b) => {
+    if (a[field] > b[field]) return -1;
+    if (a[field] < b[field]) return 1;
+    return 0; 
+  });
   
  };
-const handleSort = (field: keyof ResultItem)=>{
-const sortedResults = sortResults([...results],field);
+const handleSort = (field: keyof ResultItem, sortDirection:string)=>{
+const sortedResults = sortResults([...results],field, sortDirection);
+console.log(sortedResults)
 setResults(sortedResults)
 
 }
     return (
                         <div className="overflow-x-auto">
-                            <button onClick={()=>{handleSort("title")}} >button</button>
+                            
                             <table className=" min-w-full table-auto border-collapse border border-gray-300">
                                 <thead>
                                     <tr>
-                                        <th className="border border-gray-300">Title</th>
+                                        <th className="border border-gray-300">Title <button onClick={()=>{handleSort("title","asc")}} >^</button> <button onClick={()=>{handleSort("title","desc")}} >v</button></th>
                                         <th className="border border-gray-300">Year</th>
                                         <th className="border border-gray-300">Cited By</th>
                                         <th className="border border-gray-300">URL</th>
@@ -48,7 +55,7 @@ setResults(sortedResults)
                                 </thead>
                                 <tbody>
                                     {results.map((result, index) => (
-                                        <tr key={result.id || index} className={` ${selectedArticle === index ? 'bg-blue-500':'hover:bg-gray-500'}`} onClick={()=>{setSelectedArticle(index)}}>
+                                        <tr key={result.id } className={` ${selectedArticle === index ? 'bg-blue-500':'hover:bg-gray-500'}`} onClick={()=>{setSelectedArticle(index)}}>
                                             <td className="border border-gray-300"><a href={result.link}>{result.title}</a></td>
                                             <td className="border border-gray-300">{result.date}</td>
                                             <td className="border border-gray-300">{result.citedby}</td>
