@@ -9,7 +9,7 @@ on:
       - 'backend/app/init_db.py'
       - 'backend/app/db/*.py'
       - 'backend/app/tests/*.py'
-      - '.github\workflows\db_workflow.yml'
+      - '.github/workflows/db_workflow.yml'
   push:
     branches:
       - '*'
@@ -18,7 +18,7 @@ on:
       - 'backend/app/init_db.py'
       - 'backend/app/db/*.py'
       - 'backend/app/tests/*.py'
-      - '.github\workflows\db_workflow.yml'
+      - '.github/workflows/db_workflow.yml'
 
 jobs:
   init-db:
