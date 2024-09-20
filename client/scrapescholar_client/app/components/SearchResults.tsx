@@ -11,10 +11,11 @@ interface SearchResultsProps {
     disableD3?: boolean;
     inputs: string[];
     bubbleInputs: { x: number, y: number, radius: number, color: string, label: string }[];
+    setResults: (item:ResultItem[])=>void;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString, 
-    disableD3 = false, inputs, bubbleInputs }) => {
+    disableD3 = false, inputs, bubbleInputs, setResults }) => {
    const [selectedArticle, setSelectedArticle] = useState(-1);
     return (
         <div className={className}>
@@ -29,7 +30,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                             {disableD3 ? (<></>) : (<>
                                 <BubblePlot data={bubbleInputs}></BubblePlot></>)}
                         </div>
-                        <ResultsTable results={results} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle} />
+                        <ResultsTable setResults={setResults} results={results} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle} />
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''

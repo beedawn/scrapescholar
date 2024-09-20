@@ -3,13 +3,32 @@ import { ResultItem } from '../views/SearchView';
 
 interface ResultsTableProps {
     results: ResultItem[];
+    setResults: (item:ResultItem[])=>void;
     selectedArticle: number;
     setSelectedArticle: (index: number) => void;
 }
 
-const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle }) => {
+const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
+
+
+const sort = (array: ResultItem[], field: keyof ResultItem ):ResultItem[] => {
+
+    const newArray=[...array]
+    return newArray.sort((a, b) => {
+     if (a[field] < b[field]) return -1;
+     if (a[field] > b[field]) return 1;
+     return 0; 
+   });
+  
+ };
+const handleSort = (field: keyof ResultItem)=>{
+const sortedResults = sort([...results],field);
+setResults(sortedResults)
+
+}
     return (
                         <div className="overflow-x-auto">
+                            <button onClick={()=>{handleSort("title")}} >button</button>
                             <table className=" min-w-full table-auto border-collapse border border-gray-300">
                                 <thead>
                                     <tr>

@@ -136,7 +136,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} /></div>
                 <div className="flex-1 sm:mx-12 w-full">
             {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
-                <SearchResults displayInputs={joinedInputsString}
+                <SearchResults setResults={setResults} displayInputs={joinedInputsString}
                     results={results} emptyString={emptyString} disableD3={disableD3}
                     inputs={inputs} bubbleInputs={bubbleInputs} />}
                     </div>
