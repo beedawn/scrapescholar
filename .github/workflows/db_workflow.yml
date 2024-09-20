@@ -5,16 +5,14 @@ on:
     branches:
       - '*'
     paths:
-      - 'backend/app/models/*.py'
-      - 'backend/app/init_db.py'
-      - 'backend/app/db/*.py'
+      - 'backend/app/**/*.py'
+      - '.github/workflows/db_workflow.yml'
   push:
     branches:
       - '*'
     paths:
-      - 'backend/app/models/*.py'
-      - 'backend/app/init_db.py'
-      - 'backend/app/db/*.py'
+      - 'backend/app/**/*.py'
+      - '.github/workflows/db_workflow.yml'
 
 jobs:
   init-db:
@@ -66,3 +64,14 @@ jobs:
           POSTGRES_SERVER: localhost
           POSTGRES_PORT: "5432"          
         run: python backend/app/init_db.py
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql://student:student@localhost:5432/scrapescholartestdb
+          PYTHONPATH: ./backend
+          POSTGRES_USER: student
+          POSTGRES_PASSWORD: student
+          POSTGRES_DB: scrapescholartestdb
+          POSTGRES_SERVER: localhost
+          POSTGRES_PORT: "5432"
+        run: pytest backend/app/tests --disable-warnings
