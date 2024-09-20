@@ -9,3 +9,5 @@ class Source(Base):
     name = Column(String(100), nullable=False)
     api_endpoint = Column(String(255))
     scrape_source_url = Column(String(255))
+
+    articles = relationship("Article", back_populates="source")
