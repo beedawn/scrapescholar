@@ -5,13 +5,13 @@ on:
     branches:
       - '*'
     paths:
-      - 'backend/app/*'
+      - 'backend/app/**/*.py'
       - '.github/workflows/db_workflow.yml'
   push:
     branches:
       - '*'
     paths:
-      - 'backend/app/*'
+      - 'backend/app/**/*.py'
       - '.github/workflows/db_workflow.yml'
 
 jobs:
