@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResultItem } from '../views/SearchView';
+import SortToggleButton from './SortToggleButton';
 
 interface ResultsTableProps {
     results: ResultItem[];
@@ -38,13 +39,13 @@ setResults(sortedResults)
                             <table className=" min-w-full table-auto border-collapse border border-gray-300">
                                 <thead>
                                     <tr>
-                                        <th className="border border-gray-300">Title <button onClick={()=>{handleSort("title","asc")}} >^</button> <button onClick={()=>{handleSort("title","desc")}} >v</button></th>
-                                        <th className="border border-gray-300">Year</th>
-                                        <th className="border border-gray-300">Cited By</th>
+                                        <th className="border border-gray-300">Title<SortToggleButton handleSort={handleSort} field="title"></SortToggleButton></th>
+                                        <th className="border border-gray-300">Year<SortToggleButton handleSort={handleSort} field="date"></SortToggleButton></th>
+                                        <th className="border border-gray-300">Cited By<SortToggleButton handleSort={handleSort} field="citedby"></SortToggleButton></th>
                                         <th className="border border-gray-300">URL</th>
                                         <th className="border border-gray-300">Abstract</th>
                                         <th className="border border-gray-300">Document Type</th>
-                                        <th className="border border-gray-300">Source</th>
+                                        <th className="border border-gray-300">Source<SortToggleButton handleSort={handleSort} field="source"></SortToggleButton></th>
                                         <th className="border border-gray-300">Evaluation Criteria</th>
                                         <th className="border border-gray-300">Color</th>
                                         <th className="border border-gray-300">Methodology</th>
