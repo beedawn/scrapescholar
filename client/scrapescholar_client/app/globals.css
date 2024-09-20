@@ -31,3 +31,16 @@ body {
     text-wrap: balance;
   }
 }
+
+.topContainer{
+  width:100%;
+}
+.searchName{
+  float:left;
+  width:50%;
+}
+
+.downloadButton{
+  float:right;
+  width:50%;
+}

@@ -131,14 +131,17 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setLoading(false);
     }
     return (
-        <div>
+        <div className="flex flex-col sm:flex-row sm:mx-12">
+            <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
             <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                 handleSearchChange={handleSearchChange} removeInput={removeInput}
-                setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} />
+                setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} /></div>
+                <div className="flex-1 sm:mx-12 w-full">
             {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
                 <SearchResults displayInputs={joinedInputsString}
                     results={results} emptyString={emptyString} disableD3={disableD3}
                     inputs={inputs} bubbleInputs={bubbleInputs} />}
+                    </div>
         </div>
     );
 }

@@ -249,4 +249,38 @@ describe('Home Component', () => {
       expect(screen.getByText('link 2')).toBeInTheDocument()
     }, {timeout: 5000});
   })
+
+  test('US-8 Download button in response after search press', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    await waitFor(() => {
+      expect(screen.getByText('Download')).toBeInTheDocument()
+
+    }, {timeout: 5000});
+  })
+
+  test('AR6 Test article is selectable in the UI', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+
+    // const inputs = screen.getAllByRole('textbox');
+    // fireEvent.change(inputs[0], { target: { value: testInput } });
+
+    await waitFor(() => {
+      const firstRow = screen.getByText('test 1').closest('tr');
+      fireEvent.click(firstRow);
+      expect(firstRow).toHaveClass('bg-blue-500');
+
+    }, {timeout: 5000});
+  })
+
+
+
 });
