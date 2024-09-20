@@ -11,10 +11,9 @@ interface ResultsTableProps {
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
 
 
-const sort = (array: ResultItem[], field: keyof ResultItem ):ResultItem[] => {
+const sortResults = (array: ResultItem[], field: keyof ResultItem ):ResultItem[] => {
 
-    const newArray=[...array]
-    return newArray.sort((a, b) => {
+    return array.sort((a, b) => {
      if (a[field] < b[field]) return -1;
      if (a[field] > b[field]) return 1;
      return 0; 
@@ -22,7 +21,7 @@ const sort = (array: ResultItem[], field: keyof ResultItem ):ResultItem[] => {
   
  };
 const handleSort = (field: keyof ResultItem)=>{
-const sortedResults = sort([...results],field);
+const sortedResults = sortResults([...results],field);
 setResults(sortedResults)
 
 }
