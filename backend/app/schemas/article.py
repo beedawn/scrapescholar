@@ -1,4 +1,3 @@
-# app/schemas/article.py
 from pydantic import BaseModel, HttpUrl
 from typing import Optional
 from datetime import date
@@ -17,7 +16,7 @@ class ArticleBase(BaseModel):
     doi: Optional[str] = None
 
 class ArticleCreate(ArticleBase):
-    pass
+    user_id: int
 
 class ArticleUpdate(BaseModel):
     title: Optional[str] = None
@@ -32,6 +31,7 @@ class ArticleUpdate(BaseModel):
 
 class ArticleRead(ArticleBase):
     article_id: int
+    user_id: int
 
     class Config:
         orm_mode = True

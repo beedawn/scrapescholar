@@ -10,7 +10,7 @@ def get_articles(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Article).offset(skip).limit(limit).all()
 
 def create_article(db: Session, article: ArticleCreate):
-    db_article = Article(**article.dict())
+    db_article = Article(**article.dict(), user_id=user_id)
     db.add(db_article)
     db.commit()
     db.refresh(db_article)
