@@ -23,7 +23,7 @@ const SortToggleButton: React.FC<SortToggleButtonProps> = ({handleSort, field, p
   
 
                     <div>
-                    {isPressed?<Button onClick={()=>handlePress(field, "asc")}>up</Button>:<Button onClick={()=>handlePress(field,"desc")}>down</Button>}
+                    {isPressed && pressed?<Button onClick={()=>handlePress(field, "asc")}>up</Button>:<Button onClick={()=>handlePress(field,"desc")}>down</Button>}
                     </div>
     )
 };
