@@ -15,7 +15,7 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString, disableD3 = false, inputs, bubbleInputs }) => {
   
-   const [selectedArticle, setSelectedArticle] = useState(0);
+   const [selectedArticle, setSelectedArticle] = useState(-1);
   
     return (
         <div className={className}>
