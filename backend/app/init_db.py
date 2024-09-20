@@ -1,7 +1,7 @@
 # app/init_db.py
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models import Base  # Import Base from models
+from app.models import Base
 from app.dependencies import get_db_uri
 
 # Retrieve the database URI
