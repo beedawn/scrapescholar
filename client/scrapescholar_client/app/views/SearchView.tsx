@@ -1,10 +1,8 @@
 "use client";
-import Image from "next/image";
 import React, { useState, Dispatch, SetStateAction, } from 'react';
 import SearchResults from "../components/SearchResults";
 import NavBar from "../components/NavBar";
 import Dropdown from "../types/DropdownType";
-import { filter } from "d3";
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
