@@ -15,7 +15,7 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString, disableD3 = false, inputs, bubbleInputs }) => {
   
-   const [selectedArticle, setSelectedArticle] = useState(0);
+   const [selectedArticle, setSelectedArticle] = useState(-1);
   
     return (
         <div className={className}>
@@ -24,10 +24,14 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                     <div>
                         <div className="topContainer">
                             <div className="searchName">search name</div>
-                            <a href="test link">
-                                <div className="downloadButton text-right"><Button>Download</Button></div>
+                           
+                                <div className="downloadButton text-right">
+                                     <Button>
+                                        <a href="/csv">Download</a> 
+                                    </Button>   
+                                </div>
                             
-                            </a> 
+                        
                             </div>
                         <p>
                             You searched {displayInputs}
