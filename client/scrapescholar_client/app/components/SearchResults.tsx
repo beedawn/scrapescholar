@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import LinePlot from './d3/LinePlot';
 import BubblePlot from './d3/BubblePlot';
 import { ResultItem } from '../views/SearchView';
@@ -14,6 +14,9 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString, disableD3 = false, inputs, bubbleInputs }) => {
+  
+   const [selectedArticle, setSelectedArticle] = useState(0);
+  
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
@@ -33,47 +36,47 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                             {disableD3 ? (<></>) : (<>
                                 <BubblePlot data={bubbleInputs}></BubblePlot></>)}
                         </div>
-                        <div>
-                            <table>
+                        <div className="overflow-x-auto">
+                            <table className=" min-w-full table-auto border-collapse border border-gray-300">
                                 <thead>
                                     <tr>
-                                        <th>Title</th>
-                                        <th>Year</th>
-                                        <th>Cited By</th>
-                                        <th>URL</th>
-                                        <th>Abstract</th>
-                                        <th>Document Type</th>
-                                        <th>Source</th>
-                                        <th>Evaluation Criteria</th>
-                                        <th>Color</th>
-                                        <th>Methodology</th>
-                                        <th>Clarity</th>
-                                        <th>Completeness</th>
-                                        <th>Transparency</th>
+                                        <th className="border border-gray-300">Title</th>
+                                        <th className="border border-gray-300">Year</th>
+                                        <th className="border border-gray-300">Cited By</th>
+                                        <th className="border border-gray-300">URL</th>
+                                        <th className="border border-gray-300">Abstract</th>
+                                        <th className="border border-gray-300">Document Type</th>
+                                        <th className="border border-gray-300">Source</th>
+                                        <th className="border border-gray-300">Evaluation Criteria</th>
+                                        <th className="border border-gray-300">Color</th>
+                                        <th className="border border-gray-300">Methodology</th>
+                                        <th className="border border-gray-300">Clarity</th>
+                                        <th className="border border-gray-300">Completeness</th>
+                                        <th className="border border-gray-300">Transparency</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {results.map((result, index) => (
-                                        <tr key={result.id || index}>
-                                            <td><a href={result.link}>{result.title}</a></td>
-                                            <td>{result.date}</td>
-                                            <td>{result.citedby}</td>
-                                            <td><a href={result.link}>{result.link}</a></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{result.source}</td>
-                                            <td>accept</td>
-                                            <td>
+                                        <tr key={result.id || index} className={` ${selectedArticle === index ? 'bg-blue-500':'hover:bg-gray-500'}`} onClick={()=>{setSelectedArticle(index)}}>
+                                            <td className="border border-gray-300"><a href={result.link}>{result.title}</a></td>
+                                            <td className="border border-gray-300">{result.date}</td>
+                                            <td className="border border-gray-300">{result.citedby}</td>
+                                            <td className="border border-gray-300"><a href={result.link}>{result.link}</a></td>
+                                            <td className="border border-gray-300"></td>
+                                            <td className="border border-gray-300"></td>
+                                            <td className="border border-gray-300">{result.source}</td>
+                                            <td className="border border-gray-300">accept</td>
+                                            <td className="border border-gray-300">
                                                 <select className="text-black" >
                                                     <option value="red" className='bg-red-600'>Red</option>
                                                     <option value="yellow" className="bg-yellow">Yellow</option>
                                                     <option className="bg-green" value="green">Green</option>
                                                 </select>
                                             </td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
+                                            <td className="border border-gray-300">0</td>
+                                            <td className="border border-gray-300">0</td>
+                                            <td className="border border-gray-300">0</td>
+                                            <td className="border border-gray-300">0</td>
                                         </tr>
 
                                     ))}
