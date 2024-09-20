@@ -11,5 +11,5 @@ class ResearchQuestionScore(Base):
     score = Column(Integer, nullable=False)
     last_updated_by_id = Column(Integer, ForeignKey("User.user_id"))
 
-    research_question_mapping = relationship("ResearchQuestionMapping")
+    research_question_mapping = relationship("ResearchQuestionMapping", back_populates="research_question_scores")  # Added back_populates
     last_updated_by = relationship("User", back_populates="research_question_scores")
