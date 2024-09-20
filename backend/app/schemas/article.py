@@ -1,3 +1,4 @@
+# app/schemas/article.py
 from pydantic import BaseModel, HttpUrl
 from typing import Optional
 from datetime import date
@@ -28,6 +29,7 @@ class ArticleUpdate(BaseModel):
     review_status: Optional[str] = None
     abstract: Optional[str] = None
     doi: Optional[str] = None
+    user_id: Optional[int] = None
 
 class ArticleRead(ArticleBase):
     article_id: int

@@ -2,9 +2,13 @@
 from sqlalchemy.orm import Session
 from app.models.search import Search
 from app.schemas.search import SearchCreate, SearchUpdate
+from fastapi import HTTPException
 
 def get_search(db: Session, search_id: int):
-    return db.query(Search).filter(Search.search_id == search_id).first()
+    search = db.query(Search).filter(Search.search_id == search_id).first()
+    if not search:
+        raise HTTPException(status_code=404, detail="Search not found")
+    return search
 
 def get_searches(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Search).offset(skip).limit(limit).all()
@@ -18,16 +22,18 @@ def create_search(db: Session, search: SearchCreate):
 
 def update_search(db: Session, search_id: int, search: SearchUpdate):
     db_search = db.query(Search).filter(Search.search_id == search_id).first()
-    if db_search:
-        for key, value in search.dict(exclude_unset=True).items():
-            setattr(db_search, key, value)
-        db.commit()
-        db.refresh(db_search)
+    if not db_search:
+        raise HTTPException(status_code=404, detail="Search not found")
+    for key, value in search.dict(exclude_unset=True).items():
+        setattr(db_search, key, value)
+    db.commit()
+    db.refresh(db_search)
     return db_search
 
 def delete_search(db: Session, search_id: int):
-    db_search = db.query(Search).filter(Search.search_id == search_id).first()
-    if db_search:
-        db.delete(db_search)
-        db.commit()
-    return db_search
+    search = db.query(Search).filter(Search.search_id == search_id).first()
+    if not search:
+        raise HTTPException(status_code=404, detail="Search not found")
+    db.delete(search)
+    db.commit()
+    return search

@@ -1,3 +1,4 @@
+# app/models/article.py
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.session import Base
@@ -25,4 +26,5 @@ class Article(Base):
     comments = relationship("Comment", back_populates="article")
     article_scores = relationship("ArticleScore", back_populates="article")
     research_question_mappings = relationship("ResearchQuestionMapping", back_populates="article")
+    collaborations = relationship("Collaboration", back_populates="article")
     user = relationship("User", back_populates="articles")

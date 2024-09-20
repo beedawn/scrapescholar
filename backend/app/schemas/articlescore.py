@@ -6,7 +6,6 @@ from typing import Optional
 class ArticleScoreBase(BaseModel):
     user_id: int
     article_id: int
-    search_id: int
     score: float
 
 class ArticleScoreCreate(ArticleScoreBase):
