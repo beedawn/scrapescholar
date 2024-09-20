@@ -2,6 +2,7 @@ import React from 'react';
 import LinePlot from './d3/LinePlot';
 import BubblePlot from './d3/BubblePlot';
 import { ResultItem } from '../views/SearchView';
+import Button from './Button';
 interface SearchResultsProps {
     displayInputs: string[];
     results: ResultItem[];
@@ -15,9 +16,16 @@ interface SearchResultsProps {
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString, disableD3 = false, inputs, bubbleInputs }) => {
     return (
         <div className={className}>
-            <div className="float-left p-12 max-w-md max-w-screen-sm">
+            <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
                 {results.length !== 0 && displayInputs[0] !== emptyString ? (
                     <div>
+                        <div className="topContainer">
+                            <div className="searchName">search name</div>
+                            <a href="test link">
+                                <div className="downloadButton text-right"><Button>Download</Button></div>
+                            
+                            </a> 
+                            </div>
                         <p>
                             You searched {displayInputs}
                         </p>
