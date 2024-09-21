@@ -16,6 +16,15 @@ export interface ResultItem {
     date: string;
     source: string;
     citedby:number;
+    color:string;
+    relevance:number;
+    abstract: string;
+    doctype: string;
+    evaluation_criteria: string;
+    methodology: number;
+    clarity: 0;
+    completeness: 0;
+    transparency: 0;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
