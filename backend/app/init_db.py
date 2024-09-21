@@ -1,7 +1,9 @@
+# backend/app/init_db.py
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models import Base
+from app.models import User, Article, Source, Role, Search
 from app.dependencies import get_db_uri
 from app.schemas.user import UserCreate
 from app.schemas.source import SourceCreate
@@ -45,8 +47,8 @@ def init_db():
     # Check if we are in the test environment
     db: SessionLocal = SessionLocal()
     try:
-        db_url = os.getenv("DATABASE_URL")
-        if "scrapescholartestdb" in db_url:
+        db_name = os.getenv("POSTGRES_DB")
+        if "scrapescholartestdb" in db_name:
             print("Test environment detected, inserting test data...")
             insert_test_data(db)
         else:
