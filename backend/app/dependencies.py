@@ -1,6 +1,6 @@
 # app/dependencies.py
 
-from pydantic_settings import BaseSettings  # Updated import
+from pydantic_settings import BaseSettings 
 from pydantic import Field
 from dotenv import load_dotenv
 import os
@@ -36,7 +36,7 @@ def get_db_uri():
 
 # The `get_db` function that provides a SQLAlchemy database session
 def get_db():
-    from app.db.session import SessionLocal  # Import here to avoid circular import issues
+    from app.db.session import SessionLocal
     db = SessionLocal()
     try:
         yield db
