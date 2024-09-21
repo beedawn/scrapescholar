@@ -27,7 +27,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);
-        setResults(sortedResults)
+        setResults(sortedResults);
     }
     const [pressedSort, setPressedSort]=useState<keyof ResultItem | null>(null);
     return (
