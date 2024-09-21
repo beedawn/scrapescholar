@@ -16,14 +16,14 @@ const SortToggleButton: React.FC<SortToggleButtonProps> = ({handleSort, field, p
     const handlePress=(field:keyof ResultItem, direction:string)=>{
         handleSort(field, direction)
         setPressed(!pressed)
-
+        
     }
-  const isPressed = pressedSort === field;
+  let isPressed = pressedSort === field;
     return (
   
 
                     <div>
-                    {isPressed && pressed?<Button onClick={()=>handlePress(field, "asc")}>up</Button>:<Button onClick={()=>handlePress(field,"desc")}>down</Button>}
+                    {isPressed && pressed ?<Button onClick={()=>handlePress(field, "asc")}>up</Button>:<Button onClick={()=>handlePress(field,"desc")}>down</Button>}
                     </div>
     )
 };
