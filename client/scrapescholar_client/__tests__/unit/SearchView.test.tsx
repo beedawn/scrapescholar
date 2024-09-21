@@ -335,7 +335,7 @@ describe('Home Component', () => {
   //US-15 When user clicks on arrow next to relevance, results are sorted by relevance
   // 
 
-  test('US-15 When user clicks on arrow next to relevance, results are sorted by relevance descending', async () => {
+  test('US-15 When user clicks on arrow next to relevance twice, results are sorted by relevance descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
     const inputs = screen.getAllByRole('textbox');
@@ -348,6 +348,7 @@ describe('Home Component', () => {
     }, { timeout: 5000 });
     if(sortButton){
     fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText('92%')).toBeInTheDocument()
     expect(within(rows[1]).queryByText('80%')).toBeInTheDocument()
@@ -358,7 +359,7 @@ describe('Home Component', () => {
   })
 
 
-  test('US-15 When user clicks on arrow next to relevance twice, results are sorted by relevance ascending', async () => {
+  test('US-15 When user clicks on arrow next to relevance, results are sorted by relevance ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
     const searchButton = screen.getByText('Search');
@@ -372,7 +373,6 @@ let sortButton;
 
     }, { timeout: 5000 });
     if(sortButton){
-    fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText('80%')).toBeInTheDocument()
@@ -414,7 +414,7 @@ let sortButton;
 
   // When user clicks on arrow next to date, results are sorted by date
 
-  test('US-15 When user clicks on arrow next to date, results are sorted by date descending', async () => {
+  test('US-15 When user clicks on arrow next to date twice, results are sorted by date descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
     const inputs = screen.getAllByRole('textbox');
@@ -427,6 +427,7 @@ let sortButton;
     }, { timeout: 5000 });
     if(sortButton){
     fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("2024-07-01")).toBeInTheDocument()
     expect(within(rows[1]).queryByText("2024-05-31")).toBeInTheDocument()
@@ -437,7 +438,7 @@ let sortButton;
   })
 
 
-  test('US-15 When user clicks on arrow next to date twice, results are sorted by date ascending', async () => {
+  test('US-15 When user clicks on arrow next to date, results are sorted by date ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
     const searchButton = screen.getByText('Search');
@@ -451,7 +452,6 @@ let sortButton;
 
     }, { timeout: 5000 });
     if(sortButton){
-    fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("2024-05-31")).toBeInTheDocument()
@@ -493,7 +493,7 @@ let sortButton;
   // When user clicks on arrow next to database, results are sorted by database
 
 
-  test('US-15 When user clicks on arrow next to source, results are sorted by source descending', async () => {
+  test('US-15 When user clicks on arrow next to source twice, results are sorted by source descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
     const inputs = screen.getAllByRole('textbox');
@@ -506,6 +506,7 @@ let sortButton;
     }, { timeout: 5000 });
     if(sortButton){
     fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("Scopus")).toBeInTheDocument()
     expect(within(rows[1]).queryByText("Science Direct")).toBeInTheDocument()
@@ -516,7 +517,7 @@ let sortButton;
   })
 
 
-  test('US-15 When user clicks on arrow next to source twice, results are sorted by source ascending', async () => {
+  test('US-15 When user clicks on arrow next to source, results are sorted by source ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
     const searchButton = screen.getByText('Search');
@@ -530,7 +531,6 @@ let sortButton;
 
     }, { timeout: 5000 });
     if(sortButton){
-    fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("Science Direct")).toBeInTheDocument()
@@ -590,7 +590,7 @@ let sortButton;
 
    // When user clicks on arrow next to title, results are sorted by title
 
-   test('US-15 When user clicks on arrow next to source, results are sorted by source descending', async () => {
+   test('US-15 When user clicks on arrow next to source twice, results are sorted by source descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
     const inputs = screen.getAllByRole('textbox');
@@ -603,6 +603,7 @@ let sortButton;
     }, { timeout: 5000 });
     if(sortButton){
     fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("test 2")).toBeInTheDocument()
     expect(within(rows[1]).queryByText("test 1")).toBeInTheDocument()
@@ -613,7 +614,7 @@ let sortButton;
   })
 
 
-  test('US-15 When user clicks on arrow next to source twice, results are sorted by source ascending', async () => {
+  test('US-15 When user clicks on arrow next to source, results are sorted by source ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
     const searchButton = screen.getByText('Search');
@@ -627,7 +628,6 @@ let sortButton;
 
     }, { timeout: 5000 });
     if(sortButton){
-    fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("test 1")).toBeInTheDocument()
@@ -671,7 +671,7 @@ let sortButton;
   // When user clicks on arrow next to color, results are sorted by color
 
 
-  test('US-15 When user clicks on arrow next to color, results are sorted by color descending', async () => {
+  test('US-15 When user clicks on arrow next to color twice, results are sorted by color descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
     const inputs = screen.getAllByRole('textbox');
@@ -684,6 +684,7 @@ let sortButton;
     }, { timeout: 5000 });
     if(sortButton){
     fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("yellow")).toBeInTheDocument()
     expect(within(rows[1]).queryByText("red")).toBeInTheDocument()
@@ -694,7 +695,7 @@ let sortButton;
   })
 
 
-  test('US-15 When user clicks on arrow next to source twice, results are sorted by source ascending', async () => {
+  test('US-15 When user clicks on arrow next to source, results are sorted by source ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
     const searchButton = screen.getByText('Search');
@@ -708,7 +709,6 @@ let sortButton;
 
     }, { timeout: 5000 });
     if(sortButton){
-    fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
     expect(within(rows[0]).queryByText("red")).toBeInTheDocument()
