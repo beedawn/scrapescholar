@@ -74,4 +74,4 @@ jobs:
           POSTGRES_DB: scrapescholartestdb
           POSTGRES_SERVER: localhost
           POSTGRES_PORT: "5432"
-        run: pytest backend/app/tests --disable-warnings
+        run: pytest backend/app/tests --disable-warnings -v -s
