@@ -1,10 +1,8 @@
 "use client";
-import Image from "next/image";
 import React, { useState, Dispatch, SetStateAction, } from 'react';
 import SearchResults from "../components/SearchResults";
 import NavBar from "../components/NavBar";
 import Dropdown from "../types/DropdownType";
-import { filter } from "d3";
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -18,6 +16,15 @@ export interface ResultItem {
     date: string;
     source: string;
     citedby:number;
+    color:string;
+    relevance:number;
+    abstract: string;
+    doctype: string;
+    evaluation_criteria: string;
+    methodology: number;
+    clarity: 0;
+    completeness: 0;
+    transparency: 0;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
@@ -138,7 +145,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} /></div>
                 <div className="flex-1 sm:mx-12 w-full">
             {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
-                <SearchResults displayInputs={joinedInputsString}
+                <SearchResults setResults={setResults} displayInputs={joinedInputsString}
                     results={results} emptyString={emptyString} disableD3={disableD3}
                     inputs={inputs} bubbleInputs={bubbleInputs} />}
                     </div>

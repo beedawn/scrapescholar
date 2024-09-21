@@ -1,4 +1,5 @@
 import requests
+import random
 
 from urllib.parse import quote
 
@@ -28,6 +29,18 @@ def request_api(query: str):
                     'date':article.get('prism:coverDate'), 
                     'citedby': article.get('citedby-count'),
                     'source': "Scopus",
+                    'color':'red',
+                    'relevance': random.randint(1, 100),
+                    'abstract':'',
+                    'doctype':'',
+                    'evaluation_criteria':'',
+                    'color':'',
+                    'methodology':0,
+                    'clarity':0,
+                    'completeness':0,
+                    'transparency':0
+
+
                     })
         x += 1
     return return_articles
