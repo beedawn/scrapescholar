@@ -4,13 +4,22 @@ import uuid
 from sqlalchemy.exc import IntegrityError
 from app.db.session import SessionLocal
 from sqlalchemy.orm import Session
-from app.models import User, Article, Source, Role, Search
+from app.models import User, Article, Source, Role, Search, SearchShare
 from app.crud.user import create_user
 from app.crud.source import create_source
 from app.crud.search import create_search
 from app.schemas.user import UserCreate
 from app.schemas.source import SourceCreate
 from app.schemas.search import SearchCreate
+from app.schemas.searchshare import SearchShareCreate
+from app.schemas.article import ArticleCreate
+from app.schemas.searchkeyword import SearchKeywordCreate
+from app.schemas.keyword import KeywordCreate
+from app.crud.searchshare import create_search_share
+from app.crud.article import create_article
+from app.crud.searchkeyword import create_search_keyword
+from app.crud.keyword import create_keyword
+
 
 @pytest.fixture(scope="module")
 def db():
@@ -90,3 +99,43 @@ def test_search_table_exists(db):
     """Test if the Search table is created and accessible."""
     searches = db.query(Search).all()
     assert isinstance(searches, list)  # Expecting an empty or populated list
+
+def test_full_search_insert_and_share(db: Session):
+    """
+    Test the insertion of all related entities: Search, Articles, Keywords, and Share with a new user.
+    """
+
+    # Step 1: Create an existing user
+    existing_user_data = UserCreate(username="existing_user", password="password123", email="existing_user@example.com")
+    existing_user = create_user(db=db, user=existing_user_data)
+
+    # Step 2: Create a new search for the existing user
+    search_data = SearchCreate(user_id=existing_user.user_id, search_keywords=["AI", "Machine Learning"])
+    search = create_search(db=db, search=search_data)
+
+    # Step 3: Create at least 2 articles associated with the search
+    article_1_data = Article(user_id=existing_user.user_id, source_id=1, search_id=search.search_id, title="Article 1")
+    article_2_data = Article(user_id=existing_user.user_id, source_id=1, search_id=search.search_id, title="Article 2")
+
+    db.add_all([article_1_data, article_2_data])
+    db.commit()
+
+    # Step 4: Verify that both articles have been added
+    articles = db.query(Article).filter(Article.search_id == search.search_id).all()
+    assert len(articles) == 2
+    assert articles[0].title == "Article 1"
+    assert articles[1].title == "Article 2"
+
+    # Step 5: Share the search with a new user
+    new_user_data = UserCreate(username="new_user", password="password123", email="new_user@example.com")
+    new_user = create_user(db=db, user=new_user_data)
+
+    search_share_data = SearchShare(search_id=search.search_id, shared_with_user_id=new_user.user_id)
+    db.add(search_share_data)
+    db.commit()
+
+    # Step 6: Verify the search share
+    shared_search = db.query(SearchShare).filter(SearchShare.shared_with_user_id == new_user.user_id).first()
+    assert shared_search is not None
+    assert shared_search.search_id == search.search_id
+    assert shared_search.shared_with_user_id == new_user.user_id
