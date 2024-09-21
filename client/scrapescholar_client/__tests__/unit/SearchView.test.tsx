@@ -1165,4 +1165,349 @@ test('US-15 When user clicks on arrow next to evaluationCritera,bg evaluationCri
 })
 
 
+
+
+
+// When user clicks on arrow next to methodology, results are sorted by methodology
+
+
+test('US-15 When user clicks on arrow next to methodology twice, results are sorted by methodology descending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const methodologyScoreHeader = screen.getByText('Methodology');
+    sortButton = within(methodologyScoreHeader.closest('th')).getByRole('button');
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[10].textContent).toBe("1");
+    expect(rows[1].children[10].textContent).toBe("0");
+
+  }
+  else
+    fail('no sort button')
+
+})
+
+
+test('US-15 When user clicks on arrow next to methodology, results are sorted by methodology ascending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const methodologyScoreHeader = screen.getByText('Methodology');
+    sortButton = within(methodologyScoreHeader.closest('th')).getByRole('button');
+
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[10].textContent).toBe("0");
+    expect(rows[1].children[10].textContent).toBe("1");
+
+  } else
+    fail('no sort button found')
+})
+
+
+test('US-15 when results load methodology arrow is light gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+
+  await waitFor(() => {
+    const methodologyHeader = screen.getByText('Methodology');
+    const sortButton = within(methodologyHeader.closest('th')).getByRole('button');
+    expect(sortButton).toHaveClass('bg-gray-400');
+  }, { timeout: 5000 });
+})
+
+test('US-15 When user clicks on arrow next to methodology,bg methodology turns dark gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  await waitFor(() => {
+    const methodologyHeader = screen.getByText('Methodology');
+    const sortButton = within(methodologyHeader.closest('th')).getByRole('button')
+    fireEvent.click(sortButton);
+    expect(sortButton).toHaveClass('bg-gray-600');
+  }, { timeout: 5000 });
+})
+
+
+
+
+
+
+// When user clicks on arrow next to clarity, results are sorted by clarity
+
+
+test('US-15 When user clicks on arrow next to clarity twice, results are sorted by clarity descending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const clarityScoreHeader = screen.getByText('Clarity');
+    sortButton = within(clarityScoreHeader.closest('th')).getByRole('button');
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[11].textContent).toBe("1");
+    expect(rows[1].children[11].textContent).toBe("0");
+
+  }
+  else
+    fail('no sort button')
+
+})
+
+
+test('US-15 When user clicks on arrow next to clarity, results are sorted by clarity ascending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const clarityScoreHeader = screen.getByText('Clarity');
+    sortButton = within(clarityScoreHeader.closest('th')).getByRole('button');
+
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[11].textContent).toBe("0");
+    expect(rows[1].children[11].textContent).toBe("1");
+
+  } else
+    fail('no sort button found')
+})
+
+
+test('US-15 when results load clarity arrow is light gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+
+  await waitFor(() => {
+    const clarityHeader = screen.getByText('Clarity');
+    const sortButton = within(clarityHeader.closest('th')).getByRole('button');
+    expect(sortButton).toHaveClass('bg-gray-400');
+  }, { timeout: 5000 });
+})
+
+test('US-15 When user clicks on arrow next to clarity,bg clarity turns dark gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  await waitFor(() => {
+    const clarityHeader = screen.getByText('Clarity');
+    const sortButton = within(clarityHeader.closest('th')).getByRole('button')
+    fireEvent.click(sortButton);
+    expect(sortButton).toHaveClass('bg-gray-600');
+  }, { timeout: 5000 });
+})
+
+
+
+
+
+// When user clicks on arrow next to completeness, results are sorted by completeness
+
+
+test('US-15 When user clicks on arrow next to completeness twice, results are sorted by completeness descending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const completenessScoreHeader = screen.getByText('Completeness');
+    sortButton = within(completenessScoreHeader.closest('th')).getByRole('button');
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[11].textContent).toBe("1");
+    expect(rows[1].children[11].textContent).toBe("0");
+
+  }
+  else
+    fail('no sort button')
+
+})
+
+
+test('US-15 When user clicks on arrow next to completeness, results are sorted by completeness ascending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const completenessScoreHeader = screen.getByText('Completeness');
+    sortButton = within(completenessScoreHeader.closest('th')).getByRole('button');
+
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[11].textContent).toBe("0");
+    expect(rows[1].children[11].textContent).toBe("1");
+
+  } else
+    fail('no sort button found')
+})
+
+
+test('US-15 when results load completeness arrow is light gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+
+  await waitFor(() => {
+    const completenessHeader = screen.getByText('Completeness');
+    const sortButton = within(completenessHeader.closest('th')).getByRole('button');
+    expect(sortButton).toHaveClass('bg-gray-400');
+  }, { timeout: 5000 });
+})
+
+test('US-15 When user clicks on arrow next to completeness,bg completeness turns dark gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  await waitFor(() => {
+    const completenessHeader = screen.getByText('Completeness');
+    const sortButton = within(completenessHeader.closest('th')).getByRole('button')
+    fireEvent.click(sortButton);
+    expect(sortButton).toHaveClass('bg-gray-600');
+  }, { timeout: 5000 });
+})
+
+
+
+
+
+// When user clicks on arrow next to transparency, results are sorted by transparency
+
+
+test('US-15 When user clicks on arrow next to transparency twice, results are sorted by transparency descending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const transparencyScoreHeader = screen.getByText('Transparency');
+    sortButton = within(transparencyScoreHeader.closest('th')).getByRole('button');
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[11].textContent).toBe("1");
+    expect(rows[1].children[11].textContent).toBe("0");
+
+  }
+  else
+    fail('no sort button')
+
+})
+
+
+test('US-15 When user clicks on arrow next to transparency, results are sorted by transparency ascending', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  let sortButton;
+  await waitFor(() => {
+    const transparencyScoreHeader = screen.getByText('Transparency');
+    sortButton = within(transparencyScoreHeader.closest('th')).getByRole('button');
+
+  }, { timeout: 5000 });
+  if (sortButton) {
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[11].textContent).toBe("0");
+    expect(rows[1].children[11].textContent).toBe("1");
+
+  } else
+    fail('no sort button found')
+})
+
+
+test('US-15 when results load transparency arrow is light gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+
+  await waitFor(() => {
+    const transparencyHeader = screen.getByText('Transparency');
+    const sortButton = within(transparencyHeader.closest('th')).getByRole('button');
+    expect(sortButton).toHaveClass('bg-gray-400');
+  }, { timeout: 5000 });
+})
+
+test('US-15 When user clicks on arrow next to transparency,bg transparency turns dark gray', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  await waitFor(() => {
+    const transparencyHeader = screen.getByText('Transparency');
+    const sortButton = within(transparencyHeader.closest('th')).getByRole('button')
+    fireEvent.click(sortButton);
+    expect(sortButton).toHaveClass('bg-gray-600');
+  }, { timeout: 5000 });
+})
+
+
 });
