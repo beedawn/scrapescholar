@@ -26,13 +26,11 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
     };
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
-        console.log(sortedResults)
         setPressedSort(field);
         setResults(sortedResults)
     }
     const [pressedSort, setPressedSort]=useState<keyof ResultItem | null>(null);
     return (
-
         <div className="overflow-x-auto">
 
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
