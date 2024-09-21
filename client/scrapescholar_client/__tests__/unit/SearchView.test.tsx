@@ -261,6 +261,19 @@ describe('Home Component', () => {
 
     }, {timeout: 5000});
   })
+  test('US-8 Download button is a link', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    await waitFor(() => {
+     const downloadButton = screen.getByText('Download');
+     expect(downloadButton).toHaveAttribute('href', '/csv');
+
+    }, {timeout: 5000});
+  })
+
 
   test('AR6 Test article is selectable in the UI', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
