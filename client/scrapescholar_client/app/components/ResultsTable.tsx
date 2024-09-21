@@ -55,27 +55,28 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                 </thead>
                 <tbody>
                     {results.map((result, index) => (
-                        <tr key={result.id} className={` ${selectedArticle === index ? 'bg-blue-500' : 'hover:bg-gray-500'}`} onClick={() => { setSelectedArticle(index) }}>
-                            <td className="border border-gray-300"><a href={result.link}>{result.title}</a></td>
-                            <td className="border border-gray-300">{result.date}</td>
-                            <td className="border border-gray-300">{result.citedby}</td>
-                            <td className="border border-gray-300"><a href={result.link}>{result.link}</a></td>
-                            <td className="border border-gray-300"></td>
-                            <td className="border border-gray-300"></td>
-                            <td className="border border-gray-300">{result.source}</td>
-                            <td className="border border-gray-300">accept</td>
-                            <td className="border border-gray-300">
+                        <tr key={result.id} className={` ${selectedArticle === index ? 'bg-blue-500' : 'hover:bg-gray-500'}`} onClick={() => { setSelectedArticle(index) }} data-testid='row'>
+                            <td className="border border-gray-300" ><a href={result.link}>{result.title}</a></td>
+                            <td className="border border-gray-300" >{result.date}</td>
+                            <td className="border border-gray-300" >{result.citedby}</td>
+                            <td className="border border-gray-300" ><a href={result.link}>{result.link}</a></td>
+                            <td className="border border-gray-300" ></td>
+                            <td className="border border-gray-300" ></td>
+                            <td className="border border-gray-300" >{result.source}</td>
+                            <td className="border border-gray-300" >accept</td>
+                            <td className="border border-gray-300" >
+                                {result.color}
                                 <select className="text-black" >
                                     <option value="red" className='bg-red-600'>Red</option>
                                     <option value="yellow" className="bg-yellow">Yellow</option>
                                     <option className="bg-green" value="green">Green</option>
                                 </select>
                             </td>
-                            <td className="border border-gray-300">{result.relevance}%</td>
+                            <td className="border border-gray-300" >{result.relevance}%</td>
+                            <td className="border border-gray-300" >0</td>
+                            <td className="border border-gray-300" >0</td>
                             <td className="border border-gray-300">0</td>
-                            <td className="border border-gray-300">0</td>
-                            <td className="border border-gray-300">0</td>
-                            <td className="border border-gray-300">0</td>
+                            <td className="border border-gray-300" >0</td>
                         </tr>
 
                     ))}

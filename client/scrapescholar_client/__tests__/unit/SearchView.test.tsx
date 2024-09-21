@@ -34,7 +34,7 @@ beforeEach(() => {
           {
             "id": "0",
             "title": "test 1",
-            "link": "link 1",
+            "link": "link x",
             "date": "2024-05-31",
             "source": "Science Direct",
             "citedby": "0",
@@ -51,9 +51,9 @@ beforeEach(() => {
           {
             "id": "1",
             "title": "test 2",
-            "link": "link 2",
+            "link": "link a",
             "date": "2024-07-01",
-            "source": "Science Direct",
+            "source": "Scopus",
             "citedby": "1",
             "color": "yellow",
             "relevance": "80",
@@ -285,8 +285,8 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
     await waitFor(() => {
-      expect(screen.getByText('link 1')).toBeInTheDocument()
-      expect(screen.getByText('link 2')).toBeInTheDocument()
+      expect(screen.getByText('link a')).toBeInTheDocument()
+      expect(screen.getByText('link x')).toBeInTheDocument()
     }, { timeout: 5000 });
   })
 
@@ -332,9 +332,54 @@ describe('Home Component', () => {
   })
 
 
-
-  //US-15When user clicks on arrow next to relevance, results are sorted by relevance
+  //US-15 When user clicks on arrow next to relevance, results are sorted by relevance
   // 
+
+  test('US-15 When user clicks on arrow next to relevance, results are sorted by relevance descending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const relevanceScoreHeader = screen.getByText('Relevance Score');
+       sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText('92%')).toBeInTheDocument()
+    expect(within(rows[1]).queryByText('80%')).toBeInTheDocument()
+    }
+    else
+    fail('no sort button')
+
+  })
+
+
+  test('US-15 When user clicks on arrow next to relevance twice, results are sorted by relevance ascending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+let sortButton;
+    await waitFor(() => {
+      const relevanceScoreHeader = screen.getByText('Relevance Score');
+       sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
+
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText('80%')).toBeInTheDocument()
+    expect(within(rows[1]).queryByText('92%')).toBeInTheDocument()
+  } else
+  fail('no sort button found')
+  })
 
   test('US-15 when results load relevance arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -369,6 +414,53 @@ describe('Home Component', () => {
 
   // When user clicks on arrow next to date, results are sorted by date
 
+  test('US-15 When user clicks on arrow next to date, results are sorted by date descending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const yearScoreHeader = screen.getByText('Year');
+       sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("2024-07-01")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("2024-05-31")).toBeInTheDocument()
+    }
+    else
+    fail('no sort button')
+
+  })
+
+
+  test('US-15 When user clicks on arrow next to date twice, results are sorted by date ascending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+let sortButton;
+    await waitFor(() => {
+      const yearScoreHeader = screen.getByText('Year');
+       sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
+
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("2024-05-31")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("2024-07-01")).toBeInTheDocument()
+  } else
+  fail('no sort button found')
+  })
+  
+
   test('US-15 when results load date arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
@@ -400,6 +492,54 @@ describe('Home Component', () => {
   })
   // When user clicks on arrow next to database, results are sorted by database
 
+
+  test('US-15 When user clicks on arrow next to source, results are sorted by source descending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const sourceScoreHeader = screen.getByText('Source');
+       sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("Scopus")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("Science Direct")).toBeInTheDocument()
+    }
+    else
+    fail('no sort button')
+
+  })
+
+
+  test('US-15 When user clicks on arrow next to source twice, results are sorted by source ascending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+let sortButton;
+    await waitFor(() => {
+      const sourceScoreHeader = screen.getByText('Source');
+       sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
+
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("Science Direct")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("Scopus")).toBeInTheDocument()
+  } else
+  fail('no sort button found')
+  })
+  
+
   test('US-15 when results load source arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
@@ -429,21 +569,7 @@ describe('Home Component', () => {
       expect(sortButton).toHaveClass('bg-gray-600');
     }, { timeout: 5000 });
   })
-  // When user clicks on arrow next to title, results are sorted by title
-  test('US-15 when results load source arrow is light gray', async () => {
-    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
-
-    await waitFor(() => {
-      const sourceHeader = screen.getByText('Source');
-      const sortButton = within(sourceHeader.closest('th')).getByRole('button');
-      expect(sortButton).toHaveClass('bg-gray-400');
-    }, { timeout: 5000 });
-  })
+ 
 
   test('US-15 When user clicks on arrow next to source,bg color turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -459,7 +585,139 @@ describe('Home Component', () => {
       expect(sortButton).toHaveClass('bg-gray-600');
     }, { timeout: 5000 });
   })
+
+
+
+   // When user clicks on arrow next to title, results are sorted by title
+
+   test('US-15 When user clicks on arrow next to source, results are sorted by source descending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const titleScoreHeader = screen.getByText('Title');
+       sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("test 2")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("test 1")).toBeInTheDocument()
+    }
+    else
+    fail('no sort button')
+
+  })
+
+
+  test('US-15 When user clicks on arrow next to source twice, results are sorted by source ascending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+let sortButton;
+    await waitFor(() => {
+      const titleScoreHeader = screen.getByText('Title');
+       sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
+
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("test 1")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("test 2")).toBeInTheDocument()
+  } else
+  fail('no sort button found')
+  })
+  
+   test('US-15 when results load title arrow is light gray', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+
+    await waitFor(() => {
+      const titleHeader = screen.getByText('Title');
+      const sortButton = within(titleHeader.closest('th')).getByRole('button');
+      expect(sortButton).toHaveClass('bg-gray-400');
+    }, { timeout: 5000 });
+  })
+
+
+
+  test('US-15 When user clicks on arrow next to title,bg color turns dark gray', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    await waitFor(() => {
+      const titleHeader = screen.getByText('Title');
+      const sortButton = within(titleHeader.closest('th')).getByRole('button')
+      fireEvent.click(sortButton);
+      expect(sortButton).toHaveClass('bg-gray-600');
+    }, { timeout: 5000 });
+  })
+
   // When user clicks on arrow next to color, results are sorted by color
+
+
+  test('US-15 When user clicks on arrow next to color, results are sorted by color descending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const colorScoreHeader = screen.getByText('Color');
+       sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("yellow")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("red")).toBeInTheDocument()
+    }
+    else
+    fail('no sort button')
+
+  })
+
+
+  test('US-15 When user clicks on arrow next to source twice, results are sorted by source ascending', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+let sortButton;
+    await waitFor(() => {
+      const colorScoreHeader = screen.getByText('Color');
+       sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
+
+    }, { timeout: 5000 });
+    if(sortButton){
+    fireEvent.click(sortButton);
+    fireEvent.click(sortButton);
+    const rows = screen.getAllByTestId('row')
+    expect(within(rows[0]).queryByText("red")).toBeInTheDocument()
+    expect(within(rows[1]).queryByText("yellow")).toBeInTheDocument()
+  } else
+  fail('no sort button found')
+  })
+
+
   test('US-15 when results load color arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
