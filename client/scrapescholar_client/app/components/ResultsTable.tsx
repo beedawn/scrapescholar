@@ -30,6 +30,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setResults(sortedResults);
     }
     const [pressedSort, setPressedSort]=useState<keyof ResultItem | null>(null);
+ 
     return (
         <div className="overflow-x-auto">
 

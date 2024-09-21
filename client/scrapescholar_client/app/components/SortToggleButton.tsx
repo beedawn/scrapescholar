@@ -24,8 +24,10 @@ const SortToggleButton: React.FC<SortToggleButtonProps> = ({handleSort, field, p
 
                     <div>
                         
-                    {pressedSort!==null&&isPressed? (isPressed && pressed ?<Button className="bg-gray-600" onClick={()=>handlePress(field, "desc")}>⌃</Button>
-                    :<Button className="bg-gray-600" onClick={()=>handlePress(field,"asc")}>˅</Button>):<Button className="bg-gray-400" onClick={()=>handlePress(field, "desc")}>⌃</Button>}
+                    {pressedSort!==null&&isPressed? (isPressed && pressed ?
+                     <Button className="bg-gray-600" onClick={()=>handlePress(field,"asc")}>˅</Button>:
+                    <Button className="bg-gray-600" onClick={()=>handlePress(field, "desc")}>⌃</Button>
+                   ):<Button className="bg-gray-400" onClick={()=>handlePress(field, "desc")}>⌃</Button>}
                     </div>
     )
 };
