@@ -344,17 +344,17 @@ describe('Home Component', () => {
     let sortButton;
     await waitFor(() => {
       const relevanceScoreHeader = screen.getByText('Relevance Score');
-       sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText('92%')).toBeInTheDocument()
-    expect(within(rows[1]).queryByText('80%')).toBeInTheDocument()
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText('92%')).toBeInTheDocument()
+      expect(within(rows[1]).queryByText('80%')).toBeInTheDocument()
     }
     else
-    fail('no sort button')
+      fail('no sort button')
 
   })
 
@@ -366,19 +366,19 @@ describe('Home Component', () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-let sortButton;
+    let sortButton;
     await waitFor(() => {
       const relevanceScoreHeader = screen.getByText('Relevance Score');
-       sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
 
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText('80%')).toBeInTheDocument()
-    expect(within(rows[1]).queryByText('92%')).toBeInTheDocument()
-  } else
-  fail('no sort button found')
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText('80%')).toBeInTheDocument()
+      expect(within(rows[1]).queryByText('92%')).toBeInTheDocument()
+    } else
+      fail('no sort button found')
   })
 
   test('US-15 when results load relevance arrow is light gray', async () => {
@@ -423,17 +423,17 @@ let sortButton;
     let sortButton;
     await waitFor(() => {
       const yearScoreHeader = screen.getByText('Year');
-       sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("2024-07-01")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("2024-05-31")).toBeInTheDocument()
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("2024-07-01")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("2024-05-31")).toBeInTheDocument()
     }
     else
-    fail('no sort button')
+      fail('no sort button')
 
   })
 
@@ -445,21 +445,21 @@ let sortButton;
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-let sortButton;
+    let sortButton;
     await waitFor(() => {
       const yearScoreHeader = screen.getByText('Year');
-       sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
 
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("2024-05-31")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("2024-07-01")).toBeInTheDocument()
-  } else
-  fail('no sort button found')
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("2024-05-31")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("2024-07-01")).toBeInTheDocument()
+    } else
+      fail('no sort button found')
   })
-  
+
 
   test('US-15 when results load date arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -502,17 +502,17 @@ let sortButton;
     let sortButton;
     await waitFor(() => {
       const sourceScoreHeader = screen.getByText('Source');
-       sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("Scopus")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("Science Direct")).toBeInTheDocument()
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("Scopus")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("Science Direct")).toBeInTheDocument()
     }
     else
-    fail('no sort button')
+      fail('no sort button')
 
   })
 
@@ -524,21 +524,21 @@ let sortButton;
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-let sortButton;
+    let sortButton;
     await waitFor(() => {
       const sourceScoreHeader = screen.getByText('Source');
-       sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
 
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("Science Direct")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("Scopus")).toBeInTheDocument()
-  } else
-  fail('no sort button found')
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("Science Direct")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("Scopus")).toBeInTheDocument()
+    } else
+      fail('no sort button found')
   })
-  
+
 
   test('US-15 when results load source arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -569,7 +569,7 @@ let sortButton;
       expect(sortButton).toHaveClass('bg-gray-600');
     }, { timeout: 5000 });
   })
- 
+
 
   test('US-15 When user clicks on arrow next to source,bg color turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -588,9 +588,9 @@ let sortButton;
 
 
 
-   // When user clicks on arrow next to title, results are sorted by title
+  // When user clicks on arrow next to title, results are sorted by title
 
-   test('US-15 When user clicks on arrow next to source twice, results are sorted by source descending', async () => {
+  test('US-15 When user clicks on arrow next to source twice, results are sorted by source descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
     const inputs = screen.getAllByRole('textbox');
@@ -599,17 +599,17 @@ let sortButton;
     let sortButton;
     await waitFor(() => {
       const titleScoreHeader = screen.getByText('Title');
-       sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("test 2")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("test 1")).toBeInTheDocument()
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("test 2")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("test 1")).toBeInTheDocument()
     }
     else
-    fail('no sort button')
+      fail('no sort button')
 
   })
 
@@ -621,22 +621,22 @@ let sortButton;
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-let sortButton;
+    let sortButton;
     await waitFor(() => {
       const titleScoreHeader = screen.getByText('Title');
-       sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
 
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("test 1")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("test 2")).toBeInTheDocument()
-  } else
-  fail('no sort button found')
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("test 1")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("test 2")).toBeInTheDocument()
+    } else
+      fail('no sort button found')
   })
-  
-   test('US-15 when results load title arrow is light gray', async () => {
+
+  test('US-15 when results load title arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
     const searchButton = screen.getByText('Search');
@@ -680,17 +680,17 @@ let sortButton;
     let sortButton;
     await waitFor(() => {
       const colorScoreHeader = screen.getByText('Color');
-       sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("yellow")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("red")).toBeInTheDocument()
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("yellow")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("red")).toBeInTheDocument()
     }
     else
-    fail('no sort button')
+      fail('no sort button')
 
   })
 
@@ -702,19 +702,19 @@ let sortButton;
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-let sortButton;
+    let sortButton;
     await waitFor(() => {
       const colorScoreHeader = screen.getByText('Color');
-       sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
+      sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
 
     }, { timeout: 5000 });
-    if(sortButton){
-    fireEvent.click(sortButton);
-    const rows = screen.getAllByTestId('row')
-    expect(within(rows[0]).queryByText("red")).toBeInTheDocument()
-    expect(within(rows[1]).queryByText("yellow")).toBeInTheDocument()
-  } else
-  fail('no sort button found')
+    if (sortButton) {
+      fireEvent.click(sortButton);
+      const rows = screen.getAllByTestId('row')
+      expect(within(rows[0]).queryByText("red")).toBeInTheDocument()
+      expect(within(rows[1]).queryByText("yellow")).toBeInTheDocument()
+    } else
+      fail('no sort button found')
   })
 
 
