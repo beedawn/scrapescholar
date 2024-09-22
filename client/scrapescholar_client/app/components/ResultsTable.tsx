@@ -45,7 +45,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                         <th className="border border-gray-300">Document Type<SortToggleButton handleSort={handleSort} field="doctype" pressedSort={pressedSort}/></th>
                         <th className="border border-gray-300">Source<SortToggleButton handleSort={handleSort} field="source" pressedSort={pressedSort}/></th>
                         <th className="border border-gray-300">Evaluation Criteria<SortToggleButton handleSort={handleSort} field="evaluation_criteria" pressedSort={pressedSort}/></th>
-                        <th className="border border-gray-300">Color <SortToggleButton handleSort={handleSort} field="color" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Assessment <SortToggleButton handleSort={handleSort} field="color" pressedSort={pressedSort}/></th>
                         <th className="border border-gray-300">Relevance Score<SortToggleButton handleSort={handleSort} field="relevance" pressedSort={pressedSort}/></th>
                         <th className="border border-gray-300">Methodology<SortToggleButton handleSort={handleSort} field="methodology" pressedSort={pressedSort}/></th>
                         <th className="border border-gray-300">Clarity<SortToggleButton handleSort={handleSort} field="clarity" pressedSort={pressedSort}/></th>
@@ -60,10 +60,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                             <td className="border border-gray-300" >{result.date}</td>
                             <td className="border border-gray-300" >{result.citedby}</td>
                             <td className="border border-gray-300" ><a href={result.link}>{result.link}</a></td>
-                            <td className="border border-gray-300" ></td>
-                            <td className="border border-gray-300" ></td>
+                            <td className="border border-gray-300" >{result.abstract}</td>
+                            <td className="border border-gray-300" >{result.doctype}</td>
                             <td className="border border-gray-300" >{result.source}</td>
-                            <td className="border border-gray-300" >accept</td>
+                            <td className="border border-gray-300" >{result.evaluation_criteria}</td>
                             <td className="border border-gray-300" >
                                 {result.color}
                                 <select className="text-black" >
@@ -73,10 +73,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                 </select>
                             </td>
                             <td className="border border-gray-300" >{result.relevance}%</td>
-                            <td className="border border-gray-300" >0</td>
-                            <td className="border border-gray-300" >0</td>
-                            <td className="border border-gray-300">0</td>
-                            <td className="border border-gray-300" >0</td>
+                            <td className="border border-gray-300" >{result.methodology}</td>
+                            <td className="border border-gray-300" >{result.clarity}</td>
+                            <td className="border border-gray-300">{result.completeness}</td>
+                            <td className="border border-gray-300" >{result.transparency}</td>
                         </tr>
 
                     ))}
