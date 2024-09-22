@@ -5,6 +5,7 @@ import json
 import csv
 import urllib.parse 
 from urllib.parse import quote
+from api_tools.api_tools import scopus_api_key,parse_data_scopus
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -54,6 +55,7 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     count = "25"
     sort = "relevancy"
     subj = subject
+    key = scopus_api_key
 
     #Final Assembly
     getPhrase = "https://api.elsevier.com/content/search/scopus?" \
