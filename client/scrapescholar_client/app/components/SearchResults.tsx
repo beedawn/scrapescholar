@@ -1,74 +1,44 @@
-import React from 'react';
-import LinePlot from './d3/LinePlot';
+import React, {useState} from 'react';
 import BubblePlot from './d3/BubblePlot';
 import { ResultItem } from '../views/SearchView';
+import SearchHeader from './SearchHeader';
+import ResultsTable from './ResultsTable';
 interface SearchResultsProps {
     displayInputs: string[];
     results: ResultItem[];
     className?: string;
     emptyString?: string;
-    disableD3?:boolean;
-    inputs:string[];
+    disableD3?: boolean;
+    inputs: string[];
+    bubbleInputs: { x: number, y: number, radius: number, color: string, label: string }[];
+    setResults: (item:ResultItem[])=>void;
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({results, displayInputs, className, emptyString, disableD3=false, inputs }) => {
-   let bubbleInputs = [{x:0, y:0, radius:0, color:"", label:""}];
-   if(displayInputs[0]!==undefined){
-    const filteredInputs = displayInputs[0].split(' ');
-   const filteredInputsAND = filteredInputs.filter((item)=>{
-    return item !== "AND"
-   })
-
-   const filteredInputsOR = filteredInputsAND.filter((item)=>{
-    return item !== "OR"
-   })
-
-   const filteredInputsNOT = filteredInputsOR.filter((item)=>{
-    return item !== "NOT"
-   })
-   bubbleInputs=filteredInputsNOT.map((input, i)=>({
-    x: i, 
-    y: 50, 
-    radius:50, 
-    color: "green", 
-    label:input
-   })); 
-}
-
-
+const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString, 
+    disableD3 = false, inputs, bubbleInputs, setResults }) => {
+   const [selectedArticle, setSelectedArticle] = useState(-1);
     return (
         <div className={className}>
-            <div className="float-left p-12 max-w-fit">
+            <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
                 {results.length !== 0 && displayInputs[0] !== emptyString ? (
-                     <div>
-                     <p>
-                         You searched {displayInputs}
-                     </p>
-                  
                     <div>
-
-                        {disableD3?(<></>):(<><LinePlot data={[20, 40, 50, 60]} width={200} height={200} /> <BubblePlot data={bubbleInputs}></BubblePlot></>)}
-
+                       <SearchHeader downloadURL="/csv" />
+                        <p>
+                            You searched {displayInputs}
+                        </p>
+                        <div>
+                            {disableD3 ? (<></>) : (<>
+                                <BubblePlot data={bubbleInputs}></BubblePlot></>)}
+                        </div>
+                        <ResultsTable setResults={setResults} results={results} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle} />
                     </div>
-
-                    <div>
-                    <ul>
-      {results.map((result) => (
-        <>
-        <li><a href={result.link}>{result.title}</a></li>
-    
-        </>
-      ))}
-    </ul>
-                     </div>
-                    </div>
-                ) : (
-                    results.length !== 0
-                    &&
-                    <p className="bg-red-800 p-2 rounded">
-                        Please enter a keyword
-                    </p>
-                )}
+                ) :
+                    results.length === 0 && displayInputs[0] === ''
+                        ?
+                        (<p className="bg-red-800 p-2 rounded">
+                            Please enter a keyword
+                        </p>)
+                        : (results.length === 0 && displayInputs[0] !== '' ? (<p>No Results Found</p>) : (<p>Loading...</p>))}
             </div>
         </div>
     );

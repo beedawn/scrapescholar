@@ -22,7 +22,6 @@ const SearchBox: React.FC<SearchBoxProps> =
         disabled={disabled}
         placeholder={placeholder}
       >
-
       </input>
     );
   };
