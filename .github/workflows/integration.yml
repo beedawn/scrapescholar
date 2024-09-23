@@ -10,13 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://student:student@localhost:5432/scrapescholartestdb
-      PYTHONPATH: ./backend
-      POSTGRES_USER: student
-      POSTGRES_PASSWORD: student
-      POSTGRES_DB: scrapescholartestdb
-      POSTGRES_SERVER: localhost
-      POSTGRES_PORT: "5432"
+    
       # used in fastapi, academic API Keys
       SCIENCEDIRECT_APIKEY: ${{secrets.SCIENCEDIRECT_APIKEY}}
       SCOPUS_APIKEY: ${{secrets.SCOPUS_APIKEY}}
