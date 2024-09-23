@@ -3,6 +3,7 @@ anyio==4.4.0
 certifi==2024.8.30
 charset-normalizer==3.3.2
 click==8.1.7
+coverage==7.6.1
 dnspython==2.6.1
 email_validator==2.2.0
 fastapi==0.113.0
@@ -39,7 +40,3 @@ uvicorn==0.30.6
 uvloop==0.20.0
 watchfiles==0.24.0
 websockets==13.0.1
-sqlalchemy==2.0.34
-alembic==1.13.2
-psycopg2-binary==2.9.9
-pydantic-settings==2.5.2
