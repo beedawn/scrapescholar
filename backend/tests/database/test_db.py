@@ -21,11 +21,13 @@ from app.crud.searchkeyword import create_search_keyword
 from app.crud.keyword import create_keyword
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def db():
     """Set up the database connection for testing."""
     db = SessionLocal()
+    db.begin_nested()
     yield db
+    db.rollback()
     db.close()
 
 def test_role_table_exists(db):
@@ -120,6 +122,7 @@ def test_full_search_insert_and_share(db: Session):
     db.add_all([article_1_data, article_2_data])
     db.commit()
 
+
     # Step 4: Verify that both articles have been added
     articles = db.query(Article).filter(Article.search_id == search.search_id).all()
     assert len(articles) == 2
@@ -134,8 +137,14 @@ def test_full_search_insert_and_share(db: Session):
     db.add(search_share_data)
     db.commit()
 
+
     # Step 6: Verify the search share
     shared_search = db.query(SearchShare).filter(SearchShare.shared_with_user_id == new_user.user_id).first()
     assert shared_search is not None
     assert shared_search.search_id == search.search_id
     assert shared_search.shared_with_user_id == new_user.user_id
+
+    db.delete(existing_user)
+    db.delete(new_user)
+    db.commit()
+    
