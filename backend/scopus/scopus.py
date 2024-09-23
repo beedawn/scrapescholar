@@ -5,7 +5,7 @@ import json
 import csv
 import urllib.parse 
 from urllib.parse import quote
-from api_tools.api_tools import scopus_api_key,parse_data_scopus
+from backend import api_tools
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -20,8 +20,8 @@ class QueryParameters:
 
 #   Create SearchResults class
 class SearchResults:
-    def __init__(self, title = None, year = None, citedBy = None, link = None, abstract = None, documentType = None, 
-                 source = None, evaluation = None, methodology = None, clarity = None, completeness = None, transparency = None):
+    def __init__(self, title = None, year = None, citedBy = None, link = None, abstract = None, documentType = None, source = None,
+                 evaluation = None, relevanceScore = None, methodology = None, clarity = None, completeness = None, transparency = None):
         self.title = title
         self.year = year
         self.citedBy = citedBy
@@ -30,13 +30,14 @@ class SearchResults:
         self.documentType = documentType
         self.source = source
         self.evaluation = evaluation
+        self.relevanceScore = relevanceScore
         self.methodology = methodology
         self.clarity = clarity
         self.completeness = completeness
         self.transparency = transparency
 
 #   Create Query Execute Function
-def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
+def query_scopus_api(keywords, key, subject, minYear):
     #Keyword Builder
     keywordPhrase = ""
 
@@ -55,7 +56,7 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
     count = "25"
     sort = "relevancy"
     subj = subject
-    key = scopus_api_key
+    key = key
 
     #Final Assembly
     getPhrase = "https://api.elsevier.com/content/search/scopus?" \
@@ -66,12 +67,13 @@ def query_scopus_api(keywords, key, subject = "COMP", minYear = "2015",):
         + "&date=" + dateRange \
         + "&count=" + count \
         + "&sort=" + sort \
-        + "&subj=" + subject
+        + "&subj=" + subj
     return getPhrase
 
 #   Create function to 'get' all elements needed for the front end and print results to a CSV
 def load_json_scrape_results(json_data):        
-    with open("search_results.csv", mode='w', newline='') as file:
+    file_path = "search_results.csv"
+    with open(file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Title","Year","Cited By","Link","Abstract","Document Type","Source","Evaluation","Methodology","Clarity","Completeness","Transparency"])
         for entry in json_data["search-results"].get("entry", []):
@@ -98,69 +100,17 @@ def load_json_scrape_results(json_data):
                         result.source, result.evaluation, result.methodology, result.clarity, result.completeness, result.transparency]
             writer.writerow(rowArray)
         file.close()
-
-#   ---main--- This is testing the variables that I will recieve from the front end
-
+    return file_path
 
 #  Access an environment variable for API Key
 api_key = os.getenv("SCOPUS_APIKEY_TH")
 
 #   QueryParameters - keywordList is user input, the rest will be static and unique to the scienceDirect parameters
-researcherKeywordList = ["cybersecurity", "AND", "non profit", "OR", "charity"]     
-subjectComp = "COMP"
-minYear2015 = "2015"
+# researcherKeywordList = ["cybersecurity", "AND", "non profit", "OR", "charity"]     
+# subjectComp = "COMP"
+# minYear2015 = "2015"
 
 #   Build Query
-searchQuery = QueryParameters(keywords=researcherKeywordList, subject=subjectComp, minYear=minYear2015)
-queryURL = query_scopus_api(searchQuery.keywords, api_key)
-print(queryURL)
-apiResponse = requests.get(queryURL)
-jsonResults = apiResponse.json()
-
-#   Store Results in Class
-search_results = (load_json_scrape_results(jsonResults))
-import random
-
-from urllib.parse import quote
-
-from api_tools.api_tools import scopus_api_key,parse_data_scopus
-
-# triggers for science direct endpoint
-def request_api(query: str):
-    #request data from science direct
-    query=quote(query)
-    response = requests.get(f"https://api.elsevier.com/content/search/scopus?query={query}&apiKey={scopus_api_key}")
-    articles=parse_data_scopus(response)
-    #return entries to sciencedirect endpoint response
-    return_articles = []
-    x = 0
-    for article in articles:
-        error = article.get('error')
-        if error is None:
-            links = article.get('link')
-            if links:
-                link = links[2].get('@href')
-            else:
-                link = ""
-            return_articles.append({
-                    'id':x,
-                    'title': article.get('dc:title'), 
-                    'link':link, 
-                    'date':article.get('prism:coverDate'), 
-                    'citedby': article.get('citedby-count'),
-                    'source': "Scopus",
-                    'color':'red',
-                    'relevance': random.randint(1, 100),
-                    'abstract':'',
-                    'doctype':'',
-                    'evaluation_criteria':'',
-                    'color':'',
-                    'methodology':0,
-                    'clarity':0,
-                    'completeness':0,
-                    'transparency':0
 
 
-                    })
-        x += 1
-    return return_articles
+
