@@ -62,6 +62,9 @@ def test_article_creation_with_existing_user_and_source(db: Session):
     article = Article(user_id=user.user_id, source_id=source.source_id, search_id=search.search_id, title="New Test Article")
     db.add(article)
     db.commit()
+    db.delete(article)
+    db.delete(search)
+    db.commit()
 
     assert article.article_id is not None
     assert article.user_id == user.user_id
@@ -73,6 +76,8 @@ def test_foreign_key_constraint(db):
     with pytest.raises(IntegrityError):
         article = Article(title="Test Article", source_id=9999, search_id=1)  # Invalid source_id
         db.add(article)
+        db.commit()
+        db.delete(article)
         db.commit()
 
     # Explicitly roll back after the failure
@@ -90,6 +95,9 @@ def test_article_table_insert_with_new_data(db: Session):
     db.add(article)
 
     try:
+        db.commit()
+        db.delete(article)
+        db.delete(source)
         db.commit()
     except Exception as e:
         db.rollback()
@@ -121,6 +129,7 @@ def test_full_search_insert_and_share(db: Session):
 
     db.add_all([article_1_data, article_2_data])
     db.commit()
+  
 
 
     # Step 4: Verify that both articles have been added
@@ -128,6 +137,8 @@ def test_full_search_insert_and_share(db: Session):
     assert len(articles) == 2
     assert articles[0].title == "Article 1"
     assert articles[1].title == "Article 2"
+   
+
 
     # Step 5: Share the search with a new user
     new_user_data = UserCreate(username="new_user", password="password123", email="new_user@example.com")
@@ -144,6 +155,11 @@ def test_full_search_insert_and_share(db: Session):
     assert shared_search.search_id == search.search_id
     assert shared_search.shared_with_user_id == new_user.user_id
 
+
+    db.delete(search_share_data)
+    db.delete(article_1_data)
+    db.delete(article_2_data)
+    db.delete(search)
     db.delete(existing_user)
     db.delete(new_user)
     db.commit()
