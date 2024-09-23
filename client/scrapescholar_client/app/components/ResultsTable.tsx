@@ -9,21 +9,22 @@ interface ResultsTableProps {
     setSelectedArticle: (index: number) => void;
 }
 
+export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDirection: string): ResultItem[] => {
+    if (sortDirection === "asc")
+        return array.sort((a, b) => {
+            if (a[field] < b[field]) return -1;
+            if (a[field] > b[field]) return 1;
+            return 0;
+        });
+    else
+        return array.sort((a, b) => {
+            if (a[field] > b[field]) return -1;
+            if (a[field] < b[field]) return 1;
+            return 0;
+        });
+};
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
-    const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDirection: string): ResultItem[] => {
-        if (sortDirection === "asc")
-            return array.sort((a, b) => {
-                if (a[field] < b[field]) return -1;
-                if (a[field] > b[field]) return 1;
-                return 0;
-            });
-        else
-            return array.sort((a, b) => {
-                if (a[field] > b[field]) return -1;
-                if (a[field] < b[field]) return 1;
-                return 0;
-            });
-    };
+
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);

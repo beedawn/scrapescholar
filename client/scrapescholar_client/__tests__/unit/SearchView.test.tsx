@@ -1,8 +1,10 @@
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchView from '../../app/views/SearchView';
+import SearchView, {ResultItem} from '../../app/views/SearchView';
 import React from 'react';
 import Dropdown from '../../app/types/DropdownType';
+import {sortResults} from '../../app/components/ResultsTable';
+
 
 /*
 
@@ -21,7 +23,59 @@ import Dropdown from '../../app/types/DropdownType';
     clarity: 0;
     completeness: 0;
     transparency: 0;*/
-
+const items:ResultItem[] = [
+  {
+    id: 0,
+    title: "test 1",
+    link: "link x",
+    date: "2024-05-31",
+    source: "Science Direct",
+    citedby: 0,
+    color: "red",
+    relevance: 92,
+    abstract: "a",
+    doctype: "article",
+    evaluation_criteria: "accept",
+    methodology: 0,
+    clarity: 0,
+    transparency: 0,
+    completeness: 0
+  },
+  {
+    id: 1,
+    title: "test 2",
+    link: "link a",
+    date: "2024-07-01",
+    source: "Scopus",
+    citedby: 1,
+    color: "yellow",
+    relevance: 80,
+    abstract: "b",
+    doctype: "journal",
+    evaluation_criteria: "deny",
+    methodology: 1,
+    clarity: 1,
+    transparency: 1,
+    completeness: 1
+  },
+  {
+    id: 1,
+    title: "test 1",
+    link: "link a",
+    date: "2024-07-01",
+    source: "Scopus",
+    citedby: 1,
+    color: "yellow",
+    relevance: 80,
+    abstract: "b",
+    doctype: "journal",
+    evaluation_criteria: "deny",
+    methodology: 1,
+    clarity: 1,
+    transparency: 1,
+    completeness: 1
+  }
+]
 
 beforeEach(() => {
   // Reset mocks before each test
@@ -1508,6 +1562,42 @@ test('US-15 When user clicks on arrow next to transparency,bg transparency turns
     expect(sortButton).toHaveClass('bg-gray-600');
   }, { timeout: 5000 });
 })
+
+test('Check error is returned when search fails to fetch/backend down', async () => {
+  global.fetch = jest.fn(() => Promise.reject(new Error('Fetch failed'))) as jest.Mock;
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  await waitFor(() => {
+    const errorText = screen.getByText('Fetch failed');
+    expect(errorText).toBeInTheDocument();
+  }, { timeout: 5000 });
+})
+
+test('sort results ascending',  () => {
+const sorted = sortResults(items, 'title', 'asc')
+expect(sorted).toEqual(items)
+
+  
+
+})
+
+test('sort results descending', () => {
+  const sorted = sortResults(items, 'title', 'desc')
+  console.log(items[1])
+  expect(sorted).toEqual([items[0], items[1],items[2] ])
+  
+    
+  
+  })
+
+  test('returns an empty array when sorting an empty array', () => {
+    expect(sortResults([], 'title', 'asc')).toEqual([]);
+});
+
 
 
 });

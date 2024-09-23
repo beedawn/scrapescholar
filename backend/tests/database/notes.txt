@@ -1,0 +1,11 @@
+To run the SQL tests and initialize the database you must install PostgreSQL, then once it is running run the following:
+```bash
+CREATE USER student WITH PASSWORD 'student';
+CREATE DATABASE scrapescholartestdb;
+GRANT ALL PRIVLEDGES ON DATABASE scrapescholartestdb to student;
+```
+
+then to initialize the tables navigate to the backend folder and run
+```python
+python -m app.init_db
+```

@@ -22,9 +22,9 @@ export interface ResultItem {
     doctype: string;
     evaluation_criteria: string;
     methodology: number;
-    clarity: 0;
-    completeness: 0;
-    transparency: 0;
+    clarity: number;
+    completeness: number;
+    transparency: number;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
