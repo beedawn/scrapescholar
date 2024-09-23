@@ -7,6 +7,7 @@ import urllib.parse
 import api_tools
 from dotenv import load_dotenv
 load_dotenv()
+from api_tools.api_tools import scopus_api_key,parse_data_scopus
 
 #   Create QueryParameters class
 class QueryParameters:
