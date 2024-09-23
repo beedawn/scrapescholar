@@ -62,5 +62,5 @@ backend % coverage run --source=app -m pytest tests --verbose && coverage report
 
 next js with coverage
 ```bash
-npm run tests:unit -- --coverage
+npm run test:unit -- --coverage
 ```
