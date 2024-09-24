@@ -1462,17 +1462,13 @@ test('AR-4 pencil is next to value in methodology', async () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
     let sortButton;
+    let clarityField: Element | null = null;
     await waitFor(() => {
+
       const pencilIcons = screen.getAllByText("✎");
       fireEvent.click(pencilIcons[0]);
-
-
-
-
-  
       const rows = screen.getAllByTestId('row');
-      const clarityField = rows[0].children[10];
-
+      clarityField = rows[0].children[10];
       const input= clarityField.querySelector('input');
       if(input){
       fireEvent.change(input, { target: { value: testInput } });
@@ -1481,10 +1477,15 @@ test('AR-4 pencil is next to value in methodology', async () => {
       fireEvent.click(checkIcons[0]);
       }
       else{
-        fail('no input found after clicking pencil')
-      }
-      expect(clarityField.textContent).toContain("test input");
+      fail('no input found after clicking pencil')
+       }
+      
     }, { timeout: 5000 });
+    if(clarityField)
+    expect(clarityField.textContent).toContain("test input");
+    else{
+      fail('no input found after clicking pencil')
+       }
   })
 
 });
