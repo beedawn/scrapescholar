@@ -19,9 +19,17 @@ const SortToggleButton: React.FC<SortToggleButtonProps> = ({ handleSort, field, 
     return (
         <div className="inline-block">
             {pressedSort !== null && isPressed ? (isPressed && pressed ?
-                <Button className="bg-gray-600 text-sm px-1 py-1" onClick={() => handlePress(field, "desc")}>⌃</Button> :
-                <Button className="bg-gray-600 text-sm px-1 py-1" onClick={() => handlePress(field, "asc")}>˅</Button>
-            ) : <Button className="bg-gray-400 text-sm px-1 py-1" onClick={() => handlePress(field, "asc")}>˅</Button>}
+                <Button className="bg-gray-600 text-sm px-1 py-1" onClick={() => handlePress(field, "desc")}>
+                    ⌃
+                </Button>
+                :
+                <Button className="bg-gray-600 text-sm px-1 py-1" onClick={() => handlePress(field, "asc")}>
+                    ˅
+                </Button>
+            ) :
+                <Button className="bg-gray-400 text-sm px-1 py-1" onClick={() => handlePress(field, "asc")}>
+                    ˅
+                </Button>}
         </div>
     )
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import BubblePlot from './d3/BubblePlot';
 import { ResultItem } from '../views/SearchView';
 import SearchHeader from './SearchHeader';
@@ -11,18 +11,18 @@ interface SearchResultsProps {
     disableD3?: boolean;
     inputs: string[];
     bubbleInputs: { x: number, y: number, radius: number, color: string, label: string }[];
-    setResults: (item:ResultItem[])=>void;
+    setResults: (item: ResultItem[]) => void;
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString, 
+const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString,
     disableD3 = false, inputs, bubbleInputs, setResults }) => {
-   const [selectedArticle, setSelectedArticle] = useState(-1);
+    const [selectedArticle, setSelectedArticle] = useState(-1);
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
                 {results.length !== 0 && displayInputs[0] !== emptyString ? (
                     <div>
-                       <SearchHeader downloadURL="/csv" />
+                        <SearchHeader downloadURL="/csv" />
                         <p>
                             You searched {displayInputs}
                         </p>

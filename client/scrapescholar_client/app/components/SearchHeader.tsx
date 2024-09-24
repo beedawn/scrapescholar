@@ -1,31 +1,21 @@
 import React from 'react';
-
-
 import Button from './Button';
+
 interface SearchHeaderProps {
-downloadURL:string;
+    downloadURL: string;
 }
-const SearchHeader: React.FC<SearchHeaderProps> = ({downloadURL}) => {
-  
-
-  
+const SearchHeader: React.FC<SearchHeaderProps> = ({ downloadURL }) => {
     return (
-  
-
-                    <div>
-                        <div className="topContainer">
-                            <div className="searchName">search name</div>
-                           
-                                <div className="downloadButton text-right">
-                                     <Button>
-                                        <a href={downloadURL}>Download</a> 
-                                    </Button>   
-                                </div>
-                            
-                        
-                            </div>
-                      
-                    </div>
+        <div>
+            <div className="topContainer">
+                <div className="searchName">search name</div>
+                <div className="downloadButton text-right">
+                    <Button>
+                        <a href={downloadURL}>Download</a>
+                    </Button>
+                </div>
+            </div>
+        </div>
     )
 };
 

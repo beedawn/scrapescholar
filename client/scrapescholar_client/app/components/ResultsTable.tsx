@@ -35,7 +35,6 @@ export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDi
         });
 };
 
-
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
     const [editableResults, setEditableResults] = useState<ResultItem[]>([...results]);
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
@@ -57,16 +56,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         const updatedResults: ResultItem[] = editableResults.map(result => ({ ...result }));
         updatedResults[index][field as keyof EditableCell] = value as string;
         setEditableResults(updatedResults);
-
     }
     const handleFieldConfirm = () => {
         setResults(editableResults);
         //send request to backend to update value?
-
     }
     return (
         <div className="overflow-x-auto">
-
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
                 <thead>
                     <tr>
