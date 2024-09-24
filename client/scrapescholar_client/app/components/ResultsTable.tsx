@@ -58,13 +58,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         updatedCells[index][field as keyof EditableCell] = !updatedCells[index][field as keyof EditableCell];
         setEditableCells(updatedCells)
     }
-    const handleFieldChange = (index: number, field: keyof EditableCell, value: string) => {
+    const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
         const updatedResults = editableResults.map(result => 
-            result.id === index ? { ...result, [field]: value } : result
+            result.id === id ? { ...result, [field]: value } : result
         );
         setEditableResults(updatedResults);
     }
-    const handleFieldConfirm = () => {
+    const handleFieldConfirm = async () => {
         setResults(editableResults);
         //send request to backend to update value?
     }
