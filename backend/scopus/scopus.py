@@ -49,8 +49,7 @@ def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min
     date_range = min_year + "-" + str(current_year)
     count = "25"
     sort = "relevancy"
-    subj = subject
-    key = key
+ 
 
     #Final Assembly
     built_query = "https://api.elsevier.com/content/search/scopus?" \
@@ -61,11 +60,11 @@ def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min
         + "&date=" + date_range \
         + "&count=" + count \
         + "&sort=" + sort \
-        + "&subj=" + subj
+        + "&subj=" + subject
     response = requests.get(built_query)
     articles=parse_data_scopus(response)
     #return entries to scopus endpoint response
-    return_articles = []
+    return_articles: List[SearchResult] = []
     article_id = 0
     for article in articles:
         error = article.get('error')
