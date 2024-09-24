@@ -53,3 +53,14 @@ To run the backend tests run
 ```bash
 python -m pytest tests/
 ```
+
+
+Tests with coverage
+```bash
+coverage run -m pytest tests --verbose && coverage report -m
+```
+
+next js with coverage
+```bash
+npm run test:unit -- --coverage
+```

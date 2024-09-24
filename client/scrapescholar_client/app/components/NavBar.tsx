@@ -27,8 +27,12 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                 </div>
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
                 <form onSubmit={handleResults}>
-                    <Button onClick={addInput} className="m-5">+</Button>
-                    <Button type="submit" >Search</Button>
+                    <Button onClick={addInput} className="m-5">
+                        +
+                    </Button>
+                    <Button type="submit">
+                        Search
+                    </Button>
                     {inputs.map((input: string, index: number) => {
                         return (<div key={index}>
                             <SearchBox value={input} onChange={(e) => { handleSearchChange(index, e) }} className="m-2" />
@@ -40,8 +44,11 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                                     -
                                 </Button>}<br />
                             {inputs.length > 1 && index != inputs.length - 1 && inputs[index].length > 0 &&
-                                <DropdownSearchBox value={dropdown[index]} className="ml-2" onDropdownChange={(e) => { handleDropdownChange(index, e.target.value as Dropdown) }}></DropdownSearchBox>}
-
+                                <DropdownSearchBox value={dropdown[index]} className="ml-2" onDropdownChange={(e) => {
+                                    handleDropdownChange(index, e.target.value as Dropdown)
+                                }}
+                                />
+                            }
                         </div>)
                     })}
                 </form>

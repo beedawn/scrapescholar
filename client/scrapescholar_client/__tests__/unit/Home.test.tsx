@@ -31,7 +31,6 @@ describe('Home Component', () => {
     //should be 2 inputs now
     const logoutButton = screen.getByText('Logout');
     expect(logoutButton).toBeInTheDocument();
-
   });
 
   test('check logout button works in SearchView', () => {
@@ -45,7 +44,6 @@ describe('Home Component', () => {
     fireEvent.click(logoutButton);
     const loginButton2 = screen.getByText('Login');
     expect(loginButton2).toBeInTheDocument();
-
   });
 
 });

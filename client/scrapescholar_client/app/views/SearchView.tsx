@@ -10,21 +10,22 @@ interface SearchViewProps {
 }
 
 export interface ResultItem {
+    [key: string]: any;
     id: number;
     title: string;
     link: string;
     date: string;
     source: string;
-    citedby:number;
-    color:string;
-    relevance:number;
+    citedby: number;
+    color: string;
+    relevance_score: number;
     abstract: string;
-    doctype: string;
+    document_type: string;
     evaluation_criteria: string;
-    methodology: number;
-    clarity: 0;
-    completeness: 0;
-    transparency: 0;
+    methodology: string;
+    clarity: string;
+    completeness: string;
+    transparency: string;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
@@ -120,7 +121,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             setInputs([...filterBlankInputs])
             const apiQuery = inputsAndLogicalOperators.join('+')
             try {
-                data = await fetch(`http://0.0.0.0:8000/scopus?query=${apiQuery}`)
+                data = await fetch(`http://0.0.0.0:8000/scopus?keywords=${apiQuery}`)
                 jsonData = await data.json()
             }
             catch (error: any) {
@@ -140,15 +141,16 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     return (
         <div className="flex flex-col sm:flex-row sm:mx-12">
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
-            <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
-                handleSearchChange={handleSearchChange} removeInput={removeInput}
-                setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} /></div>
-                <div className="flex-1 sm:mx-12 w-full">
-            {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
-                <SearchResults setResults={setResults} displayInputs={joinedInputsString}
-                    results={results} emptyString={emptyString} disableD3={disableD3}
-                    inputs={inputs} bubbleInputs={bubbleInputs} />}
-                    </div>
+                <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
+                    handleSearchChange={handleSearchChange} removeInput={removeInput}
+                    setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} />
+            </div>
+            <div className="flex-1 sm:mx-12 w-full">
+                {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
+                    <SearchResults setResults={setResults} displayInputs={joinedInputsString}
+                        results={results} emptyString={emptyString} disableD3={disableD3}
+                        inputs={inputs} bubbleInputs={bubbleInputs} />}
+            </div>
         </div>
     );
 }
