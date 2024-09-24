@@ -9,7 +9,7 @@ client = TestClient(app)
 
 
 def test_scopus_response_has_title_and_link():
-    response = client.get("/keywords?query=test")
+    response = client.get("/scopus?keywords=test")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data,list)
