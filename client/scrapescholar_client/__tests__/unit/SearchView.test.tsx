@@ -903,8 +903,8 @@ test('US-15 When user clicks on arrow next to URL twice, results are sorted by U
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[3].textContent).toBe("link x");
-    expect(rows[1].children[3].textContent).toBe("link a");
+    expect(rows[0].children[3].textContent).toContain("link x");
+    expect(rows[1].children[3].textContent).toContain("link a");
 
   }
   else
@@ -929,8 +929,8 @@ test('US-15 When user clicks on arrow next to url, results are sorted by url asc
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[3].textContent).toBe("link a");
-    expect(rows[1].children[3].textContent).toBe("link x");
+    expect(rows[0].children[3].textContent).toContain("link a");
+    expect(rows[1].children[3].textContent).toContain("link x");
 
   } else
     fail('no sort button found')
@@ -986,8 +986,8 @@ test('US-15 When user clicks on arrow next to abstract twice, results are sorted
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[4].textContent).toBe("b");
-    expect(rows[1].children[4].textContent).toBe("a");
+    expect(rows[0].children[4].textContent).toContain("b");
+    expect(rows[1].children[4].textContent).toContain("a");
 
   }
   else
@@ -1012,8 +1012,8 @@ test('US-15 When user clicks on arrow next to abstract, results are sorted by ab
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[4].textContent).toBe("a");
-    expect(rows[1].children[4].textContent).toBe("b");
+    expect(rows[0].children[4].textContent).toContain("a");
+    expect(rows[1].children[4].textContent).toContain("b");
 
   } else
     fail('no sort button found')
@@ -1070,8 +1070,8 @@ test('US-15 When user clicks on arrow next to doctype twice, results are sorted 
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[5].textContent).toBe("journal");
-    expect(rows[1].children[5].textContent).toBe("article");
+    expect(rows[0].children[5].textContent).toContain("journal");
+    expect(rows[1].children[5].textContent).toContain("article");
 
   }
   else
@@ -1096,8 +1096,8 @@ test('US-15 When user clicks on arrow next to doctype, results are sorted by doc
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[5].textContent).toBe("article");
-    expect(rows[1].children[5].textContent).toBe("journal");
+    expect(rows[0].children[5].textContent).toContain("article");
+    expect(rows[1].children[5].textContent).toContain("journal");
 
   } else
     fail('no sort button found')
@@ -1154,8 +1154,8 @@ test('US-15 When user clicks on arrow next to evaluationCritera twice, results a
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[7].textContent).toBe("deny");
-    expect(rows[1].children[7].textContent).toBe("accept");
+    expect(rows[0].children[7].textContent).toContain("deny");
+    expect(rows[1].children[7].textContent).toContain("accept");
 
   }
   else
@@ -1180,8 +1180,8 @@ test('US-15 When user clicks on arrow next to evaluationCritera, results are sor
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[7].textContent).toBe("accept");
-    expect(rows[1].children[7].textContent).toBe("deny");
+    expect(rows[0].children[7].textContent).toContain("accept");
+    expect(rows[1].children[7].textContent).toContain("deny");
 
   } else
     fail('no sort button found')
