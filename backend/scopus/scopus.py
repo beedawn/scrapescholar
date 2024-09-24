@@ -70,7 +70,7 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
     articles=parse_data_scopus(response)
     #return entries to scopus endpoint response
     return_articles = []
-    x = 0
+    article_id = 0
     for article in articles:
         error = article.get('error')
         if error is None:
@@ -80,7 +80,7 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
             else:
                 link = ""
             return_articles.append({
-                    'id':x,
+                    'id':article_id,
                     'title': article.get('dc:title'), 
                     'link':link, 
                     'date':article.get('prism:coverDate'), 
@@ -99,7 +99,7 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
 
 
                     })
-        x += 1
+        article_id += 1
     return return_articles
 
 
