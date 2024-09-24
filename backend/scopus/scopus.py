@@ -17,8 +17,8 @@ class QueryParameters:
 
 #   Create SearchResults class
 class SearchResult:
-    def __init__(self, id, title = None, date = None, citedby = None, link = None, abstract = None, document_type = None, source = None,
-                 evaluation_criteria = None, color:str=None, relevance_score = None, methodology = None, clarity = None, completeness = None, transparency = None):
+    def __init__(self, id:int, title:str = None, date:str = None, citedby:int = None, link:str = None, abstract:str = None, document_type:str = None, source:str = None,
+                 evaluation_criteria:str = None, color:str=None, relevance_score:int = None, methodology:int = None, clarity:int = None, completeness:int = None, transparency:int = None):
         self.id=id
         self.title = title
         self.date = date
@@ -38,7 +38,7 @@ class SearchResult:
 
 
 #   Create Query Execute Function
-def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", min_year: str="1900"):
+def query_scopus_api(keywords:str, key: str=scopus.scopus_api_key, subject: str="", min_year: str="1900"):
     encoded_keywords = quote(keywords).replace(" ", "+")
     subject = quote(subject)
     min_year= quote(min_year)
@@ -116,11 +116,11 @@ def load_json_scrape_results(json_data):
             # Classify the remaining attributes
             result = SearchResult(
                 title = entry.get("dc:title"),
-                year = str(entry.get("prism:coverDate", "Not Listed")[:4]),
-                citedBy = entry.get("citedby-count"),
+                date = str(entry.get("prism:coverDate", "Not Listed")[:4]),
+                citedby = entry.get("citedby-count"),
                 link = href_value,
                 abstract = None,       #Need to upgrade to view=COMPLETE (requires subscription?)
-                documentType = entry.get("subtypeDescription"),
+                document_type = entry.get("subtypeDescription"),
                 source = "Scopus",
                 evaluation="0",
                 methodology="0",
@@ -128,7 +128,7 @@ def load_json_scrape_results(json_data):
                 completeness="0",
                 transparency="0"
             )
-            rowArray = [result.title, result.year, result.citedBy, result.link, str(result.abstract), result.documentType, 
+            rowArray = [result.title, result.year, result.citedBy, result.link, str(result.abstract), result.document_type, 
                         result.source, result.evaluation, result.methodology, result.clarity, result.completeness, result.transparency]
             writer.writerow(rowArray)
         file.close()
