@@ -57,10 +57,10 @@ python -m pytest tests/
 
 Tests with coverage
 ```bash
-backend % coverage run --source=app -m pytest tests --verbose && coverage report -m
+backend % coverage run -m pytest tests --verbose && coverage report -m
 ```
 
 next js with coverage
 ```bash
-npm run tests:unit -- --coverage
+npm run test:unit -- --coverage
 ```
