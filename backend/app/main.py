@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import sciencedirect.sciencedirect as sciencedirect
 import scopus.scopus as scopus
+from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -27,8 +28,7 @@ async def get_sciencedirect_data(query: str):
 
 
 @app.get("/scopus")
-async def researcher_api_call(keywords, apikey: str=scopus.scopus_api_key, subject:str="", minYear:str="1990"):
-    #searchQuery = scopus.QueryParameters(keywords=keywordsList, subject=subject, minYear=minYear)
+async def researcher_api_call(keywords:str, apikey: str=scopus_api_key, subject:str="", minYear:str="1990"):
     response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
     return response
 

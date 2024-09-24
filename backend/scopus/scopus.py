@@ -1,7 +1,6 @@
 import requests
 import datetime
 import csv
-import scopus.scopus as scopus
 from urllib.parse import quote
 import random
 from api_tools.api_tools import scopus_api_key, parse_data_scopus
@@ -16,27 +15,32 @@ class QueryParameters:
         self.min_year = min_year
 
 #   Create SearchResults class
-class SearchResults:
-    def __init__(self, title = None, year = None, citedBy = None, link = None, abstract = None, documentType = None, source = None,
-                 evaluation = None, relevanceScore = None, methodology = None, clarity = None, completeness = None, transparency = None):
+class SearchResult:
+    def __init__(self, id:int, title:str = None, date:str = None, citedby:int = None, link:str = None, abstract:str = None, document_type:str = None, source:str = None,
+                 evaluation_criteria:str = None, color:str=None, relevance_score:int = None, methodology:int = None, clarity:int = None, completeness:int = None, transparency:int = None):
+        self.id=id
         self.title = title
-        self.year = year
-        self.citedBy = citedBy
+        self.date = date
+        self.citedby = citedby
         self.link = link
         self.abstract = abstract
-        self.documentType = documentType
+        self.document_type = document_type
         self.source = source
-        self.evaluation = evaluation
-        self.relevanceScore = relevanceScore
+        self.evaluation_criteria = evaluation_criteria
+        self.color = color
+        self.relevance_score = relevance_score #relevance
         self.methodology = methodology
         self.clarity = clarity
         self.completeness = completeness
         self.transparency = transparency
 
-#   Create Query Execute Function
-def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", min_year: str="1900"):
-    encoded_keywords = quote(keywords).replace(" ", "+")
 
+
+#   Create Query Execute Function
+def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min_year: str="1900"):
+    encoded_keywords = quote(keywords).replace(" ", "+")
+    subject = quote(subject)
+    min_year= quote(min_year)
     #Other Parameters
     http_accept = "application/json"
     view = "STANDARD"                               #Note: COMPLETE view is inaccessible with a standard token
@@ -71,24 +75,23 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
                 link = links[2].get('@href')
             else:
                 link = ""
-            return_articles.append({
-                    'id':article_id,
-                    'title': article.get('dc:title'), 
-                    'link':link, 
-                    'date':article.get('prism:coverDate'), 
-                    'citedby': article.get('citedby-count'),
-                    'source': "Scopus",
-                    'color':'red',
-                    'relevance': random.randint(1, 100),
-                    'abstract':'',
-                    'doctype':'',
-                    'evaluation_criteria':'',
-                    'color':'',
-                    'methodology':0,
-                    'clarity':0,
-                    'completeness':0,
-                    'transparency':0
-                    })
+            return_articles.append(SearchResult(
+                    id=article_id,
+                    title=article.get('dc:title'), 
+                    link=link, 
+                    date=article.get('prism:coverDate'), 
+                    citedby=article.get('citedby-count'),
+                    source="Scopus",
+                    color='red',
+                    relevance_score=random.randint(1, 100),
+                    abstract='',
+                    document_type=article.get("subtypeDescription"),
+                    evaluation_criteria='',
+                    methodology=0,
+                    clarity=0,
+                    completeness=0,
+                    transparency=0
+                    ))
         article_id += 1
     return return_articles
 
@@ -110,13 +113,13 @@ def load_json_scrape_results(json_data):
                 if link.get("@ref") == "scopus":
                     href_value = link.get("@href")
             # Classify the remaining attributes
-            result = SearchResults(
+            result = SearchResult(
                 title = entry.get("dc:title"),
-                year = str(entry.get("prism:coverDate", "Not Listed")[:4]),
-                citedBy = entry.get("citedby-count"),
+                date = str(entry.get("prism:coverDate", "Not Listed")[:4]),
+                citedby = entry.get("citedby-count"),
                 link = href_value,
                 abstract = None,       #Need to upgrade to view=COMPLETE (requires subscription?)
-                documentType = entry.get("subtypeDescription"),
+                document_type = entry.get("subtypeDescription"),
                 source = "Scopus",
                 evaluation="0",
                 methodology="0",
@@ -124,7 +127,7 @@ def load_json_scrape_results(json_data):
                 completeness="0",
                 transparency="0"
             )
-            rowArray = [result.title, result.year, result.citedBy, result.link, str(result.abstract), result.documentType, 
+            rowArray = [result.title, result.year, result.citedBy, result.link, str(result.abstract), result.document_type, 
                         result.source, result.evaluation, result.methodology, result.clarity, result.completeness, result.transparency]
             writer.writerow(rowArray)
         file.close()
