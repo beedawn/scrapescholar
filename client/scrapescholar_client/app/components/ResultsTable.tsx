@@ -40,10 +40,16 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);
+        const orderedEditableResults = sortedResults.map(result => {
+            // Find the corresponding item in 'editableResults' by matching the 'id'
+            return editableResults.find(editable => editable.id === result.id) || result;
+        });
+        setEditableResults(orderedEditableResults);
         setResults(sortedResults);
     }
     const [pressedSort, setPressedSort] = useState<keyof ResultItem | null>(null);
-    const [editableCells, setEditableCells] = useState<EditableCell[]>(results.map(() => ({
+    const [editableCells, setEditableCells] = useState<EditableCell[]>(results.map((result) => ({
+        id:result.id,
         relevance: false, methodology: false, clarity: false, completeness: false, transparency: false
     })));
 
@@ -53,8 +59,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setEditableCells(updatedCells)
     }
     const handleFieldChange = (index: number, field: keyof EditableCell, value: string) => {
-        const updatedResults: ResultItem[] = editableResults.map(result => ({ ...result }));
-        updatedResults[index][field as keyof EditableCell] = value as string;
+        const updatedResults = editableResults.map(result => 
+            result.id === index ? { ...result, [field]: value } : result
+        );
         setEditableResults(updatedResults);
     }
     const handleFieldConfirm = () => {
@@ -149,26 +156,26 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                 <DynamicUserField editableResults={editableResults}
                                     field="methodology" handleFieldConfirm={handleFieldConfirm}
                                     handleCellClick={handleCellClick} result={result} editableCells={editableCells}
-                                    handleFieldChange={handleFieldChange} />
+                                    handleFieldChange={handleFieldChange} index={index}/>
                             </td>
                             <td className="border border-gray-300" >
                                 <DynamicUserField editableResults={editableResults}
                                     field="clarity" handleFieldConfirm={handleFieldConfirm}
                                     handleCellClick={handleCellClick} result={result}
-                                    editableCells={editableCells} handleFieldChange={handleFieldChange} />
+                                    editableCells={editableCells} handleFieldChange={handleFieldChange} index={index} />
                             </td>
                             <td className="border border-gray-300">
                                 <DynamicUserField editableResults={editableResults}
                                     field="completeness" handleFieldConfirm={handleFieldConfirm}
                                     handleCellClick={handleCellClick} result={result}
-                                    editableCells={editableCells} handleFieldChange={handleFieldChange} />
+                                    editableCells={editableCells} handleFieldChange={handleFieldChange} index={index} />
                             </td>
                             <td className="border border-gray-300" >
                                 <DynamicUserField editableResults={editableResults}
                                     field="transparency" handleFieldConfirm={handleFieldConfirm}
                                     handleCellClick={handleCellClick} result={result}
                                     editableCells={editableCells}
-                                    handleFieldChange={handleFieldChange} />
+                                    handleFieldChange={handleFieldChange} index={index}/>
                             </td>
                         </tr>
 
