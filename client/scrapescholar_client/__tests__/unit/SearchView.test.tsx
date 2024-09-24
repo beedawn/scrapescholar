@@ -1251,8 +1251,8 @@ describe('Home Component', () => {
       fireEvent.click(sortButton);
       fireEvent.click(sortButton);
       const rows = screen.getAllByTestId('row')
-      expect(rows[0].children[11].textContent).toContain("1");
-      expect(rows[1].children[11].textContent).toContain("0");
+      expect(rows[0].children[12].textContent).toContain("1");
+      expect(rows[1].children[12].textContent).toContain("0");
     }
     else
       fail('no sort button')
@@ -1273,8 +1273,8 @@ describe('Home Component', () => {
     if (sortButton) {
       fireEvent.click(sortButton);
       const rows = screen.getAllByTestId('row')
-      expect(rows[0].children[11].textContent).toContain("0");
-      expect(rows[1].children[11].textContent).toContain("1");
+      expect(rows[0].children[12].textContent).toContain("0");
+      expect(rows[1].children[12].textContent).toContain("1");
     } else
       fail('no sort button found')
   })
@@ -1323,8 +1323,8 @@ describe('Home Component', () => {
       fireEvent.click(sortButton);
       fireEvent.click(sortButton);
       const rows = screen.getAllByTestId('row')
-      expect(rows[0].children[11].textContent).toContain("1");
-      expect(rows[1].children[11].textContent).toContain("0");
+      expect(rows[0].children[13].textContent).toContain("1");
+      expect(rows[1].children[13].textContent).toContain("0");
     }
     else
       fail('no sort button')
@@ -1344,8 +1344,8 @@ describe('Home Component', () => {
     if (sortButton) {
       fireEvent.click(sortButton);
       const rows = screen.getAllByTestId('row')
-      expect(rows[0].children[11].textContent).toContain("0");
-      expect(rows[1].children[11].textContent).toContain("1");
+      expect(rows[0].children[13].textContent).toContain("0");
+      expect(rows[1].children[13].textContent).toContain("1");
     } else
       fail('no sort button found')
   })
@@ -1404,6 +1404,87 @@ describe('Home Component', () => {
     expect(sortResults([], 'title', 'asc')).toEqual([]);
   });
 
+//AR-4
+test('AR-4 pencil is next to value in methodology', async () => {
+  render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  const searchButton = screen.getByText('Search');
+  const inputs = screen.getAllByRole('textbox');
+  fireEvent.change(inputs[0], { target: { value: testInput } });
+  fireEvent.click(searchButton);
+  await waitFor(() => {
+    const rows = screen.getAllByTestId('row')
+    expect(rows[0].children[10].textContent).toContain("✎");
+    expect(rows[1].children[10].textContent).toContain("✎");
+  }, { timeout: 5000 });
+})
 
+  
+  test('AR-4 When user clicks on pencil next to value, text field turns into input box', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const pencilIcons = screen.getAllByText("✎");
+      fireEvent.click(pencilIcons[0]);
+      const rows = screen.getAllByTestId('row');
+      const clarityField = rows[0].children[10];
+      const input= clarityField.querySelector('input');
+      expect(input).toBeInTheDocument();
+    }, { timeout: 5000 });
+  })
+
+  test('AR-4 When user clicks on pencil next to value, text field turns into input box, then x button is pressed and reverts back to plain text', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const pencilIcons = screen.getAllByText("✎");
+      fireEvent.click(pencilIcons[0]);
+      const closeIcons = screen.getAllByText("×");
+      fireEvent.click(closeIcons[0]);
+      const rows = screen.getAllByTestId('row');
+      const clarityField = rows[0].children[10];
+      expect(clarityField.textContent).toContain("0");
+    }, { timeout: 5000 });
+  })
+
+
+  test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    let sortButton;
+    await waitFor(() => {
+      const pencilIcons = screen.getAllByText("✎");
+      fireEvent.click(pencilIcons[0]);
+
+
+
+
+  
+      const rows = screen.getAllByTestId('row');
+      const clarityField = rows[0].children[10];
+
+      const input= clarityField.querySelector('input');
+      if(input){
+      fireEvent.change(input, { target: { value: testInput } });
+
+      const checkIcons = screen.getAllByText("✔");
+      fireEvent.click(checkIcons[0]);
+      }
+      else{
+        fail('no input found after clicking pencil')
+      }
+      expect(clarityField.textContent).toContain("test input");
+    }, { timeout: 5000 });
+  })
 
 });
