@@ -34,4 +34,8 @@ async def researcher_api_call(keywords:str, apikey: str=scopus_api_key, subject:
 
     # Use later for json to csv frontend
     csvFilePath = scopus.load_json_scrape_results(jsonResults)
+<<<<<<< HEAD
     return FileResponse(path=csvFilePath, media_type='text/csv', filename="search_results.csv")
+=======
+    return FileResponse(path=csvFilePath, media_type='text/csv', filename="search_results.csv")
+>>>>>>> main

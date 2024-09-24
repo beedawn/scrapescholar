@@ -66,6 +66,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
                 <thead>
                     <tr>
+<<<<<<< HEAD
                         <th className="border border-gray-300">
                             Title
                             <SortToggleButton handleSort={handleSort} field="title" pressedSort={pressedSort} />
@@ -122,6 +123,22 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                             Transparency
                             <SortToggleButton handleSort={handleSort} field="transparency" pressedSort={pressedSort} />
                         </th>
+=======
+                        <th className="border border-gray-300">Title<SortToggleButton handleSort={handleSort} field="title" pressedSort={pressedSort} /></th>
+                        <th className="border border-gray-300">Year<SortToggleButton handleSort={handleSort} field="date" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Cited By<SortToggleButton handleSort={handleSort} field="citedby" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">URL<SortToggleButton handleSort={handleSort} field="link" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Abstract<SortToggleButton handleSort={handleSort} field="abstract" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Document Type<SortToggleButton handleSort={handleSort} field="document_type" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Source<SortToggleButton handleSort={handleSort} field="source" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Evaluation Criteria<SortToggleButton handleSort={handleSort} field="evaluation_criteria" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Assessment <SortToggleButton handleSort={handleSort} field="color" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Relevance Score<SortToggleButton handleSort={handleSort} field="relevance_score" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Methodology<SortToggleButton handleSort={handleSort} field="methodology" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Clarity<SortToggleButton handleSort={handleSort} field="clarity" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Completeness<SortToggleButton handleSort={handleSort} field="completeness" pressedSort={pressedSort}/></th>
+                        <th className="border border-gray-300">Transparency<SortToggleButton handleSort={handleSort} field="transparency" pressedSort={pressedSort}/></th>
+>>>>>>> main
                     </tr>
                 </thead>
                 <tbody>
@@ -133,7 +150,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                             <td className="border border-gray-300" >{result.citedby}</td>
                             <td className="border border-gray-300" ><a href={result.link}>{result.link}</a></td>
                             <td className="border border-gray-300" >{result.abstract}</td>
-                            <td className="border border-gray-300" >{result.doctype}</td>
+                            <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>
                             <td className="border border-gray-300" >{result.evaluation_criteria}</td>
                             <td className="border border-gray-300" >
@@ -144,6 +161,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                     <option className="bg-green" value="green">Green</option>
                                 </select>
                             </td>
+<<<<<<< HEAD
                             <td className="border border-gray-300" >{result.relevance}%</td>
                             <td className="border border-gray-300" >
                                 <DynamicUserField editableResults={editableResults}
@@ -170,6 +188,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                     editableCells={editableCells}
                                     handleFieldChange={handleFieldChange} />
                             </td>
+=======
+                            <td className="border border-gray-300" >{result.relevance_score}%</td>
+                            <td className="border border-gray-300" >{result.methodology}</td>
+                            <td className="border border-gray-300" >{result.clarity}</td>
+                            <td className="border border-gray-300">{result.completeness}</td>
+                            <td className="border border-gray-300" >{result.transparency}</td>
+>>>>>>> main
                         </tr>
 
                     ))}

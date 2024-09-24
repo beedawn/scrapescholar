@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.main import app
-from scopus.scopus import scopus_api_key
+from api_tools.api_tools import scopus_api_key
 
 client = TestClient(app)
 

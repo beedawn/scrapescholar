@@ -16,9 +16,15 @@ export interface ResultItem {
     link: string;
     date: string;
     source: string;
+<<<<<<< HEAD
     citedby: number;
     color: string;
     relevance: number;
+=======
+    citedby:number;
+    color:string;
+    relevance_score:number;
+>>>>>>> main
     abstract: string;
     document_type: string;
     evaluation_criteria: string;
