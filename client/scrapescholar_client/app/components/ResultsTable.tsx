@@ -55,7 +55,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
 
     }
     const handleFieldChange =(index:number, field:keyof EditableCell, value:string) =>{
-        const updatedResults:ResultItem[] = results.map(result => ({ ...result }));
+        const updatedResults:ResultItem[] = editableResults.map(result => ({ ...result }));
         updatedResults[index][field as keyof EditableCell]=value as string;
         setEditableResults(updatedResults);
 
@@ -63,6 +63,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
     const handleFieldConfirm =() =>{
             console.log("test")
         setResults(editableResults);
+    //send request to backend to update value?
 
     }
     return (
@@ -107,26 +108,17 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                 </select>
                             </td>
                             <td className="border border-gray-300" >{result.relevance}%</td>
-                            <td className="border border-gray-300" >{editableCells[result.id].methodology?
-                            (<><input style={{color:"black"}}></input><button style={{display:"inline"}} onClick={()=>{
-                                handleCellClick(result.id,"methodology")
-                                }}>
-                                    ×
-                                    </button>
-                                    </>)
-                                    :
-                                    (<>
-                                    {result.methodology}
-                                    <div style={{display:"inline"}} onClick={()=>{handleCellClick(result.id,"methodology")}}>
-                                        ✎
-                                        </div>
-                                        </>)}
+                            <td className="border border-gray-300" > <DynamicUserField editableResults={editableResults} field="methodology" handleFieldConfirm={handleFieldConfirm} handleCellClick={handleCellClick} result={result} editableCells={editableCells} handleFieldChange={handleFieldChange}></DynamicUserField>
+                               
+                      
                             </td>
                             <td className="border border-gray-300" >
                                 <DynamicUserField editableResults={editableResults} field="clarity" handleFieldConfirm={handleFieldConfirm} handleCellClick={handleCellClick} result={result} editableCells={editableCells} handleFieldChange={handleFieldChange}></DynamicUserField>
                                 </td>
-                            <td className="border border-gray-300">{result.completeness}</td>
-                            <td className="border border-gray-300" >{result.transparency}</td>
+                            <td className="border border-gray-300"> <DynamicUserField editableResults={editableResults} field="completeness" handleFieldConfirm={handleFieldConfirm} handleCellClick={handleCellClick} result={result} editableCells={editableCells} handleFieldChange={handleFieldChange}></DynamicUserField>
+                            </td>
+                            <td className="border border-gray-300" > <DynamicUserField editableResults={editableResults} field="transparency" handleFieldConfirm={handleFieldConfirm} handleCellClick={handleCellClick} result={result} editableCells={editableCells} handleFieldChange={handleFieldChange}></DynamicUserField>
+                            </td>
                         </tr>
 
                     ))}
