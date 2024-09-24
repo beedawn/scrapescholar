@@ -1,7 +1,6 @@
 import requests
 import datetime
 import csv
-import scopus.scopus as scopus
 from urllib.parse import quote
 import random
 from api_tools.api_tools import scopus_api_key, parse_data_scopus
@@ -38,7 +37,7 @@ class SearchResult:
 
 
 #   Create Query Execute Function
-def query_scopus_api(keywords:str, key: str=scopus.scopus_api_key, subject: str="", min_year: str="1900"):
+def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min_year: str="1900"):
     encoded_keywords = quote(keywords).replace(" ", "+")
     subject = quote(subject)
     min_year= quote(min_year)
