@@ -8,12 +8,12 @@ from api_tools.api_tools import scopus_api_key, parse_data_scopus
 
 #   Create QueryParameters class
 class QueryParameters:
-    def __init__(self, keywords = None, subject = None, minYear = None):
+    def __init__(self, keywords = None, subject = None, min_year = None):
         if keywords is None:
             keywords = []
         self.keywords = keywords
         self.subject = subject
-        self.minYear = minYear
+        self.min_year = min_year
 
 #   Create SearchResults class
 class SearchResults:
@@ -34,7 +34,7 @@ class SearchResults:
         self.transparency = transparency
 
 #   Create Query Execute Function
-def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", minYear: str="1900"):
+def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", min_year: str="1900"):
     encoded_keywords = quote(keywords).replace(" ", "+")
 
     #Other Parameters
