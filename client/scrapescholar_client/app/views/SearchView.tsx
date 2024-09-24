@@ -10,6 +10,7 @@ interface SearchViewProps {
 }
 
 export interface ResultItem {
+    [key:string]:any;
     id: number;
     title: string;
     link: string;
@@ -21,10 +22,10 @@ export interface ResultItem {
     abstract: string;
     doctype: string;
     evaluation_criteria: string;
-    methodology: number;
-    clarity: number;
-    completeness: number;
-    transparency: number;
+    methodology: string;
+    clarity: string;
+    completeness: string;
+    transparency: string;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {

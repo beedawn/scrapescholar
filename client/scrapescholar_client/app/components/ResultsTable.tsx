@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
 import { ResultItem } from '../views/SearchView';
 import SortToggleButton from './SortToggleButton';
+import DynamicUserField from './DynamicUserField';
 
-type EditableField = 'relevance' | 'methodology' | 'clarity' | 'completeness' | 'transparency';
 
-interface EditableCell {
+export interface EditableCell {
   relevance: boolean;
   methodology: boolean;
   clarity: boolean;
   completeness: boolean;
   transparency: boolean;
+  [key:string]:any;
 }
 
 interface ResultsTableProps {
@@ -36,21 +37,32 @@ export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDi
 
 
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
-
+    const [editableResults, setEditableResults] = useState<ResultItem[]>([...results]);
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);
         setResults(sortedResults);
     }
     const [pressedSort, setPressedSort]=useState<keyof ResultItem | null>(null);
-    const [editableCells, setEditableCells]=useState(results.map(()=>({relevance:false, methodology:false, clarity:false, completeness:false, transparency:false})));
+    const [editableCells, setEditableCells]=useState<EditableCell[]>(results.map(()=>({relevance:false, methodology:false, clarity:false, completeness:false, transparency:false})));
 
-    const handleCellClick = (index:number, field:EditableField) => {
+    const handleCellClick = (index:number, field: keyof EditableCell) => {
         console.log("click");
         const updatedCells:EditableCell[] = [...editableCells];
         updatedCells[index][field as keyof EditableCell]=!updatedCells[index][field as keyof EditableCell];
         setEditableCells(updatedCells)
         console.log(updatedCells[index][field]);
+
+    }
+    const handleFieldChange =(index:number, field:keyof EditableCell, value:string) =>{
+        const updatedResults:ResultItem[] = results.map(result => ({ ...result }));
+        updatedResults[index][field as keyof EditableCell]=value as string;
+        setEditableResults(updatedResults);
+
+    }
+    const handleFieldConfirm =() =>{
+            console.log("test")
+        setResults(editableResults);
 
     }
     return (
@@ -77,7 +89,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                 </thead>
                 <tbody>
                     {results.map((result, index) => (
-                        <tr key={result.id} className={` ${selectedArticle === index ? 'bg-blue-500' : 'hover:bg-gray-500'}`} onClick={() => { setSelectedArticle(index) }} data-testid='row'>
+                        <tr key={result.id} className={` ${selectedArticle === result.id ? 'bg-blue-500' : 'hover:bg-gray-500'}`} onClick={() => { setSelectedArticle(result.id) }} data-testid='row'>
                             <td className="border border-gray-300" ><a href={result.link}>{result.title}</a></td>
                             <td className="border border-gray-300" >{result.date}</td>
                             <td className="border border-gray-300" >{result.citedby}</td>
@@ -95,9 +107,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                 </select>
                             </td>
                             <td className="border border-gray-300" >{result.relevance}%</td>
-                            <td className="border border-gray-300" >{editableCells[index].methodology?
-                            (<><input></input><button style={{display:"inline"}} onClick={()=>{
-                                handleCellClick(index,"methodology")
+                            <td className="border border-gray-300" >{editableCells[result.id].methodology?
+                            (<><input style={{color:"black"}}></input><button style={{display:"inline"}} onClick={()=>{
+                                handleCellClick(result.id,"methodology")
                                 }}>
                                     ×
                                     </button>
@@ -105,12 +117,14 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                     :
                                     (<>
                                     {result.methodology}
-                                    <div style={{display:"inline"}} onClick={()=>{handleCellClick(index,"methodology")}}>
+                                    <div style={{display:"inline"}} onClick={()=>{handleCellClick(result.id,"methodology")}}>
                                         ✎
                                         </div>
                                         </>)}
                             </td>
-                            <td className="border border-gray-300" >{result.clarity}</td>
+                            <td className="border border-gray-300" >
+                                <DynamicUserField editableResults={editableResults} field="clarity" handleFieldConfirm={handleFieldConfirm} handleCellClick={handleCellClick} result={result} editableCells={editableCells} handleFieldChange={handleFieldChange}></DynamicUserField>
+                                </td>
                             <td className="border border-gray-300">{result.completeness}</td>
                             <td className="border border-gray-300" >{result.transparency}</td>
                         </tr>
