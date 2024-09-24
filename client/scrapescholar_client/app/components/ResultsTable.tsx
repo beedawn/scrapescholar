@@ -2,6 +2,16 @@ import React, {useState} from 'react';
 import { ResultItem } from '../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 
+type EditableField = 'relevance' | 'methodology' | 'clarity' | 'completeness' | 'transparency';
+
+interface EditableCell {
+  relevance: boolean;
+  methodology: boolean;
+  clarity: boolean;
+  completeness: boolean;
+  transparency: boolean;
+}
+
 interface ResultsTableProps {
     results: ResultItem[];
     setResults: (item: ResultItem[]) => void;
@@ -35,10 +45,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
     const [pressedSort, setPressedSort]=useState<keyof ResultItem | null>(null);
     const [editableCells, setEditableCells]=useState(results.map(()=>({relevance:false, methodology:false, clarity:false, completeness:false, transparency:false})));
 
-    const handleCellClick = (index:number, field:string) => {
+    const handleCellClick = (index:number, field:EditableField) => {
         console.log("click");
-        const updatedCells = [...editableCells];
-        updatedCells[index][field]=!updatedCells[index][field];
+        const updatedCells:EditableCell[] = [...editableCells];
+        updatedCells[index][field as keyof EditableCell]=!updatedCells[index][field as keyof EditableCell];
         setEditableCells(updatedCells)
         console.log(updatedCells[index][field]);
 
