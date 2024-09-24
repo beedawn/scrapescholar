@@ -1,14 +1,9 @@
 import requests
-import os
 import datetime
-import json
 import csv
 import scopus.scopus as scopus
 from urllib.parse import quote
 import random
-
-from dotenv import load_dotenv
-load_dotenv()
 from api_tools.api_tools import scopus_api_key, parse_data_scopus
 
 #   Create QueryParameters class
@@ -40,15 +35,14 @@ class SearchResults:
 
 #   Create Query Execute Function
 def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", minYear: str="1900"):
-
-    encodedWord = quote(keywords).replace(" ", "+")
+    encoded_keywords = quote(keywords).replace(" ", "+")
 
     #Other Parameters
-    httpAccept = "application/json"
+    http_accept = "application/json"
     view = "STANDARD"                               #Note: COMPLETE view is inaccessible with a standard token
     today = datetime.date.today()
-    currentYear = today.year
-    dateRange = minYear + "-" + str(currentYear)
+    current_year = today.year
+    date_range = min_year + "-" + str(current_year)
     count = "25"
     sort = "relevancy"
     subj = subject
@@ -57,10 +51,10 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
     #Final Assembly
     built_query = "https://api.elsevier.com/content/search/scopus?" \
         + "apiKey=" + key \
-        + "&query=" + encodedWord \
-        + "&httpAccept=" + httpAccept \
+        + "&query=" + encoded_keywords \
+        + "&httpAccept=" + http_accept \
         + "&view=" + view \
-        + "&date=" + dateRange \
+        + "&date=" + date_range \
         + "&count=" + count \
         + "&sort=" + sort \
         + "&subj=" + subj
