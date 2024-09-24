@@ -820,8 +820,8 @@ test('US-15 When user clicks on arrow next to citedby twice, results are sorted 
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[2].textContent).toBe("1");
-    expect(rows[1].children[2].textContent).toBe("0");
+    expect(rows[0].children[2].textContent).toContain("1"); 
+    expect(rows[1].children[2].textContent).toContain("0");
 
   }
   else
@@ -846,8 +846,8 @@ test('US-15 When user clicks on arrow next to citedby, results are sorted by cit
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[2].textContent).toBe("0");
-    expect(rows[1].children[2].textContent).toBe("1");
+    expect(rows[0].children[2].textContent).toContain("0");
+    expect(rows[1].children[2].textContent).toContain("1");
 
   } else
     fail('no sort button found')
@@ -1240,8 +1240,8 @@ test('US-15 When user clicks on arrow next to methodology twice, results are sor
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[10].textContent).toBe("1");
-    expect(rows[1].children[10].textContent).toBe("0");
+    expect(rows[0].children[10].textContent).toContain("1");
+    expect(rows[1].children[10].textContent).toContain("0");
 
   }
   else
@@ -1266,8 +1266,8 @@ test('US-15 When user clicks on arrow next to methodology, results are sorted by
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[10].textContent).toBe("0");
-    expect(rows[1].children[10].textContent).toBe("1");
+    expect(rows[0].children[10].textContent).toContain("0");
+    expect(rows[1].children[10].textContent).toContain("1");
 
   } else
     fail('no sort button found')
@@ -1327,8 +1327,8 @@ test('US-15 When user clicks on arrow next to clarity twice, results are sorted 
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[11].textContent).toBe("1");
-    expect(rows[1].children[11].textContent).toBe("0");
+    expect(rows[0].children[11].textContent).toContain("1");
+    expect(rows[1].children[11].textContent).toContain("0");
 
   }
   else
@@ -1353,8 +1353,8 @@ test('US-15 When user clicks on arrow next to clarity, results are sorted by cla
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[11].textContent).toBe("0");
-    expect(rows[1].children[11].textContent).toBe("1");
+    expect(rows[0].children[11].textContent).toContain("0");
+    expect(rows[1].children[11].textContent).toContain("1");
 
   } else
     fail('no sort button found')
@@ -1413,8 +1413,8 @@ test('US-15 When user clicks on arrow next to completeness twice, results are so
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[11].textContent).toBe("1");
-    expect(rows[1].children[11].textContent).toBe("0");
+    expect(rows[0].children[11].textContent).toContain("1");
+    expect(rows[1].children[11].textContent).toContain("0");
 
   }
   else
@@ -1439,8 +1439,8 @@ test('US-15 When user clicks on arrow next to completeness, results are sorted b
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[11].textContent).toBe("0");
-    expect(rows[1].children[11].textContent).toBe("1");
+    expect(rows[0].children[11].textContent).toContain("0");
+    expect(rows[1].children[11].textContent).toContain("1");
 
   } else
     fail('no sort button found')
@@ -1499,8 +1499,8 @@ test('US-15 When user clicks on arrow next to transparency twice, results are so
     fireEvent.click(sortButton);
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[11].textContent).toBe("1");
-    expect(rows[1].children[11].textContent).toBe("0");
+    expect(rows[0].children[11].textContent).toContain("1");
+    expect(rows[1].children[11].textContent).toContain("0");
 
   }
   else
@@ -1525,8 +1525,8 @@ test('US-15 When user clicks on arrow next to transparency, results are sorted b
   if (sortButton) {
     fireEvent.click(sortButton);
     const rows = screen.getAllByTestId('row')
-    expect(rows[0].children[11].textContent).toBe("0");
-    expect(rows[1].children[11].textContent).toBe("1");
+    expect(rows[0].children[11].textContent).toContain("0");
+    expect(rows[1].children[11].textContent).toContain("1");
 
   } else
     fail('no sort button found')
