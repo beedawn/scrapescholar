@@ -88,7 +88,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                         </th>
                         <th className="border border-gray-300">
                             Document Type
-                            <SortToggleButton handleSort={handleSort} field="doctype" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort} field="document_type" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Source
@@ -104,7 +104,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                         </th>
                         <th className="border border-gray-300">
                             Relevance Score
-                            <SortToggleButton handleSort={handleSort} field="relevance" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort} field="relevance_score" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Methodology
@@ -133,7 +133,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                             <td className="border border-gray-300" >{result.citedby}</td>
                             <td className="border border-gray-300" ><a href={result.link}>{result.link}</a></td>
                             <td className="border border-gray-300" >{result.abstract}</td>
-                            <td className="border border-gray-300" >{result.doctype}</td>
+                            <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>
                             <td className="border border-gray-300" >{result.evaluation_criteria}</td>
                             <td className="border border-gray-300" >
@@ -144,7 +144,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                     <option className="bg-green" value="green">Green</option>
                                 </select>
                             </td>
-                            <td className="border border-gray-300" >{result.relevance}%</td>
+                            <td className="border border-gray-300" >{result.relevance_score}%</td>
                             <td className="border border-gray-300" >
                                 <DynamicUserField editableResults={editableResults}
                                     field="methodology" handleFieldConfirm={handleFieldConfirm}

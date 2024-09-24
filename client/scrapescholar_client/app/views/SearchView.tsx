@@ -18,7 +18,7 @@ export interface ResultItem {
     source: string;
     citedby: number;
     color: string;
-    relevance: number;
+    relevance_score: number;
     abstract: string;
     document_type: string;
     evaluation_criteria: string;
