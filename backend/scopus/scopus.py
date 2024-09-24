@@ -3,11 +3,12 @@ import os
 import datetime
 import json
 import csv
-import urllib.parse 
-import api_tools
+from urllib.parse import quote
+import random
+
 from dotenv import load_dotenv
 load_dotenv()
-from api_tools.api_tools import scopus_api_key,parse_data_scopus
+from api_tools.api_tools import scopus_api_key, parse_data_scopus
 
 #   Create QueryParameters class
 class QueryParameters:
@@ -43,7 +44,7 @@ def query_scopus_api(keywords, key, subject, minYear):
 
     for currentWord in keywords:
         strippedWord = currentWord.strip()
-        encodedWord = urllib.parse.quote(strippedWord).replace(" ", "+")
+        encodedWord = quote(strippedWord).replace(" ", "+")
         keywordPhrase += encodedWord
         keywordPhrase += "%20"
 
@@ -59,7 +60,7 @@ def query_scopus_api(keywords, key, subject, minYear):
     key = key
 
     #Final Assembly
-    getPhrase = "https://api.elsevier.com/content/search/scopus?" \
+    built_query = "https://api.elsevier.com/content/search/scopus?" \
         + "apiKey=" + key \
         + "&query=" + keywordPhrase \
         + "&httpAccept=" + httpAccept \
@@ -68,8 +69,49 @@ def query_scopus_api(keywords, key, subject, minYear):
         + "&count=" + count \
         + "&sort=" + sort \
         + "&subj=" + subj
-    return getPhrase
+    
+    response = requests.get(built_query)
+    articles=parse_data_scopus(response)
+    #return entries to scopus endpoint response
+    return_articles = []
+    x = 0
+    for article in articles:
+        error = article.get('error')
+        if error is None:
+            links = article.get('link')
+            if links:
+                link = links[2].get('@href')
+            else:
+                link = ""
+            return_articles.append({
+                    'id':x,
+                    'title': article.get('dc:title'), 
+                    'link':link, 
+                    'date':article.get('prism:coverDate'), 
+                    'citedby': article.get('citedby-count'),
+                    'source': "Scopus",
+                    'color':'red',
+                    'relevance': random.randint(1, 100),
+                    'abstract':'',
+                    'doctype':'',
+                    'evaluation_criteria':'',
+                    'color':'',
+                    'methodology':0,
+                    'clarity':0,
+                    'completeness':0,
+                    'transparency':0
 
+
+                    })
+        x += 1
+    return return_articles
+
+
+
+
+
+
+# csv stuff
 #   Create function to 'get' all elements needed for the front end and print results to a CSV
 def load_json_scrape_results(json_data):        
     file_path = "search_results.csv"
@@ -102,8 +144,7 @@ def load_json_scrape_results(json_data):
         file.close()
     return file_path
 
-#  Access an environment variable for API Key
-api_key = os.getenv("SCOPUS_APIKEY_TH")
+
 
 #   QueryParameters - keywordList is user input, the rest will be static and unique to the scienceDirect parameters
 # researcherKeywordList = ["cybersecurity", "AND", "non profit", "OR", "charity"]     

@@ -27,12 +27,12 @@ async def get_sciencedirect_data(query: str):
 
 
 @app.get("/scopus")
-async def researcher_api_call(keywords: str, apikey: str, subject: str="COMP", minYear: str="2015"):
-    keywordsList = keywords.split(",")
-    searchQuery = scopus.QueryParameters(keywords=keywordsList, subject=subject, minYear=minYear)
-    queryURL = scopus.query_scopus_api(searchQuery.keywords, apikey, subject, minYear)
-    apiResponse = scopus.requests.get(queryURL)
-    return apiResponse.json()
+async def researcher_api_call(keywords: str, apikey: str=scopus.scopus_api_key, subject: str="", minYear: str=""):
+
+    #searchQuery = scopus.QueryParameters(keywords=keywordsList, subject=subject, minYear=minYear)
+    response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
+    
+    return response
 
     # Use later for json to csv frontend
     csvFilePath = scopus.load_json_scrape_results(jsonResults)
