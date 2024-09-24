@@ -43,7 +43,6 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
 
     encodedWord = quote(keywords).replace(" ", "+")
 
-
     #Other Parameters
     httpAccept = "application/json"
     view = "STANDARD"                               #Note: COMPLETE view is inaccessible with a standard token
@@ -65,7 +64,6 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
         + "&count=" + count \
         + "&sort=" + sort \
         + "&subj=" + subj
-    print(built_query)
     response = requests.get(built_query)
     articles=parse_data_scopus(response)
     #return entries to scopus endpoint response
@@ -96,8 +94,6 @@ def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", 
                     'clarity':0,
                     'completeness':0,
                     'transparency':0
-
-
                     })
         article_id += 1
     return return_articles
