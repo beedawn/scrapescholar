@@ -27,7 +27,7 @@ async def get_sciencedirect_data(query: str):
 
 
 @app.get("/scopus")
-async def researcher_api_call(keywords: str, apikey: str=scopus.scopus_api_key, subject: str="", minYear: str=""):
+async def researcher_api_call(keywords, apikey: str=scopus.scopus_api_key, subject:str="", minYear:str="1990"):
 
     #searchQuery = scopus.QueryParameters(keywords=keywordsList, subject=subject, minYear=minYear)
     response = scopus.query_scopus_api(keywords, apikey, subject, minYear)

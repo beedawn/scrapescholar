@@ -3,6 +3,7 @@ import os
 import datetime
 import json
 import csv
+import scopus.scopus as scopus
 from urllib.parse import quote
 import random
 
@@ -38,15 +39,10 @@ class SearchResults:
         self.transparency = transparency
 
 #   Create Query Execute Function
-def query_scopus_api(keywords, key, subject, minYear):
-    #Keyword Builder
-    keywordPhrase = ""
+def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", minYear: str="1900"):
 
-    for currentWord in keywords:
-        strippedWord = currentWord.strip()
-        encodedWord = quote(strippedWord).replace(" ", "+")
-        keywordPhrase += encodedWord
-        keywordPhrase += "%20"
+    encodedWord = quote(keywords).replace(" ", "+")
+
 
     #Other Parameters
     httpAccept = "application/json"
@@ -62,14 +58,14 @@ def query_scopus_api(keywords, key, subject, minYear):
     #Final Assembly
     built_query = "https://api.elsevier.com/content/search/scopus?" \
         + "apiKey=" + key \
-        + "&query=" + keywordPhrase \
+        + "&query=" + encodedWord \
         + "&httpAccept=" + httpAccept \
         + "&view=" + view \
         + "&date=" + dateRange \
         + "&count=" + count \
         + "&sort=" + sort \
         + "&subj=" + subj
-    
+    print(built_query)
     response = requests.get(built_query)
     articles=parse_data_scopus(response)
     #return entries to scopus endpoint response

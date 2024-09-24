@@ -214,8 +214,8 @@ describe('Home Component', () => {
     fireEvent.click(searchButton);
     await waitFor(() => {
       //may fail as these are entirely dependent on the search results
-      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85195044861&origin=inward')).toBeInTheDocument()
-      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85202744346&origin=inward')).toBeInTheDocument()
+      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204072897&origin=inward')).toBeInTheDocument()
+      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204065798&origin=inward')).toBeInTheDocument()
     }, {timeout: 5000});
   })
 });
