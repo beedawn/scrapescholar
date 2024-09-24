@@ -1587,7 +1587,7 @@ expect(sorted).toEqual(items)
 
 test('sort results descending', () => {
   const sorted = sortResults(items, 'title', 'desc')
-  console.log(items[1])
+
   expect(sorted).toEqual([items[0], items[1],items[2] ])
   
     

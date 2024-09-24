@@ -44,16 +44,14 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setResults(sortedResults);
     }
     const [pressedSort, setPressedSort] = useState<keyof ResultItem | null>(null);
-    const [editableCells, setEditableCells] = useState<EditableCell[]>(results.map(() => ({ 
-        relevance: false, methodology: false, clarity: false, completeness: false, transparency: false })));
+    const [editableCells, setEditableCells] = useState<EditableCell[]>(results.map(() => ({
+        relevance: false, methodology: false, clarity: false, completeness: false, transparency: false
+    })));
 
     const handleCellClick = (index: number, field: keyof EditableCell) => {
-        console.log("click");
         const updatedCells: EditableCell[] = [...editableCells];
         updatedCells[index][field as keyof EditableCell] = !updatedCells[index][field as keyof EditableCell];
         setEditableCells(updatedCells)
-        console.log(updatedCells[index][field]);
-
     }
     const handleFieldChange = (index: number, field: keyof EditableCell, value: string) => {
         const updatedResults: ResultItem[] = editableResults.map(result => ({ ...result }));
@@ -62,7 +60,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
 
     }
     const handleFieldConfirm = () => {
-        console.log("test")
         setResults(editableResults);
         //send request to backend to update value?
 
@@ -106,7 +103,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                             <SortToggleButton handleSort={handleSort} field="evaluation_criteria" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
-                            Assessment 
+                            Assessment
                             <SortToggleButton handleSort={handleSort} field="color" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
@@ -133,8 +130,8 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                 </thead>
                 <tbody>
                     {results.map((result, index) => (
-                        <tr key={result.id} className={` ${selectedArticle === result.id ? 'bg-blue-500' : 'hover:bg-gray-500'}`} 
-                        onClick={() => { setSelectedArticle(result.id) }} data-testid='row'>
+                        <tr key={result.id} className={` ${selectedArticle === result.id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
+                            onClick={() => { setSelectedArticle(result.id) }} data-testid='row'>
                             <td className="border border-gray-300" ><a href={result.link}>{result.title}</a></td>
                             <td className="border border-gray-300" >{result.date}</td>
                             <td className="border border-gray-300" >{result.citedby}</td>
