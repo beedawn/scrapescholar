@@ -23,6 +23,8 @@ export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDi
             return 0;
         });
 };
+
+
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
 
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
@@ -31,7 +33,16 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setResults(sortedResults);
     }
     const [pressedSort, setPressedSort]=useState<keyof ResultItem | null>(null);
- 
+    const [editableCells, setEditableCells]=useState(results.map(()=>({relevance:false, methodology:false, clarity:false, completeness:false, transparency:false})));
+
+    const handleCellClick = (index:number, field:string) => {
+        console.log("click");
+        const updatedCells = [...editableCells];
+        updatedCells[index][field]=!updatedCells[index][field];
+        setEditableCells(updatedCells)
+        console.log(updatedCells[index][field]);
+
+    }
     return (
         <div className="overflow-x-auto">
 
@@ -74,7 +85,21 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                 </select>
                             </td>
                             <td className="border border-gray-300" >{result.relevance}%</td>
-                            <td className="border border-gray-300" >{result.methodology}</td>
+                            <td className="border border-gray-300" >{editableCells[index].methodology?
+                            (<><input></input><button style={{display:"inline"}} onClick={()=>{
+                                handleCellClick(index,"methodology")
+                                }}>
+                                    ×
+                                    </button>
+                                    </>)
+                                    :
+                                    (<>
+                                    {result.methodology}
+                                    <div style={{display:"inline"}} onClick={()=>{handleCellClick(index,"methodology")}}>
+                                        ✎
+                                        </div>
+                                        </>)}
+                            </td>
                             <td className="border border-gray-300" >{result.clarity}</td>
                             <td className="border border-gray-300">{result.completeness}</td>
                             <td className="border border-gray-300" >{result.transparency}</td>
