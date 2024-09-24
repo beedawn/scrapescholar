@@ -40,7 +40,8 @@ class SearchResult:
 #   Create Query Execute Function
 def query_scopus_api(keywords, key: str=scopus.scopus_api_key, subject: str="", min_year: str="1900"):
     encoded_keywords = quote(keywords).replace(" ", "+")
-
+    subject = quote(subject)
+    min_year= quote(min_year)
     #Other Parameters
     http_accept = "application/json"
     view = "STANDARD"                               #Note: COMPLETE view is inaccessible with a standard token
