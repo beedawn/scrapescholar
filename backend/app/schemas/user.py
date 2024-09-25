@@ -3,6 +3,10 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
 class UserBase(BaseModel):
     username: str
     email: Optional[EmailStr] = None
