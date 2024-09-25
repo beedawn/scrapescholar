@@ -1029,8 +1029,6 @@ describe('SearchView US-11 Component', () => {
     }, { timeout: 5000 });
   })
 
-
-
   test('US-15 When user clicks on arrow next to title,bg color turns dark gray, then clicks on color arrow, and title should be light grey', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
@@ -1042,17 +1040,12 @@ describe('SearchView US-11 Component', () => {
       const sortButton = within(titleHeader.closest('th')).getByRole('button')
       fireEvent.click(sortButton);
       expect(sortButton).toHaveClass('bg-gray-600');
-  
       const yearHeader = screen.getByText('Year');
       const sortButton2 = within(yearHeader.closest('th')).getByRole('button')
       fireEvent.click(sortButton2);
       expect(sortButton2).toHaveClass('bg-gray-600');
-
       expect(sortButton).toHaveClass('bg-gray-400');
     }, { timeout: 5000 });
   })
 
-
-
-  
 });
