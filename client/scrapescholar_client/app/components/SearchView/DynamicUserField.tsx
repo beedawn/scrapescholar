@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import { ResultItem } from '../views/SearchView';
+import { ResultItem } from '../../views/SearchView';
 import { EditableCell } from './ResultsTable';
 type EditableField = 'relevance' | 'methodology' | 'clarity' | 'completeness' | 'transparency';
 

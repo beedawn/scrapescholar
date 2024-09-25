@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ResultItem } from '../views/SearchView';
+import { ResultItem } from '../../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
 

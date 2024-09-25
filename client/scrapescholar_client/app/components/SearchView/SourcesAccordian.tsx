@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button from './Button';
-import { ResultItem } from '../views/SearchView';
+import Button from './../Button';
+import { ResultItem } from '../../views/SearchView';
 
 interface SourcesAccordianProps {
     //probably need some kind of set state

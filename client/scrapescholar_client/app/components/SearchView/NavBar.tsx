@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import Button from './Button';
+import Button from './../Button';
 import SearchBox from './SearchBox';
 import DropdownSearchBox from './DropdownSearchBox';
-import Dropdown from '../types/DropdownType';
+import Dropdown from '../../types/DropdownType';
 import SourcesAccordian from './SourcesAccordian';
 interface NavBarProps {
     handleResults: (event: React.FormEvent<HTMLFormElement>) => void;
