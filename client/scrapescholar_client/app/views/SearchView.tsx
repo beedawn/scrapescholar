@@ -47,7 +47,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
 
     const addToUserDatabaseList = (item:string) => {
-        console.log(item)
        setUserDatabaseList ([...userDatabaseList, item])
       
     }
@@ -89,7 +88,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     //runs when search is pressed
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
-        console.log(userDatabaseList);
+       // console.log(userDatabaseList);
         //prevents default form submit which causes page to reload
         event.preventDefault();
         //sets loading to true which triggers "Loading" to show in UI

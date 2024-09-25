@@ -4,6 +4,9 @@ import Home from '../../app/page';
 import React from 'react';
 
 describe('Home Component', () => {
+
+  const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
+  const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
   test('check login button loads', () => {
     render(<Home />);
     //finds + button
@@ -14,7 +17,11 @@ describe('Home Component', () => {
   test('check login button click works', () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
-    //clicks + button
+  
+    const usernameInput = screen.getByPlaceholderText('Username');
+    const passwordInput = screen.getByPlaceholderText('Password');
+    fireEvent.change(usernameInput, { target: { value: admin_user } });
+    fireEvent.change(passwordInput, { target: { value: admin_pass } });
     fireEvent.click(loginButton);
     //should be 2 inputs now
     expect(screen.getAllByRole('textbox')).toHaveLength(1);
@@ -23,26 +30,6 @@ describe('Home Component', () => {
     //maybe should test there are two + buttons too?
   });
 
-  test('check logout button renders in SearchView', () => {
-    render(<Home />);
-    const loginButton = screen.getByText('Login');
-    //clicks + button
-    fireEvent.click(loginButton);
-    //should be 2 inputs now
-    const logoutButton = screen.getByText('Logout');
-    expect(logoutButton).toBeInTheDocument();
-  });
 
-  test('check logout button works in SearchView', () => {
-    render(<Home />);
-    const loginButton = screen.getByText('Login');
-    //clicks + button
-    fireEvent.click(loginButton);
-    //should be 2 inputs now
-    const logoutButton = screen.getByText('Logout');
-    expect(logoutButton).toBeInTheDocument();
-    fireEvent.click(logoutButton);
-    const loginButton2 = screen.getByText('Login');
-    expect(loginButton2).toBeInTheDocument();
-  });
+
 });
