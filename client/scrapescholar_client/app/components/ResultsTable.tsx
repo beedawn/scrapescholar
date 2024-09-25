@@ -21,24 +21,36 @@ interface ResultsTableProps {
 }
 
 export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDirection: string): ResultItem[] => {
-    if (sortDirection === "asc")
-        return array.sort((a, b) => {
-            if (a[field] < b[field]) return -1;
-            if (a[field] > b[field]) return 1;
-            return 0;
-        });
-    else
-        return array.sort((a, b) => {
-            if (a[field] > b[field]) return -1;
-            if (a[field] < b[field]) return 1;
-            return 0;
-        });
-};
+
+
+return array.sort((a,b)=>{
+    const aValue = a[field];
+    const bValue = b[field];
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+    }
+    if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortDirection === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    }
+    if (typeof aValue === "number") {
+         // Numbers come before strings
+        return sortDirection === "asc" ? -1 : 1;
+    }
+    if (typeof bValue === "number") {
+        // Strings come after numbers
+        return sortDirection === "asc" ? 1 : -1; 
+    }
+    return 0; 
+})
+ };
 
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
     const [editableResults, setEditableResults] = useState<ResultItem[]>([...results]);
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
+
+        console.log(sortedResults)
         setPressedSort(field);
         const orderedEditableResults = sortedResults.map(result => {
             // Find the corresponding item in 'editableResults' by matching the 'id'
