@@ -1425,7 +1425,7 @@ test('AR-4 pencil is next to value in methodology', async () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-    let sortButton;
+
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
       fireEvent.click(pencilIcons[0]);
@@ -1442,7 +1442,7 @@ test('AR-4 pencil is next to value in methodology', async () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-    let sortButton;
+
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
       fireEvent.click(pencilIcons[0]);
@@ -1461,7 +1461,6 @@ test('AR-4 pencil is next to value in methodology', async () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-    let sortButton;
     let clarityField: Element | null = null;
     await waitFor(() => {
 
@@ -1483,6 +1482,67 @@ test('AR-4 pencil is next to value in methodology', async () => {
     }, { timeout: 5000 });
     if(clarityField)
     expect(clarityField.textContent).toContain("test input");
+    else{
+      fail('no input found after clicking pencil')
+       }
+  })
+
+  test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+
+    let clarityField: Element | null = null;
+    let clarityField2: Element | null = null;
+
+
+    let sortButton;
+    await waitFor(() => {
+      const transparencyScoreHeader = screen.getByText('Transparency');
+      sortButton = within(transparencyScoreHeader.closest('th')).getByRole('button');
+    }, { timeout: 5000 });
+    if (sortButton) {
+      fireEvent.click(sortButton);
+
+    } else
+      fail('no sort button found')
+    
+
+    await waitFor(() => {
+
+      const pencilIcons = screen.getAllByText("✎");
+      fireEvent.click(pencilIcons[0]);
+      fireEvent.click(pencilIcons[4]);
+      const rows = screen.getAllByTestId('row');
+      clarityField = rows[0].children[10];
+      const input= clarityField.querySelector('input');
+      clarityField2 = rows[1].children[10];
+      const input2= clarityField2.querySelector('input');
+
+
+
+
+      if(input&&input2){
+      fireEvent.change(input, { target: { value: testInput+"1" } });
+      fireEvent.change(input2, { target: { value: testInput+"2" } });
+      const checkIcons = screen.getAllByText("✔");
+      fireEvent.click(checkIcons[0]);
+      fireEvent.click(checkIcons[1]);
+      }
+      else{
+      fail('no input found after clicking pencil')
+       }
+      
+    }, { timeout: 5000 });
+
+    
+    if(clarityField){
+    
+    const rows = screen.getAllByTestId('row');
+    expect(rows[0].children[10].textContent).toContain("test input1");
+    expect(rows[1].children[10].textContent).toContain("test input2");}
     else{
       fail('no input found after clicking pencil')
        }
