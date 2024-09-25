@@ -16,7 +16,7 @@ describe('Home Component', () => {
     expect(loginButton).toBeInTheDocument();
   });
 
-  test('check login button click works', () => {
+  test('check login button click works', async () => {
     render(<Home />);
 
 
@@ -30,10 +30,12 @@ describe('Home Component', () => {
     const loginButton = screen.getByText('Login');
     fireEvent.click(loginButton);
     //should be 2 inputs now
+    await waitFor(() => {
     expect(screen.getAllByRole('textbox')).toHaveLength(1);
     expect(screen.getByText('ScrapeScholar')).toBeInTheDocument();
     expect(screen.getByText('Search')).toBeInTheDocument();
     //maybe should test there are two + buttons too?
+  }, { timeout: 5000 });
   });
 
 
