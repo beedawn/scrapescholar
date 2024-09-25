@@ -33,8 +33,6 @@ describe('SearchView US-11 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
 
- 
-
   //US-15 When user clicks on arrow next to relevance, results are sorted by relevance
   test('US-15 When user clicks on arrow next to relevance twice, results are sorted by relevance descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -842,7 +840,6 @@ describe('SearchView US-11 Component', () => {
       fail('no sort button')
   })
 
-
   test('US-15 When user clicks on arrow next to clarity, results are sorted by clarity ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
@@ -862,7 +859,6 @@ describe('SearchView US-11 Component', () => {
     } else
       fail('no sort button found')
   })
-
 
   test('US-15 when results load clarity arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -914,7 +910,6 @@ describe('SearchView US-11 Component', () => {
       fail('no sort button')
   })
 
-
   test('US-15 When user clicks on arrow next to completeness, results are sorted by completeness ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
@@ -934,7 +929,6 @@ describe('SearchView US-11 Component', () => {
     } else
       fail('no sort button found')
   })
-
 
   test('US-15 when results load completeness arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -1033,8 +1027,23 @@ describe('SearchView US-11 Component', () => {
     }, { timeout: 5000 });
   })
 
-  
-
-
+  test('US-15 When user clicks on arrow next to title,bg color turns dark gray, then clicks on color arrow, and title should be light grey', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    const searchButton = screen.getByText('Search');
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: testInput } });
+    fireEvent.click(searchButton);
+    await waitFor(() => {
+      const titleHeader = screen.getByText('Title');
+      const sortButton = within(titleHeader.closest('th')).getByRole('button')
+      fireEvent.click(sortButton);
+      expect(sortButton).toHaveClass('bg-gray-600');
+      const yearHeader = screen.getByText('Year');
+      const sortButton2 = within(yearHeader.closest('th')).getByRole('button')
+      fireEvent.click(sortButton2);
+      expect(sortButton2).toHaveClass('bg-gray-600');
+      expect(sortButton).toHaveClass('bg-gray-400');
+    }, { timeout: 5000 });
+  })
 
 });

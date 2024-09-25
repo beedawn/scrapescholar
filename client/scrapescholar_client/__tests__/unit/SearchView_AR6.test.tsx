@@ -45,5 +45,4 @@ describe('SearchView AR-6 Component', () => {
     }, { timeout: 5000 });
   })
 
-
 });
