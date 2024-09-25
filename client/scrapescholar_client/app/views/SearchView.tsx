@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, Dispatch, SetStateAction, } from 'react';
-import SearchResults from "../components/SearchResults";
-import NavBar from "../components/NavBar";
+import SearchResults from "../components/SearchView/SearchResults";
+import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
 
 interface SearchViewProps {

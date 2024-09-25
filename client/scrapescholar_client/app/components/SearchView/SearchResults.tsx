@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import BubblePlot from './d3/BubblePlot';
-import { ResultItem } from '../views/SearchView';
+import BubblePlot from './../d3/BubblePlot';
+import { ResultItem } from '../../views/SearchView';
 import SearchHeader from './SearchHeader';
 import ResultsTable from './ResultsTable';
 interface SearchResultsProps {

@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import SearchView, { ResultItem } from '../../app/views/SearchView';
 import React from 'react';
 import Dropdown from '../../app/types/DropdownType';
-import { sortResults } from '../../app/components/ResultsTable';
+import { sortResults } from '../../app/components/SearchView/ResultsTable';
 
 /*
 

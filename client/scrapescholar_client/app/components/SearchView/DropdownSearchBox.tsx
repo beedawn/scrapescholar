@@ -1,5 +1,5 @@
 import React from 'react';
-import DropdownType from '../types/DropdownType'
+import DropdownType from '../../types/DropdownType'
 interface DropdownSearchBoxProps {
   value: string;
   onDropdownChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;

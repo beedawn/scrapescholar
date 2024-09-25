@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button from './Button';
-import { ResultItem } from '../views/SearchView';
+import Button from './../Button';
+import { ResultItem } from '../../views/SearchView';
 
 interface SortToggleButtonProps {
     handleSort: (field: keyof ResultItem, sortDirection: string) => void;
