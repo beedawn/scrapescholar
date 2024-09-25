@@ -59,7 +59,11 @@ const databases =["ScienceDirect","Scopus"];
                     </h2>
                     <div className={openIndex === index ? '' : 'hidden'} id={`accordion-color-body-${index + 1}`} aria-labelledby={`accordion-color-heading-${index + 1}`}>
                         <div className="pl-5 dark:border-gray-700">
-                            {databases.map((database, index) => (<div key={index+"check"}><p><input type="checkbox" checked={checkboxes[database]} onChange={(event)=>{handleCheckboxChange(event,database)}}/>{database}</p></div>))}
+                            {databases.map((database, index) => (
+                                <div key={index+"check"}>
+                                    <label htmlFor={database}>
+                                <input id={database} type="checkbox" name={database} checked={checkboxes[database]} onChange={(event)=>{handleCheckboxChange(event,database)}}/>
+                                {database}</label></div>))}
                         </div>
                     </div>
                 </div>
