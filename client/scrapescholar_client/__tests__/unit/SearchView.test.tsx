@@ -1538,7 +1538,7 @@ test('AR-4 pencil is next to value in methodology', async () => {
     }, { timeout: 5000 });
 
     
-    if(clarityField){
+    if(clarityField&&clarityField2){
     
     const rows = screen.getAllByTestId('row');
     expect(rows[0].children[10].textContent).toContain("test input1");
