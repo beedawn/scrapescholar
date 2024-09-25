@@ -15,7 +15,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn}) => {
     const [username, setUserName]=useState<string>('');
     const [password, setPassword]=useState<string>('');
     const [error, setError]=useState<string>('');
-    const handleLogin = async(e)=>{
+    const handleLogin = async(e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         setError('');
         if (username==="admin"&&password=="admin"){
