@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Button from './Button';
 import SearchBox from './SearchBox';
 import DropdownSearchBox from './DropdownSearchBox';
 import Dropdown from '../types/DropdownType';
+import SourcesAccordian from './SourcesAccordian';
 interface NavBarProps {
     handleResults: (event: React.FormEvent<HTMLFormElement>) => void;
     addInput: () => void;
@@ -12,13 +13,22 @@ interface NavBarProps {
     removeInput: (index: number) => void;
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     dropdown: Dropdown[];
+    addToUserDatabaseList: (item:string) => void;
+    removeFromUserDatabaseList: (item:string) => void;
 }
 
+
+
+
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
-    addInput, inputs, handleSearchChange, removeInput, setLoggedIn, dropdown, handleDropdownChange }) => {
+    addInput, inputs, handleSearchChange, removeInput, setLoggedIn, dropdown, handleDropdownChange, addToUserDatabaseList, removeFromUserDatabaseList }) => {
     const handleLogout = () => {
         setLoggedIn(false);
     };
+
+
+  
+    
     return (
         <>
             <div className="p-5 max-w-sm mr-auto float-left">
@@ -26,6 +36,10 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     <Button onClick={handleLogout} className="">Logout</Button>
                 </div>
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
+
+      <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} />
+
+
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">
                         +
