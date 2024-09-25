@@ -9,16 +9,18 @@ interface LoginProps {
    
 }
 
-
+const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
+const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 
 const Login: React.FC<LoginProps> = ({ setLoggedIn}) => {
     const [username, setUserName]=useState<string>('');
     const [password, setPassword]=useState<string>('');
     const [error, setError]=useState<string>('');
     const handleLogin = async(e: React.FormEvent<HTMLFormElement>)=>{
+        console.log(admin_user)
         e.preventDefault();
         setError('');
-        if (username==="admin"&&password=="admin"){
+        if (username===admin_user&&password==admin_pass){
             setLoggedIn(true)
         }
       
