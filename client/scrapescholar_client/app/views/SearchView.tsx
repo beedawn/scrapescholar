@@ -41,6 +41,21 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         color: string,
         label: string
     }[]>([]);
+    //list of user selected databases
+    const [userDatabaseList, setUserDatabaseList] = useState<string[]>([]);
+
+
+
+    const addToUserDatabaseList = (item:string) => {
+        console.log(item)
+       setUserDatabaseList ([...userDatabaseList, item])
+      
+    }
+    
+    const removeFromUserDatabaseList = (item:string) => {
+       setUserDatabaseList(userDatabaseList.filter((array_item:any)=>{return array_item!=item}))
+        
+     }
     //string of inputs joined with ' '
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
     //drop down array for dropdown values
@@ -74,6 +89,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     //runs when search is pressed
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
+        console.log(userDatabaseList);
         //prevents default form submit which causes page to reload
         event.preventDefault();
         //sets loading to true which triggers "Loading" to show in UI
@@ -143,7 +159,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
-                    setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} />
+                    setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}/>
             </div>
             <div className="flex-1 sm:mx-12 w-full">
                 {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
