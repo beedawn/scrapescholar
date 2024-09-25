@@ -910,7 +910,6 @@ describe('SearchView US-11 Component', () => {
       fail('no sort button')
   })
 
-
   test('US-15 When user clicks on arrow next to completeness, results are sorted by completeness ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
@@ -930,7 +929,6 @@ describe('SearchView US-11 Component', () => {
     } else
       fail('no sort button found')
   })
-
 
   test('US-15 when results load completeness arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
