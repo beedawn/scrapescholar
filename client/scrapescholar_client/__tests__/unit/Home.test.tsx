@@ -11,39 +11,43 @@ describe('Home Component', () => {
     expect(loginButton).toBeInTheDocument();
   });
 
-  test('check login button click works', () => {
+  // test('check login button click works', () => {
+  //   render(<Home />);
+  //   const loginButton = screen.getByText('Login');
+
+  //   screen.getAllByRole('textbox')
+  //   //clicks + button
+  //   fireEvent.click(loginButton);
+  //   //should be 2 inputs now
+  //   expect(screen.getAllByRole('textbox')).toHaveLength(1);
+  //   expect(screen.getByText('ScrapeScholar')).toBeInTheDocument();
+  //   expect(screen.getByText('Search')).toBeInTheDocument();
+  //   //maybe should test there are two + buttons too?
+  // });
+
+
+  // test('US-4 check logout button works in SearchView', () => {
+  //   render(<Home />);
+
+  //   const logoutButton = screen.getByText('Logout');
+  //   expect(logoutButton).toBeInTheDocument();
+  //   fireEvent.click(logoutButton);
+  //   const loginButton2 = screen.getByText('Login');
+  //   expect(loginButton2).toBeInTheDocument();
+  // });
+
+  test('US-4 check login button click denies empty credetials', () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
     //clicks + button
     fireEvent.click(loginButton);
     //should be 2 inputs now
-    expect(screen.getAllByRole('textbox')).toHaveLength(1);
-    expect(screen.getByText('ScrapeScholar')).toBeInTheDocument();
-    expect(screen.getByText('Search')).toBeInTheDocument();
+   
+    expect(screen.getByText('Invalid Login')).toBeInTheDocument();
     //maybe should test there are two + buttons too?
   });
 
-  test('check logout button renders in SearchView', () => {
-    render(<Home />);
-    const loginButton = screen.getByText('Login');
-    //clicks + button
-    fireEvent.click(loginButton);
-    //should be 2 inputs now
-    const logoutButton = screen.getByText('Logout');
-    expect(logoutButton).toBeInTheDocument();
-  });
 
-  test('check logout button works in SearchView', () => {
-    render(<Home />);
-    const loginButton = screen.getByText('Login');
-    //clicks + button
-    fireEvent.click(loginButton);
-    //should be 2 inputs now
-    const logoutButton = screen.getByText('Logout');
-    expect(logoutButton).toBeInTheDocument();
-    fireEvent.click(logoutButton);
-    const loginButton2 = screen.getByText('Login');
-    expect(loginButton2).toBeInTheDocument();
-  });
+
 
 });

@@ -1622,4 +1622,13 @@ describe('Home Component', () => {
 
   });
 
+  test('US-4 check logout button renders in SearchView', () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} />);
+   
+    const logoutButton = screen.getByText('Logout');
+    expect(logoutButton).toBeInTheDocument();
+  });
+
+
+
 });
