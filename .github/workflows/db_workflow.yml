@@ -17,18 +17,14 @@ on:
 jobs:
   init-db:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: ${{secrets.DATABASE_URL}}
-      PYTHONPATH: ./backend
-      POSTGRES_USER: ${{secrets.POSTGRES_USER}}
-      POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-      POSTGRES_DB: ${{secrets.POSTGRES_DB}}
-      POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
-      POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
 
     services:
       postgres:
         image: postgres:latest
+        env:
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
         ports:
           - 5432:5432
         options: >-
@@ -58,8 +54,24 @@ jobs:
             sleep 5
           done
 
-      - name: Run init_db script       
+      - name: Run init_db script
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          PYTHONPATH: ./backend
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
+          POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}     
         run: python backend/app/init_db.py
 
       - name: Run tests
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          PYTHONPATH: ./backend
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
+          POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
         run: pytest backend/tests/database --disable-warnings -v -s
