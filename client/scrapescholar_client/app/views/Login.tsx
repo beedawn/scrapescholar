@@ -16,7 +16,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn}) => {
 
 
     const loginPost = async(username:string, password:string) =>{
-    const url = 'http://localhost:8000/auth/login';
+    const url = 'http://0.0.0.0:8000/auth/login';
     const formData = new URLSearchParams();
     formData.append('username', username);
     formData.append('password', password);
