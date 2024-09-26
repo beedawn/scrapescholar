@@ -28,6 +28,9 @@ def get_user_by_username(db: Session, username: str):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+def get_user_by_email(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()
+
 def create_user(db: Session, user: UserCreate):
     # Hash the user's password before storing it
     hashed_password = hash_password(user.password)
