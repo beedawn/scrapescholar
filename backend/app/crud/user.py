@@ -31,7 +31,14 @@ def get_user_by_username(db: Session, username: str):
 def create_user(db: Session, user: UserCreate):
     # Hash the user's password before storing it
     hashed_password = hash_password(user.password)
-    db_user = User(username=user.username, email=user.email, password=hashed_password)
+    
+    # Use the role_id from the UserCreate schema, which defaults to 2 if not provided
+    db_user = User(
+        username=user.username,
+        email=user.email,
+        password=hashed_password,
+        role_id=user.role_id  # Use the provided or default role_id
+    )
     
     db.add(db_user)
     db.commit()

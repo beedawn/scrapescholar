@@ -14,7 +14,11 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
     API endpoint to create a new user.
     """
     # Check if the username already exists
-    existing_user = get_user_by_username(db, user.username)
+    try:
+        existing_user = get_user_by_username(db, user.username)
+    except HTTPException:
+        existing_user = None
+
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists.")
     

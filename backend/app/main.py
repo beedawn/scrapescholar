@@ -24,8 +24,8 @@ async def health_check():
     return {"message": "Hello World"}
 
 # Include the auth routes in the main app
-app.include_router(user.router, prefix="/user", tags=["User"])
-app.include_router(role.router, prefix="/role", tags=["Role"])
+app.include_router(user.router, prefix="/users", tags=["Users"])
+app.include_router(role.router, prefix="/roles", tags=["Roles"])
 
 @app.get("/sciencedirect")
 async def get_sciencedirect_data(query: str):
