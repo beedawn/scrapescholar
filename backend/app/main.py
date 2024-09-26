@@ -4,7 +4,7 @@ import sciencedirect.sciencedirect as sciencedirect
 import scopus.scopus as scopus
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.auth import router as auth_router
+from app.api import user, role
 
 app = FastAPI()
 
@@ -24,7 +24,8 @@ async def health_check():
     return {"message": "Hello World"}
 
 # Include the auth routes in the main app
-app.include_router(auth_router, prefix="/auth")
+app.include_router(user.router, prefix="/user", tags=["User"])
+app.include_router(role.router, prefix="/role", tags=["Role"])
 
 @app.get("/sciencedirect")
 async def get_sciencedirect_data(query: str):
