@@ -23,9 +23,11 @@ from passlib.context import CryptContext
 
 
 def verify_hash(plain_text, hashed_text: str):
+    hash_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     return hash_context.verify(plain_text, hashed_text)
 
 @pytest.fixture(scope="function")
+
 def db():
     """Set up the database connection for testing."""
     db = SessionLocal()
@@ -42,7 +44,14 @@ def test_role_table_exists(db):
 
 def test_user_exists_in_db(db):
     """Test if the test user from init_db exists in the database."""
-    user = db.query(User).filter_by(username="testuser").first()
+
+    users = db.query(User).all()
+    user = None
+    for candidate in users:
+        if(verify_hash("testuser", candidate.username)):
+            user = candidate
+ 
+
     assert user is not None
     assert verify_hash("testuser",user.username)
     assert verify_hash("testuser@example.com", user.email)
@@ -51,7 +60,11 @@ def test_article_creation_with_existing_user_and_source(db: Session):
     """Test article creation using the test data from init_db."""
 
     # Get the test user from the database
-    user = db.query(User).filter_by(username="testuser").first()
+    users = db.query(User).all()
+    user = None
+    for candidate in users:
+        if(verify_hash("testuser", candidate.username)):
+            user = candidate
     assert user is not None
 
     # Get the test source from the database
