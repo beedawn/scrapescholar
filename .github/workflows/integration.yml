@@ -12,12 +12,12 @@ jobs:
     env:
       DATABASE_URL: postgresql://student:student@localhost:5432/scrapescholartestdb
       PYTHONPATH: ./backend
-      POSTGRES_USER: student
-      POSTGRES_PASSWORD: student
-      POSTGRES_DB: scrapescholartestdb
-      POSTGRES_SERVER: localhost
-      POSTGRES_PORT: "5432"
-      SECRET_KEY: "SECRET*#1234"
+      POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+      POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+      POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+      POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
+      POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
+      SECRET_KEY: ${{secrets.SECRET_KEY}}
       # used in fastapi, academic API Keys
       SCIENCEDIRECT_APIKEY: ${{secrets.SCIENCEDIRECT_APIKEY}}
       SCOPUS_APIKEY: ${{secrets.SCOPUS_APIKEY}}
