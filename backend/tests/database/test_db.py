@@ -19,7 +19,11 @@ from app.crud.searchshare import create_search_share
 from app.crud.article import create_article
 from app.crud.searchkeyword import create_search_keyword
 from app.crud.keyword import create_keyword
+from passlib.context import CryptContext
 
+
+def verify_hash(plain_text, hashed_text: str):
+    return hash_context.verify(plain_text, hashed_text)
 
 @pytest.fixture(scope="function")
 def db():
@@ -40,8 +44,8 @@ def test_user_exists_in_db(db):
     """Test if the test user from init_db exists in the database."""
     user = db.query(User).filter_by(username="testuser").first()
     assert user is not None
-    assert user.username == "testuser"
-    assert user.email == "testuser@example.com"
+    assert verify_hash("testuser",user.username)
+    assert verify_hash("testuser@example.com", user.email)
 
 def test_article_creation_with_existing_user_and_source(db: Session):
     """Test article creation using the test data from init_db."""
