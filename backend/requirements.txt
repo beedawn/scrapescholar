@@ -43,5 +43,6 @@ uvicorn==0.30.6
 uvloop==0.20.0
 watchfiles==0.24.0
 websockets==13.0.1
-python-jose==4.9
-fastapi-login==2.9.0
+python-jose==3.3.0
+fastapi-login==1.10.2
+passlib==1.7.4
