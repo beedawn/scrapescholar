@@ -8,10 +8,22 @@ describe('Home Component', () => {
   const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
   const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 
-  test('check login button loads', () => {
+  test('US-4 check login button loads', () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
     expect(loginButton).toBeInTheDocument();
+  });
+
+  test('US-4 check username field is on page', async () => {
+    render(<Home />);
+    const usernameInput = screen.getByPlaceholderText('Username');
+      expect(usernameInput).toBeInTheDocument();
+  });
+
+  test('US-4 check password field is on page', async () => {
+    render(<Home />);
+    const passwordInput = screen.getByPlaceholderText('Password');
+      expect(passwordInput).toBeInTheDocument();
   });
 
   test('check login button click works', async () => {
