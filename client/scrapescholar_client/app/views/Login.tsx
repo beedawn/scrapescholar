@@ -13,19 +13,54 @@ const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
 const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 
 const Login: React.FC<LoginProps> = ({ setLoggedIn}) => {
+
+
+    const loginPost = async(username:string, password:string) =>{
+    const url = 'http://localhost:8000/auth/login';
+    const formData = new URLSearchParams();
+    formData.append('username', username);
+    formData.append('password', password);
+try{
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData.toString()
+    });
+    if(!response.ok){
+        const errorData = (response).json;
+        throw new Error ('Network error:' +JSON.stringify(errorData))
+    }
+    const data = await response.json();
+    return data.access_token;
+}
+catch(error){
+    console.error('Error:', error);
+    return null;
+}
+   
+
+    }
+    const [token, setToken]=useState();
+
     const [username, setUserName]=useState<string>('');
     const [password, setPassword]=useState<string>('');
     const [error, setError]=useState<string>('');
     const handleLogin = async(e: React.FormEvent<HTMLFormElement>)=>{
-        console.log(admin_user)
+
         e.preventDefault();
         setError('');
-        if (username===admin_user&&password==admin_pass){
+        const tokenResponse=await loginPost(username, password);
+        
+        if (tokenResponse){
+            setToken(tokenResponse);
             setLoggedIn(true)
         }
       
         setError('Invalid Login');
-        //do something
+        
     }
     return (
         <div className="flex flex-col mt-40 sm:flex-row sm:mx-12 justify-center items-center">
