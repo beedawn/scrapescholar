@@ -62,7 +62,7 @@ describe('Home Component', () => {
   }, { timeout: 5000 });
   });
 
-  test('US-4 check login button click denies empty credetials', () => {
+  test('US-4 check login button click denies empty credentials', () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
     //clicks + button
