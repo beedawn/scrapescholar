@@ -32,7 +32,7 @@ afterEach(() => {
 describe('SearchView US-11 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
-    test('US-15 When user clicks on arrow next to doctype twice, results are sorted by doctype descending', async () => {
+    test('US-10 Sources should be displayed in UI', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         const searchButton = screen.getByText('Search');
         const inputs = screen.getAllByRole('textbox');
