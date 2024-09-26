@@ -6,11 +6,11 @@ import scopus.scopus as scopus
 from api_tools.api_tools import sciencedirect_api_key
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
+from app.api import user, role, auth
 
 app = FastAPI()
 
 origins = [ "http://0.0.0.0:3000", "http://localhost:3000"]
-
 
 app.add_middleware(
         CORSMiddleware,
@@ -52,21 +52,18 @@ def status_check(get_response):
 async def health_check():
     return {"message": "Hello World"}
 
-@app.get("/available_sources")
-async def available_sources():
-    return {"available_sources": ["Scopus", "Science Direct"]}
+# Include the auth routes in the main app
+app.include_router(auth.router, prefix="/auth")
+app.include_router(user.router, prefix="/users", tags=["Users"])
+app.include_router(role.router, prefix="/roles", tags=["Roles"])
 
-@app.get("/scopus/json")
-async def get_scopus_json(keywords:str, apikey: str=scopus_api_key, subject:str="COMP", minYear:str="1990"):
-    response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
-    getResponse = requests.get(response)
-    if str(getResponse.status_code) == "200":
-        return getResponse.json()
-    else:
-        return status_check(str(getResponse.status_code))
-    
-@app.get("/scopus/csv")
-async def get_scopus_json(keywords:str, apikey: str=scopus_api_key, subject:str="COMP", minYear:str="1990"):
+@app.get("/sciencedirect")
+async def get_sciencedirect_data(query: str):
+    return sciencedirect.request_api(query)
+
+
+@app.get("/scopus")
+async def researcher_api_call(keywords:str, apikey: str=scopus_api_key, subject:str="", minYear:str="1990"):
     response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
     getResponse = requests.get(response)
     if str(getResponse.status_code) == "200":
