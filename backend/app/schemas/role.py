@@ -1,6 +1,5 @@
 # app/schemas/role.py
 from pydantic import BaseModel
-from typing import Optional
 
 class RoleBase(BaseModel):
     role_name: str

@@ -33,6 +33,9 @@ describe('SearchView AR-4 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
 
+ 
+
+
   //AR-4
   test('AR-4 pencil is next to value in methodology', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -46,6 +49,7 @@ describe('SearchView AR-4 Component', () => {
       expect(rows[1].children[10].textContent).toContain("✎");
     }, { timeout: 5000 });
   })
+
 
   test('AR-4 When user clicks on pencil next to value, text field turns into input box', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
@@ -82,6 +86,7 @@ describe('SearchView AR-4 Component', () => {
     }, { timeout: 5000 });
   })
 
+
   test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
@@ -90,6 +95,7 @@ describe('SearchView AR-4 Component', () => {
     fireEvent.click(searchButton);
     let clarityField: Element | null = null;
     await waitFor(() => {
+
       const pencilIcons = screen.getAllByText("✎");
       fireEvent.click(pencilIcons[0]);
       const rows = screen.getAllByTestId('row');
@@ -97,6 +103,7 @@ describe('SearchView AR-4 Component', () => {
       const input = clarityField.querySelector('input');
       if (input) {
         fireEvent.change(input, { target: { value: testInput } });
+
         const checkIcons = screen.getAllByText("✔");
         fireEvent.click(checkIcons[0]);
       }
@@ -118,8 +125,11 @@ describe('SearchView AR-4 Component', () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
+
     let clarityField: Element | null = null;
     let clarityField2: Element | null = null;
+
+
     let sortButton;
     await waitFor(() => {
       const transparencyScoreHeader = screen.getByText('Transparency');
@@ -127,9 +137,13 @@ describe('SearchView AR-4 Component', () => {
     }, { timeout: 5000 });
     if (sortButton) {
       fireEvent.click(sortButton);
+
     } else
       fail('no sort button found')
+
+
     await waitFor(() => {
+
       const pencilIcons = screen.getAllByText("✎");
       fireEvent.click(pencilIcons[0]);
       fireEvent.click(pencilIcons[4]);
@@ -138,6 +152,10 @@ describe('SearchView AR-4 Component', () => {
       const input = clarityField.querySelector('input');
       clarityField2 = rows[1].children[10];
       const input2 = clarityField2.querySelector('input');
+
+
+
+
       if (input && input2) {
         fireEvent.change(input, { target: { value: testInput + "1" } });
         fireEvent.change(input2, { target: { value: testInput + "2" } });
@@ -148,9 +166,12 @@ describe('SearchView AR-4 Component', () => {
       else {
         fail('no input found after clicking pencil')
       }
+
     }, { timeout: 5000 });
 
+
     if (clarityField && clarityField2) {
+
       const rows = screen.getAllByTestId('row');
       expect(rows[0].children[10].textContent).toContain("test input1");
       expect(rows[1].children[10].textContent).toContain("test input2");
@@ -159,5 +180,6 @@ describe('SearchView AR-4 Component', () => {
       fail('no input found after clicking pencil')
     }
   })
+
 
 });
