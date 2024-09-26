@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://student:student@localhost:5432/scrapescholartestdb
+      DATABASE_URL: ${{secrets.DATABASE_URL}}
       PYTHONPATH: ./backend
       POSTGRES_USER: ${{secrets.POSTGRES_USER}}
       POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
