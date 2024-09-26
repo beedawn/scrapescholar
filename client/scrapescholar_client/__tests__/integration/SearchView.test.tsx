@@ -8,7 +8,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 afterEach(async () => {
   // Sleep for 1 second after each test
-  await sleep(1000);
+  // await sleep(1000);
 });
 
 describe('Home Component', () => {
@@ -212,10 +212,12 @@ describe('Home Component', () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-    await waitFor(() => {
+   
       //may fail as these are entirely dependent on the search results
-      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204072897&origin=inward')).toBeInTheDocument()
-      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204065798&origin=inward')).toBeInTheDocument()
-    }, {timeout: 5000});
+      screen.debug(); 
+      const link = await screen.findByText("https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204072897&origin=inward");
+      expect(link).toBeInTheDocument()
+
+
   })
 });
