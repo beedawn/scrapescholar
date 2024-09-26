@@ -4,7 +4,9 @@ import sciencedirect.sciencedirect as sciencedirect
 import scopus.scopus as scopus
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import user, role, auth
+from role import role
+from user import user
+from auth import auth
 
 app = FastAPI()
 
