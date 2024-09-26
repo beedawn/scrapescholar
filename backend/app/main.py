@@ -1,6 +1,9 @@
+import requests
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 import sciencedirect.sciencedirect as sciencedirect
 import scopus.scopus as scopus
+from api_tools.api_tools import sciencedirect_api_key
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,21 +20,77 @@ app.add_middleware(
         allow_headers=["*"],
         )
 
+def status_check(get_response):
+    if get_response == "200":
+        return "Success 200:"
+    
+    elif get_response == "400":
+        return "Error " + get_response + ": Invalid Request - Invalid information is submitted."
+    
+    elif get_response == "401":
+        return "Error " + get_response + ": Authentication Error - User cannot be authenticated due to missing or invalid credentials (authtoken or APIKey)."
+    
+    elif get_response == "403":
+        return "Error " + get_response + ": Authorization/Entitlements Error - User cannot be authenticated or entitlements cannot be validated."
+    
+    elif get_response == "405":
+        return "Error " + get_response + ": Invalid HTTP Method - Requested HTTP Method is invalid."
+    
+    elif get_response == "406":
+        return "Error " + get_response + ": Invalid Mime Type - Requested MIME type is invalid."
+    
+    elif get_response == "429":
+        return "Error " + get_response + ": Quota Exceeded - Quota limits exceeded for associated API Key."
+    
+    elif get_response == "500":
+        return "Error " + get_response + ": Generic Error - General-purpose error condition, typically due to back-end processing errors."
+
+    else:
+        return "Unknown Status Code: " + get_response
+
 @app.get("/health_check")
 async def health_check():
     return {"message": "Hello World"}
 
+@app.get("/available_sources")
+async def available_sources():
+    return {"available_sources": ["Scopus", "Science Direct"]}
 
-@app.get("/sciencedirect")
-async def get_sciencedirect_data(query: str):
-    return sciencedirect.request_api(query)
-
-
-@app.get("/scopus")
-async def researcher_api_call(keywords:str, apikey: str=scopus_api_key, subject:str="", minYear:str="1990"):
+@app.get("/scopus/json")
+async def get_scopus_json(keywords:str, apikey: str=scopus_api_key, subject:str="COMP", minYear:str="1990"):
     response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
-    return response
+    getResponse = requests.get(response)
+    if str(getResponse.status_code) == "200":
+        return getResponse.json()
+    else:
+        return status_check(str(getResponse.status_code))
+    
+@app.get("/scopus/csv")
+async def get_scopus_json(keywords:str, apikey: str=scopus_api_key, subject:str="COMP", minYear:str="1990"):
+    response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
+    getResponse = requests.get(response)
+    if str(getResponse.status_code) == "200":
+        csvFilePath = scopus.json_to_csv(getResponse.json())
+        return FileResponse(path=csvFilePath, media_type='text/csv', filename="search_results_scopus.csv")
+    else:
+        return status_check(str(getResponse.status_code))
 
-    # Use later for json to csv frontend
-    csvFilePath = scopus.load_json_scrape_results(jsonResults)
-    return FileResponse(path=csvFilePath, media_type='text/csv', filename="search_results.csv")
+@app.get("/sciencedirect/json")
+async def get_sciencedirect_data(keywords:str, apikey: str=sciencedirect_api_key, minYear:str="1990"):
+    response = sciencedirect.query_science_direct_api(keywords, apikey, minYear)
+    getResponse = requests.get(response)
+    if str(getResponse.status_code) == "200":
+        return getResponse.json()
+    else:
+        return status_check(str(getResponse.status_code))
+
+@app.get("/sciencedirect/csv")
+async def get_sciencedirect_data(keywords:str, apikey: str=sciencedirect_api_key, minYear:str="1990"):
+    response = sciencedirect.query_science_direct_api(keywords, apikey, minYear)
+    getResponse = requests.get(response)
+    if str(getResponse.status_code) == "200":
+        csvFilePath = sciencedirect.json_to_csv(getResponse.json())
+        return FileResponse(path=csvFilePath, media_type='text/csv', filename="search_results_sciencedirect.csv")
+    else:
+        return status_check(str(getResponse.status_code))
+    
