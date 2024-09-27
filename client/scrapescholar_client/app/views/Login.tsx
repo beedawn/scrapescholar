@@ -31,14 +31,14 @@ try{
     });
     if(!response.ok){
         const errorData = (response).json;
-        throw new Error ('Network error:' +JSON.stringify(errorData))
+        return new Error ('Network error:' +JSON.stringify(errorData))
     }
     const data = await response.json();
     return data.access_token;
 }
 catch(error){
-    console.error('Error:', error);
-    return null;
+    // console.error('Error:', error);
+    return error;
 }
    
 
@@ -54,9 +54,11 @@ catch(error){
         setError('');
         const tokenResponse=await loginPost(username, password);
         
-        if (tokenResponse || (username===admin_user&&password===admin_pass) ){
+        if (tokenResponse && typeof tokenResponse === 'string'|| (username===admin_user&&password===admin_pass) ){
             setToken(tokenResponse);
             setLoggedIn(true)
+        } else if (tokenResponse.error){
+            setError(tokenResponse.error);
         }
       
         setError('Invalid Login');

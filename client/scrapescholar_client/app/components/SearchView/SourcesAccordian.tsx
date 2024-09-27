@@ -11,9 +11,11 @@ interface SourcesAccordianProps {
 const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseList, removeFromUserDatabaseList }) => {
 
 const databases =["ScienceDirect","Scopus"];
+
+
     const [openIndex, setOpenIndex] = useState(null);
     const [checkboxes, setCheckboxes] = useState<Record<string,boolean>>(databases.reduce((acc, database)=>{
-        acc[database]=false;
+        acc[database]=true;
         return acc
     }, {} as Record<string, boolean>));
 

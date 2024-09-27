@@ -4,7 +4,7 @@ import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
 import { queryAllByAltText } from '@testing-library/react';
-
+import databases from '../databaselist';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -43,7 +43,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         label: string
     }[]>([]);
     //list of user selected databases
-    const [userDatabaseList, setUserDatabaseList] = useState<string[]>([]);
+    const [userDatabaseList, setUserDatabaseList] = useState<string[]>(databases);
 
 
 
@@ -132,11 +132,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         let data: Response;
         let jsonData;
         let queryString ='';
-        console.log(userDatabaseList)
         for (let item of userDatabaseList){
             queryString += `&academic_database=${item}`;
         }
-        console.log(queryString)
         if (inputsAndLogicalOperators.length === 0)
             setInputs([emptyString])
         else {

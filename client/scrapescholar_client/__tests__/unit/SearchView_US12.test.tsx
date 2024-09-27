@@ -79,14 +79,12 @@ describe('SearchView US-11 Component', () => {
     expect(scopusCheckbox).toBeInTheDocument();
   });
 
-  test('US-12 ensure checkboxes can be checked ', () => {
+  test('US-12 ensure checkboxes are initially checked ', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
     const sourcesAccordian = screen.getByText('Sources');
     fireEvent.click(sourcesAccordian);
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });
     const scopusCheckbox = screen.getByRole('checkbox', { name: /Scopus/i });
-    fireEvent.click(scienceDirectCheckbox);
-    fireEvent.click(scopusCheckbox);
     expect(scienceDirectCheckbox).toBeChecked();
     expect(scopusCheckbox).toBeChecked();
   });
@@ -97,10 +95,6 @@ describe('SearchView US-11 Component', () => {
     fireEvent.click(sourcesAccordian);
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });
     const scopusCheckbox = screen.getByRole('checkbox', { name: /Scopus/i });
-    fireEvent.click(scienceDirectCheckbox);
-    fireEvent.click(scopusCheckbox);
-    expect(scienceDirectCheckbox).toBeChecked();
-    expect(scopusCheckbox).toBeChecked();
     fireEvent.click(scienceDirectCheckbox);
     fireEvent.click(scopusCheckbox);
     expect(scienceDirectCheckbox).not.toBeChecked();
