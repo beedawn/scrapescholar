@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from role import role
 from user import user
 from auth import auth
+from search import search
 
 app = FastAPI()
 
@@ -28,6 +29,7 @@ async def health_check():
 app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
+app.include_router(search.router, prefix="/search", tags=["Search"])
 
 @app.get("/sciencedirect")
 async def get_sciencedirect_data(query: str):
