@@ -1,12 +1,13 @@
 # app/main.py
-from fastapi import FastAPI
-import sciencedirect.sciencedirect as sciencedirect
-import scopus.scopus as scopus
+from fastapi import FastAPI, Query
+import academic_databases.sciencedirect.sciencedirect as sciencedirect
+import academic_databases.scopus.scopus as scopus
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
 from role import role
 from user import user
 from auth import auth
+from typing import List, Annotated
 
 app = FastAPI()
 
@@ -29,15 +30,37 @@ app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
 
+def check_response(response:List, id:int):
+    if len(response) > 0 and response[-1].id is not None:
+        new_id=response[-1].id+1
+    else:
+        new_id=id
+    return new_id
+
+@app.get("/api")
+async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None):
+    print(academic_databases)
+    response = []
+    id = 0
+    if "Science Direct" in academic_databases:
+        new_id=check_response(response,id)
+        article_response, id =sciencedirect.request_data(keywords, id=new_id)
+        response.extend(article_response)
+        print(response[-1])
+    if "Scopus" in academic_databases:
+        new_id=check_response(response,id)
+        article_response, id =scopus.request_data(keywords, id=new_id)
+        response.extend(article_response)
+    return response
+
 @app.get("/sciencedirect")
-async def get_sciencedirect_data(query: str):
-    return sciencedirect.request_api(query)
+async def get_sciencedirect_data(keywords:str):
+    return sciencedirect.request_data(keywords,0)
 
 
 @app.get("/scopus")
 async def researcher_api_call(keywords:str, apikey: str=scopus_api_key, subject:str="", minYear:str="1990"):
-    response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
-    return response
+    return scopus.request_data(keywords, apikey, subject, minYear)
 
     # Use later for json to csv frontend
     csvFilePath = scopus.load_json_scrape_results(jsonResults)

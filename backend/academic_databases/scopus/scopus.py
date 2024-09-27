@@ -4,40 +4,11 @@ import csv
 from urllib.parse import quote
 import random
 from api_tools.api_tools import scopus_api_key, parse_data_scopus
-
-#   Create QueryParameters class
-class QueryParameters:
-    def __init__(self, keywords = None, subject = None, min_year = None):
-        if keywords is None:
-            keywords = []
-        self.keywords = keywords
-        self.subject = subject
-        self.min_year = min_year
-
-#   Create SearchResults class
-class SearchResult:
-    def __init__(self, id:int, title:str = None, date:str = None, citedby:int = None, link:str = None, abstract:str = None, document_type:str = None, source:str = None,
-                 evaluation_criteria:str = None, color:str=None, relevance_score:int = None, methodology:int = None, clarity:int = None, completeness:int = None, transparency:int = None):
-        self.id=id
-        self.title = title
-        self.date = date
-        self.citedby = citedby
-        self.link = link
-        self.abstract = abstract
-        self.document_type = document_type
-        self.source = source
-        self.evaluation_criteria = evaluation_criteria
-        self.color = color
-        self.relevance_score = relevance_score #relevance
-        self.methodology = methodology
-        self.clarity = clarity
-        self.completeness = completeness
-        self.transparency = transparency
+from academic_databases.SearchResult import SearchResult
 
 
 
-#   Create Query Execute Function
-def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min_year: str="1900"):
+def request_data(keywords:str, id:int, key: str=scopus_api_key, subject: str="", min_year: str="1900") :
     encoded_keywords = quote(keywords).replace(" ", "+")
     subject = quote(subject)
     min_year= quote(min_year)
@@ -50,8 +21,6 @@ def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min
     count = "25"
     sort = "relevancy"
  
-
-    #Final Assembly
     built_query = "https://api.elsevier.com/content/search/scopus?" \
         + "apiKey=" + key \
         + "&query=" + encoded_keywords \
@@ -65,7 +34,7 @@ def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min
     articles=parse_data_scopus(response)
     #return entries to scopus endpoint response
     return_articles: List[SearchResult] = []
-    article_id = 0
+    article_id = id
     for article in articles:
         error = article.get('error')
         if error is None:
@@ -92,7 +61,7 @@ def query_scopus_api(keywords:str, key: str=scopus_api_key, subject: str="", min
                     transparency=0
                     ))
         article_id += 1
-    return return_articles
+    return return_articles, article_id
 
 
 
@@ -134,7 +103,3 @@ def load_json_scrape_results(json_data):
 
 
 
-#   QueryParameters - keywordList is user input, the rest will be static and unique to the scienceDirect parameters
-# researcherKeywordList = ["cybersecurity", "AND", "non profit", "OR", "charity"]     
-# subjectComp = "COMP"
-# minYear2015 = "2015"
