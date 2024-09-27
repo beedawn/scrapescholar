@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
@@ -213,10 +213,13 @@ describe('Home Component', () => {
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
    
-      //may fail as these are entirely dependent on the search results
-      screen.debug(); 
-      const link = await screen.findByText("https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204072897&origin=inward");
-      expect(link).toBeInTheDocument()
+
+      await waitFor(()=>{
+        screen.debug(undefined,10000000)
+        const rows = screen.getAllByTestId('row')
+        expect(within(rows[1]).queryByText(/sciencedirect\.com/i)).toBeInTheDocument()
+      }, { timeout: 5000 })
+
 
 
   })
