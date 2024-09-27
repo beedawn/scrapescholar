@@ -41,7 +41,8 @@ def check_response(response:List, id:int):
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None):
     response = []
     id = 0
-    if "Science Direct" in academic_databases:
+    print(academic_databases)
+    if "ScienceDirect" in academic_databases:
         new_id=check_response(response,id)
         article_response, id =sciencedirect.request_data(keywords, id=new_id)
         response.extend(article_response)

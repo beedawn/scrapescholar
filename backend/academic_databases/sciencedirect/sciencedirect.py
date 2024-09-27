@@ -20,16 +20,13 @@ def request_data(query: str, id:int):
                 link = links[1].get('@href')
             else:
                 link = ""        
-
-
-
             return_articles.append(SearchResult(
                     id=article_id,
                     title=article.get('dc:title'), 
                     link=link, 
                     date=article.get('prism:coverDate'), 
                     citedby=article.get('citedby-count'),
-                    source="Scopus",
+                    source="ScienceDirect",
                     color='red',
                     relevance_score=random.randint(1, 100),
                     abstract='',
@@ -40,12 +37,6 @@ def request_data(query: str, id:int):
                     completeness=0,
                     transparency=0
                     ))
-            # returnList.append({
-            #         'id':article_id,
-            #         'title':article.get('dc:title'), 
-            #         'link':link, 
-            #         'date':article.get('prism:coverDate'), 
-            #         'source': "Science Direct",
-            #         })
+  
         article_id += 1
     return return_articles, id

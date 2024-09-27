@@ -3,6 +3,7 @@ import React, { useState, Dispatch, SetStateAction, } from 'react';
 import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
+import { queryAllByAltText } from '@testing-library/react';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -130,13 +131,19 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //initialize data variable to fill up with api response
         let data: Response;
         let jsonData;
+        let queryString ='';
+        console.log(userDatabaseList)
+        for (let item of userDatabaseList){
+            queryString += `&academic_database=${item}`;
+        }
+        console.log(queryString)
         if (inputsAndLogicalOperators.length === 0)
             setInputs([emptyString])
         else {
             setInputs([...filterBlankInputs])
             const apiQuery = inputsAndLogicalOperators.join('+')
             try {
-                data = await fetch(`http://0.0.0.0:8000/scopus?keywords=${apiQuery}`)
+                data = await fetch(`http://0.0.0.0:8000/academic_data?keywords=${apiQuery}${queryString}`)
                 jsonData = await data.json()
             }
             catch (error: any) {

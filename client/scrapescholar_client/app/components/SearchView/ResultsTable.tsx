@@ -77,6 +77,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setResults(editableResults);
         //send request to backend to update value?
     }
+    console.log(results)
     return (
         <div className="overflow-x-auto">
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
