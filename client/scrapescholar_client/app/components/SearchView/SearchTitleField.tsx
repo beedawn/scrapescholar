@@ -23,7 +23,7 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
 
             }
         return (
-            <>
+            <><div data-testid="search-title">
                 {editable ?
                     (<><form onSubmit={async (e)=>{
                         e.preventDefault();
@@ -51,13 +51,14 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
                     </>)
                     :
                     (<>
-                        {searchName}
+                        <span>{searchName}</span>
                         <button style={{ display: "inline" }} onClick={handleClick }>
                             ✎
                         </button>
                     </>
                     )
                 }
+              </div>  
             </>)
     };
 

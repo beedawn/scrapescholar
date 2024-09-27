@@ -56,10 +56,10 @@ describe('SearchView AR-4 Component', () => {
 
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
-      fireEvent.click(pencilIcons[0]);
+      fireEvent.click(pencilIcons[1]);
       const rows = screen.getAllByTestId('row');
-      const clarityField = rows[0].children[10];
-      const input = clarityField.querySelector('input');
+      const methodologyField = rows[0].children[10];
+      const input = methodologyField.querySelector('input');
       expect(input).toBeInTheDocument();
     }, { timeout: 5000 });
   })
@@ -73,12 +73,12 @@ describe('SearchView AR-4 Component', () => {
 
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
-      fireEvent.click(pencilIcons[0]);
+      fireEvent.click(pencilIcons[1]);
       const closeIcons = screen.getAllByText("×");
       fireEvent.click(closeIcons[0]);
       const rows = screen.getAllByTestId('row');
-      const clarityField = rows[0].children[10];
-      expect(clarityField.textContent).toContain("0");
+      const methodologyField = rows[0].children[10];
+      expect(methodologyField.textContent).toContain("0");
     }, { timeout: 5000 });
   })
 
@@ -88,13 +88,13 @@ describe('SearchView AR-4 Component', () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-    let clarityField: Element | null = null;
+    let methodologyField: Element | null = null;
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
       fireEvent.click(pencilIcons[1]);
       const rows = screen.getAllByTestId('row');
-      clarityField = rows[0].children[10];
-      const input = clarityField.querySelector('input');
+      methodologyField = rows[0].children[10];
+      const input = methodologyField.querySelector('input');
       if (input) {
         fireEvent.change(input, { target: { value: testInput } });
         const checkIcons = screen.getAllByText("✔");
@@ -106,8 +106,8 @@ describe('SearchView AR-4 Component', () => {
 
     }, { timeout: 5000 });
     screen.debug(undefined,100000)
-    if (clarityField)
-      expect(clarityField.textContent).toContain(testInput);
+    if (methodologyField)
+      expect(methodologyField.textContent).toContain(testInput);
     else {
       fail('no input found after clicking pencil')
     }
@@ -119,8 +119,8 @@ describe('SearchView AR-4 Component', () => {
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     fireEvent.click(searchButton);
-    let clarityField: Element | null = null;
-    let clarityField2: Element | null = null;
+    let methodologyField: Element | null = null;
+    let methodologyField2: Element | null = null;
     let sortButton;
     await waitFor(() => {
       const transparencyScoreHeader = screen.getByText('Transparency');
@@ -135,10 +135,10 @@ describe('SearchView AR-4 Component', () => {
       fireEvent.click(pencilIcons[1]);
       fireEvent.click(pencilIcons[5]);
       const rows = screen.getAllByTestId('row');
-      clarityField = rows[0].children[10];
-      const input = clarityField.querySelector('input');
-      clarityField2 = rows[1].children[10];
-      const input2 = clarityField2.querySelector('input');
+      methodologyField = rows[0].children[10];
+      const input = methodologyField.querySelector('input');
+      methodologyField2 = rows[1].children[10];
+      const input2 = methodologyField2.querySelector('input');
       if (input && input2) {
         fireEvent.change(input, { target: { value: testInput + "1" } });
         fireEvent.change(input2, { target: { value: testInput + "2" } });
@@ -151,7 +151,7 @@ describe('SearchView AR-4 Component', () => {
       }
     }, { timeout: 5000 });
 
-    if (clarityField && clarityField2) {
+    if (methodologyField && methodologyField2) {
       const rows = screen.getAllByTestId('row');
       expect(rows[0].children[10].textContent).toContain("test input1");
       expect(rows[1].children[10].textContent).toContain("test input2");

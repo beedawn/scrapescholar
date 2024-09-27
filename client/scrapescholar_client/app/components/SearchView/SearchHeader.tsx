@@ -14,7 +14,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ downloadURL, searchName, se
             <div className="topContainer">
                 <div className="searchName">
                     
-                    <SearchTitleField searchName={searchName} setSearchName={setSearchName}/>search name</div>
+                    <SearchTitleField searchName={searchName} setSearchName={setSearchName}/></div>
                 <div className="downloadButton text-right">
                     <Button>
                         <a href={downloadURL}>Download</a>
