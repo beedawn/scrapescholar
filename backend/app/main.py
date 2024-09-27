@@ -37,7 +37,7 @@ def check_response(response:List, id:int):
         new_id=id
     return new_id
 
-@app.get("/api")
+@app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None):
     print(academic_databases)
     response = []
@@ -53,15 +53,4 @@ async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | 
         response.extend(article_response)
     return response
 
-@app.get("/sciencedirect")
-async def get_sciencedirect_data(keywords:str):
-    return sciencedirect.request_data(keywords,0)
 
-
-@app.get("/scopus")
-async def researcher_api_call(keywords:str, apikey: str=scopus_api_key, subject:str="", minYear:str="1990"):
-    return scopus.request_data(keywords, apikey, subject, minYear)
-
-    # Use later for json to csv frontend
-    csvFilePath = scopus.load_json_scrape_results(jsonResults)
-    return FileResponse(path=csvFilePath, media_type='text/csv', filename="search_results.csv")

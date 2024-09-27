@@ -68,38 +68,3 @@ def request_data(keywords:str, id:int, key: str=scopus_api_key, subject: str="",
 
 
 
-# csv stuff
-#   Create function to 'get' all elements needed for the front end and print results to a CSV
-def load_json_scrape_results(json_data):        
-    file_path = "search_results.csv"
-    with open(file_path, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Title","Year","Cited By","Link","Abstract","Document Type","Source","Evaluation","Methodology","Clarity","Completeness","Transparency"])
-        for entry in json_data["search-results"].get("entry", []):
-            # Find URL link before parsing the rest of the data
-            for link in entry.get("link", []):
-                if link.get("@ref") == "scopus":
-                    href_value = link.get("@href")
-            # Classify the remaining attributes
-            result = SearchResult(
-                title = entry.get("dc:title"),
-                date = str(entry.get("prism:coverDate", "Not Listed")[:4]),
-                citedby = entry.get("citedby-count"),
-                link = href_value,
-                abstract = None,       #Need to upgrade to view=COMPLETE (requires subscription?)
-                document_type = entry.get("subtypeDescription"),
-                source = "Scopus",
-                evaluation="0",
-                methodology="0",
-                clarity="0",
-                completeness="0",
-                transparency="0"
-            )
-            rowArray = [result.title, result.year, result.citedBy, result.link, str(result.abstract), result.document_type, 
-                        result.source, result.evaluation, result.methodology, result.clarity, result.completeness, result.transparency]
-            writer.writerow(rowArray)
-        file.close()
-    return file_path
-
-
-
