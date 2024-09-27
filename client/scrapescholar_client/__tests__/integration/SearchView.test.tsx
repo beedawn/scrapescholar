@@ -215,7 +215,6 @@ describe('Home Component', () => {
    
 
       await waitFor(()=>{
-        screen.debug(undefined,10000000)
         const rows = screen.getAllByTestId('row')
         expect(within(rows[1]).queryByText(/sciencedirect\.com/i)).toBeInTheDocument()
       }, { timeout: 5000 })
