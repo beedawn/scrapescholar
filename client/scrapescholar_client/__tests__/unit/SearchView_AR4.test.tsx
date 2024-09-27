@@ -113,7 +113,7 @@ describe('SearchView AR-4 Component', () => {
     }
   })
 
-  test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text', async () => {
+  test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text after being sorted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const searchButton = screen.getByText('Search');
     const inputs = screen.getAllByRole('textbox');
