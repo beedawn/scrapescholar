@@ -91,7 +91,7 @@ describe('SearchView AR-4 Component', () => {
     let clarityField: Element | null = null;
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
-      fireEvent.click(pencilIcons[0]);
+      fireEvent.click(pencilIcons[1]);
       const rows = screen.getAllByTestId('row');
       clarityField = rows[0].children[10];
       const input = clarityField.querySelector('input');
@@ -105,8 +105,9 @@ describe('SearchView AR-4 Component', () => {
       }
 
     }, { timeout: 5000 });
+    screen.debug(undefined,100000)
     if (clarityField)
-      expect(clarityField.textContent).toContain("test input");
+      expect(clarityField.textContent).toContain(testInput);
     else {
       fail('no input found after clicking pencil')
     }
@@ -131,8 +132,8 @@ describe('SearchView AR-4 Component', () => {
       fail('no sort button found')
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
-      fireEvent.click(pencilIcons[0]);
-      fireEvent.click(pencilIcons[4]);
+      fireEvent.click(pencilIcons[1]);
+      fireEvent.click(pencilIcons[5]);
       const rows = screen.getAllByTestId('row');
       clarityField = rows[0].children[10];
       const input = clarityField.querySelector('input');
