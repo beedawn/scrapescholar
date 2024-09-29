@@ -9,7 +9,6 @@ interface SearchResultsProps {
     className?: string;
     emptyString?: string;
     disableD3?: boolean;
-    inputs: string[];
     bubbleInputs: { x: number, y: number, radius: number, color: string, label: string }[];
     setResults: (item: ResultItem[]) => void;
     setSearchName:  (item: string) => void;
@@ -17,7 +16,7 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString,
-    disableD3 = false, inputs, bubbleInputs, setResults, setSearchName, searchName }) => {
+    disableD3 = false,  bubbleInputs, setResults, setSearchName, searchName }) => {
     const [selectedArticle, setSelectedArticle] = useState(-1);
   
     return (

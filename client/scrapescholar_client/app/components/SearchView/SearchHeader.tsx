@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from './../Button'; 
-import DynamicUserField from './DynamicUserField';
 import SearchTitleField from './SearchTitleField';
 
 interface SearchHeaderProps {

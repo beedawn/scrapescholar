@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Button from './../Button';
-import { ResultItem } from '../../views/SearchView';
 import apiCalls from '@/app/api/apiCalls';
 
 interface SourcesAccordianProps {
-    //probably need some kind of set state
     addToUserDatabaseList: (item:string) => void;
     removeFromUserDatabaseList: (item:string) => void;
-
 }
 
 const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseList, removeFromUserDatabaseList }) => {
     const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
-
     const[databases, setDatabases]=useState([])
       useEffect(() => {
         const fetchDatabases = async () => {
@@ -26,8 +21,6 @@ const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseLis
         fetchDatabases();  
     }, []); 
     
-      
-
     const [openIndex, setOpenIndex] = useState(null);
     const [checkboxes, setCheckboxes] = useState<Record<string,boolean>>({});
 

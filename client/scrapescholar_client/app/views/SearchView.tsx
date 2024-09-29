@@ -157,7 +157,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString}
                         results={results} emptyString={emptyString} disableD3={disableD3}
-                        inputs={inputs} bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}
+                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}
             </div>
         </div>
     );
