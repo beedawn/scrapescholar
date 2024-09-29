@@ -1,3 +1,3 @@
-const databases =["ScienceDirect","Scopus"];
+const databases =["sciencedirect","scopus"];
 
 export default databases;

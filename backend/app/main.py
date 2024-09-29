@@ -1,13 +1,14 @@
 # app/main.py
 from fastapi import FastAPI, Query
-import academic_databases.sciencedirect.sciencedirect as sciencedirect
-import academic_databases.scopus.scopus as scopus
+import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
+import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
 from role import role
 from user import user
 from auth import auth
 from typing import List, Annotated
+from pathlib import Path
 
 app = FastAPI()
 
@@ -37,19 +38,36 @@ def check_response(response:List, id:int):
         new_id=id
     return new_id
 
+
+def get_database_list(directory):
+    # Get a list of all folders in the specified directory
+    return [folder.name for folder in Path(directory).iterdir() if folder.is_dir() and folder.name != "__pycache__"]
+
+
 @app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None):
     response = []
     id = 0
-    print(academic_databases)
-    if "ScienceDirect" in academic_databases:
-        new_id=check_response(response,id)
-        article_response, id =sciencedirect.request_data(keywords, id=new_id)
-        response.extend(article_response)
-    if "Scopus" in academic_databases:
-        new_id=check_response(response,id)
-        article_response, id =scopus.request_data(keywords, id=new_id)
-        response.extend(article_response)
+    database_list = get_database_list('academic_databases/')
+
+    print(database_list)
+ 
+
+    for item in database_list:
+        if item in academic_databases:
+            print(globals()[item])
+            new_id=check_response(response,id)
+            article_response, id =globals()[item].request_data(keywords, id=new_id)
+            response.extend(article_response)
+    # if "Scopus" in academic_databases:
+    #     new_id=check_response(response,id)
+    #     article_response, id =scopus.request_data(keywords, id=new_id)
+    #     response.extend(article_response)
     return response
 
+
+@app.get("/academic_sources")
+async def multiple_apis():
+    database_list = get_database_list('academic_databases/')
+    return database_list
 

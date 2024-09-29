@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, Dispatch, SetStateAction, } from 'react';
+import React, { useState, Dispatch, SetStateAction, useEffect} from 'react';
 import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
 import { queryAllByAltText } from '@testing-library/react';
-import databases from '../databaselist';
+
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -30,6 +30,33 @@ export interface ResultItem {
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
+    // async function getDatabases() {
+    //     const url = "http://0.0.0.0:8000/academic_sources";
+    //     try {
+    //       const response = await fetch(url);
+    //       if (!response.ok) {
+    //         throw new Error(`Response status: ${response.status}`);
+    //       }
+      
+    //       const json = await response.json();
+     
+    //       return json;
+    //     } catch (error) {
+    //       console.error(error.message);
+    //     }
+    //   }
+    // const[databases, setDatabases]=useState([])
+    //   useEffect(() => {
+    //     const fetchDatabases = async () => {
+    //         const db_list = await getDatabases();
+    //         setDatabases(db_list);  
+ 
+    
+    //     };
+    //     fetchDatabases();  
+    // }, []); 
+    
+
 
     const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results
@@ -45,18 +72,14 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         label: string
     }[]>([]);
     //list of user selected databases
-    const [userDatabaseList, setUserDatabaseList] = useState<string[]>(databases);
-
-
+    const [userDatabaseList, setUserDatabaseList] = useState<string[]>([]);
 
     const addToUserDatabaseList = (item:string) => {
        setUserDatabaseList ([...userDatabaseList, item])
-      
     }
     
     const removeFromUserDatabaseList = (item:string) => {
        setUserDatabaseList(userDatabaseList.filter((array_item:any)=>{return array_item!=item}))
-        
      }
     //string of inputs joined with ' '
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
@@ -134,7 +157,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         let data: Response;
         let jsonData;
         let queryString ='';
-        for (let item of userDatabaseList){
+        for (let item of databases){
             queryString += `&academic_database=${item}`;
         }
         if (inputsAndLogicalOperators.length === 0)
@@ -165,7 +188,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
-                    setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}/>
+                    setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}
+                    />
             </div>
             <div className="flex-1 sm:mx-12 w-full">
                 {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
