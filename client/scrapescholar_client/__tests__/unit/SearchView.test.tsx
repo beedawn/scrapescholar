@@ -66,7 +66,7 @@ describe('SearchView Component', () => {
     fireEvent.click(addButton);
     //should be 2 inputs now
     expect(screen.getAllByRole('textbox')).toHaveLength(2);
-    //maybe should test there are two + buttons too?
+
   });
 
   test('updates input value correctly', () => {

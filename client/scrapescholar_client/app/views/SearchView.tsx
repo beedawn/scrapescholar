@@ -30,31 +30,31 @@ export interface ResultItem {
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
-    // async function getDatabases() {
-    //     const url = "http://0.0.0.0:8000/academic_sources";
-    //     try {
-    //       const response = await fetch(url);
-    //       if (!response.ok) {
-    //         throw new Error(`Response status: ${response.status}`);
-    //       }
+    async function getDatabases() {
+        const url = "http://0.0.0.0:8000/academic_sources";
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
       
-    //       const json = await response.json();
+          const json = await response.json();
      
-    //       return json;
-    //     } catch (error) {
-    //       console.error(error.message);
-    //     }
-    //   }
-    // const[databases, setDatabases]=useState([])
-    //   useEffect(() => {
-    //     const fetchDatabases = async () => {
-    //         const db_list = await getDatabases();
-    //         setDatabases(db_list);  
+          return json;
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+
+      useEffect(() => {
+        const fetchDatabases = async () => {
+            const db_list = await getDatabases();
+            setUserDatabaseList(db_list);  
  
     
-    //     };
-    //     fetchDatabases();  
-    // }, []); 
+        };
+        fetchDatabases();  
+    }, []); 
     
 
 
@@ -157,7 +157,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         let data: Response;
         let jsonData;
         let queryString ='';
-        for (let item of databases){
+        for (let item of userDatabaseList){
             queryString += `&academic_database=${item}`;
         }
         if (inputsAndLogicalOperators.length === 0)
