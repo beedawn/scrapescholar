@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
-
+import accordianContainsSources from '../helperFunctions/accordianContainsSources';
 import fetchMock from '../helperFunctions/apiMock';
 
 beforeEach(() => {
@@ -17,12 +17,7 @@ describe('SearchView US-11 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
 
-  const accordianContainsSources = () =>{
-    const scienceDirectChecklist = screen.getByText('ScienceDirect');
-    const scopusChecklist = screen.getByText('Scopus');
-    expect(scienceDirectChecklist).toBeInTheDocument();
-    expect(scopusChecklist).toBeInTheDocument();
-  }
+
 
   const clickAccordian = () =>{
     const sourcesAccordian = screen.getByText('Sources');
