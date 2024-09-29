@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
 import fetchMock from '../helperFunctions/apiMock';
-
+import submitSearch from '../helperFunctions/submitSearch';
 
 beforeEach(() => {
     global.fetch = fetchMock;
@@ -37,10 +37,7 @@ describe('SearchView US-11 Component', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
 
     await waitFor(() => {
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
 }, { timeout: 5000 });
     screen.debug()
     await waitFor(() => {
@@ -49,25 +46,17 @@ describe('SearchView US-11 Component', () => {
   })
 
   test('US-11 shows link in response after search press', async () => {
-
-
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
     const sourcesAccordian = screen.getByText('Sources');
     fireEvent.click(sourcesAccordian);
     await waitFor(() => {
-
         const scienceDirectChecklist = screen.getByText('ScienceDirect');
         const scopusChecklist = screen.getByText('Scopus');
         expect(scienceDirectChecklist).toBeInTheDocument();
         expect(scopusChecklist).toBeInTheDocument();
     }, {timeout:5000});
 
-
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
 
     await waitFor(() => {
       expect(screen.getByText('link a')).toBeInTheDocument()

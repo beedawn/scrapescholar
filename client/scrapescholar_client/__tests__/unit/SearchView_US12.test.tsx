@@ -1,6 +1,6 @@
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchView, { ResultItem } from '../../app/views/SearchView';
+import SearchView from '../../app/views/SearchView';
 import React from 'react';
 
 import fetchMock from '../helperFunctions/apiMock';

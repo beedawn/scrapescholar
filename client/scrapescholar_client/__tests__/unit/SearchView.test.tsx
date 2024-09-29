@@ -6,7 +6,7 @@ import Dropdown from '../../app/types/DropdownType';
 import { sortResults } from '../../app/components/SearchView/ResultsTable';
 import itemsArray from '../mockData/ItemsTestArray';
 
-
+import submitSearch from '../helperFunctions/submitSearch';
 const items: ResultItem[] = itemsArray;
 
 import fetchMock from '../helperFunctions/apiMock';
@@ -69,10 +69,7 @@ describe('SearchView Component', () => {
 
   test('shows you searched test input after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    const searchButton = screen.getByText('Search');
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       expect(screen.getByText('You searched ' + testInput)).toBeInTheDocument()
 
@@ -221,10 +218,5 @@ describe('SearchView Component', () => {
   test('returns an empty array when sorting an empty array', () => {
     expect(sortResults([], 'title', 'asc')).toEqual([]);
   });
-
-
-
-
-
 
 });

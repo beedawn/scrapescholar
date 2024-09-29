@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import SearchView, { ResultItem } from '../../app/views/SearchView';
 import React from 'react';
 import fetchMock from '../helperFunctions/apiMock';
-
+import submitSearch from '../helperFunctions/submitSearch';
 
 
 beforeEach(() => {
@@ -20,10 +20,7 @@ describe('SearchView US-15 Component', () => {
   //US-15 When user clicks on arrow next to relevance, results are sorted by relevance
   test('US-15 When user clicks on arrow next to relevance twice, results are sorted by relevance descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const relevanceScoreHeader = screen.getByText('Relevance Score');
@@ -42,10 +39,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to relevance, results are sorted by relevance ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const relevanceScoreHeader = screen.getByText('Relevance Score');
@@ -62,10 +56,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load relevance arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const relevanceScoreHeader = screen.getByText('Relevance Score');
       const sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
@@ -75,10 +66,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when user clicks arrow next to relevance, it turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const relevanceScoreHeader = screen.getByText('Relevance Score');
       const sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
@@ -90,10 +78,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to date, results are sorted by date
   test('US-15 When user clicks on arrow next to date twice, results are sorted by date descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const yearScoreHeader = screen.getByText('Year');
@@ -112,10 +97,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to date, results are sorted by date ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const yearScoreHeader = screen.getByText('Year');
@@ -132,10 +114,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load date arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const yearHeader = screen.getByText('Year');
       const sortButton = within(yearHeader.closest('th')).getByRole('button');
@@ -145,10 +124,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to date, bg color turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const yearHeader = screen.getByText('Year');
       const sortButton = within(yearHeader.closest('th')).getByRole('button')
@@ -160,10 +136,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to database, results are sorted by database
   test('US-15 When user clicks on arrow next to source twice, results are sorted by source descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const sourceScoreHeader = screen.getByText('Source');
@@ -182,10 +155,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to source, results are sorted by source ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const sourceScoreHeader = screen.getByText('Source');
@@ -202,10 +172,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load source arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const sourceHeader = screen.getByText('Source');
       const sortButton = within(sourceHeader.closest('th')).getByRole('button');
@@ -215,10 +182,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to source, bg color turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const sourceHeader = screen.getByText('Source');
       const sortButton = within(sourceHeader.closest('th')).getByRole('button')
@@ -229,10 +193,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to source,bg color turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const sourceHeader = screen.getByText('Source');
       const sortButton = within(sourceHeader.closest('th')).getByRole('button')
@@ -244,10 +205,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to title, results are sorted by title
   test('US-15 When user clicks on arrow next to title twice, results are sorted by title descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const titleScoreHeader = screen.getByText('Title');
@@ -266,10 +224,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to title, results are sorted by title ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const titleScoreHeader = screen.getByText('Title');
@@ -286,10 +241,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load title arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const titleHeader = screen.getByText('Title');
       const sortButton = within(titleHeader.closest('th')).getByRole('button');
@@ -299,10 +251,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to title,bg color turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const titleHeader = screen.getByText('Title');
       const sortButton = within(titleHeader.closest('th')).getByRole('button')
@@ -314,10 +263,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to color, results are sorted by color
   test('US-15 When user clicks on arrow next to Assessment twice, results are sorted by Assessment descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const colorScoreHeader = screen.getByText('Assessment');
@@ -336,10 +282,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to color, results are sorted by color ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const colorScoreHeader = screen.getByText('Assessment');
@@ -356,10 +299,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load color arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const colorHeader = screen.getByText('Assessment');
       const sortButton = within(colorHeader.closest('th')).getByRole('button');
@@ -369,10 +309,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to color,bg color turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const colorHeader = screen.getByText('Assessment');
       const sortButton = within(colorHeader.closest('th')).getByRole('button')
@@ -384,10 +321,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to cited by, results are sorted by cited by
   test('US-15 When user clicks on arrow next to citedby twice, results are sorted by citedby descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const citedbyScoreHeader = screen.getByText('Cited By');
@@ -406,10 +340,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to citedby, results are sorted by citedby ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const citedbyScoreHeader = screen.getByText('Cited By');
@@ -426,10 +357,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load citedby arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const citedbyHeader = screen.getByText('Cited By');
       const sortButton = within(citedbyHeader.closest('th')).getByRole('button');
@@ -439,10 +367,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to citedby,bg citedby turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const citedbyHeader = screen.getByText('Cited By');
       const sortButton = within(citedbyHeader.closest('th')).getByRole('button')
@@ -454,10 +379,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to URL, results are sorted by URL
   test('US-15 When user clicks on arrow next to URL twice, results are sorted by URL descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const urlScoreHeader = screen.getByText('URL');
@@ -476,10 +398,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to url, results are sorted by url ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const urlScoreHeader = screen.getByText('URL');
@@ -496,10 +415,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load url arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const urlHeader = screen.getByText('URL');
       const sortButton = within(urlHeader.closest('th')).getByRole('button');
@@ -509,10 +425,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to url,bg url turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const urlHeader = screen.getByText('URL');
       const sortButton = within(urlHeader.closest('th')).getByRole('button')
@@ -524,10 +437,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to Abstract, results are sorted by Abstract
   test('US-15 When user clicks on arrow next to abstract twice, results are sorted by abstract descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const abstractScoreHeader = screen.getByText('Abstract');
@@ -546,10 +456,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to abstract, results are sorted by abstract ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const abstractScoreHeader = screen.getByText('Abstract');
@@ -566,10 +473,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load abstract arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const abstractHeader = screen.getByText('Abstract');
       const sortButton = within(abstractHeader.closest('th')).getByRole('button');
@@ -579,10 +483,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to abstract,bg abstract turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const abstractHeader = screen.getByText('Abstract');
       const sortButton = within(abstractHeader.closest('th')).getByRole('button')
@@ -594,10 +495,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to doctype, results are sorted by doctype
   test('US-15 When user clicks on arrow next to doctype twice, results are sorted by doctype descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const doctypeScoreHeader = screen.getByText('Document Type');
@@ -616,10 +514,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to doctype, results are sorted by doctype ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const doctypeScoreHeader = screen.getByText('Document Type');
@@ -636,10 +531,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load doctype arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const doctypeHeader = screen.getByText('Document Type');
       const sortButton = within(doctypeHeader.closest('th')).getByRole('button');
@@ -649,10 +541,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to doctype,bg doctype turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const doctypeHeader = screen.getByText('Document Type');
       const sortButton = within(doctypeHeader.closest('th')).getByRole('button')
@@ -664,10 +553,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to evaluationCritera, results are sorted by evaluationCritera
   test('US-15 When user clicks on arrow next to evaluationCritera twice, results are sorted by evaluationCritera descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const evaluationCriteraScoreHeader = screen.getByText('Evaluation Criteria');
@@ -686,10 +572,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to evaluationCritera, results are sorted by evaluationCritera ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const evaluationCriteraScoreHeader = screen.getByText('Evaluation Criteria');
@@ -706,10 +589,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load evaluationCritera arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const evaluationCriteraHeader = screen.getByText('Evaluation Criteria');
       const sortButton = within(evaluationCriteraHeader.closest('th')).getByRole('button');
@@ -719,10 +599,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to evaluationCritera,bg evaluationCritera turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const evaluationCriteraHeader = screen.getByText('Evaluation Criteria');
       const sortButton = within(evaluationCriteraHeader.closest('th')).getByRole('button')
@@ -734,10 +611,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to methodology, results are sorted by methodology
   test('US-15 When user clicks on arrow next to methodology twice, results are sorted by methodology descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const methodologyScoreHeader = screen.getByText('Methodology');
@@ -756,10 +630,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to methodology, results are sorted by methodology ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const methodologyScoreHeader = screen.getByText('Methodology');
@@ -776,10 +647,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load methodology arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const methodologyHeader = screen.getByText('Methodology');
       const sortButton = within(methodologyHeader.closest('th')).getByRole('button');
@@ -789,10 +657,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to methodology,bg methodology turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const methodologyHeader = screen.getByText('Methodology');
       const sortButton = within(methodologyHeader.closest('th')).getByRole('button')
@@ -804,10 +669,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to clarity, results are sorted by clarity
   test('US-15 When user clicks on arrow next to clarity twice, results are sorted by clarity descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const clarityScoreHeader = screen.getByText('Clarity');
@@ -826,10 +688,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to clarity, results are sorted by clarity ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const clarityScoreHeader = screen.getByText('Clarity');
@@ -846,10 +705,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load clarity arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const clarityHeader = screen.getByText('Clarity');
       const sortButton = within(clarityHeader.closest('th')).getByRole('button');
@@ -859,10 +715,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to clarity,bg clarity turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const clarityHeader = screen.getByText('Clarity');
       const sortButton = within(clarityHeader.closest('th')).getByRole('button')
@@ -874,10 +727,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to completeness, results are sorted by completeness
   test('US-15 When user clicks on arrow next to completeness twice, results are sorted by completeness descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const completenessScoreHeader = screen.getByText('Completeness');
@@ -896,10 +746,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to completeness, results are sorted by completeness ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const completenessScoreHeader = screen.getByText('Completeness');
@@ -916,10 +763,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load completeness arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const completenessHeader = screen.getByText('Completeness');
       const sortButton = within(completenessHeader.closest('th')).getByRole('button');
@@ -929,10 +773,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to completeness,bg completeness turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const completenessHeader = screen.getByText('Completeness');
       const sortButton = within(completenessHeader.closest('th')).getByRole('button')
@@ -944,10 +785,7 @@ describe('SearchView US-15 Component', () => {
   // When user clicks on arrow next to transparency, results are sorted by transparency
   test('US-15 When user clicks on arrow next to transparency twice, results are sorted by transparency descending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const transparencyScoreHeader = screen.getByText('Transparency');
@@ -966,10 +804,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to transparency, results are sorted by transparency ascending', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let sortButton;
     await waitFor(() => {
       const transparencyScoreHeader = screen.getByText('Transparency');
@@ -986,10 +821,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 when results load transparency arrow is light gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const transparencyHeader = screen.getByText('Transparency');
       const sortButton = within(transparencyHeader.closest('th')).getByRole('button');
@@ -999,10 +831,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to transparency,bg transparency turns dark gray', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const transparencyHeader = screen.getByText('Transparency');
       const sortButton = within(transparencyHeader.closest('th')).getByRole('button')
@@ -1013,10 +842,7 @@ describe('SearchView US-15 Component', () => {
 
   test('US-15 When user clicks on arrow next to title,bg color turns dark gray, then clicks on color arrow, and title should be light grey', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const titleHeader = screen.getByText('Title');
       const sortButton = within(titleHeader.closest('th')).getByRole('button')
