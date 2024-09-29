@@ -15,7 +15,6 @@ interface NavBarProps {
     dropdown: Dropdown[];
     addToUserDatabaseList: (item: string) => void;
     removeFromUserDatabaseList: (item: string) => void;
-
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
@@ -32,11 +31,11 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     <Button onClick={handleLogout} className="">Logout</Button>
                 </div>
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
-                <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList} 
-                removeFromUserDatabaseList={removeFromUserDatabaseList} />
-                <DropdownSearchBox value={"hi"} 
-                onDropdownChange={() => { }} valueArray={["Search 1", "Search 2", "Search 3"]} 
-                className="w-full" />
+                <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
+                    removeFromUserDatabaseList={removeFromUserDatabaseList} />
+                <DropdownSearchBox value={"hi"}
+                    onDropdownChange={() => { }} valueArray={["Search 1", "Search 2", "Search 3"]}
+                    className="w-full" />
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">
                         +

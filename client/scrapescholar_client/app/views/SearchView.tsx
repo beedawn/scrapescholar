@@ -4,6 +4,8 @@ import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
 import { queryAllByAltText } from '@testing-library/react';
+import apiCalls from '../api/apiCalls'; 
+import { filter } from 'd3';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -30,37 +32,18 @@ export interface ResultItem {
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
-    async function getDatabases() {
-        const url = "http://0.0.0.0:8000/academic_sources";
-        try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-          }
-      
-          const json = await response.json();
-     
-          return json;
-        } catch (error:unknown) {
-            if (error instanceof Error) {
-                console.error(error.message); 
-            } else {
-                console.error('An unknown error occurred'); 
-            }
-        }
-      }
+
+    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
 
       useEffect(() => {
         const fetchDatabases = async () => {
-            const db_list = await getDatabases();
+            const db_list = await getAPIDatabases();
             setUserDatabaseList(db_list);  
  
     
         };
         fetchDatabases();  
     }, []); 
-    
-
 
     const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results
@@ -81,7 +64,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const addToUserDatabaseList = (item:string) => {
        setUserDatabaseList ([...userDatabaseList, item])
     }
-    
     const removeFromUserDatabaseList = (item:string) => {
        setUserDatabaseList(userDatabaseList.filter((array_item:any)=>{return array_item!=item}))
      }
@@ -158,33 +140,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //update state with our new array
         setBubbleInputs(newBubbleInputs);
         //initialize data variable to fill up with api response
-        let data: Response;
-        let jsonData;
-        let queryString ='';
-        for (let item of userDatabaseList){
-            queryString += `&academic_database=${item}`;
-        }
-        if (inputsAndLogicalOperators.length === 0)
-            setInputs([emptyString])
-        else {
-            setInputs([...filterBlankInputs])
-            const apiQuery = inputsAndLogicalOperators.join('+')
-            try {
-                data = await fetch(`http://0.0.0.0:8000/academic_data?keywords=${apiQuery}${queryString}`)
-                jsonData = await data.json()
-            }
-            catch (error: any) {
-                // jsonData = [{ "title": error.message, link: '' }]
-                setError(error);
-            }
-        }
-        if (jsonData !== undefined && jsonData.length > 0) {
-            setResults(jsonData)
-        }
-        else {
-            //set better error message
-            setResults([]);
-        }
+ 
+        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs);
         setLoading(false);
     }
     return (
@@ -200,7 +157,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString}
                         results={results} emptyString={emptyString} disableD3={disableD3}
-                        inputs={inputs} bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}
+                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}
             </div>
         </div>
     );

@@ -1,37 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import Button from './../Button';
-import { ResultItem } from '../../views/SearchView';
-
+import apiCalls from '@/app/api/apiCalls';
 
 interface SourcesAccordianProps {
-    //probably need some kind of set state
     addToUserDatabaseList: (item:string) => void;
     removeFromUserDatabaseList: (item:string) => void;
-
 }
 
 const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseList, removeFromUserDatabaseList }) => {
-
-  
-    async function getDatabases() {
-        const url = "http://0.0.0.0:8000/academic_sources";
-        try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-          }
-      
-          const json = await response.json();
-          return json;
-        } catch (error) {
-            
-          return [];
-        }
-      }
+    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
     const[databases, setDatabases]=useState([])
       useEffect(() => {
         const fetchDatabases = async () => {
-            const db_list = await getDatabases();
+            const db_list = await getAPIDatabases();
             setDatabases(db_list);  
             // Initialize checkboxes with default checked state
             const initialCheckboxes = db_list.reduce(
@@ -41,8 +21,6 @@ const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseLis
         fetchDatabases();  
     }, []); 
     
-      
-
     const [openIndex, setOpenIndex] = useState(null);
     const [checkboxes, setCheckboxes] = useState<Record<string,boolean>>({});
 

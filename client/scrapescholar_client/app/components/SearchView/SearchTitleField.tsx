@@ -1,25 +1,17 @@
-import React, { ChangeEvent, useState } from 'react';
-import { ResultItem } from '../../views/SearchView';
-import { EditableCell } from './ResultsTable';
-type EditableField = 'relevance' | 'methodology' | 'clarity' | 'completeness' | 'transparency';
+import React, { useState } from 'react';
 
 interface SearchTitleFieldProps{
-
     searchName: string;
     setSearchName: (item: string) => void;
-    
 }
-
 
 const SearchTitleField: React.FC<SearchTitleFieldProps> =
     ({  searchName, setSearchName
          }) => {
             const [editableSearchName,setEditableSearchName]=useState(searchName);
-
             const [editable, setEditable] = useState(false);
-            const handleClick= ()  =>{
+            const handleClick= () =>{
                 setEditable(!editable)
-
             }
         return (
             <><div data-testid="search-title">
@@ -36,8 +28,7 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
                             onClick={()=>{
                                 handleClick();
                                 setEditableSearchName(searchName)
-                            }
-                            }
+                            }}
                         >
                             ×
                         </button>
