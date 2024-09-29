@@ -9,20 +9,22 @@ interface SearchResultsProps {
     className?: string;
     emptyString?: string;
     disableD3?: boolean;
-    inputs: string[];
     bubbleInputs: { x: number, y: number, radius: number, color: string, label: string }[];
     setResults: (item: ResultItem[]) => void;
+    setSearchName:  (item: string) => void;
+    searchName:string;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString,
-    disableD3 = false, inputs, bubbleInputs, setResults }) => {
+    disableD3 = false,  bubbleInputs, setResults, setSearchName, searchName }) => {
     const [selectedArticle, setSelectedArticle] = useState(-1);
+  
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
                 {results.length !== 0 && displayInputs[0] !== emptyString ? (
                     <div>
-                        <SearchHeader downloadURL="/csv" />
+                        <SearchHeader downloadURL="/csv" searchName={searchName} setSearchName={setSearchName} />
                         <p>
                             You searched {displayInputs}
                         </p>

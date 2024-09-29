@@ -3,7 +3,7 @@ import React, { useState, Dispatch, SetStateAction, } from 'react';
 import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
-
+import apiCalls from '../api/apiCalls';
 interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
    
@@ -13,36 +13,10 @@ const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
 const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 
 const Login: React.FC<LoginProps> = ({ setLoggedIn}) => {
+    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
 
 
-    const loginPost = async(username:string, password:string) =>{
-    const url = 'http://0.0.0.0:8000/auth/login';
-    const formData = new URLSearchParams();
-    formData.append('username', username);
-    formData.append('password', password);
-try{
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: formData.toString()
-    });
-    if(!response.ok){
-        const errorData = (response).json;
-        throw new Error ('Network error:' +JSON.stringify(errorData))
-    }
-    const data = await response.json();
-    return data.access_token;
-}
-catch(error){
-    console.error('Error:', error);
-    return null;
-}
-   
 
-    }
     const [token, setToken]=useState();
 
     const [username, setUserName]=useState<string>('');
@@ -52,11 +26,13 @@ catch(error){
 
         e.preventDefault();
         setError('');
-        const tokenResponse=await loginPost(username, password);
+        const tokenResponse=await postAPILogin(username, password);
         
-        if (tokenResponse || (username===admin_user&&password===admin_pass) ){
+        if (tokenResponse && typeof tokenResponse === 'string'|| (username===admin_user&&password===admin_pass) ){
             setToken(tokenResponse);
             setLoggedIn(true)
+        } else if (tokenResponse.error){
+            setError(tokenResponse.error);
         }
       
         setError('Invalid Login');

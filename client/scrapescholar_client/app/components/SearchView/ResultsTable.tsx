@@ -3,7 +3,6 @@ import { ResultItem } from '../../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
 
-
 export interface EditableCell {
     relevance: boolean;
     methodology: boolean;
@@ -21,11 +20,9 @@ interface ResultsTableProps {
 }
 
 export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDirection: string): ResultItem[] => {
-
-    return array.sort((a,b)=>{
+    return array.sort((a, b) => {
         const aValue = a[field];
         const bValue = b[field];
-
         if (typeof aValue === "number" && typeof bValue === "number") {
             return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
         }
@@ -38,11 +35,11 @@ export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDi
         }
         if (typeof bValue === "number") {
             // Strings come after numbers
-            return sortDirection === "asc" ? 1 : -1; 
+            return sortDirection === "asc" ? 1 : -1;
         }
-        return 0; 
-})
- };
+        return 0;
+    })
+};
 
 const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
     const [editableResults, setEditableResults] = useState<ResultItem[]>([...results]);
@@ -58,7 +55,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
     }
     const [pressedSort, setPressedSort] = useState<keyof ResultItem | null>(null);
     const [editableCells, setEditableCells] = useState<EditableCell[]>(results.map((result) => ({
-        id:result.id,
+        id: result.id,
         relevance: false, methodology: false, clarity: false, completeness: false, transparency: false
     })));
 
@@ -68,7 +65,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setEditableCells(updatedCells)
     }
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
-        const updatedResults = editableResults.map(result => 
+        const updatedResults = editableResults.map(result =>
             result.id === id ? { ...result, [field]: value } : result
         );
         setEditableResults(updatedResults);
@@ -77,6 +74,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setResults(editableResults);
         //send request to backend to update value?
     }
+
     return (
         <div className="overflow-x-auto">
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
@@ -165,7 +163,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                 <DynamicUserField editableResults={editableResults}
                                     field="methodology" handleFieldConfirm={handleFieldConfirm}
                                     handleCellClick={handleCellClick} result={result} editableCells={editableCells}
-                                    handleFieldChange={handleFieldChange} index={index}/>
+                                    handleFieldChange={handleFieldChange} index={index} />
                             </td>
                             <td className="border border-gray-300" >
                                 <DynamicUserField editableResults={editableResults}
@@ -184,7 +182,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                                     field="transparency" handleFieldConfirm={handleFieldConfirm}
                                     handleCellClick={handleCellClick} result={result}
                                     editableCells={editableCells}
-                                    handleFieldChange={handleFieldChange} index={index}/>
+                                    handleFieldChange={handleFieldChange} index={index} />
                             </td>
                         </tr>
 
