@@ -1,60 +1,12 @@
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchView, { ResultItem } from '../../app/views/SearchView';
+import SearchView from '../../app/views/SearchView';
 import React from 'react';
-
-
-import itemsJson from '../ItemsTestJson';
-
-import sourcesJson from '../DatabaseSourcesJson';
+import fetchMock from '../helperFunctions/apiMock';
 
 
 beforeEach(() => {
-
-
-    global.fetch = jest.fn((url) => {
-        const academic_database_url = /^http:\/\/0.0.0.0:8000\/academic_data\?keywords\=/
-  
-        const academic_sources_url =/^http:\/\/0.0.0.0:8000\/academic_sources/
-        if (academic_database_url.test(url)) {
-          return Promise.resolve({
-                ok: true,
-                status: 200,
-                json: () => Promise.resolve(itemsJson),
-                headers: new Headers(),
-                redirected: false,
-                statusText: 'OK',
-          
-              })
-        
-    
-    }
-        if (academic_sources_url.test(url)) {
-          return Promise.resolve({
-            ok: true,
-            status: 200,
-            json: () => Promise.resolve(sourcesJson),
-            headers: new Headers(),
-            redirected: false,
-            statusText: 'OK',
-            
-          });
-        }
-        return Promise.reject(new Error('Invalid URL'));
-    }) as jest.Mock;
-//   // Reset mocks before each test
-//   global.fetch = jest.fn(() =>
-//     Promise.resolve({
-//       ok: true,
-//       status: 200,
-//       json: () => Promise.resolve(itemsJson),
-//       headers: new Headers(),
-//       redirected: false,
-//       statusText: 'OK',
-
-//     })
-//   ) as jest.Mock;
-  
+    global.fetch = fetchMock;
 });
 
 afterEach(() => {
@@ -68,6 +20,7 @@ describe('SearchView US-11 Component', () => {
 
   //US-11
   test('US-11 shows No results found after search press', async () => {
+    //sets empty response from api
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
