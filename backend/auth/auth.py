@@ -12,6 +12,7 @@ import os
 load_dotenv()
 
 SECRET = os.getenv("SECRET_KEY")
+DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE"
 
 if not SECRET:
     raise ValueError("SECRET_KEY environment variable is not set")
@@ -46,7 +47,8 @@ def verify_hash(plain_text, hashed_text: str):
 def load_user(user_id: str, db: Session = None):
     if db is None:
         db = next(get_db())
-    print(f"Loading user by user_id: {user_id}")
+    if DEBUG_SCRAPESCHOLAR:
+        print(f"Loading user by user_id: {user_id}")
     return db.query(User).filter(User.user_id == int(user_id)).first()
 
 # Login route
@@ -63,7 +65,8 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         elif verify_hash(data.username, candidate.email):
             user = candidate
 
-    print(f"User found: ID={user.user_id}, Username={user.username}, Email={user.email}")
+    if DEBUG_SCRAPESCHOLAR:
+        print(f"User found: ID={user.user_id}, Username={user.username}, Email={user.email}")
 
     if not user or not verify_hash(data.password, user.password):
         raise HTTPException(
@@ -72,5 +75,6 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         )
 
     access_token = login_manager.create_access_token(data={"sub": str(user.user_id)})
-    print(f"Access Token Generated: {access_token}")
+    if DEBUG_SCRAPESCHOLAR:
+        print(f"Access Token Generated: {access_token}")
     return {"access_token": access_token, "token_type": "bearer"}
