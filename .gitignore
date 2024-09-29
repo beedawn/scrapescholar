@@ -1,4 +1,5 @@
 *.pyc
 # Ignore .env files
 .env
-venv
+.venv
+.localTestScripts
