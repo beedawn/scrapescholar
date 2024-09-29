@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
 import fetchMock from '../helperFunctions/apiMock';
-
+import submitSearch from '../helperFunctions/submitSearch';
 
 
 beforeEach(() => {
@@ -18,13 +18,11 @@ describe('SearchView AR-4 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
 
+
   //AR-4
   test('AR-4 pencil is next to value in methodology', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     await waitFor(() => {
       const rows = screen.getAllByTestId('row')
       expect(rows[0].children[10].textContent).toContain("✎");
@@ -34,10 +32,7 @@ describe('SearchView AR-4 Component', () => {
 
   test('AR-4 When user clicks on pencil next to value, text field turns into input box', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
 
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
@@ -51,10 +46,7 @@ describe('SearchView AR-4 Component', () => {
 
   test('AR-4 When user clicks on pencil next to value, text field turns into input box, then x button is pressed and reverts back to plain text', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
 
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
@@ -69,10 +61,7 @@ describe('SearchView AR-4 Component', () => {
 
   test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let methodologyField: Element | null = null;
     await waitFor(() => {
       const pencilIcons = screen.getAllByText("✎");
@@ -90,7 +79,7 @@ describe('SearchView AR-4 Component', () => {
       }
 
     }, { timeout: 5000 });
-    screen.debug(undefined,100000)
+
     if (methodologyField)
       expect(methodologyField.textContent).toContain(testInput);
     else {
@@ -100,10 +89,7 @@ describe('SearchView AR-4 Component', () => {
 
   test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text after being sorted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
+    submitSearch(testInput);
     let methodologyField: Element | null = null;
     let methodologyField2: Element | null = null;
     let sortButton;

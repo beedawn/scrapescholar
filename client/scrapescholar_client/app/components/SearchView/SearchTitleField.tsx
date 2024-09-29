@@ -18,7 +18,6 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
 
             const [editable, setEditable] = useState(false);
             const handleClick= ()  =>{
-                console.log(editable)
                 setEditable(!editable)
 
             }

@@ -22,11 +22,9 @@ const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseLis
           }
       
           const json = await response.json();
-          console.log(json);
           return json;
         } catch (error) {
             
-          console.log("error");
           return [];
         }
       }
@@ -37,9 +35,8 @@ const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseLis
             setDatabases(db_list);  
             // Initialize checkboxes with default checked state
             const initialCheckboxes = db_list.reduce(
-                (accumulator, db_source) => ({ ...accumulator, [db_source]: true }), {});
+                (accumulator:any[], db_source:any) => ({ ...accumulator, [db_source]: true }), {});
             setCheckboxes(initialCheckboxes);  
-            console.log(db_list)
         };
         fetchDatabases();  
     }, []); 
@@ -47,7 +44,7 @@ const SourcesAccordian: React.FC<SourcesAccordianProps> = ({addToUserDatabaseLis
       
 
     const [openIndex, setOpenIndex] = useState(null);
-    const [checkboxes, setCheckboxes] = useState<Record<string,boolean>>([]);
+    const [checkboxes, setCheckboxes] = useState<Record<string,boolean>>({});
 
     const toggleAccordion = (index: any) => {
         setOpenIndex(openIndex === index ? null : index);

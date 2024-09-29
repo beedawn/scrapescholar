@@ -41,8 +41,12 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
           const json = await response.json();
      
           return json;
-        } catch (error) {
-          console.error(error.message);
+        } catch (error:unknown) {
+            if (error instanceof Error) {
+                console.error(error.message); 
+            } else {
+                console.error('An unknown error occurred'); 
+            }
         }
       }
 

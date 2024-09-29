@@ -39,7 +39,7 @@ describe('SearchView US-11 Component', () => {
     await waitFor(() => {
     submitSearch(testInput);
 }, { timeout: 5000 });
-    screen.debug()
+
     await waitFor(() => {
       expect(screen.getByText('No Results Found')).toBeInTheDocument()
     }, { timeout: 5000 });
@@ -62,7 +62,7 @@ describe('SearchView US-11 Component', () => {
       expect(screen.getByText('link a')).toBeInTheDocument()
       expect(screen.getByText('link x')).toBeInTheDocument()
     }, { timeout: 5000 });
-    screen.debug();
+
   })
 
 });
