@@ -1,10 +1,14 @@
 # app/main.py
-from fastapi import FastAPI
-import sciencedirect.sciencedirect as sciencedirect
-import scopus.scopus as scopus
+from fastapi import FastAPI, Query
+import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
+import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import user, role, auth
+from role import role
+from user import user
+from auth import auth
+from typing import List, Annotated
+from pathlib import Path
 
 app = FastAPI()
 
@@ -27,16 +31,43 @@ app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
 
-@app.get("/sciencedirect")
-async def get_sciencedirect_data(query: str):
-    return sciencedirect.request_api(query)
+def check_response(response:List, id:int):
+    if len(response) > 0 and response[-1].id is not None:
+        new_id=response[-1].id+1
+    else:
+        new_id=id
+    return new_id
 
 
-@app.get("/scopus")
-async def researcher_api_call(keywords:str, apikey: str=scopus_api_key, subject:str="", minYear:str="1990"):
-    response = scopus.query_scopus_api(keywords, apikey, subject, minYear)
+def get_database_list(directory):
+    # Get a list of all folders in the specified directory
+    return [folder.name for folder in Path(directory).iterdir() if folder.is_dir() and folder.name != "__pycache__"]
+
+
+@app.get("/academic_data")
+async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None):
+    response = []
+    id = 0
+    database_list = get_database_list('academic_databases/')
+
+    print(database_list)
+ 
+
+    for item in database_list:
+        if item in academic_databases:
+            print(globals()[item])
+            new_id=check_response(response,id)
+            article_response, id =globals()[item].request_data(keywords, id=new_id)
+            response.extend(article_response)
+    # if "Scopus" in academic_databases:
+    #     new_id=check_response(response,id)
+    #     article_response, id =scopus.request_data(keywords, id=new_id)
+    #     response.extend(article_response)
     return response
 
-    # Use later for json to csv frontend
-    csvFilePath = scopus.load_json_scrape_results(jsonResults)
-    return FileResponse(path=csvFilePath, media_type='text/csv', filename="search_results.csv")
+
+@app.get("/academic_sources")
+async def multiple_apis():
+    database_list = get_database_list('academic_databases/')
+    return database_list
+

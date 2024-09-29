@@ -8,9 +8,9 @@ from passlib.context import CryptContext
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Helper function to hash passwords
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+# Helper function to hash fields
+def hash(text: str) -> str:
+    return pwd_context.hash(text)
 
 # Helper function to verify passwords
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -33,12 +33,14 @@ def get_user_by_email(db: Session, email: str):
 
 def create_user(db: Session, user: UserCreate):
     # Hash the user's password before storing it
-    hashed_password = hash_password(user.password)
+    hashed_password = hash(user.password)
+    hashed_username = hash(user.username)
+    hashed_email = hash(user.email)
     
     # Use the role_id from the UserCreate schema, which defaults to 2 if not provided
     db_user = User(
-        username=user.username,
-        email=user.email,
+        username=hashed_username,
+        email=hashed_email,
         password=hashed_password,
         role_id=user.role_id  # Use the provided or default role_id
     )

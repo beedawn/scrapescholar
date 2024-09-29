@@ -1,14 +1,15 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
 import Dropdown from '../../app/types/DropdownType';
-
+import submitSearch from '../helperFunctions/submitSearch';
+import accordianContainsSources from '../helperFunctions/accordianContainsSources';
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 afterEach(async () => {
   // Sleep for 1 second after each test
-  await sleep(1000);
+  // await sleep(1000);
 });
 
 describe('Home Component', () => {
@@ -33,8 +34,11 @@ describe('Home Component', () => {
     expect(screen.getAllByRole('textbox')).toHaveLength(1);
   });
 
-  test('check - button loads', () => {
+  test('check - button loads', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     fireEvent.click(addButton)
     //finds - button
@@ -42,8 +46,11 @@ describe('Home Component', () => {
     expect(deleteButton).toBeInTheDocument();
   });
 
-  test('adds new input field on "+" button click', () => {
+  test('adds new input field on "+" button click', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     //clicks + button
     fireEvent.click(addButton);
@@ -52,8 +59,11 @@ describe('Home Component', () => {
     //maybe should test there are two + buttons too?
   });
 
-  test('updates input value correctly', () => {
+  test('updates input value correctly', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     expect(inputs[0]).toHaveValue(testInput);
@@ -62,6 +72,9 @@ describe('Home Component', () => {
 
   test('US-11 shows No results found after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const searchButton = screen.getByText('Search');
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
@@ -80,6 +93,9 @@ describe('Home Component', () => {
 
   test('shows you searched test input after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const inputs = screen.getAllByRole('textbox');
     fireEvent.change(inputs[0], { target: { value: testInput } });
     const searchButton = screen.getByText('Search');
@@ -90,8 +106,11 @@ describe('Home Component', () => {
     }, {timeout: 5000});
   })
 
-  test('removes input when delete button clicked', () => {
+  test('removes input when delete button clicked', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
     fireEvent.click(addButton);
@@ -109,8 +128,11 @@ describe('Home Component', () => {
     expect(screen.getAllByRole('textbox')[1]).toHaveValue(testInput + ' 3')
   });
 
-  test('deletes empty inputs', () => {
+  test('deletes empty inputs', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     let i = 0;
     while (i < 6) {
@@ -132,6 +154,9 @@ describe('Home Component', () => {
 
   test('blank search prompts to enter a keyword search', async () => {
    render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+   await waitFor(()=>{
+    accordianContainsSources();
+  }, {timeout:5000});
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     await waitFor(()=>{
@@ -139,8 +164,11 @@ describe('Home Component', () => {
     });
   });
 
-  test('2 inputs with text in first field displays and/or dropdown', () => {
+  test('2 inputs with text in first field displays and/or dropdown', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
     const inputs = screen.getAllByRole('textbox');
@@ -152,6 +180,9 @@ describe('Home Component', () => {
 
   test('and shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
     const inputs = screen.getAllByRole('textbox');
@@ -170,6 +201,9 @@ describe('Home Component', () => {
 
   test('or shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
     const inputs = screen.getAllByRole('textbox');
@@ -190,6 +224,9 @@ describe('Home Component', () => {
 
   test('not shows in results after search submitted', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
     const addButton = screen.getByText('+');
     fireEvent.click(addButton);
     const inputs = screen.getAllByRole('textbox');
@@ -208,14 +245,17 @@ describe('Home Component', () => {
 
   test('US-11 shows link in response after search press', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true}/>);
-    const searchButton = screen.getByText('Search');
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], { target: { value: testInput } });
-    fireEvent.click(searchButton);
-    await waitFor(() => {
-      //may fail as these are entirely dependent on the search results
-      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204072897&origin=inward')).toBeInTheDocument()
-      expect(screen.getByText('https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204065798&origin=inward')).toBeInTheDocument()
-    }, {timeout: 5000});
+
+    await waitFor(()=>{
+      accordianContainsSources();
+    }, {timeout:5000});
+    submitSearch(testInput);
+   
+
+      await waitFor(()=>{
+        const rows = screen.getAllByTestId('row')
+        expect(within(rows[1]).queryByText(/scopus\.com/i)).toBeInTheDocument()
+      }, { timeout: 5000 })
+
   })
 });

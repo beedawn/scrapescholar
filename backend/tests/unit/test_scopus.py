@@ -3,13 +3,13 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.main import app
-from scopus.scopus import scopus_api_key
+from api_tools.api_tools import scopus_api_key
 
 client = TestClient(app)
 
 
 def test_scopus_response_has_title_and_link():
-    response = client.get("/scopus?keywords=test")
+    response = client.get("/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
@@ -23,7 +23,7 @@ def test_scopus_response_has_title_and_link():
 
 
 def test_scopus_empty_response_is_empty():
-    response = client.get("/scopus?keywords=abcdefg+AND+hijklmnop+AND+12345")
+    response = client.get("/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)

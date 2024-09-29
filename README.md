@@ -64,3 +64,14 @@ next js with coverage
 ```bash
 npm run test:unit -- --coverage
 ```
+
+
+To create test database please do the following 
+
+CREATE DATABASE scrapescholartestdb;
+
+CREATE USER student WITH PASSWORD 'student';
+
+GRANT ALL PRIVILEGES ON DATABASE scrapescholartestdb TO student;
+
+python -m app.db_init.py

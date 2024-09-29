@@ -9,10 +9,10 @@ class User(Base):
     __tablename__ = "User"
 
     user_id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(50), unique=True, nullable=False)
+    username = Column(String(255), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
     role_id = Column(Integer, ForeignKey("Role.role_id"))
-    email = Column(String(100), unique=True)
+    email = Column(String(255), unique=True)
     registration_date = Column(DateTime, default=datetime.utcnow)
 
     role = relationship("Role", back_populates="users")

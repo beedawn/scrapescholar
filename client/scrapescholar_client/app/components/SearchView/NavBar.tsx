@@ -13,22 +13,18 @@ interface NavBarProps {
     removeInput: (index: number) => void;
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     dropdown: Dropdown[];
-    addToUserDatabaseList: (item:string) => void;
-    removeFromUserDatabaseList: (item:string) => void;
+    addToUserDatabaseList: (item: string) => void;
+    removeFromUserDatabaseList: (item: string) => void;
+
 }
 
-
-
-
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
-    addInput, inputs, handleSearchChange, removeInput, setLoggedIn, dropdown, handleDropdownChange, addToUserDatabaseList, removeFromUserDatabaseList }) => {
+    addInput, inputs, handleSearchChange, removeInput,
+    setLoggedIn, dropdown, handleDropdownChange,
+    addToUserDatabaseList, removeFromUserDatabaseList }) => {
     const handleLogout = () => {
         setLoggedIn(false);
     };
-
-
-  
-    
     return (
         <>
             <div className="p-5 max-w-sm mr-auto float-left">
@@ -36,10 +32,11 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     <Button onClick={handleLogout} className="">Logout</Button>
                 </div>
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
-
-      <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} />
-
-
+                <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList} 
+                removeFromUserDatabaseList={removeFromUserDatabaseList} />
+                <DropdownSearchBox value={"hi"} 
+                onDropdownChange={() => { }} valueArray={["Search 1", "Search 2", "Search 3"]} 
+                className="w-full" />
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">
                         +
@@ -60,7 +57,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                             {inputs.length > 1 && index != inputs.length - 1 && inputs[index].length > 0 &&
                                 <DropdownSearchBox value={dropdown[index]} className="ml-2" onDropdownChange={(e) => {
                                     handleDropdownChange(index, e.target.value as Dropdown)
-                                }}
+                                }} valueArray={Object.values(Dropdown)}
                                 />
                             }
                         </div>)

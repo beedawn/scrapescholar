@@ -1,28 +1,12 @@
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchView, { ResultItem } from '../../app/views/SearchView';
+import SearchView from '../../app/views/SearchView';
 import React from 'react';
-import Dropdown from '../../app/types/DropdownType';
-import { sortResults } from '../../app/components/SearchView/ResultsTable';
-
-import itemsArray from '../ItemsTestArray';
-import itemsJson from '../ItemsTestJson';
-
-const items: ResultItem[] = itemsArray;
+import accordianContainsSources from '../helperFunctions/accordianContainsSources';
+import fetchMock from '../helperFunctions/apiMock';
 
 beforeEach(() => {
-  // Reset mocks before each test
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      ok: true,
-      status: 200,
-      json: () => Promise.resolve(itemsJson),
-      headers: new Headers(),
-      redirected: false,
-      statusText: 'OK',
-
-    })
-  ) as jest.Mock;
+  global.fetch = fetchMock;
 });
 
 afterEach(() => {
@@ -33,8 +17,12 @@ describe('SearchView US-11 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
 
- 
 
+
+  const clickAccordian = () =>{
+    const sourcesAccordian = screen.getByText('Sources');
+    fireEvent.click(sourcesAccordian);
+  }
 
   //us-12 tests
   test('US-12 check sources accordian loads', () => {
@@ -44,63 +32,61 @@ describe('SearchView US-11 Component', () => {
     expect(sourcesAccordian).toBeInTheDocument();
   });
 
-  test('US-12 press sources accordian', () => {
+  test('US-12 press sources accordian', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
 
-    const sourcesAccordian = screen.getByText('Sources');
-    fireEvent.click(sourcesAccordian);
-    const scienceDirectChecklist = screen.getByText('ScienceDirect');
-    const scopusChecklist = screen.getByText('Scopus');
-    expect(scienceDirectChecklist).toBeInTheDocument();
-    expect(scopusChecklist).toBeInTheDocument();
+    clickAccordian();
+
+    await waitFor(() => {
+accordianContainsSources()
+  }, {timeout:5000});
+
+
   });
 
-  test('US-12 press sources accordian twice', () => {
+  test('US-12 press sources accordian twice', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
-
     const sourcesAccordian = screen.getByText('Sources');
-    fireEvent.click(sourcesAccordian);
-
-    const scienceDirectChecklist = screen.getByText('ScienceDirect');
-    const scopusChecklist = screen.getByText('Scopus');
-    expect(scienceDirectChecklist).toBeInTheDocument();
-    expect(scopusChecklist).toBeInTheDocument();
+    clickAccordian();
+    await waitFor(()=>{
+      accordianContainsSources();
+    },{timeout:5000})
     fireEvent.click(sourcesAccordian);
     expect(sourcesAccordian).toBeInTheDocument();
   });
 
-  test('US-12 check checkboxes next to source items', () => {
+  test('US-12 check checkboxes next to source items', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
-    const sourcesAccordian = screen.getByText('Sources');
-    fireEvent.click(sourcesAccordian);
+    clickAccordian();
+    await waitFor(()=>{
+      accordianContainsSources();
+    },{timeout:5000})
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });
     const scopusCheckbox = screen.getByRole('checkbox', { name: /Scopus/i });
     expect(scienceDirectCheckbox).toBeInTheDocument();
     expect(scopusCheckbox).toBeInTheDocument();
   });
 
-  test('US-12 ensure checkboxes can be checked ', () => {
+  test('US-12 ensure checkboxes are initially checked ', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
-    const sourcesAccordian = screen.getByText('Sources');
-    fireEvent.click(sourcesAccordian);
+    clickAccordian();
+    await waitFor(()=>{
+      accordianContainsSources();
+    })
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });
     const scopusCheckbox = screen.getByRole('checkbox', { name: /Scopus/i });
-    fireEvent.click(scienceDirectCheckbox);
-    fireEvent.click(scopusCheckbox);
     expect(scienceDirectCheckbox).toBeChecked();
     expect(scopusCheckbox).toBeChecked();
   });
 
-  test('US-12 ensure checkboxes can be unchecked ', () => {
+  test('US-12 ensure checkboxes can be unchecked ', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
-    const sourcesAccordian = screen.getByText('Sources');
-    fireEvent.click(sourcesAccordian);
+    clickAccordian();
+    await waitFor(()=>{
+      accordianContainsSources();
+    })
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });
     const scopusCheckbox = screen.getByRole('checkbox', { name: /Scopus/i });
-    fireEvent.click(scienceDirectCheckbox);
-    fireEvent.click(scopusCheckbox);
-    expect(scienceDirectCheckbox).toBeChecked();
-    expect(scopusCheckbox).toBeChecked();
     fireEvent.click(scienceDirectCheckbox);
     fireEvent.click(scopusCheckbox);
     expect(scienceDirectCheckbox).not.toBeChecked();

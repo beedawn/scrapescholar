@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, Dispatch, SetStateAction, } from 'react';
+import React, { useState, Dispatch, SetStateAction, useEffect} from 'react';
 import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
+import { queryAllByAltText } from '@testing-library/react';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -29,6 +30,39 @@ export interface ResultItem {
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
+    async function getDatabases() {
+        const url = "http://0.0.0.0:8000/academic_sources";
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+      
+          const json = await response.json();
+     
+          return json;
+        } catch (error:unknown) {
+            if (error instanceof Error) {
+                console.error(error.message); 
+            } else {
+                console.error('An unknown error occurred'); 
+            }
+        }
+      }
+
+      useEffect(() => {
+        const fetchDatabases = async () => {
+            const db_list = await getDatabases();
+            setUserDatabaseList(db_list);  
+ 
+    
+        };
+        fetchDatabases();  
+    }, []); 
+    
+
+
+    const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results
     const [results, setResults] = useState<ResultItem[]>([]);
     //inputs gets user inputs, update everytime user enters character
@@ -44,16 +78,12 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     //list of user selected databases
     const [userDatabaseList, setUserDatabaseList] = useState<string[]>([]);
 
-
-
     const addToUserDatabaseList = (item:string) => {
        setUserDatabaseList ([...userDatabaseList, item])
-      
     }
     
     const removeFromUserDatabaseList = (item:string) => {
        setUserDatabaseList(userDatabaseList.filter((array_item:any)=>{return array_item!=item}))
-        
      }
     //string of inputs joined with ' '
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
@@ -130,13 +160,17 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //initialize data variable to fill up with api response
         let data: Response;
         let jsonData;
+        let queryString ='';
+        for (let item of userDatabaseList){
+            queryString += `&academic_database=${item}`;
+        }
         if (inputsAndLogicalOperators.length === 0)
             setInputs([emptyString])
         else {
             setInputs([...filterBlankInputs])
             const apiQuery = inputsAndLogicalOperators.join('+')
             try {
-                data = await fetch(`http://0.0.0.0:8000/scopus?keywords=${apiQuery}`)
+                data = await fetch(`http://0.0.0.0:8000/academic_data?keywords=${apiQuery}${queryString}`)
                 jsonData = await data.json()
             }
             catch (error: any) {
@@ -158,13 +192,15 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
-                    setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}/>
+                    setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}
+                    />
             </div>
             <div className="flex-1 sm:mx-12 w-full">
                 {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString}
                         results={results} emptyString={emptyString} disableD3={disableD3}
-                        inputs={inputs} bubbleInputs={bubbleInputs} />}
+                        inputs={inputs} bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}
             </div>
         </div>
     );

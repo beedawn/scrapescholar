@@ -25,7 +25,7 @@ describe('Home Component', () => {
       expect(passwordInput).toBeInTheDocument();
   }); 
   
-  test('check login button click works', () => {
+  test('US-4 check login button click works', async () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
     const usernameInput = screen.getByPlaceholderText('Username');
@@ -33,9 +33,13 @@ describe('Home Component', () => {
     fireEvent.change(usernameInput, { target: { value: admin_user } });
     fireEvent.change(passwordInput, { target: { value: admin_pass } });
     fireEvent.click(loginButton);
-    expect(screen.getAllByRole('textbox')).toHaveLength(1);
-    expect(screen.getByText('ScrapeScholar')).toBeInTheDocument();
-    expect(screen.getByText('Search')).toBeInTheDocument();
+    await waitFor(()=>{
+
+      expect(screen.getAllByRole('textbox')).toHaveLength(1);
+      expect(screen.getByText('ScrapeScholar')).toBeInTheDocument();
+      expect(screen.getByText('Search')).toBeInTheDocument();
+    },{timeout:5000})
+
   });
   test('US-4 check logout button works in SearchView', async () => {
     render(<Home />);
@@ -55,13 +59,16 @@ describe('Home Component', () => {
     expect(loginButton2).toBeInTheDocument();
   }, { timeout: 5000 });
   });
-  test('US-4 check login button click denies empty credetials', () => {
+
+  test('US-4 check login button click denies empty credentials', async () => {
     render(<Home />);
     const loginButton = screen.getByText('Login');
     fireEvent.click(loginButton);
-    expect(screen.getByText('Invalid Login')).toBeInTheDocument();
-  });
+    await waitFor(() => {
+      expect(screen.getByText('Invalid Login')).toBeInTheDocument();
+    }, { timeout: 5000 });
 
+  });
 
 
 });
