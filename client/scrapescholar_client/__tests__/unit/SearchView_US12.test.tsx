@@ -13,13 +13,10 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe('SearchView US-11 Component', () => {
+describe('SearchView US-12 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
-
-
-
-  const clickAccordian = () =>{
+  const clickAccordian = () => {
     const sourcesAccordian = screen.getByText('Sources');
     fireEvent.click(sourcesAccordian);
   }
@@ -27,30 +24,25 @@ describe('SearchView US-11 Component', () => {
   //us-12 tests
   test('US-12 check sources accordian loads', () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
-
     const sourcesAccordian = screen.getByText('Sources');
     expect(sourcesAccordian).toBeInTheDocument();
   });
 
   test('US-12 press sources accordian', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
-
     clickAccordian();
-
     await waitFor(() => {
-accordianContainsSources()
-  }, {timeout:5000});
-
-
+      accordianContainsSources()
+    }, { timeout: 5000 });
   });
 
   test('US-12 press sources accordian twice', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
     const sourcesAccordian = screen.getByText('Sources');
     clickAccordian();
-    await waitFor(()=>{
+    await waitFor(() => {
       accordianContainsSources();
-    },{timeout:5000})
+    }, { timeout: 5000 })
     fireEvent.click(sourcesAccordian);
     expect(sourcesAccordian).toBeInTheDocument();
   });
@@ -58,9 +50,9 @@ accordianContainsSources()
   test('US-12 check checkboxes next to source items', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
     clickAccordian();
-    await waitFor(()=>{
+    await waitFor(() => {
       accordianContainsSources();
-    },{timeout:5000})
+    }, { timeout: 5000 })
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });
     const scopusCheckbox = screen.getByRole('checkbox', { name: /Scopus/i });
     expect(scienceDirectCheckbox).toBeInTheDocument();
@@ -70,7 +62,7 @@ accordianContainsSources()
   test('US-12 ensure checkboxes are initially checked ', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
     clickAccordian();
-    await waitFor(()=>{
+    await waitFor(() => {
       accordianContainsSources();
     })
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });
@@ -82,7 +74,7 @@ accordianContainsSources()
   test('US-12 ensure checkboxes can be unchecked ', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
     clickAccordian();
-    await waitFor(()=>{
+    await waitFor(() => {
       accordianContainsSources();
     })
     const scienceDirectCheckbox = screen.getByRole('checkbox', { name: /ScienceDirect/i });

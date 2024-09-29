@@ -17,13 +17,13 @@ describe('Home Component', () => {
   test('US-4 check username field is on page', async () => {
     render(<Home />);
     const usernameInput = screen.getByPlaceholderText('Username');
-      expect(usernameInput).toBeInTheDocument();
+    expect(usernameInput).toBeInTheDocument();
   });
 
   test('US-4 check password field is on page', async () => {
     render(<Home />);
     const passwordInput = screen.getByPlaceholderText('Password');
-      expect(passwordInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
   });
 
   test('check login button click works', async () => {

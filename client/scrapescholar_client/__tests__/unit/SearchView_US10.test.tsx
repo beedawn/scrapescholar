@@ -15,18 +15,18 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe('SearchView US-11 Component', () => {
+describe('SearchView US-10 Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
-    test('US-10 Sources should be displayed in UI', async () => {
-        render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-        submitSearch(testInput);
-        await waitFor(() => {
-            const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[6].textContent).toContain("Science Direct");
-            expect(rows[1].children[6].textContent).toContain("Scopus");
-        }, { timeout: 5000 });
-    })
+  test('US-10 Sources should be displayed in UI', async () => {
+    render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+    submitSearch(testInput);
+    await waitFor(() => {
+      const rows = screen.getAllByTestId('row')
+      expect(rows[0].children[6].textContent).toContain("Science Direct");
+      expect(rows[1].children[6].textContent).toContain("Scopus");
+    }, { timeout: 5000 });
+  })
 });
 
 
