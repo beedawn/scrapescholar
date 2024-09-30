@@ -106,9 +106,9 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
 
     content = {"access_token": access_token, "token_type": "bearer"}
     response = JSONResponse(content=content)
-
+    # will need to change this to secure for deployment
     response.set_cookie(
-        key="access_token", 
+    key="access_token", 
     value=access_token, 
     httponly=True, 
     secure=False,
