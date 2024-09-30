@@ -14,6 +14,7 @@ import jwt  # Import JWT
 from dotenv import load_dotenv
 from typing import List
 import os
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -101,15 +102,13 @@ async def get_last_300_searches(db: Session = Depends(get_db), current_user: Use
 
 # Endpoint to save a requested search
 @router.post("/user/searches", status_code=status.HTTP_200_OK)
-async def post_search(search:SearchCreate, articles:List[ArticleBase], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def post_search(keywords:List[str], articles:List[ArticleBase], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """
     Save a search to the DB
     """
 
     """
     todo: 
-    check what searches the user has in history,
-    generate an id based off the current searchs in history?
     add search and search ID
     can probably remove search from the parameters, as this will create the search, and possibly return it?
     get a list of articles from the api request, a search,
@@ -120,7 +119,9 @@ async def post_search(search:SearchCreate, articles:List[ArticleBase], db: Sessi
     is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
     will leave as endpoint for now, its easier for testing/development
     """
+    title=f"{datetime.now()}_{current_user.user_id}"
     # create new search to associate articles to
+    search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     created_search = create_search(search=search, db=db)
     print("PRINTING SEARCH")
     print(search)

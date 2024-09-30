@@ -1,5 +1,5 @@
 # auth/auth.py
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 from app.db.session import get_db, SessionLocal
 from app.models.user import User
@@ -9,6 +9,7 @@ from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 import os
+from fastapi.responses import JSONResponse
 
 load_dotenv()
 
@@ -70,7 +71,7 @@ def load_user(user_id: str, db: Session = None):
 
 # Login route
 @router.post("/login")
-def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db) ):
 
     # Iterate through all users and decrypt their usernames for comparison
     user = None
@@ -102,4 +103,17 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     access_token = login_manager.create_access_token(data={"sub": str(user.user_id)})
     if DEBUG_SCRAPESCHOLAR:
         print(f"Access Token Generated: {access_token}")
-    return {"access_token": access_token, "token_type": "bearer"}
+
+    content = {"access_token": access_token, "token_type": "bearer"}
+    response = JSONResponse(content=content)
+
+    response.set_cookie(
+        key="access_token", 
+    value=access_token, 
+    httponly=True, 
+    secure=False,
+    path="/",
+    samesite="None",
+    max_age=3600)
+
+    return response

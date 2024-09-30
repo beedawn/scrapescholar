@@ -1,5 +1,5 @@
 # app/main.py
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Response
 import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
 import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
@@ -73,3 +73,7 @@ async def multiple_apis():
     database_list = get_database_list('academic_databases/')
     return database_list
 
+@app.get("/cookie-time")
+async def cookie_monster(response:Response):
+    response.set_cookie(key="cookie", value="cookie")
+    return {"message":"is cookie set?"}

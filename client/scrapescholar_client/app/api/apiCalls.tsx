@@ -24,6 +24,7 @@ const apiCalls = () => {
     try {
       const response = await fetch(url, {
         method: 'POST',
+        credentials:"include",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded'
