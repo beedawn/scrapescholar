@@ -113,7 +113,11 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     httponly=True, 
     secure=False,
     path="/",
-    samesite="None",
+    domain="0.0.0.0",
+    samesite="Lax",
     max_age=3600)
 
     return response
+
+
+

@@ -119,19 +119,12 @@ async def post_search(keywords:List[str], articles:List[ArticleBase], db: Sessio
     is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
     will leave as endpoint for now, its easier for testing/development
     """
+    #title, date and user_id could this be better?
     title=f"{datetime.now()}_{current_user.user_id}"
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     created_search = create_search(search=search, db=db)
-    print("PRINTING SEARCH")
-    print(search)
-    print(type(search))
-    print(articles)
-    print(type(articles))
 
-    print("PRINTING CREATED SEARCH")
-    print(created_search)
-    print(created_search.search_id)
 
     for article in articles:
         format_article= ArticleCreate(title=article.title,

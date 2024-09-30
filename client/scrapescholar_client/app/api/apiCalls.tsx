@@ -1,7 +1,10 @@
+
 const apiCalls = () => {
 
+  const host = "0.0.0.0"
+
   const getAPIDatabases = async () => {
-    const url = "http://0.0.0.0:8000/academic_sources";
+    const url = `http://${host}:8000/academic_sources`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -17,7 +20,7 @@ const apiCalls = () => {
   }
 
   const postAPILogin = async (username: string, password: string) => {
-    const url = 'http://0.0.0.0:8000/auth/login';
+    const url = `http://${host}:8000/auth/login`;
     const formData = new URLSearchParams();
     formData.append('username', username);
     formData.append('password', password);
@@ -58,7 +61,9 @@ const apiCalls = () => {
         setInputs([...filterBlankInputs])
         const apiQuery = inputsAndLogicalOperators.join('+')
         try {
-            data = await fetch(`http://0.0.0.0:8000/academic_data?keywords=${apiQuery}${queryString}`)
+
+          const url = `http://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
+            data = await fetch(url, { method: "GET", credentials:"include"})
             jsonData = await data.json()
         }
         catch (error: any) {

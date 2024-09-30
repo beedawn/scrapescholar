@@ -1,15 +1,16 @@
 # app/main.py
-from fastapi import FastAPI, Query, Response
+from fastapi import FastAPI, Query, Response, Request, Cookie
 import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
 import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
-from role import role
-from user import user
-from auth import auth
-from search import search
+from endpoints.role import role
+from endpoints.user import user
+from endpoints.auth import auth
+from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
+from endpoints.search.search import post_search
 
 app = FastAPI()
 
@@ -47,24 +48,21 @@ def get_database_list(directory):
 
 
 @app.get("/academic_data")
-async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None):
-    response = []
+async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None, 
+cookie: Annotated[str | None, Cookie()] = None):
+    print("cookies")
+    print(cookie)
+
+    response=[]
     id = 0
     database_list = get_database_list('academic_databases/')
-
-    print(database_list)
- 
-
     for item in database_list:
         if item in academic_databases:
             print(globals()[item])
             new_id=check_response(response,id)
             article_response, id =globals()[item].request_data(keywords, id=new_id)
             response.extend(article_response)
-    # if "Scopus" in academic_databases:
-    #     new_id=check_response(response,id)
-    #     article_response, id =scopus.request_data(keywords, id=new_id)
-    #     response.extend(article_response)
+    # await post_search(keywords=keywords, articles=response)
     return response
 
 
@@ -77,3 +75,10 @@ async def multiple_apis():
 async def cookie_monster(response:Response):
     response.set_cookie(key="cookie", value="cookie")
     return {"message":"is cookie set?"}
+
+
+
+
+@app.get("/cookie")
+async def read_cookie(my_cookie: str | None = Cookie(None)):
+    return {"cookie": my_cookie}
