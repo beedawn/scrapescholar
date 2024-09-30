@@ -11,6 +11,7 @@ class Search(Base):
     search_date = Column(TIMESTAMP)
     search_keywords = Column(ARRAY(String))
     status = Column(String(20), default='active')
+    title = Column(String(255), nullable=False)
 
     user = relationship("User", back_populates="searches")
     articles = relationship("Article", back_populates="search")    

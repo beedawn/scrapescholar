@@ -5,8 +5,12 @@ from app.db.session import get_db
 from app.models.search import Search
 from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer
+from app.crud.search import create_search
+from app.schemas.search import SearchCreate
+from app.schemas.article import ArticleCreate
 import jwt  # Import JWT
 from dotenv import load_dotenv
+from typing import List
 import os
 
 # Load environment variables
@@ -91,3 +95,43 @@ async def get_last_300_searches(db: Session = Depends(get_db), current_user: Use
         if DEBUG_SCRAPESCHOLAR:
             print(f"Error retrieving searches: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+
+
+# Endpoint to save a requested search
+@router.post("/user/searches", status_code=status.HTTP_200_OK)
+async def post_search(search:SearchCreate, articles:List[ArticleCreate], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """
+    Save a search to the DB
+    """
+
+    """
+    todo: 
+    check what searches the user has in history,
+    generate an id based off the current searchs in history?
+    add search and search ID
+    can probably remove search from the parameters, as this will create the search, and possibly return it?
+    get a list of articles from the api request, a search,
+    save the search as a whole ie create a search, 
+    then save each article within the DB ie create one to many articles
+        and associate it the search
+    """
+    print("PRINTING SEARCH")
+    print(search)
+    print(type(search))
+    print(articles)
+    print(type(articles))
+    # try:
+    #     # Query the last 300 searches for the authenticated user
+    #     searches = (
+    #         db.query(Search)
+    #         .filter(Search.user_id == current_user.user_id)
+    #         .order_by(Search.search_date.desc())
+    #         .limit(300)
+    #         .all()
+    #     )
+    #     return searches if searches else []
+
+    # except Exception as e:
+    #     if DEBUG_SCRAPESCHOLAR:
+    #         print(f"Error retrieving searches: {str(e)}")
+    #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")

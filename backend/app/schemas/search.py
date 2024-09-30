@@ -7,6 +7,7 @@ class SearchBase(BaseModel):
     user_id: int
     search_keywords: Optional[List[str]] = None
     status: Optional[str] = "active"
+    title: str
 
 class SearchCreate(SearchBase):
     pass
