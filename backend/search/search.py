@@ -114,6 +114,9 @@ async def post_search(search:SearchCreate, articles:List[ArticleCreate], db: Ses
     save the search as a whole ie create a search, 
     then save each article within the DB ie create one to many articles
         and associate it the search
+
+    is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
+    will leave as endpoint for now, its easier for testing/development
     """
     print("PRINTING SEARCH")
     print(search)
