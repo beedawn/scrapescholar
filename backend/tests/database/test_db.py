@@ -20,14 +20,24 @@ from app.crud.article import create_article
 from app.crud.searchkeyword import create_search_keyword
 from app.crud.keyword import create_keyword
 from passlib.context import CryptContext
+from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+import os
 
+# Load environment variables for encryption
+load_dotenv()
+encryption_key = os.getenv("ENCRYPTION_KEY")
+fernet = Fernet(encryption_key)
 
 def verify_hash(plain_text, hashed_text: str):
     hash_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     return hash_context.verify(plain_text, hashed_text)
 
-@pytest.fixture(scope="function")
+def decrypt_username(encrypted_username: str) -> str:
+    """Decrypt the encrypted username"""
+    return fernet.decrypt(encrypted_username.encode()).decode()
 
+@pytest.fixture(scope="function")
 def db():
     """Set up the database connection for testing."""
     db = SessionLocal()
@@ -48,13 +58,17 @@ def test_user_exists_in_db(db):
     users = db.query(User).all()
     user = None
     for candidate in users:
-        if(verify_hash("testuser", candidate.username)):
-            user = candidate
- 
+        try:
+            decrypted_username = decrypt_username(candidate.username)
+            if decrypted_username == "testuser":
+                user = candidate
+                break
+        except:
+            continue
 
     assert user is not None
-    assert verify_hash("testuser",user.username)
     assert verify_hash("testuser@example.com", user.email)
+    assert verify_hash("testpassword", user.password)
 
 def test_article_creation_with_existing_user_and_source(db: Session):
     """Test article creation using the test data from init_db."""
@@ -63,8 +77,13 @@ def test_article_creation_with_existing_user_and_source(db: Session):
     users = db.query(User).all()
     user = None
     for candidate in users:
-        if(verify_hash("testuser", candidate.username)):
-            user = candidate
+        try:
+            decrypted_username = decrypt_username(candidate.username)
+            if decrypted_username == "testuser":
+                user = candidate
+                break
+        except:
+            continue
     assert user is not None
 
     # Get the test source from the database
@@ -146,16 +165,12 @@ def test_full_search_insert_and_share(db: Session):
 
     db.add_all([article_1_data, article_2_data])
     db.commit()
-  
-
 
     # Step 4: Verify that both articles have been added
     articles = db.query(Article).filter(Article.search_id == search.search_id).all()
     assert len(articles) == 2
     assert articles[0].title == "Article 1"
     assert articles[1].title == "Article 2"
-   
-
 
     # Step 5: Share the search with a new user
     new_user_data = UserCreate(username="new_user", password="password123", email="new_user@example.com")
@@ -165,13 +180,11 @@ def test_full_search_insert_and_share(db: Session):
     db.add(search_share_data)
     db.commit()
 
-
     # Step 6: Verify the search share
     shared_search = db.query(SearchShare).filter(SearchShare.shared_with_user_id == new_user.user_id).first()
     assert shared_search is not None
     assert shared_search.search_id == search.search_id
     assert shared_search.shared_with_user_id == new_user.user_id
-
 
     db.delete(search_share_data)
     db.delete(article_1_data)
@@ -180,4 +193,3 @@ def test_full_search_insert_and_share(db: Session):
     db.delete(existing_user)
     db.delete(new_user)
     db.commit()
-    
