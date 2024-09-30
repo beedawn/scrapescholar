@@ -5,7 +5,6 @@ from datetime import date
 
 class ArticleBase(BaseModel):
     source_id: int
-    search_id: int
     title: str
     author: Optional[str] = None
     publication_date: Optional[date] = None
@@ -17,6 +16,7 @@ class ArticleBase(BaseModel):
     doi: Optional[str] = None
 
 class ArticleCreate(ArticleBase):
+    search_id: int
     user_id: int
 
 class ArticleUpdate(BaseModel):

@@ -7,7 +7,9 @@ from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer
 from app.crud.search import create_search
 from app.schemas.search import SearchCreate
-from app.schemas.article import ArticleCreate
+from app.schemas.article import ArticleCreate, ArticleBase
+from app.crud.article import create_article
+from pydantic import HttpUrl
 import jwt  # Import JWT
 from dotenv import load_dotenv
 from typing import List
@@ -99,7 +101,7 @@ async def get_last_300_searches(db: Session = Depends(get_db), current_user: Use
 
 # Endpoint to save a requested search
 @router.post("/user/searches", status_code=status.HTTP_200_OK)
-async def post_search(search:SearchCreate, articles:List[ArticleCreate], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def post_search(search:SearchCreate, articles:List[ArticleBase], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """
     Save a search to the DB
     """
@@ -118,11 +120,32 @@ async def post_search(search:SearchCreate, articles:List[ArticleCreate], db: Ses
     is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
     will leave as endpoint for now, its easier for testing/development
     """
+    # create new search to associate articles to
+    created_search = create_search(search=search, db=db)
     print("PRINTING SEARCH")
     print(search)
     print(type(search))
     print(articles)
     print(type(articles))
+
+    print("PRINTING CREATED SEARCH")
+    print(created_search)
+    print(created_search.search_id)
+
+    for article in articles:
+        format_article= ArticleCreate(title=article.title,
+        author=article.author,
+        publication_date=article.publication_date,
+        journal=article.journal,
+        url=HttpUrl(article.url),
+        relevance_score=article.relevance_score,
+        review_status=article.review_status,
+        abstract=article.abstract,
+        doi=article.doi,
+        source_id=article.source_id,
+        search_id=created_search.search_id, 
+        user_id=current_user.user_id)
+        create_article(article=format_article, db=db)
     # try:
     #     # Query the last 300 searches for the authenticated user
     #     searches = (
