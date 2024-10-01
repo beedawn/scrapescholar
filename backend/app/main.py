@@ -1,5 +1,6 @@
 # app/main.py
 from fastapi import FastAPI, Query, Response, Request, Cookie, Depends
+from fastapi.responses import JSONResponse
 import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
 import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
@@ -62,23 +63,24 @@ def get_database_list(directory):
 @app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None, 
 access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    print(keywords)
     keywords_list = keywords.split()
     response=[]
     id = 0
     database_list = get_database_list('academic_databases/')
     for item in database_list:
         if item in academic_databases:
-            print(globals()[item])
             new_id=check_response(response,id)
             article_response, id =globals()[item].request_data(keywords, id=new_id,)
             response.extend(article_response)
-            for x in article_response:
-                print(x.__dict__)
-            print(article_response)
     current_user= await get_current_user_no_route(token=access_token, db=db)
-    await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
-    return response
+    search_valid = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
+    if search_valid:
+        return response
+    else:
+        return JSONResponse(
+        status_code=507,
+        content={"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}
+    )
 
 
 @app.get("/academic_sources")

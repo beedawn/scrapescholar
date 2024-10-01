@@ -6,6 +6,7 @@ from app.models.search import Search
 from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer
 from app.crud.search import create_search
+from app.crud.user import decrypt
 from app.schemas.search import SearchCreate
 from app.schemas.article import ArticleCreate, ArticleBase
 from app.crud.article import create_article
@@ -100,61 +101,64 @@ async def get_last_300_searches(db: Session = Depends(get_db), current_user: Use
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
 
-# Endpoint to save a requested search
-@router.post("/user/searches", status_code=status.HTTP_200_OK)
-async def post_search(keywords:List[str], articles:List[ArticleBase], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    """
-    Save a search to the DB
-    """
+# # Endpoint to save a requested search
+# @router.post("/user/searches", status_code=status.HTTP_200_OK)
+# async def post_search(keywords:List[str], articles:List[ArticleBase], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+#     """
+#     Save a search to the DB
+#     """
 
-    """
-    todo: 
-    add search and search ID
-    can probably remove search from the parameters, as this will create the search, and possibly return it?
-    get a list of articles from the api request, a search,
-    save the search as a whole ie create a search, 
-    then save each article within the DB ie create one to many articles
-        and associate it the search
+#     """
+#     todo: 
+#     add search and search ID
+#     can probably remove search from the parameters, as this will create the search, and possibly return it?
+#     get a list of articles from the api request, a search,
+#     save the search as a whole ie create a search, 
+#     then save each article within the DB ie create one to many articles
+#         and associate it the search
 
-    is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
-    will leave as endpoint for now, its easier for testing/development
-    """
-    #title, date and user_id could this be better?
-    title=f"{datetime.now()}_{current_user.user_id}"
-    # create new search to associate articles to
-    search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
-    created_search = create_search(search=search, db=db)
+#     is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
+#     will leave as endpoint for now, its easier for testing/development
+#     """
 
 
-    for article in articles:
-        format_article= ArticleCreate(title=article.title,
-        author=article.author,
-        publication_date=article.date,
-        journal=article.journal,
-        url=HttpUrl(article.url),
-        relevance_score=article.relevance_score,
-        review_status=article.review_status,
-        abstract=article.abstract,
-        doi=article.doi,
-        source_id=article.source_id,
-        search_id=created_search.search_id, 
-        user_id=current_user.user_id)
-        create_article(article=format_article, db=db)
-    # try:
-    #     # Query the last 300 searches for the authenticated user
-    #     searches = (
-    #         db.query(Search)
-    #         .filter(Search.user_id == current_user.user_id)
-    #         .order_by(Search.search_date.desc())
-    #         .limit(300)
-    #         .all()
-    #     )
-    #     return searches if searches else []
 
-    # except Exception as e:
-    #     if DEBUG_SCRAPESCHOLAR:
-    #         print(f"Error retrieving searches: {str(e)}")
-    #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+#     #title, date and user_id could this be better should be username_datetimestamp?
+#     title=f"{datetime.now()}_{current_user.user_id}"
+#     # create new search to associate articles to
+#     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
+#     created_search = create_search(search=search, db=db)
+
+
+#     for article in articles:
+#         format_article= ArticleCreate(title=article.title,
+#         author=article.author,
+#         publication_date=article.date,
+#         journal=article.journal,
+#         url=HttpUrl(article.url),
+#         relevance_score=article.relevance_score,
+#         review_status=article.review_status,
+#         abstract=article.abstract,
+#         doi=article.doi,
+#         source_id=article.source_id,
+#         search_id=created_search.search_id, 
+#         user_id=current_user.user_id)
+#         create_article(article=format_article, db=db)
+#     # try:
+#     #     # Query the last 300 searches for the authenticated user
+#     #     searches = (
+#     #         db.query(Search)
+#     #         .filter(Search.user_id == current_user.user_id)
+#     #         .order_by(Search.search_date.desc())
+#     #         .limit(300)
+#     #         .all()
+#     #     )
+#     #     return searches if searches else []
+
+#     # except Exception as e:
+#     #     if DEBUG_SCRAPESCHOLAR:
+#     #         print(f"Error retrieving searches: {str(e)}")
+#     #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
 
 
@@ -166,18 +170,28 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
 
     """
     todo: 
-    add search and search ID
-    can probably remove search from the parameters, as this will create the search, and possibly return it?
-    get a list of articles from the api request, a search,
-    save the search as a whole ie create a search, 
-    then save each article within the DB ie create one to many articles
-        and associate it the search
 
-    is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
-    will leave as endpoint for now, its easier for testing/development
+
+
+    need to check if user has 300 searches, then respond with some kind of message to front end to let it know to bug them to delete searches
     """
+
+
+    #check if there are 300 searches if there are, bail
+    existing_searches = (
+            db.query(Search)
+            .filter(Search.user_id == current_user.user_id)
+            .order_by(Search.search_date.desc())
+            .limit(300)
+            .all()
+        )
+    print("SEARCH LENGTH")
+    print(len(existing_searches))
+    if (len(existing_searches)>=300):
+        return False
     #title, date and user_id could this be better?
-    title=f"{datetime.now()}_{current_user.user_id}"
+    decrypt_username=decrypt(current_user.username)
+    title=f"{decrypt_username}-{datetime.now()}"
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     created_search = create_search(search=search, db=db, )
@@ -187,10 +201,6 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     date_format = "%Y-%m-%d"
 
     for article in articles:
-        print("article link")
-        print(article.link)
-        print("http url")
-        print(HttpUrl(article.link))
         format_article= ArticleCreate(
         title=article.title,
         date=datetime.strptime(article.date, date_format).date(),
@@ -205,6 +215,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         search_id=created_search.search_id, 
         user_id=current_user.user_id)
         create_article(article=format_article, db=db)
+    return True
 
 
 

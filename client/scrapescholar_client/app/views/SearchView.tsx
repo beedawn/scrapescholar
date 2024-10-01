@@ -47,7 +47,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results
-    const [results, setResults] = useState<ResultItem[]>([]);
+    const [results, setResults] = useState<ResultItem[]|string[]>([]);
     //inputs gets user inputs, update everytime user enters character
     const [inputs, setInputs] = useState<string[]>(['']);
     //bubble inputs is passed to bubble plot, pure inputs that update when Search is pressed only
@@ -141,7 +141,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setBubbleInputs(newBubbleInputs);
         //initialize data variable to fill up with api response
         console.log(inputs);
-        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs);
+        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs);
+        console.log(error);
         setLoading(false);
     }
     return (
