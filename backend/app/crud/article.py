@@ -20,15 +20,16 @@ def create_article(db: Session, article: ArticleCreate):
         search_id=article.search_id,
         user_id=article.user_id,
         title=article.title,
-        author=article.author,
-        publication_date=article.publication_date,
-        journal=article.journal,
-        url=str(article.url) if article.url else None,  # Convert to string
+        date=article.date,
+        link=str(article.link) if article.link else None,  # Convert to string
         relevance_score=article.relevance_score,
-        review_status=article.review_status,
+        evaluation_criteria=article.evaluation_criteria,
         abstract=article.abstract,
+        citedby=article.citedby,
+        document_type=article.document_type,
         doi=article.doi
     )
+
     db.add(db_article)
     db.commit()
     db.refresh(db_article)

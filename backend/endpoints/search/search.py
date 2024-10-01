@@ -204,22 +204,6 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
 
 
 
-    # try:
-    #     # Query the last 300 searches for the authenticated user
-    #     searches = (
-    #         db.query(Search)
-    #         .filter(Search.user_id == current_user.user_id)
-    #         .order_by(Search.search_date.desc())
-    #         .limit(300)
-    #         .all()
-    #     )
-    #     return searches if searches else []
-
-    # except Exception as e:
-    #     if DEBUG_SCRAPESCHOLAR:
-    #         print(f"Error retrieving searches: {str(e)}")
-    #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
-
 
 
 async def get_current_user_no_route(db: Session, token: str = Depends(oauth2_scheme)):
