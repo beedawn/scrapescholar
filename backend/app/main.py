@@ -46,7 +46,9 @@ def get_database_list(directory):
     # Get a list of all folders in the specified directory
     return [folder.name for folder in Path(directory).iterdir() if folder.is_dir() and folder.name != "__pycache__"]
 
+#to get the cookie the cookie value needs to be the same as the cookie key
 
+#ie cookie key is access_token, so the parameter here needs to be access_token
 @app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None, 
 access_token: Annotated[str | None, Cookie()] = None):
