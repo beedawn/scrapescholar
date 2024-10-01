@@ -180,17 +180,21 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     title=f"{datetime.now()}_{current_user.user_id}"
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
-    created_search = create_search(search=search, db=db)
+    created_search = create_search(search=search, db=db, )
 
 
     # Define the format
     date_format = "%Y-%m-%d"
 
     for article in articles:
+        print("article link")
+        print(article.link)
+        print("http url")
+        print(HttpUrl(article.link))
         format_article= ArticleCreate(
         title=article.title,
         date=datetime.strptime(article.date, date_format).date(),
-        url=HttpUrl(article.link),
+        link=HttpUrl(article.link),
         relevance_score=article.relevance_score,
         evaluation_criteria=article.evaluation_criteria,
         abstract=article.abstract,
