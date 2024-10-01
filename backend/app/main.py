@@ -14,7 +14,7 @@ from endpoints.search.search import post_search
 
 app = FastAPI()
 
-origins = [ "http://0.0.0.0:3000", "http://localhost:3000"]
+origins = [ "http://0.0.0.0:3000/", "http://localhost:3000/"]
 
 app.add_middleware(
         CORSMiddleware,
@@ -49,9 +49,9 @@ def get_database_list(directory):
 
 @app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None, 
-cookie: Annotated[str | None, Cookie()] = None):
+access_token: Annotated[str | None, Cookie()] = None):
     print("cookies")
-    print(cookie)
+    print(access_token)
 
     response=[]
     id = 0
@@ -62,7 +62,7 @@ cookie: Annotated[str | None, Cookie()] = None):
             new_id=check_response(response,id)
             article_response, id =globals()[item].request_data(keywords, id=new_id)
             response.extend(article_response)
-    # await post_search(keywords=keywords, articles=response)
+    #await post_search(keywords=keywords, articles=response)
     return response
 
 
@@ -71,12 +71,10 @@ async def multiple_apis():
     database_list = get_database_list('academic_databases/')
     return database_list
 
-@app.get("/cookie-time")
-async def cookie_monster(response:Response):
-    response.set_cookie(key="cookie", value="cookie")
-    return {"message":"is cookie set?"}
-
-
+@app.post("/set_cookie")
+async def set_cookie(response: Response):
+    response.set_cookie(key="my_cookie", value="cookie_value")
+    return {"message": "Cookie set"}
 
 
 @app.get("/cookie")
