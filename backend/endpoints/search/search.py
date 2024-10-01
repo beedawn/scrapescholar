@@ -129,7 +129,7 @@ async def post_search(keywords:List[str], articles:List[ArticleBase], db: Sessio
     for article in articles:
         format_article= ArticleCreate(title=article.title,
         author=article.author,
-        publication_date=article.publication_date,
+        publication_date=article.date,
         journal=article.journal,
         url=HttpUrl(article.url),
         relevance_score=article.relevance_score,
@@ -155,3 +155,118 @@ async def post_search(keywords:List[str], articles:List[ArticleBase], db: Sessio
     #     if DEBUG_SCRAPESCHOLAR:
     #         print(f"Error retrieving searches: {str(e)}")
     #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+
+
+
+
+async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], db: Session , current_user: User ):
+    """
+    Save a search to the DB
+    """
+
+    """
+    todo: 
+    add search and search ID
+    can probably remove search from the parameters, as this will create the search, and possibly return it?
+    get a list of articles from the api request, a search,
+    save the search as a whole ie create a search, 
+    then save each article within the DB ie create one to many articles
+        and associate it the search
+
+    is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
+    will leave as endpoint for now, its easier for testing/development
+    """
+    #title, date and user_id could this be better?
+    title=f"{datetime.now()}_{current_user.user_id}"
+    # create new search to associate articles to
+    search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
+    created_search = create_search(search=search, db=db)
+
+
+    # Define the format
+    date_format = "%Y-%m-%d"
+
+    for article in articles:
+        format_article= ArticleCreate(
+        title=article.title,
+        date=datetime.strptime(article.date, date_format).date(),
+        url=HttpUrl(article.link),
+        relevance_score=article.relevance_score,
+        evaluation_criteria=article.evaluation_criteria,
+        abstract=article.abstract,
+        citedby=article.citedby,
+        document_type=article.document_type,
+        #needs changed to something real
+        source_id=1,
+        search_id=created_search.search_id, 
+        user_id=current_user.user_id)
+        create_article(article=format_article, db=db)
+
+
+
+    # try:
+    #     # Query the last 300 searches for the authenticated user
+    #     searches = (
+    #         db.query(Search)
+    #         .filter(Search.user_id == current_user.user_id)
+    #         .order_by(Search.search_date.desc())
+    #         .limit(300)
+    #         .all()
+    #     )
+    #     return searches if searches else []
+
+    # except Exception as e:
+    #     if DEBUG_SCRAPESCHOLAR:
+    #         print(f"Error retrieving searches: {str(e)}")
+    #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+
+
+
+async def get_current_user_no_route(db: Session, token: str = Depends(oauth2_scheme)):
+    try:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Decoding token: {token}")
+
+        # Decode the JWT token
+        payload = jwt.decode(token, SECRET, algorithms=["HS256"])
+        user_id = payload.get("sub")
+
+        if user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token payload does not contain a user ID",
+            )
+
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"User ID from token: {user_id}")
+
+        # Query the user from the database
+        user = db.query(User).filter(User.user_id == user_id).first()
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="User not found",
+            )
+
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Current user fetched: {user}")
+        return user
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired",
+        )
+    except jwt.InvalidTokenError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+        )
+    except Exception as e:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Unexpected error: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while fetching the current user",
+        )

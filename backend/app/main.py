@@ -1,5 +1,5 @@
 # app/main.py
-from fastapi import FastAPI, Query, Response, Request, Cookie
+from fastapi import FastAPI, Query, Response, Request, Cookie, Depends
 import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
 import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
@@ -10,7 +10,9 @@ from endpoints.auth import auth
 from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
-from endpoints.search.search import post_search
+from endpoints.search.search import post_search_no_route, get_current_user_no_route
+from app.db.session import get_db, SessionLocal
+from sqlalchemy.orm import Session
 
 app = FastAPI()
 
@@ -23,6 +25,14 @@ app.add_middleware(
         allow_methods=["*"],
         allow_headers=["*"],
         )
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @app.get("/health_check")
 async def health_check():
@@ -51,10 +61,9 @@ def get_database_list(directory):
 #ie cookie key is access_token, so the parameter here needs to be access_token
 @app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None, 
-access_token: Annotated[str | None, Cookie()] = None):
-    print("cookies")
-    print(access_token)
-
+access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+    print(keywords)
+    keywords_list = keywords.split()
     response=[]
     id = 0
     database_list = get_database_list('academic_databases/')
@@ -62,9 +71,13 @@ access_token: Annotated[str | None, Cookie()] = None):
         if item in academic_databases:
             print(globals()[item])
             new_id=check_response(response,id)
-            article_response, id =globals()[item].request_data(keywords, id=new_id)
+            article_response, id =globals()[item].request_data(keywords, id=new_id,)
             response.extend(article_response)
-    #await post_search(keywords=keywords, articles=response)
+            for x in article_response:
+                print(x.__dict__)
+            print(article_response)
+    current_user= await get_current_user_no_route(token=access_token, db=db)
+    await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
     return response
 
 

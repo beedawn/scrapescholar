@@ -49,7 +49,9 @@ const apiCalls = () => {
 
   }
 
-  const getAPIResults = async (userDatabaseList:string[], inputsAndLogicalOperators:string[],emptyString:string, setInputs:any, setResults:any, setError:any, filterBlankInputs:string[]) =>{let data: Response;
+  const getAPIResults = async (userDatabaseList:string[], inputsAndLogicalOperators:string[],
+    emptyString:string, setInputs:any, setResults:any, setError:any, filterBlankInputs:string[], inputs) =>{
+    let data: Response;
     let jsonData;
     let queryString ='';
     for (let item of userDatabaseList){
@@ -63,7 +65,7 @@ const apiCalls = () => {
         try {
 
           const url = `http://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
-            data = await fetch(url, { method: "GET", credentials:"include"})
+            data = await fetch(url, { method: "GET", credentials:"include", body:inputs})
             jsonData = await data.json()
         }
         catch (error: any) {

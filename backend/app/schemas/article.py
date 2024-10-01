@@ -6,14 +6,14 @@ from datetime import date
 class ArticleBase(BaseModel):
     source_id: int
     title: str
-    author: Optional[str] = None
-    publication_date: Optional[date] = None
-    journal: Optional[str] = None
+    # author: Optional[str] = None
+    date: Optional[date] = None
     url: Optional[HttpUrl] = None
     relevance_score: Optional[float] = None
-    review_status: Optional[str] = None
+    evaluation_criteria: Optional[str] = None
     abstract: Optional[str] = None
     doi: Optional[str] = None
+    document_type: Optional[str] = None
 
 class ArticleCreate(ArticleBase):
     search_id: int
@@ -21,7 +21,7 @@ class ArticleCreate(ArticleBase):
 
 class ArticleUpdate(BaseModel):
     title: Optional[str] = None
-    author: Optional[str] = None
+    # author: Optional[str] = None
     publication_date: Optional[date] = None
     journal: Optional[str] = None
     url: Optional[HttpUrl] = None
