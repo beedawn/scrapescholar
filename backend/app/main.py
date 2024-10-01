@@ -14,7 +14,7 @@ from endpoints.search.search import post_search
 
 app = FastAPI()
 
-origins = [ "http://0.0.0.0:3000/", "http://localhost:3000/"]
+origins = [ "http://0.0.0.0:3000", "http://localhost:3000"]
 
 app.add_middleware(
         CORSMiddleware,
