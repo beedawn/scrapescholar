@@ -48,6 +48,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results
     const [results, setResults] = useState<ResultItem[]|string[]>([]);
+    const [dataFull, setDataFull]= useState<boolean>(false);
     //inputs gets user inputs, update everytime user enters character
     const [inputs, setInputs] = useState<string[]>(['']);
     //bubble inputs is passed to bubble plot, pure inputs that update when Search is pressed only
@@ -141,7 +142,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setBubbleInputs(newBubbleInputs);
         //initialize data variable to fill up with api response
         console.log(inputs);
-        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs);
+        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs, setDataFull);
         console.log(error);
         setLoading(false);
     }
@@ -151,11 +152,11 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
-                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} 
                     />
             </div>
             <div className="flex-1 sm:mx-12 w-full">
-                {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
+                {error ? (<p>{error.message}</p>) : dataFull? <p> data is full!</p> : loading ? <p>Loading</p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString}
                         results={results} emptyString={emptyString} disableD3={disableD3}
                         bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}

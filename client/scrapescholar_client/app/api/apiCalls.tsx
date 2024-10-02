@@ -50,7 +50,7 @@ const apiCalls = () => {
   }
 
   const getAPIResults = async (userDatabaseList:string[], inputsAndLogicalOperators:string[],
-    emptyString:string, setInputs:any, setResults:any, setError:any, filterBlankInputs:string[], inputs:any) =>{
+    emptyString:string, setInputs:any, setResults:any, setError:any, filterBlankInputs:string[], inputs:any, setDataFull:(item:boolean)=>void) =>{
     let data: Response;
     let jsonData;
     let queryString ='';
@@ -69,7 +69,7 @@ const apiCalls = () => {
             jsonData = await data.json()
             if (data.status === 507) {
               console.log(jsonData.message)
-        
+              setDataFull(true);
   
           } 
 
