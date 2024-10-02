@@ -63,13 +63,13 @@ const apiCalls = () => {
         setInputs([...filterBlankInputs])
         const apiQuery = inputsAndLogicalOperators.join('+')
         try {
-          console.log("hello")
+    
           const url = `http://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
             data = await fetch(url, { method: "GET", credentials:"include"})
             jsonData = await data.json()
             if (data.status === 507) {
               console.log(jsonData.message)
-              setError(data); 
+        
   
           } 
 
@@ -77,7 +77,7 @@ const apiCalls = () => {
         catch (error: any) {
           console.log(error)
       
-          console.log("hi2")
+  
             // jsonData = [{ "title": error.message, link: '' }]
             setError(error);
         }
@@ -87,7 +87,7 @@ const apiCalls = () => {
     }
     else {
         //set better error message
-        setError(data)
+        // setError(data)
         setResults([]);
     }
 }
