@@ -194,12 +194,16 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     title=f"{decrypt_username}-{datetime.now()}"
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
-    created_search = create_search(search=search, db=db, )
+
+    x = 0
+    while (x<=300):
+        created_search = create_search(search=search, db=db, )
+        x+=1
 
 
     # Define the format
     date_format = "%Y-%m-%d"
-
+   
     for article in articles:
         format_article= ArticleCreate(
         title=article.title,
@@ -215,6 +219,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         search_id=created_search.search_id, 
         user_id=current_user.user_id)
         create_article(article=format_article, db=db)
+  
     return True
 
 
