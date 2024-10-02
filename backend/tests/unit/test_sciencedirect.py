@@ -4,7 +4,9 @@ from app.main import app
 from api_tools.api_tools import sciencedirect_api_key
 
 client = TestClient(app)
-
+#todo
+#get access token from login endpoint
+#mimic cookie so that these tests will pass
 
 def test_sciencedirect_response_has_title_and_link():
     response = client.get("/academic_data?keywords=test&academic_database=ScienceDirect")
