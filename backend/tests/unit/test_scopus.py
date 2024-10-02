@@ -4,12 +4,13 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from api_tools.api_tools import scopus_api_key
-
+from tests.unit.get_cookie import get_cookie
 client = TestClient(app)
 
-
+base_url = "http://localhost:8000" 
+session = get_cookie()
 def test_scopus_response_has_title_and_link():
-    response = client.get("/academic_data?keywords=test&academic_database=Scopus")
+    response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
@@ -23,7 +24,7 @@ def test_scopus_response_has_title_and_link():
 
 
 def test_scopus_empty_response_is_empty():
-    response = client.get("/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
+    response = session.get(f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)

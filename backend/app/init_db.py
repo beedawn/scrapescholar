@@ -11,6 +11,11 @@ from app.schemas.search import SearchCreate
 from app.crud.user import create_user
 from app.crud.source import create_source
 from app.crud.search import create_search
+from dotenv import load_dotenv
+
+load_dotenv()
+test_user=os.getenv("TEST_USER")
+test_password = os.getenv("TEST_PASSWORD")
 
 # Retrieve the database URI
 SQLALCHEMY_DATABASE_URL = get_db_uri()
@@ -70,8 +75,8 @@ def insert_test_data(db):
 
     # Insert a test User
     user_data = UserCreate(
-        username="testuser",
-        password="testpass",
+        username=test_user,
+        password=test_password,
         email="testuser@example.com"
     )
     user = create_user(db=db, user=user_data)

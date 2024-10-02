@@ -1,7 +1,7 @@
 # auth/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
-from app.db.session import get_db, SessionLocal
+from app.db.session import get_db
 from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi_login import LoginManager
@@ -31,13 +31,6 @@ login_manager = LoginManager(SECRET, token_url="/auth/login")
 # Create an API router for auth
 router = APIRouter()
 
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # Hash password
 def hash(text: str):
