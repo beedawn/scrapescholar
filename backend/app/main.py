@@ -88,12 +88,3 @@ async def multiple_apis():
     database_list = get_database_list('academic_databases/')
     return database_list
 
-@app.post("/set_cookie")
-async def set_cookie(response: Response):
-    response.set_cookie(key="my_cookie", value="cookie_value")
-    return {"message": "Cookie set"}
-
-
-@app.get("/cookie")
-async def read_cookie(my_cookie: str | None = Cookie(None)):
-    return {"cookie": my_cookie}
