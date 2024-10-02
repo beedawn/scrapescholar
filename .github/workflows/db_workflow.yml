@@ -26,7 +26,7 @@ jobs:
       POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
       POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
-      ENCRYPTION_KEY: iLUn9QqXze0XIdciqbaDnmxHlgEtkOJE6mV0e3Vw32g=
+      ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}
     services:
       postgres:
         image: postgres:latest
@@ -39,7 +39,7 @@ jobs:
           POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
           POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
-          ENCRYPTION_KEY: iLUn9QqXze0XIdciqbaDnmxHlgEtkOJE6mV0e3Vw32g=        
+          ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}       
         ports:
           - 5432:5432
         options: >-
