@@ -5,7 +5,7 @@ import SearchHeader from './SearchHeader';
 import ResultsTable from './ResultsTable';
 interface SearchResultsProps {
     displayInputs: string[];
-    results: ResultItem[]|string[];
+    results: ResultItem[];
     className?: string;
     emptyString?: string;
     disableD3?: boolean;
@@ -24,7 +24,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
-                {results.length !== 0 && displayInputs[0] !== emptyString&& results[0]!=="Error" ? (
+                {results.length !== 0 && displayInputs[0] !== emptyString ? (
                     <div>
                         <SearchHeader downloadURL="/csv" searchName={searchName} setSearchName={setSearchName} />
                         <p>
@@ -44,7 +44,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                         </p>)
                         : (results.length === 0 && displayInputs[0] !== ''  ? (<p>No Results Found</p>) : (
                         
-                        results[0]=="Error"?<p>Error!</p>:
+                       
                         
                         <p>Loading...</p>))}
             </div>

@@ -47,7 +47,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results
-    const [results, setResults] = useState<ResultItem[]|string[]>([]);
+    const [results, setResults] = useState<ResultItem[]>([]);
     const [dataFull, setDataFull]= useState<boolean>(false);
     //inputs gets user inputs, update everytime user enters character
     const [inputs, setInputs] = useState<string[]>(['']);

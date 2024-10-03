@@ -13,7 +13,7 @@ export interface EditableCell {
 }
 
 interface ResultsTableProps {
-    results: ResultItem[]|string[];
+    results: ResultItem[];
     setResults: (item: ResultItem[]) => void;
     selectedArticle: number;
     setSelectedArticle: (index: number) => void;
