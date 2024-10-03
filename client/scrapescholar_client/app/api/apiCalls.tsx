@@ -121,7 +121,38 @@ const getAPISearches = async ( setError:any) =>{
   }
 }
 
-return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches};
+
+
+const getAPIPastSearchResults = async ( setResults:any, setError:any, search_id:number) =>{
+  let data: Response;
+  let jsonData;
+      try {
+  
+        const url = `http://${host}:8000/search/user/articles?search_id=${search_id}`
+          data = await fetch(url, { method: "GET", credentials:"include"})
+          jsonData = await data.json()
+     
+
+      }
+      catch (error: any) {
+    
+
+          // jsonData = [{ "title": error.message, link: '' }]
+          setError(error);
+      }
+  
+  if (jsonData !== undefined && jsonData.length > 0) {
+      setResults(jsonData)
+  }
+  else {
+      //set better error message
+      // setError(data)
+      setResults([]);
+  }
+}
+
+
+return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults};
 
 }
 

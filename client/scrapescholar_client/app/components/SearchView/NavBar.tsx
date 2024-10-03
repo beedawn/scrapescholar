@@ -15,14 +15,15 @@ interface NavBarProps {
     dropdown: Dropdown[];
     addToUserDatabaseList: (item: string) => void;
     removeFromUserDatabaseList: (item: string) => void;
-    searches:any[];
+    searches:any[]; 
+    handlePastSearchSelection: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
     addInput, inputs, handleSearchChange, removeInput,
     setLoggedIn, dropdown, handleDropdownChange,
-    addToUserDatabaseList, removeFromUserDatabaseList, searches }) => {
+    addToUserDatabaseList, removeFromUserDatabaseList, searches, handlePastSearchSelection }) => {
     const handleLogout = () => {
         setLoggedIn(false);
     };
@@ -35,8 +36,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
                 <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
-                <DropdownSearchBox value={"hi"}
-                    onDropdownChange={() => { }} valueArray={searches.map((item)=>(item.title))}
+                <DropdownSearchBox value="past search dropdown"
+                    onDropdownChange={(selectedTitle) =>handlePastSearchSelection(selectedTitle)} valueArray={searches.map((item)=>(item.title))}
                     className="w-full" />
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">

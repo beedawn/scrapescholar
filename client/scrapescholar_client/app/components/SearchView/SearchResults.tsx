@@ -21,7 +21,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
-                {results.length !== 0 && displayInputs[0] !== emptyString ? (
+                {results.length !== 0 ? (
                     <div>
                         <SearchHeader downloadURL="/csv" searchName={searchName} setSearchName={setSearchName} />
                         <p>
@@ -34,7 +34,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                         <ResultsTable setResults={setResults} results={results} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle} />
                     </div>
                 ) :
-                    results.length === 0 && displayInputs.length === 0 || results.length===0 && displayInputs[0]===''
+                    results.length === 0 && displayInputs.length === 0 
                         ?
                         (<p className="bg-red-800 p-2 rounded">
                             Please enter a keyword

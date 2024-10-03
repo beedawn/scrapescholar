@@ -33,7 +33,7 @@ export interface ResultItem {
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
     const [inputs, setInputs] = useState<string[]>(['']);
-    const { getAPIDatabases, getAPIResults, getAPISearches } = apiCalls();
+    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults } = apiCalls();
 
       useEffect(() => {
         const fetchDatabases = async () => {
@@ -102,6 +102,23 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         newInputs[index] = e.target.value;
         setInputs(newInputs);
     }
+
+    const handlePastSearchSelection = async (event:any)=>{
+        const selectedTitle = event.target.value;
+        const selectedSearch = searches.find((item)=> item.title === selectedTitle);
+        if(selectedSearch){
+            const selectedSearchId = selectedSearch.search_id;
+            console.log(selectedSearchId)
+            setLoading(true);
+            setError(null);
+            await getAPIPastSearchResults( setResults, setError, selectedSearchId );
+            setLoading(false);
+        }
+        else{
+        setError({"message":"No search found"});
+        }
+
+    }
     //updates data in dropdown array when and/or/not is selected
     const handleDropdownChange = (index: number, option: Dropdown) => {
         const newDropdown = [...dropdown];
@@ -161,7 +178,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
-                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} setSearches={setSearches}
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} handlePastSearchSelection={handlePastSearchSelection}
                     />
             </div>
             <div className="flex-1 sm:mx-12 w-full">
