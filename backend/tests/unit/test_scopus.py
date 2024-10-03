@@ -4,10 +4,10 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from api_tools.api_tools import scopus_api_key
-from tests.unit.get_cookie import get_cookie
+from tests.unit.tools.get_cookie import get_cookie
+from tests.unit.tools.base_url import base_url
 client = TestClient(app)
 
-base_url = "http://localhost:8000" 
 session = get_cookie()
 def test_scopus_response_has_title_and_link():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
