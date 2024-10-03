@@ -30,6 +30,7 @@ describe('SearchView AR-4 Component', () => {
 
     test('AR-4 When user clicks on pencil next to value, text field turns into input box', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+        screen.debug(undefined,1000000);
         submitSearch(testInput);
         await waitFor(() => {
             const pencilIcons = screen.getAllByText("✎");

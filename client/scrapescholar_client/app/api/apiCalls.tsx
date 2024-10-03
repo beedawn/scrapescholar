@@ -107,7 +107,7 @@ const getAPISearches = async ( setError:any) =>{
     
 
           // jsonData = [{ "title": error.message, link: '' }]
-          setError(error);
+          // setError(error);
       }
   
   if (jsonData !== undefined && jsonData.length > 0) {
