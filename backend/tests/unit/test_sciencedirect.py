@@ -21,7 +21,9 @@ def test_sciencedirect_response_returns_correct_elements():
         assert "citedby" in item
         assert "link" in item
         assert isinstance(item["link"], str)
-        assert item["link"].startswith("https://www.sciencedirect.com")
+        from urllib.parse import urlparse
+        parsed_url = urlparse(item["link"])
+        assert parsed_url.hostname and parsed_url.hostname.endswith("sciencedirect.com")
         assert "abstract" in item
         assert "document_type" in item
         assert "source" in item
