@@ -26,6 +26,8 @@ jobs:
       NEXT_PUBLIC_ADMIN_PASS: ${{ secrets.NEXT_PUBLIC_ADMIN_PASS }}
       #used in AR-3 tests
       DOMAIN: scrapescholar.me
+      TEST_USER: ${{ secrets.TEST_USER}}
+      TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
     services:
       postgres:
         image: postgres:latest
