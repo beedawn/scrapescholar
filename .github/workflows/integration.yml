@@ -72,16 +72,18 @@ jobs:
     - name: Run init_db script  
       run: python backend/app/init_db.py
         
-    - name: Run Python Integration Tests
-      working-directory: ./backend  # Adjust to the correct directory
-      run: |
-        pytest ./tests/integration
+   
 
     - name: Run FastAPI Server
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://0.0.0.0:8000/health_check
+
+    - name: Run Python Integration Tests
+      working-directory: ./backend  # Adjust to the correct directory
+      run: |
+        pytest ./tests/integration
 
     - name: Run npm install
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
