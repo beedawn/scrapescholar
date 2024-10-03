@@ -22,8 +22,11 @@ const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
         className={`text-black p-2 ${className}`}
       >
         {valueArray.map((option, index) => (
-          <option key={option+index} value={option}>
-            {option}
+          option.search_id ?
+          <option key={option+index} value={option.search_id}>
+            {option.title}
+          </option>: <option key={option+index} value={option}>
+            {option}-1
           </option>
         ))}
       </select>

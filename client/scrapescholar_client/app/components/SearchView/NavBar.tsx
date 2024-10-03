@@ -37,7 +37,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                 <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
                 <DropdownSearchBox value="past search dropdown"
-                    onDropdownChange={(selectedTitle) =>handlePastSearchSelection(selectedTitle)} valueArray={searches.map((item)=>(item.title))}
+                    onDropdownChange={(selectedTitle) =>handlePastSearchSelection(selectedTitle)} valueArray={searches}
                     className="w-full" />
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">
