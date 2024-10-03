@@ -26,6 +26,27 @@ jobs:
       NEXT_PUBLIC_ADMIN_PASS: ${{ secrets.NEXT_PUBLIC_ADMIN_PASS }}
       #used in AR-3 tests
       DOMAIN: scrapescholar.me
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          PYTHONPATH: ./backend
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
+          POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}       
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U student" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
@@ -39,6 +60,13 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         pip install -r requirements.txt
+        
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        until pg_isready -h localhost -p 5432 -U student; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 5
+        done
         
     - name: Run Python Integration Tests
       working-directory: ./backend  # Adjust to the correct directory
