@@ -11,7 +11,7 @@ from endpoints.auth import auth
 from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
-from endpoints.search.search import post_search_no_route, get_current_user_no_route
+from endpoints.search.search import post_search_no_route, get_current_user_no_route, check_if_user_exceeded_search_amount
 from app.db.session import get_db, SessionLocal
 from sqlalchemy.orm import Session
 
@@ -63,6 +63,13 @@ def get_database_list(directory):
 @app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None, 
 access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+    current_user= await get_current_user_no_route(token=access_token, db=db)
+    exceeded_searches = await check_if_user_exceeded_search_amount(current_user=current_user, db=db)
+    if exceeded_searches:
+        return JSONResponse(
+        status_code=507,
+        content={"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}
+        )
     keywords_list = keywords.split()
     response=[]
     id = 0
@@ -72,14 +79,14 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
             new_id=check_response(response,id)
             article_response, id =globals()[item].request_data(keywords, id=new_id,)
             response.extend(article_response)
-    current_user= await get_current_user_no_route(token=access_token, db=db)
+    
     search_valid = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
     if search_valid:
         return response
     else:
         return JSONResponse(
-        status_code=507,
-        content={"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}
+        status_code=404,
+        content={"message": "Not found."}
     )
 
 

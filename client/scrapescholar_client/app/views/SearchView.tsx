@@ -105,7 +105,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const handlePastSearchSelection = async (event:any)=>{
         const selectedSearchId = event.target.value;
-
+        setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
      if(selectedSearchId){
             console.log(selectedSearchId)

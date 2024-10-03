@@ -135,7 +135,21 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
 
-
+async def check_if_user_exceeded_search_amount (db: Session , current_user: User ):
+    #check if there are 300 searches if there are return true
+    existing_searches = (
+            db.query(Search)
+            .filter(Search.user_id == current_user.user_id)
+            .order_by(Search.search_date.desc())
+            .limit(300)
+            .all()
+        )
+    if (len(existing_searches)>=300):
+        print("amount exceeded!")
+        return True
+    else:
+        print("amount not exceeded")
+        return False
 
 async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], db: Session , current_user: User ):
     """
@@ -147,26 +161,26 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     need to check if user has 300 searches, then respond with some kind of message to front end to let it know to bug them to delete searches
     """
 
-    #check if there are 300 searches if there are, bail
-    existing_searches = (
-            db.query(Search)
-            .filter(Search.user_id == current_user.user_id)
-            .order_by(Search.search_date.desc())
-            .limit(300)
-            .all()
-        )
-    if (len(existing_searches)>=300):
+
+    result= await check_if_user_exceeded_search_amount(db, current_user)
+
+
+    if result:
         return False
+
     #title, date and user_id could this be better?
     decrypt_username=decrypt(current_user.username)
     title=f"{decrypt_username}-{datetime.now()}"
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
+    #insert looop here if you want 300 searhces
+    # x = 0
+    # while (x<300):
     created_search = create_search(search=search, db=db, )
-
+        # x += 1
     # Define the format
     date_format = "%Y-%m-%d"
-   
+
     for article in articles:
         format_article= ArticleCreate(
         title=article.title,
@@ -182,7 +196,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         search_id=created_search.search_id, 
         user_id=current_user.user_id)
         create_article(article=format_article, db=db)
-  
+    
     return True
 
 
