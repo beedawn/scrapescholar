@@ -105,6 +105,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const handlePastSearchSelection = async (event:any)=>{
         const selectedTitle = event.target.value;
+        //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
         const selectedSearch = searches.find((item)=> item.title === selectedTitle);
         if(selectedSearch){
             const selectedSearchId = selectedSearch.search_id;

@@ -131,7 +131,7 @@ const getAPIPastSearchResults = async ( setResults:any, setError:any, search_id:
         const url = `http://${host}:8000/search/user/articles?search_id=${search_id}`
           data = await fetch(url, { method: "GET", credentials:"include"})
           jsonData = await data.json()
-     
+          
 
       }
       catch (error: any) {
@@ -140,7 +140,7 @@ const getAPIPastSearchResults = async ( setResults:any, setError:any, search_id:
           // jsonData = [{ "title": error.message, link: '' }]
           setError(error);
       }
-  
+      console.log(jsonData)
   if (jsonData !== undefined && jsonData.length > 0) {
       setResults(jsonData)
   }
