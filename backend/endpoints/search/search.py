@@ -1,8 +1,8 @@
 # search/search.py
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query
 from app.db.session import get_db
 from app.models.search import Search
+from app.models.article import Article
 from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer
 from app.crud.search import create_search
@@ -13,9 +13,12 @@ from app.crud.article import create_article
 from pydantic import HttpUrl
 import jwt  # Import JWT
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Annotated
 import os
 from datetime import datetime
+from sqlalchemy.orm import Session
+
+
 
 # Load environment variables
 load_dotenv()
@@ -80,10 +83,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
 
 # Endpoint to retrieve the last 300 searches for the logged-in user
 @router.get("/user/searches", status_code=status.HTTP_200_OK)
-async def get_last_300_searches(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None):
     """
     Retrieve the last 300 searches for the logged-in user.
     """
+    current_user = await get_current_user_no_route(token=access_token, db=db)
     try:
         # Query the last 300 searches for the authenticated user
         searches = (
@@ -101,64 +105,34 @@ async def get_last_300_searches(db: Session = Depends(get_db), current_user: Use
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
 
-# # Endpoint to save a requested search
-# @router.post("/user/searches", status_code=status.HTTP_200_OK)
-# async def post_search(keywords:List[str], articles:List[ArticleBase], db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-#     """
-#     Save a search to the DB
-#     """
 
-#     """
-#     todo: 
-#     add search and search ID
-#     can probably remove search from the parameters, as this will create the search, and possibly return it?
-#     get a list of articles from the api request, a search,
-#     save the search as a whole ie create a search, 
-#     then save each article within the DB ie create one to many articles
-#         and associate it the search
+# get single search and associated articles
+@router.get("/user/articles", status_code=status.HTTP_200_OK)
+async def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to retrieve")):
+    """
+    Retrieve a single search and asscoaited articles
+    """
+    current_user = await get_current_user_no_route(token=access_token, db=db)
+    try:
+        # Query the last 300 searches for the authenticated user
+        search = (
+            db.query(Search)
+            .filter(Search.user_id == current_user.user_id, Search.search_id == search_id)
+            .first()
+        )
 
-#     is it better to have this as an endpoint or run this when the /academic_data end point is triggered?
-#     will leave as endpoint for now, its easier for testing/development
-#     """
+        articles = (
+            db.query(Article)
+            .filter(Article.search_id== search.search_id)
+            .order_by(Article.title.desc())
+            .all()
+        )
+        return articles if articles else []
 
-
-
-#     #title, date and user_id could this be better should be username_datetimestamp?
-#     title=f"{datetime.now()}_{current_user.user_id}"
-#     # create new search to associate articles to
-#     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
-#     created_search = create_search(search=search, db=db)
-
-
-#     for article in articles:
-#         format_article= ArticleCreate(title=article.title,
-#         author=article.author,
-#         publication_date=article.date,
-#         journal=article.journal,
-#         url=HttpUrl(article.url),
-#         relevance_score=article.relevance_score,
-#         review_status=article.review_status,
-#         abstract=article.abstract,
-#         doi=article.doi,
-#         source_id=article.source_id,
-#         search_id=created_search.search_id, 
-#         user_id=current_user.user_id)
-#         create_article(article=format_article, db=db)
-#     # try:
-#     #     # Query the last 300 searches for the authenticated user
-#     #     searches = (
-#     #         db.query(Search)
-#     #         .filter(Search.user_id == current_user.user_id)
-#     #         .order_by(Search.search_date.desc())
-#     #         .limit(300)
-#     #         .all()
-#     #     )
-#     #     return searches if searches else []
-
-#     # except Exception as e:
-#     #     if DEBUG_SCRAPESCHOLAR:
-#     #         print(f"Error retrieving searches: {str(e)}")
-#     #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+    except Exception as e:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Error retrieving search and associated articles: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
 
 
@@ -170,12 +144,8 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
 
     """
     todo: 
-
-
-
     need to check if user has 300 searches, then respond with some kind of message to front end to let it know to bug them to delete searches
     """
-
 
     #check if there are 300 searches if there are, bail
     existing_searches = (
@@ -185,8 +155,6 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
             .limit(300)
             .all()
         )
-    print("SEARCH LENGTH")
-    print(len(existing_searches))
     if (len(existing_searches)>=300):
         return False
     #title, date and user_id could this be better?
@@ -194,11 +162,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     title=f"{decrypt_username}-{datetime.now()}"
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
-
-
     created_search = create_search(search=search, db=db, )
-
-
 
     # Define the format
     date_format = "%Y-%m-%d"

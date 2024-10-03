@@ -74,7 +74,7 @@ CREATE USER student WITH PASSWORD 'student';
 
 GRANT ALL PRIVILEGES ON DATABASE scrapescholartestdb TO student;
 
-python -m app.db_init.py
+python -m app.init_db
 
 create user curl
 curl -X 'POST' \

@@ -90,7 +90,38 @@ const apiCalls = () => {
     }
 }
 
-return {getAPIDatabases, postAPILogin, getAPIResults};
+
+
+const getAPISearches = async ( setError:any) =>{
+  let data: Response;
+  let jsonData;
+
+      try {
+  
+        const url = `http://${host}:8000/search/user/searches`
+          data = await fetch(url, { method: "GET", credentials:"include"})
+          jsonData = await data.json()
+
+      }
+      catch (error: any) {
+    
+
+          // jsonData = [{ "title": error.message, link: '' }]
+          setError(error);
+      }
+  
+  if (jsonData !== undefined && jsonData.length > 0) {
+    console.log(jsonData)
+      return jsonData;
+  }
+  else {
+      //set better error message
+      // setError(data)
+      return [];
+  }
+}
+
+return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches};
 
 }
 
