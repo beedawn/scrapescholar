@@ -13,7 +13,7 @@ const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
     className = '', 
     valueArray
   }) => {
-
+console.log(valueArray)
 
     return (
       <select
@@ -22,11 +22,11 @@ const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
         className={`text-black p-2 ${className}`}
       >
         {valueArray.map((option, index) => (
-          option.search_id ?
+          option.search_id !== undefined ?
           <option key={option+index} value={option.search_id}>
             {option.title}
           </option>: <option key={option+index} value={option}>
-            {option}-1
+            {option}
           </option>
         ))}
       </select>

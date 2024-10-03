@@ -71,8 +71,6 @@ jobs:
         done
     - name: Run init_db script  
       run: python backend/app/init_db.py
-        
-   
 
     - name: Run FastAPI Server
       working-directory: ./backend  # Adjust to the correct directory

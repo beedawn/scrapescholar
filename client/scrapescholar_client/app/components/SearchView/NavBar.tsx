@@ -27,6 +27,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     const handleLogout = () => {
         setLoggedIn(false);
     };
+    const dropdown_values =Object.values(Dropdown);
+    console.log(dropdown_values)
     return (
         <>
             <div className="p-5 max-w-sm mr-auto float-left">
@@ -59,7 +61,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                             {inputs.length > 1 && index != inputs.length - 1 && inputs[index].length > 0 &&
                                 <DropdownSearchBox value={dropdown[index]} className="ml-2" onDropdownChange={(e) => {
                                     handleDropdownChange(index, e.target.value as Dropdown)
-                                }} valueArray={Object.values(Dropdown)}
+                                }} valueArray={dropdown_values}
                                 />
                             }
                         </div>)
