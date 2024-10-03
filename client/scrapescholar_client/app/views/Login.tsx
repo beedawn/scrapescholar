@@ -13,7 +13,7 @@ const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
 const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 
 const Login: React.FC<LoginProps> = ({ setLoggedIn}) => {
-    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
+    const {  postAPILogin } = apiCalls();
 
 
 
