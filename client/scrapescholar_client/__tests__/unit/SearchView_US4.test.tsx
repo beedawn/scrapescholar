@@ -27,7 +27,6 @@ describe('SearchView US-4 Component', () => {
         submitSearch(testInput);
         await waitFor(() => {
             const searchTitleDiv = screen.getByTestId('search-title')
-            console.log(searchTitleDiv)
             expect(searchTitleDiv.textContent).toContain("✎");
         }, { timeout: 5000 });
     })

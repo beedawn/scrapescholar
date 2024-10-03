@@ -18,9 +18,6 @@ interface SearchResultsProps {
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString,
     disableD3 = false,  bubbleInputs, setResults, setSearchName, searchName }) => {
     const [selectedArticle, setSelectedArticle] = useState(-1);
-  console.log(results);
-  console.log(displayInputs);
-  console.log(results.length === 0 && displayInputs[0] === '')
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">

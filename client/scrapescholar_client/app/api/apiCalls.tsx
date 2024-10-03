@@ -68,14 +68,12 @@ const apiCalls = () => {
             data = await fetch(url, { method: "GET", credentials:"include"})
             jsonData = await data.json()
             if (data.status === 507) {
-              console.log(jsonData.message)
               setDataFull(true);
   
           } 
 
         }
         catch (error: any) {
-          console.log(error)
       
   
             // jsonData = [{ "title": error.message, link: '' }]
