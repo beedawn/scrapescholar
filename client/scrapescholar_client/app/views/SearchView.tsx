@@ -141,9 +141,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //update state with our new array
         setBubbleInputs(newBubbleInputs);
         //initialize data variable to fill up with api response
-        console.log(inputs);
+
         await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs, setDataFull);
-        console.log(error);
+ 
         setLoading(false);
     }
     return (
