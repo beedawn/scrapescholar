@@ -92,7 +92,8 @@ def insert_test_data(db):
     # Insert a test Search associated with the User
     search_data = SearchCreate(
         user_id=user.user_id,
-        search_keywords=["test", "example"]
+        search_keywords=["test", "example"],
+        title="Test Search"
     )
     create_search(db=db, search=search_data)
 
