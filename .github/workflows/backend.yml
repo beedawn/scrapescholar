@@ -22,6 +22,9 @@ jobs:
       POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}
+      TEST_USER: ${{secrets.TEST_USER}}
+      TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
+
     services:
       postgres:
         image: postgres:latest
@@ -62,7 +65,7 @@ jobs:
           echo "Waiting for PostgreSQL to be ready..."
           sleep 5
         done
-        
+
     - name: Run init_db script  
       run: python backend/app/init_db.py
         
