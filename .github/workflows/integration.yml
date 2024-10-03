@@ -60,13 +60,15 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         pip install -r requirements.txt
-        
+
     - name: Wait for PostgreSQL to be ready
       run: |
         until pg_isready -h localhost -p 5432 -U student; do
           echo "Waiting for PostgreSQL to be ready..."
           sleep 5
         done
+    - name: Run init_db script  
+      run: python backend/app/init_db.py
         
     - name: Run Python Integration Tests
       working-directory: ./backend  # Adjust to the correct directory
