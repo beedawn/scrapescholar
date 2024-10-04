@@ -68,7 +68,6 @@ const apiCalls = () => {
         try {
     
           const url = `http://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
-          console.log(url)
             data = await fetch(url, { method: "GET", credentials:"include"})
             jsonData = await data.json()
         
@@ -163,7 +162,7 @@ const getAPIPastSearchTitle = async (search_id:number, setSearchName:(item:strin
         const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
           data = await fetch(url, { method: "GET", credentials:"include"})
           jsonData = await data.json()
-          console.log(jsonData)
+
 
       }
       catch (error: any) {
@@ -172,17 +171,16 @@ const getAPIPastSearchTitle = async (search_id:number, setSearchName:(item:strin
           // jsonData = [{ "title": error.message, link: '' }]
           // setError(error);
       }
-      console.log(jsonData)
 
-  if (jsonData.title !== undefined ||jsonData.keywords !== undefined) {
+
+  if (jsonData!==undefined &&(jsonData.title !== undefined ||jsonData.keywords !== undefined)) {
       setSearchName(jsonData.title); 
       setDisplayInputs(jsonData.keywords);
   }
   else {
       //set better error message
       // setError(data)
-      console.log(search_id)
-      console.log(jsonData)
+
       return [];
   }}
 }
@@ -219,7 +217,7 @@ setLoading:(item:boolean)=>void)=>{
           )
         })
           jsonData = await data.json()
-          console.log(jsonData.title)
+
 
       }
       catch (error: any) {
@@ -228,15 +226,14 @@ setLoading:(item:boolean)=>void)=>{
           // jsonData = [{ "title": error.message, link: '' }]
           // setError(error);
       }
-      console.log(jsonData)
+
      
-  if (jsonData.title !== undefined ) {
-    console.log("search name updated")
+  if (jsonData!== undefined && jsonData.title !== undefined ) {
       setSearchName(jsonData.title); 
 
   }
   else {
-      console.log(jsonData)
+      // console.log(jsonData)
       
   }
   setLoading(false)

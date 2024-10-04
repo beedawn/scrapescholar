@@ -48,7 +48,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
         const fetchSearches = async () => {
             const search_list = await getAPISearches(setError);
-            console.log(search_list)
             setSearches(search_list);  
  
     
