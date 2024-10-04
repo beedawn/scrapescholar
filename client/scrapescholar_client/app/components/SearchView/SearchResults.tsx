@@ -50,7 +50,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                         <ResultsTable setResults={setResults} results={results} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle} />
                     </div>
                 ) :
-                    results.length === 0 && displayInputs === undefined || results.length===0 && displayInputs[0]===''
+                    results.length === 0 && displayInputs[0] === ''
                         ?
                         (<p className="bg-red-800 p-2 rounded">
                             Please enter a keyword

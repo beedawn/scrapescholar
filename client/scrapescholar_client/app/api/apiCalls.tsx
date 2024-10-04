@@ -157,6 +157,7 @@ const getAPIPastSearchResults = async ( setResults:any, setError:any, search_id:
 const getAPIPastSearchTitle = async (search_id:number, setSearchName, setDisplayInputs) =>{
   let data: Response;
   let jsonData;
+  if (search_id >0){
       try {
   
         const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
@@ -173,7 +174,7 @@ const getAPIPastSearchTitle = async (search_id:number, setSearchName, setDisplay
       }
       console.log(jsonData)
 
-  if (jsonData !== undefined ) {
+  if (jsonData.title !== undefined ||jsonData.keywords !== undefined) {
       setSearchName(jsonData.title); 
       setDisplayInputs(jsonData.keywords);
   }
@@ -183,7 +184,7 @@ const getAPIPastSearchTitle = async (search_id:number, setSearchName, setDisplay
       console.log(search_id)
       console.log(jsonData)
       return [];
-  }
+  }}
 }
 
 
