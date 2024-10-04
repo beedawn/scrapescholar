@@ -213,6 +213,7 @@ def test_get_search_by_id(db_session):
 
     # Step 3: Use the access token to create a search
     search_data = {
+        "user_id": created_user_id,
         "search_keywords": ["AI", "machine learning"],
         "title": "AI and ML Search"
     }
