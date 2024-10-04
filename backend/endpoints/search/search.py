@@ -18,8 +18,6 @@ import os
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-
-
 # Load environment variables
 load_dotenv()
 
@@ -104,13 +102,11 @@ async def get_last_300_searches(db: Session = Depends(get_db), access_token: Ann
             print(f"Error retrieving searches: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
-
-
 # get single search and associated articles
 @router.get("/user/articles", status_code=status.HTTP_200_OK)
 async def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to retrieve")):
     """
-    Retrieve a single search and asscoaited articles
+    Retrieve a single search and associated articles
     """
     current_user = await get_current_user_no_route(token=access_token, db=db)
     try:
@@ -135,7 +131,46 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
 
+# Add POST route to create a new search
+@router.post("/create", status_code=status.HTTP_201_CREATED)
+async def create_new_search(
+    search_data: SearchCreate, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Create a new search and associate articles with it.
+    """
+    # Set the user_id from the current_user object
+    search = Search(
+        user_id=current_user.user_id,
+        search_keywords=search_data.search_keywords,
+        title=search_data.title,
+        status=search_data.status,
+        search_date=datetime.utcnow()
+    )
+    
+    db.add(search)
+    db.commit()
+    db.refresh(search)
+    
+    return {"search_id": search.search_id}
 
+# Retrieve a specific search by its ID
+@router.get("/searchbyid/{search_id}", status_code=status.HTTP_200_OK)
+async def get_search_by_id(search_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
+    try:
+        search = db.query(Search).filter(Search.user_id == current_user.user_id, Search.search_id == search_id).first()
+
+        if not search:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
+
+        return search
+    except Exception as e:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Error retrieving search: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving search: {str(e)}")
 
 async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], db: Session , current_user: User ):
     """
@@ -146,7 +181,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     todo: 
     need to check if user has 300 searches, then respond with some kind of message to front end to let it know to bug them to delete searches
     """
-
+    
     #check if there are 300 searches if there are, bail
     existing_searches = (
             db.query(Search)
@@ -162,7 +197,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     title=f"{decrypt_username}-{datetime.now()}"
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
-    created_search = create_search(search=search, db=db, )
+    created_search = create_search(search=search, db=db)
 
     # Define the format
     date_format = "%Y-%m-%d"
@@ -184,9 +219,6 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         create_article(article=format_article, db=db)
   
     return True
-
-
-
 
 
 async def get_current_user_no_route(db: Session, token: str = Depends(oauth2_scheme)):
