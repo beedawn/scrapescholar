@@ -111,12 +111,7 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
         # Query for the search
         search = await find_search(db=db, current_user=current_user,search_id=search_id)
    
-        articles = (
-            db.query(Article)
-            .filter(Article.search_id== search.search_id)
-            .order_by(Article.title.desc())
-            .all()
-        )
+        articles = await find_search_articles(db=db, search_id=search_id)
         return articles if articles else []
 
     except Exception as e:
@@ -154,7 +149,7 @@ async def create_new_search(
 async def get_search_by_id(search_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
     try:
-        search = db.query(Search).filter(Search.user_id == current_user.user_id, Search.search_id == search_id).first()
+        search = await find_search(db=db, current_user=current_user, search_id=search_id)
 
         if not search:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
@@ -164,7 +159,7 @@ async def get_search_by_id(search_id: int, db: Session = Depends(get_db), curren
         if DEBUG_SCRAPESCHOLAR:
             print(f"Error retrieving search: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving search: {str(e)}")
-# get single search and associated articles
+# get a searches title thinkt his duplicates above function except this one uses cookie...keeping it for now need to refactor these
 @router.get("/user/search/title", status_code=status.HTTP_200_OK)
 async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to retrieve")):
     """
@@ -181,7 +176,7 @@ async def get_search_title(db: Session = Depends(get_db), access_token: Annotate
             print(f"Error retrieving search and associated search: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
-# get single search and associated articles
+# put a new title into a search
 @router.put("/user/search/title", status_code=status.HTTP_200_OK)
 async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to retrieve"), search_data: SearchUpdate = Body(...)):
     """
@@ -200,6 +195,39 @@ async def get_search_title(db: Session = Depends(get_db), access_token: Annotate
         if DEBUG_SCRAPESCHOLAR:
             print(f"Error retrieving search and associated search: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+
+
+# delete a search
+@router.delete("/user/search/title", status_code=status.HTTP_200_OK)
+async def delete_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to delete")):
+    """
+    delete a search and associated articles
+    """
+    current_user = await get_current_user_no_route(token=access_token, db=db)
+    try:
+        # Query the last 300 searches for the authenticated user
+        search = await find_search(db=db, current_user=current_user,search_id=search_id)
+        
+        if search is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
+
+        
+        db.delete(search)
+        db.commit()
+        return []
+
+    except Exception as e:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Error retrieving search and associated search: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+
+async def find_search_articles(db, search_id):
+      return (
+            db.query(Article)
+            .filter(Article.search_id== search_id)
+            .order_by(Article.title.desc())
+            .all()
+        )
 
 async def find_search(db,current_user,search_id):
     return  (
@@ -249,10 +277,10 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     #add loop for 300 search here
-    x=0
-    while x<300:
-        created_search = create_search(search=search, db=db)
-        x += 1
+    # x=0
+    # while x<300:
+    created_search = create_search(search=search, db=db)
+        # x += 1
 
     # Define the format
     date_format = "%Y-%m-%d"

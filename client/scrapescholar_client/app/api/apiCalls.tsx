@@ -249,6 +249,62 @@ setLoading:(item:boolean)=>void)=>{
 
 }
 
+const deleteSearch = async (new_title:string, search_id:number, 
+  setSearchName:(item:string)=>void, 
+setLoading:(item:boolean)=>void)=>{
+  let data: Response;
+  let jsonData;
+  /* responds with 
+  {
+    "user_id": 1,
+    "search_keywords": [
+        "abcdefghijkl,mop",
+        "AND",
+        "123456789"
+    ],
+    "title": "new title new",
+    "search_date": null,
+    "search_id": 17,
+    "status": "active"
+} 
+    */
+   setLoading(true);
+      try {
+  
+        const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
+          data = await fetch(url, { method: "PUT", credentials:"include", headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {"title":new_title}
+
+          )
+        })
+          jsonData = await data.json()
+
+
+      }
+      catch (error: any) {
+    
+
+          // jsonData = [{ "title": error.message, link: '' }]
+          // setError(error);
+      }
+
+     
+  if (jsonData!== undefined && jsonData.title !== undefined ) {
+      setSearchName(jsonData.title); 
+
+  }
+  else {
+      // console.log(jsonData)
+      
+  }
+  setLoading(false)
+
+}
+
+
 
 return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle};
 
