@@ -56,7 +56,7 @@ setLoading}) => {
                         (<p className="bg-red-800 p-2 rounded">
                             Please enter a keyword
                         </p>)
-                        : (results.length === 0 && displayInputs[0] !== ''  ? (<p>No Results Found</p>) : (
+                        : (results.length === 0 && displayInputs[0] !== ''  ? (<p>No Results Found. Please try another search!</p>) : (
                         
                        
                         

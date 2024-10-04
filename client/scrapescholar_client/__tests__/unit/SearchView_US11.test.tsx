@@ -38,7 +38,7 @@ describe('SearchView US-11 Component', () => {
         }, { timeout: 5000 });
 
         await waitFor(() => {
-            expect(screen.getByText('No Results Found')).toBeInTheDocument()
+            expect(screen.getByText(/no results found/i)).toBeInTheDocument()
         }, { timeout: 5000 });
     })
 
