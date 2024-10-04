@@ -1,13 +1,14 @@
 # search/search.py
-from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
 from app.db.session import get_db
 from app.models.search import Search
 from app.models.article import Article
 from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer
 from app.crud.search import create_search
+
 from app.crud.user import decrypt
-from app.schemas.search import SearchCreate
+from app.schemas.search import SearchCreate, SearchUpdate
 from app.schemas.article import ArticleCreate, ArticleBase
 from app.crud.article import create_article
 from pydantic import HttpUrl
@@ -90,13 +91,7 @@ async def get_last_300_searches(db: Session = Depends(get_db), access_token: Ann
     current_user = await get_current_user_no_route(token=access_token, db=db)
     try:
         # Query the last 300 searches for the authenticated user
-        searches = (
-            db.query(Search)
-            .filter(Search.user_id == current_user.user_id)
-            .order_by(Search.search_date.desc())
-            .limit(300)
-            .all()
-        )
+        searches = await get_300_search(db=db, current_user=current_user)
         return searches if searches else []
 
     except Exception as e:
@@ -114,13 +109,9 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
     """
     current_user = await get_current_user_no_route(token=access_token, db=db)
     try:
-        # Query the last 300 searches for the authenticated user
-        search = (
-            db.query(Search)
-            .filter(Search.user_id == current_user.user_id, Search.search_id == search_id)
-            .first()
-        )
-
+        # Query for the search
+        search = await find_search(db=db, current_user=current_user,search_id=search_id)
+   
         articles = (
             db.query(Article)
             .filter(Article.search_id== search.search_id)
@@ -135,15 +126,61 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
 
 
-async def check_if_user_exceeded_search_amount (db: Session , current_user: User ):
-    #check if there are 300 searches if there are return true
-    existing_searches = (
+# get single search and associated articles
+@router.get("/user/search/title", status_code=status.HTTP_200_OK)
+async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to retrieve")):
+    """
+    Retrieve a single search and associtated articles
+    """
+    current_user = await get_current_user_no_route(token=access_token, db=db)
+    try:
+        # Find the search
+        search = await find_search(db=db, current_user=current_user,search_id=search_id)
+        return {'title':search.title, 'keywords':search.search_keywords} if search else []
+
+    except Exception as e:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Error retrieving search and associated search: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+
+# get single search and associated articles
+@router.put("/user/search/title", status_code=status.HTTP_200_OK)
+async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to retrieve"), search_data: SearchUpdate = Body(...)):
+    """
+    Update the title of an existing search
+    """
+    current_user = await get_current_user_no_route(token=access_token, db=db)
+    try:
+        # Query the last 300 searches for the authenticated user
+        search = await find_search(db=db, current_user=current_user,search_id=search_id)
+        search.title = search_data.title
+        db.commit()
+        db.refresh(search) 
+        return search if search else []
+
+    except Exception as e:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Error retrieving search and associated search: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving searches: {str(e)}")
+
+async def find_search(db,current_user,search_id):
+    return  (
+            db.query(Search)
+            .filter(Search.user_id == current_user.user_id, Search.search_id == search_id)
+            .first()
+        )
+async def get_300_search(db, current_user):
+    return (
             db.query(Search)
             .filter(Search.user_id == current_user.user_id)
             .order_by(Search.search_date.desc())
             .limit(300)
             .all()
         )
+
+async def check_if_user_exceeded_search_amount (db: Session , current_user: User ):
+    #check if there are 300 searches if there are return true
+    existing_searches = await get_300_search(db=db, current_user=current_user)
     if (len(existing_searches)>=300):
         print("amount exceeded!")
         return True
