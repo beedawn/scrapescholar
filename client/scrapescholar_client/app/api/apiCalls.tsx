@@ -51,7 +51,9 @@ const apiCalls = () => {
   }
 
   const getAPIResults = async (userDatabaseList:string[], inputsAndLogicalOperators:string[],
-    emptyString:string, setInputs:any, setResults:any, setError:any, filterBlankInputs:string[], inputs:any, setDataFull:(item:boolean)=>void) =>{
+    emptyString:string, setInputs:any, setResults:any, setError:any, 
+    filterBlankInputs:string[], inputs:any, setDataFull:(item:boolean)=>void,
+  setCurrentSearchId:(item:number)=>void) =>{
     let data: Response;
     let jsonData;
     let queryString ='';
@@ -84,8 +86,13 @@ const apiCalls = () => {
             setError(error);
         }
     }
-    if (jsonData !== undefined && jsonData.length > 0) {
-        setResults(jsonData)
+    console.log(jsonData)
+ 
+    if (jsonData !== undefined && jsonData.articles !==undefined && jsonData.articles.length > 0) {
+        //maybe should have this get searchname and keywords too?
+        console.log(jsonData)
+        setResults(jsonData.articles)
+        setCurrentSearchId(jsonData.search_id)
     }
     else {
         //set better error message
@@ -113,8 +120,9 @@ const getAPISearches = async ( setError:any) =>{
           // jsonData = [{ "title": error.message, link: '' }]
           // setError(error);
       }
-  
+
   if (jsonData !== undefined && jsonData.length > 0) {
+    console.log(jsonData)
       return jsonData;
   }
   else {

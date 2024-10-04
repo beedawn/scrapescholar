@@ -241,7 +241,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
 
 
     if result:
-        return False
+        return False, None
 
     #title, date and user_id could this be better?
     decrypt_username=decrypt(current_user.username)
@@ -269,7 +269,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         user_id=current_user.user_id)
         create_article(article=format_article, db=db)
     
-    return True
+    return True, created_search.search_id
 
 
 async def get_current_user_no_route(db: Session, token: str = Depends(oauth2_scheme)):

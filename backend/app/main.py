@@ -82,9 +82,9 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
             article_response, id =globals()[item].request_data(keywords, id=new_id,)
             response.extend(article_response)
     #need something here to get search id after its made or associated function
-    search_valid = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
-    if search_valid:
-        return response
+    search_valid, search_id = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
+    if search_valid and search_id:
+        return {"search_id":search_id, "articles":response}
     else:
         return JSONResponse(
         status_code=404,
