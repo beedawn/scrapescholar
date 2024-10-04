@@ -86,11 +86,11 @@ const apiCalls = () => {
             setError(error);
         }
     }
-    console.log(jsonData)
+
  
     if (jsonData !== undefined && jsonData.articles !==undefined && jsonData.articles.length > 0) {
         //maybe should have this get searchname and keywords too?
-        console.log(jsonData)
+       
         setResults(jsonData.articles)
         setCurrentSearchId(jsonData.search_id)
     }
@@ -122,7 +122,7 @@ const getAPISearches = async ( setError:any) =>{
       }
 
   if (jsonData !== undefined && jsonData.length > 0) {
-    console.log(jsonData)
+
       return jsonData;
   }
   else {
@@ -183,7 +183,8 @@ const getAPIPastSearchTitle = async (search_id:number, setSearchName:(item:strin
 
   if (jsonData!==undefined &&(jsonData.title !== undefined ||jsonData.keywords !== undefined)) {
       setSearchName(jsonData.title); 
-      setDisplayInputs(jsonData.keywords);
+      const joinedKeywords = jsonData.keywords.join(' ');
+      setDisplayInputs(joinedKeywords);
   }
   else {
       //set better error message

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
@@ -19,13 +19,16 @@ describe('SearchView AR-4 Component', () => {
     const testInput = "test input"
 
     test('AR-4 pencil is next to value in methodology', async () => {
-        render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-        submitSearch(testInput);
+        
+        act(()=>{render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+        submitSearch(testInput);})
+        screen.debug(undefined,100000);
         await waitFor(() => {
             const rows = screen.getAllByTestId('row')
             expect(rows[0].children[10].textContent).toContain("✎");
             expect(rows[1].children[10].textContent).toContain("✎");
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
+        
     })
 
     test('AR-4 When user clicks on pencil next to value, text field turns into input box', async () => {

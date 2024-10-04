@@ -27,13 +27,13 @@ setLoading}) => {
     const { getAPIPastSearchTitle } = apiCalls();
 
         useEffect(()=>{
-
             const fetchSearchName = async () => {
                 const search_title= await getAPIPastSearchTitle(currentSearchId, setSearchName, setDisplayInputs)
                 
             }
           fetchSearchName();
          
+
         },[])
     return (
         <div className={className}>

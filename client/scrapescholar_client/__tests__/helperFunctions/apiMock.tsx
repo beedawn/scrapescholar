@@ -29,6 +29,8 @@ const fetchMock = jest.fn((url) => {
         
       });
     }
+
+    
     return Promise.reject(new Error('Invalid URL'));
 }) as jest.Mock;
 

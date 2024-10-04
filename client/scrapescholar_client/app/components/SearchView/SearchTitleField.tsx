@@ -15,7 +15,7 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
           
                 //when search name changes, send post request to API?
                 const putSearchName = async () => {
-                    console.log("working")
+        
                     const search_title= await putSearchTitle(searchName, currentSearchId, setSearchName, setLoading)
                     
                 }
