@@ -18,10 +18,8 @@ const DataFull: React.FC<DataFullProps> =
         };
         const handleDeleteClick = async ()=>{
             setLoading(true)
-            console.log("hello loading")
             for(let item of selectedValue){
                     const numItem = Number(item)
-                    console.log(numItem)
                     await deleteSearch(numItem)
             }
             setLoading(false)
@@ -33,7 +31,7 @@ const DataFull: React.FC<DataFullProps> =
                <p>SearchData is Full!</p>
                <p>Please select some searches to delete to perform additional searches:</p><div className={"flex flex-wrap-reverse"}><div className={"float-left flex-none"}>
                <select name="searches" id="searches" multiple style={{color:"black"}} size={25} value={selectedValue} onChange={handleSelectChange}>
-               {searches.map((item)=> (<option value={item.search_id} >{item.title}</option>))}
+               {searches.map((item,index)=> (<option key={index} value={item.search_id} >{item.title}</option>))}
 </select>
 </div><div className={"float-right flex-1"}><Button className={"bg-red-600 m-5"} onClick={handleDeleteClick}>Delete </Button></div>
 

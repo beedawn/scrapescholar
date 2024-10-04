@@ -28,7 +28,7 @@ setLoading}) => {
 
         useEffect(()=>{
             const fetchSearchName = async () => {
-                const search_title= await getAPIPastSearchTitle(currentSearchId, setSearchName, setDisplayInputs)
+               await getAPIPastSearchTitle(currentSearchId, setSearchName, setDisplayInputs)
                 
             }
           fetchSearchName();
