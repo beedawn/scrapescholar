@@ -71,6 +71,8 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
         content={"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}
         )
     keywords_list = keywords.split()
+    print("USER ID")
+    print(current_user.user_id)
     response=[]
     id = 0
     database_list = get_database_list('academic_databases/')
