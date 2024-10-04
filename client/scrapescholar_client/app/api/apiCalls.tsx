@@ -187,8 +187,64 @@ const getAPIPastSearchTitle = async (search_id:number, setSearchName:(item:strin
   }}
 }
 
+const putSearchTitle = async (new_title:string, search_id:number, 
+  setSearchName:(item:string)=>void, 
+setLoading:(item:boolean)=>void)=>{
+  let data: Response;
+  let jsonData;
+  /* responds with 
+  {
+    "user_id": 1,
+    "search_keywords": [
+        "abcdefghijkl,mop",
+        "AND",
+        "123456789"
+    ],
+    "title": "new title new",
+    "search_date": null,
+    "search_id": 17,
+    "status": "active"
+} 
+    */
+   setLoading(true);
+      try {
+  
+        const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
+          data = await fetch(url, { method: "PUT", credentials:"include", headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {"title":new_title}
 
-return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle};
+          )
+        })
+          jsonData = await data.json()
+          console.log(jsonData.title)
+
+      }
+      catch (error: any) {
+    
+
+          // jsonData = [{ "title": error.message, link: '' }]
+          // setError(error);
+      }
+      console.log(jsonData)
+     
+  if (jsonData.title !== undefined ) {
+    console.log("search name updated")
+      setSearchName(jsonData.title); 
+
+  }
+  else {
+      console.log(jsonData)
+      
+  }
+  setLoading(false)
+
+}
+
+
+return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle};
 
 }
 

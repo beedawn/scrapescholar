@@ -34,6 +34,8 @@ export interface ResultItem {
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
     const [inputs, setInputs] = useState<string[]>(['']);
     const [currentSearchId, setCurrentSearchId]=useState<number>(-1);
+    const [searchName, setSearchName]=useState("search name");
+    const [loading, setLoading] = useState<boolean>(false);
     const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle } = apiCalls();
 
       useEffect(() => {
@@ -56,9 +58,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         fetchSearches();
         fetchDatabases();  
    
-    }, [inputs]); 
+    }, [loading]); 
 
-    const [searchName, setSearchName]=useState("search name");
+
     //gets data from api and stores in results
     const [results, setResults] = useState<ResultItem[]>([]);
     const [dataFull, setDataFull]= useState<boolean>(false);
@@ -86,7 +88,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     //drop down array for dropdown values
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
     //triggers when search is pressed so that UI is updated to loading
-    const [loading, setLoading] = useState<boolean>(false);
+
     const [error, setError] = useState<any>();
     const [searches, setSearches]= useState<any[]>([]);
  
@@ -118,6 +120,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             setLoading(true);
             setError(null);
             await getAPIPastSearchResults( setResults, setError, selectedSearchId );
+            await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
+            //need to add something here to update the searchname to the new name
             setLoading(false);
         }
         else{
@@ -193,7 +197,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             </div>
             <div className="flex-1 sm:mx-12 w-full">
                 {error ? (<p>{error.message}</p>) : dataFull? <p> data is full!</p> : loading ? <p>Loading</p> :
-                    <SearchResults setResults={setResults} displayInputs={joinedInputsString}
+                    <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
                         results={results} emptyString={emptyString} disableD3={disableD3}
                         bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setDisplayInputs={setJoinedInputsString}/>}
             </div>

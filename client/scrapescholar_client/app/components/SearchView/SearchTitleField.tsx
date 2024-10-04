@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import apiCalls from '@/app/api/apiCalls';
 interface SearchTitleFieldProps{
     searchName: string;
     setSearchName: (item: string) => void;
+    currentSearchId:number;
+    setLoading:(item:boolean)=>void;
 }
 
 const SearchTitleField: React.FC<SearchTitleFieldProps> =
-    ({  searchName, setSearchName
+    ({  searchName, setSearchName, currentSearchId, setLoading
          }) => {
+
+            const {putSearchTitle}=apiCalls();
+          
+                //when search name changes, send post request to API?
+                const putSearchName = async () => {
+                    console.log("working")
+                    const search_title= await putSearchTitle(searchName, currentSearchId, setSearchName, setLoading)
+                    
+                }
+    
+
+
             const [editableSearchName,setEditableSearchName]=useState(searchName);
             const [editable, setEditable] = useState(false);
             const handleClick= () =>{
@@ -18,7 +32,10 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
                 {editable ?
                     (<><form onSubmit={async (e)=>{
                         e.preventDefault();
+                        await putSearchName();
+                       
                         handleClick()
+                       
                         }}>
                         <input style={{ color: "black", width: "50%" }}
                             value={editableSearchName}
@@ -33,7 +50,7 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
                             ×
                         </button>
                         <button style={{ display: "inline", margin: "5px" }} type="submit"
-                            onClick={()=>{setSearchName(editableSearchName)}}
+                            onClick={()=>{setSearchName(editableSearchName); }}
                         >
                             ✔
                         </button>

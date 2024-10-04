@@ -7,18 +7,17 @@ interface SearchHeaderProps {
     downloadURL: string;
     searchName:string;
     setSearchName: (item: string) => void;
+    currentSearchId:number;
+    setLoading:(item:boolean)=>void;
 }
-const SearchHeader: React.FC<SearchHeaderProps> = ({ downloadURL, searchName, setSearchName }) => {
-    useEffect(()=>{
+const SearchHeader: React.FC<SearchHeaderProps> = ({ downloadURL, searchName, setSearchName, currentSearchId, setLoading }) => {
 
-
-    })
     return (
         <div>
             <div className="topContainer">
                 <div className="searchName">
                     
-                    <SearchTitleField searchName={searchName} setSearchName={setSearchName}/></div>
+                    <SearchTitleField searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setLoading={setLoading} /></div>
                 <div className="downloadButton text-right">
                     <Button>
                         <a href={downloadURL}>Download</a>

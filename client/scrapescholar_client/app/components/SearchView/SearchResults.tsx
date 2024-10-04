@@ -16,11 +16,13 @@ interface SearchResultsProps {
     searchName:string;
     currentSearchId:number;
     setDisplayInputs:(item:string[])=>void;
+    setLoading:(item:boolean)=>void;
   
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString,
-    disableD3 = false,  bubbleInputs, setResults, setSearchName, searchName, currentSearchId, setDisplayInputs}) => {
+    disableD3 = false,  bubbleInputs, setResults, setSearchName, searchName, currentSearchId, setDisplayInputs,
+setLoading}) => {
     const [selectedArticle, setSelectedArticle] = useState(-1);
     const { getAPIPastSearchTitle } = apiCalls();
 
@@ -39,7 +41,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
                 {results.length !== 0 ? (
                     <div>
-                        <SearchHeader downloadURL="/csv" searchName={searchName} setSearchName={setSearchName} />
+                        <SearchHeader downloadURL="/csv" searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setLoading={setLoading}/>
                         <p>
                             You searched {displayInputs}
                         </p>
