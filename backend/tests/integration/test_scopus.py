@@ -13,8 +13,8 @@ def test_scopus_response_has_title_and_link():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)
-    for item in data:
+    assert isinstance(data["articles"], list)
+    for item in data["articles"]:
         assert isinstance(item, dict)
         assert "title" in item
         assert isinstance(item["title"], str)
@@ -27,8 +27,8 @@ def test_scopus_empty_response_is_empty():
     response = session.get(f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)
-    assert len(data) is 0
+    assert isinstance(data["articles"], list)
+    assert len(data["articles"]) is 0
 
 
 def test_scopus_apiKey_is_filled():
