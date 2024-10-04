@@ -12,7 +12,7 @@ class SearchCreate(SearchBase):
     pass
 
 class SearchUpdate(BaseModel):
-    search_keywords: Optional[List[str]] = None
+    title: str
     status: Optional[str] = None
 
 class SearchRead(SearchBase):

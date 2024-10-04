@@ -105,7 +105,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const handlePastSearchSelection = async (event:any)=>{
         const selectedSearchId = event.target.value;
-
+        setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
      if(selectedSearchId){
             console.log(selectedSearchId)
@@ -133,6 +133,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //sets loading to true which triggers "Loading" to show in UI
         setLoading(true);
         setError(null);
+        setDataFull(false);
         //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
         //declare empty array to combien user inputs and values from drop downs
