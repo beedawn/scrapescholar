@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import Button from '../Button';
+import apiCalls from '@/app/api/apiCalls';
 
 interface DataFullProps {
 searches:any[];
+setLoading:(item:boolean)=>void;
 }
 
 const DataFull: React.FC<DataFullProps> =
-    ({ searches}) => {
+    ({ searches, setLoading}) => {
         const [selectedValue, setSelectedValue] = useState<any[]>([]);
-
+        const {deleteSearch}=apiCalls();
         const handleSelectChange = (event:any) => {
             const selectedOptions = Array.from(event.target.selectedOptions, option => (option as HTMLOptionElement).value);
             setSelectedValue(selectedOptions); 
           console.log(selectedOptions)
         };
-        const handleDeleteClick = ()=>{
-            for(let item in selectedValue){
-                    console.log(item)
+        const handleDeleteClick = async ()=>{
+            setLoading(true)
+            console.log("hello loading")
+            for(let item of selectedValue){
+                    const numItem = Number(item)
+                    console.log(numItem)
+                    await deleteSearch(numItem)
             }
+            setLoading(false)
         }
       
 

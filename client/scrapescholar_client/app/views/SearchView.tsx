@@ -55,6 +55,11 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
  
         fetchSearches();
+        if(searches.length>=300){
+            setDataFull(true)
+        }else{
+            setDataFull(false)
+        }
         fetchDatabases();  
    
     }, [loading]); 
@@ -195,7 +200,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                      />
             </div>
             <div className="flex-1 sm:mx-12 w-full">
-                {error ? (<p>{error.message}</p>) : dataFull? <p> <DataFull searches={searches} /></p> : loading ? <p>Loading</p> :
+                {error ? (<p>{error.message}</p>) 
+                : loading ? <p>Loading</p> : 
+                dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
                         results={results} emptyString={emptyString} disableD3={disableD3}
                         bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setDisplayInputs={setJoinedInputsString}/>}

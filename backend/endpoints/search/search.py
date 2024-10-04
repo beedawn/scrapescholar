@@ -211,7 +211,10 @@ async def delete_search_title(db: Session = Depends(get_db), access_token: Annot
         if search is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
 
+        articles = await find_search_articles(db, search_id)
         
+        for article in articles:
+            db.delete(article)
         db.delete(search)
         db.commit()
         return []
@@ -277,10 +280,10 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     #add loop for 300 search here
-    # x=0
-    # while x<300:
-    created_search = create_search(search=search, db=db)
-        # x += 1
+    x=0
+    while x<300:
+        created_search = create_search(search=search, db=db)
+        x += 1
 
     # Define the format
     date_format = "%Y-%m-%d"
