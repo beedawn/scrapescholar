@@ -87,9 +87,12 @@ async def get_last_300_searches(db: Session = Depends(get_db), access_token: Ann
     Retrieve the last 300 searches for the logged-in user.
     """
     current_user = await get_current_user_no_route(token=access_token, db=db)
+    print("CURRENT USER")
+    print(current_user)
     try:
         # Query the last 300 searches for the authenticated user
         searches = await get_300_search(db=db, current_user=current_user)
+        print(searches)
         return searches if searches else []
 
     except Exception as e:

@@ -1,3 +1,4 @@
+import { json } from "d3";
 
 const apiCalls = () => {
 
@@ -54,6 +55,7 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     let queryString ='';
+  
     for (let item of userDatabaseList){
         queryString += `&academic_database=${item}`;
     }
@@ -62,11 +64,14 @@ const apiCalls = () => {
     else {
         setInputs([...filterBlankInputs])
         const apiQuery = inputsAndLogicalOperators.join('+')
+  
         try {
     
           const url = `http://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
+          console.log(url)
             data = await fetch(url, { method: "GET", credentials:"include"})
             jsonData = await data.json()
+        
             if (data.status === 507) {
               setDataFull(true);
   

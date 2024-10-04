@@ -46,6 +46,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
         const fetchSearches = async () => {
             const search_list = await getAPISearches(setError);
+            console.log(search_list)
             setSearches(search_list);  
  
     
@@ -55,7 +56,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         fetchSearches();
         fetchDatabases();  
    
-    }, [currentSearchId]); 
+    }, [inputs]); 
 
     const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results

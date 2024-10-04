@@ -29,7 +29,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
         setLoggedIn(false);
     };
     const dropdown_values =Object.values(Dropdown);
-
+   
    
     return (
         <>
