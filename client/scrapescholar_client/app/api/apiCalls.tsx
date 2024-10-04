@@ -154,7 +154,7 @@ const getAPIPastSearchResults = async ( setResults:any, setError:any, search_id:
   }
 }
 
-const getAPIPastSearchTitle = async (search_id:number, setSearchName, setDisplayInputs) =>{
+const getAPIPastSearchTitle = async (search_id:number, setSearchName:(item:string)=>void, setDisplayInputs:(item:string[])=>void) =>{
   let data: Response;
   let jsonData;
   if (search_id >0){
