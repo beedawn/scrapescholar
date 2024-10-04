@@ -19,7 +19,9 @@ const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
         value={value}
         onChange={onDropdownChange}
         className={`text-black p-2 ${className}`}
-      >
+      >{valueArray[0] !== undefined && valueArray[0].search_id !==undefined ?<><option key={0} >
+      Past Searches
+    </option></>:<></>}
         {valueArray.map((option, index) => (
           option.search_id !== undefined ?
           <option key={option+index} value={option.search_id}>
