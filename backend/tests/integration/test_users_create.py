@@ -169,6 +169,7 @@ def test_create_search(db_session):
 
     # Step 3: Use the access token to create a search
     search_data = {
+        "user_id": created_user_id,
         "search_keywords": ["test", "example"],
         "title": "Test Search"
     }
