@@ -6,7 +6,7 @@ import Dropdown from "../types/DropdownType";
 import { queryAllByAltText } from '@testing-library/react';
 import apiCalls from '../api/apiCalls'; 
 import { filter } from 'd3';
-
+import DataFull from '../components/SearchView/DataFull';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -195,7 +195,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                      />
             </div>
             <div className="flex-1 sm:mx-12 w-full">
-                {error ? (<p>{error.message}</p>) : dataFull? <p> data is full!</p> : loading ? <p>Loading</p> :
+                {error ? (<p>{error.message}</p>) : dataFull? <p> <DataFull searches={searches} /></p> : loading ? <p>Loading</p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
                         results={results} emptyString={emptyString} disableD3={disableD3}
                         bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setDisplayInputs={setJoinedInputsString}/>}
