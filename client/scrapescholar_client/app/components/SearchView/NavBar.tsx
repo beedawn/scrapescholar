@@ -18,6 +18,7 @@ interface NavBarProps {
     searches:any[]; 
     handlePastSearchSelection: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 
+
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
@@ -28,7 +29,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
         setLoggedIn(false);
     };
     const dropdown_values =Object.values(Dropdown);
-    console.log(dropdown_values)
+
+   
     return (
         <>
             <div className="p-5 max-w-sm mr-auto float-left">

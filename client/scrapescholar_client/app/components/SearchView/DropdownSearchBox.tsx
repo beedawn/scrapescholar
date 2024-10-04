@@ -13,7 +13,6 @@ const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
     className = '', 
     valueArray
   }) => {
-console.log(valueArray)
 
     return (
       <select

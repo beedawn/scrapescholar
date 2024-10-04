@@ -33,7 +33,8 @@ export interface ResultItem {
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
     const [inputs, setInputs] = useState<string[]>(['']);
-    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults } = apiCalls();
+    const [currentSearchId, setCurrentSearchId]=useState<number>(-1);
+    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle } = apiCalls();
 
       useEffect(() => {
         const fetchDatabases = async () => {
@@ -49,9 +50,12 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
  
     
         };
+
+ 
         fetchSearches();
         fetchDatabases();  
-    }, [inputs]); 
+   
+    }, [currentSearchId]); 
 
     const [searchName, setSearchName]=useState("search name");
     //gets data from api and stores in results
@@ -84,6 +88,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<any>();
     const [searches, setSearches]= useState<any[]>([]);
+ 
     //empty string variable to make code easier to read
     const emptyString = '';
     //adds input and drop down when plus is pressed
@@ -108,7 +113,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
      if(selectedSearchId){
-            console.log(selectedSearchId)
+            setCurrentSearchId(selectedSearchId)
             setLoading(true);
             setError(null);
             await getAPIPastSearchResults( setResults, setError, selectedSearchId );
@@ -170,23 +175,26 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //initialize data variable to fill up with api response
 
         await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs, setDataFull);
- 
+        //need something here to load search name
         setLoading(false);
     }
+
+    
     return (
         <div className="flex flex-col sm:flex-row sm:mx-12">
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
-                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} handlePastSearchSelection={handlePastSearchSelection}
-                    />
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} 
+                    handlePastSearchSelection={handlePastSearchSelection}
+                     />
             </div>
             <div className="flex-1 sm:mx-12 w-full">
                 {error ? (<p>{error.message}</p>) : dataFull? <p> data is full!</p> : loading ? <p>Loading</p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString}
                         results={results} emptyString={emptyString} disableD3={disableD3}
-                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}
+                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setDisplayInputs={setJoinedInputsString}/>}
             </div>
         </div>
     );

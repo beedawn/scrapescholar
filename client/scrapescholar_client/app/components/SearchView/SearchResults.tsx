@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BubblePlot from './../d3/BubblePlot';
 import { ResultItem } from '../../views/SearchView';
 import SearchHeader from './SearchHeader';
 import ResultsTable from './ResultsTable';
+import apiCalls from '@/app/api/apiCalls';
 interface SearchResultsProps {
     displayInputs: string[];
     results: ResultItem[];
@@ -13,11 +14,26 @@ interface SearchResultsProps {
     setResults: (item: ResultItem[]) => void;
     setSearchName:  (item: string) => void;
     searchName:string;
+    currentSearchId:number;
+    setDisplayInputs:(item:string[])=>void;
+  
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, className, emptyString,
-    disableD3 = false,  bubbleInputs, setResults, setSearchName, searchName }) => {
+    disableD3 = false,  bubbleInputs, setResults, setSearchName, searchName, currentSearchId, setDisplayInputs}) => {
     const [selectedArticle, setSelectedArticle] = useState(-1);
+    const { getAPIPastSearchTitle } = apiCalls();
+
+        useEffect(()=>{
+
+            const fetchSearchName = async () => {
+                console.log(currentSearchId)
+                const search_title= await getAPIPastSearchTitle(currentSearchId, setSearchName, setDisplayInputs)
+                
+            }
+          fetchSearchName();
+         
+        },[])
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md sm:max-w-screen-xs md:max-w-screen-xs lg:max-w-screen-md xl:max-w-screen-lg">
@@ -34,7 +50,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, displayInputs, c
                         <ResultsTable setResults={setResults} results={results} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle} />
                     </div>
                 ) :
-                    results.length === 0 && displayInputs.length === 0 || results.length===0 && displayInputs[0]===''
+                    results.length === 0 && displayInputs === undefined || results.length===0 && displayInputs[0]===''
                         ?
                         (<p className="bg-red-800 p-2 rounded">
                             Please enter a keyword

@@ -111,7 +111,6 @@ const getAPISearches = async ( setError:any) =>{
       }
   
   if (jsonData !== undefined && jsonData.length > 0) {
-    console.log(jsonData)
       return jsonData;
   }
   else {
@@ -140,7 +139,6 @@ const getAPIPastSearchResults = async ( setResults:any, setError:any, search_id:
           // jsonData = [{ "title": error.message, link: '' }]
           setError(error);
       }
-      console.log(jsonData)
   if (jsonData !== undefined && jsonData.length > 0) {
       setResults(jsonData)
   }
@@ -151,8 +149,40 @@ const getAPIPastSearchResults = async ( setResults:any, setError:any, search_id:
   }
 }
 
+const getAPIPastSearchTitle = async (search_id:number, setSearchName, setDisplayInputs) =>{
+  let data: Response;
+  let jsonData;
+      try {
+  
+        const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
+          data = await fetch(url, { method: "GET", credentials:"include"})
+          jsonData = await data.json()
+          console.log(jsonData)
 
-return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults};
+      }
+      catch (error: any) {
+    
+
+          // jsonData = [{ "title": error.message, link: '' }]
+          // setError(error);
+      }
+      console.log(jsonData)
+
+  if (jsonData !== undefined ) {
+      setSearchName(jsonData.title); 
+      setDisplayInputs(jsonData.keywords);
+  }
+  else {
+      //set better error message
+      // setError(data)
+      console.log(search_id)
+      console.log(jsonData)
+      return [];
+  }
+}
+
+
+return {getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle};
 
 }
 

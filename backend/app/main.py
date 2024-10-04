@@ -79,7 +79,7 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
             new_id=check_response(response,id)
             article_response, id =globals()[item].request_data(keywords, id=new_id,)
             response.extend(article_response)
-    
+    #need something here to get search id after its made or associated function
     search_valid = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
     if search_valid:
         return response

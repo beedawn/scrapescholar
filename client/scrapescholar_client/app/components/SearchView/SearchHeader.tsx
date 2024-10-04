@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Button from './../Button'; 
 import SearchTitleField from './SearchTitleField';
+
 
 interface SearchHeaderProps {
     downloadURL: string;
@@ -8,6 +9,10 @@ interface SearchHeaderProps {
     setSearchName: (item: string) => void;
 }
 const SearchHeader: React.FC<SearchHeaderProps> = ({ downloadURL, searchName, setSearchName }) => {
+    useEffect(()=>{
+
+
+    })
     return (
         <div>
             <div className="topContainer">
