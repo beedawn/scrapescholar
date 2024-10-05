@@ -145,7 +145,8 @@ def test_get_search_by_id(db_session):
 @pytest.mark.search
 def test_get_search_300(db_session):
     """
-    Test the API endpoint to retrieve the last 300 searches for a user.
+    Test the API endpoint to retrieve the last 300 searches for a user,
+    and verify that additional searches are rejected once the limit is reached.
     """
     # Step 1: Create a user for authentication
     user_data = {
@@ -170,12 +171,12 @@ def test_get_search_300(db_session):
         "Authorization": f"Bearer {access_token}"
     }
 
-    # Step 3: Insert 300 random searches
+    # Step 3: Insert 300 searches with the "username-datetimestamp" naming convention
     for i in range(300):
         search_data = {
             "user_id": created_user_id,
-            "search_keywords": [f"keyword_{i}", random.choice(["Cybersecurity", "Non Profit", "Community", "Social"])],
-            "title": f"Search Title {i} - {''.join(random.choices(string.ascii_letters, k=5))}"
+            "search_keywords": [f"keyword_{i}"],
+            "title": f"test300-{time.strftime('%Y-%m-%d %H:%M:%S')}"
         }
         search_response = client.post("/search/create", json=search_data, headers=headers)
         assert search_response.status_code == 201
@@ -184,7 +185,19 @@ def test_get_search_300(db_session):
     # Step 4: Wait to ensure the transactions have been committed
     time.sleep(5)
 
-    # Step 5: Retrieve the last 300 searches using the cookie for the token
+    # Step 5: Attempt to create a 301st search, which should be rejected
+    extra_search_data = {
+        "user_id": created_user_id,
+        "search_keywords": ["extra", "search"],
+        "title": "test300-extra-search"
+    }
+    extra_search_response = client.post("/search/create", json=extra_search_data, headers=headers)
+
+    # Step 6: Assert that the 301st search is rejected
+    assert extra_search_response.status_code == 400  # Bad Request for exceeding the limit
+    assert extra_search_response.json()["detail"] == "Search limit exceeded. Please delete some searches before creating new ones."
+
+    # Step 7: Retrieve the last 300 searches using the cookie for the token
     headers_with_cookie = {
         "Cookie": f"access_token={access_token}"
     }
@@ -195,16 +208,16 @@ def test_get_search_300(db_session):
     print(f"Response content for /user/searches: {search_history_response.json()}")
     print(f"Response status code: {search_history_response.status_code}")
 
-    # Step 6: Verify the status code and content
+    # Step 8: Verify the status code and content
     assert search_history_response.status_code == 200
     searches = search_history_response.json()
     
-    # Step 7: Verify there are 300 searches, and at least one of the searches is in the list
+    # Step 9: Verify there are 300 searches, and at least one of the searches follows the naming convention
     assert isinstance(searches, list)
     assert len(searches) == 300  # Ensure exactly 300 searches are returned
     
-    # Check that at least one of the recent searches is in the list
-    latest_search_title = f"Search Title 299"  # The last inserted search
+    # Check that the recent searches follow the "username-datetimestamp" convention
+    latest_search_title = f"test300-{time.strftime('%Y-%m-%d')}"  # Check for the date prefix
     assert any(search["title"].startswith(latest_search_title) for search in searches)
     print(f"Retrieved {len(searches)} searches")
 
@@ -241,56 +254,6 @@ def test_get_search_by_id_not_found(db_session):
     # Step 3: Ensure a 404 status code is returned
     assert get_search_response.status_code == 404
     assert get_search_response.json() == {"detail": "Search not found"}
-
-@pytest.mark.search
-def test_create_search_exceed_limit(db_session):
-    """
-    Test the search creation API endpoint when the user exceeds the search limit (300 searches).
-    """
-    # Step 1: Create a user for authentication
-    user_data = {
-        "username": "search_limit_user",
-        "password": "testpassword",
-        "email": "limituser@example.com"
-    }
-    user_response = client.post("/users/create", json=user_data)
-    assert user_response.status_code == 201
-    created_user_id = user_response.json()["user_id"]
-
-    # Step 2: Authenticate the user to get an access token
-    login_data = {
-        "username": user_data["username"],
-        "password": user_data["password"]
-    }
-    login_response = client.post("/auth/login", data=login_data)
-    assert login_response.status_code == 200
-    access_token = login_response.json()["access_token"]
-
-    headers = {
-        "Authorization": f"Bearer {access_token}"
-    }
-
-    # Step 3: Insert 300 searches to reach the limit
-    for i in range(300):
-        search_data = {
-            "user_id": created_user_id,
-            "search_keywords": [f"keyword_{i}", "test"],
-            "title": f"Search {i}"
-        }
-        search_response = client.post("/search/create", json=search_data, headers=headers)
-        assert search_response.status_code == 201
-
-    # Step 4: Try to create one more search and expect a failure
-    extra_search_data = {
-        "user_id": created_user_id,
-        "search_keywords": ["extra", "search"],
-        "title": "Exceed Search"
-    }
-    extra_search_response = client.post("/search/create", json=extra_search_data, headers=headers)
-
-    # Step 5: Assert that the response status is 400 (limit exceeded)
-    assert extra_search_response.status_code == 400  # Expecting a Bad Request error for exceeding limit
-    assert extra_search_response.json()["detail"] == "Search limit exceeded. Please delete some searches before creating new ones."
 
 @pytest.mark.search
 def test_get_search_articles_no_articles(db_session):
