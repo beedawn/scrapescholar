@@ -17,6 +17,8 @@ from sqlalchemy import text
 from sqlalchemy.exc import ProgrammingError
 import jwt
 from datetime import datetime, timedelta
+from tests.integration.tools.get_cookie import get_cookie
+from typing import List
 
 # Initialize TestClient
 client = TestClient(app)
@@ -431,3 +433,237 @@ def test_get_invalid_token(db_session):
 
     assert search_history_response.status_code == 401
     assert search_history_response.json() == {"detail": "Invalid token"}
+
+
+
+
+
+
+
+
+
+
+
+
+from tests.integration.tools.base_url import base_url
+session = get_cookie()
+def test_get_valid_token_status_200(db_session):
+    """
+    Test the /search/user/searches endpoint with an valid cookie returns 200.
+    """
+
+
+    # Step 2: Call the endpoint with the cookie
+    search_history_response = session.get(f"{base_url}/search/user/searches")
+
+    assert search_history_response.status_code == 200
+
+
+
+def test_get_valid_token_search_user_searches_response_schema(db_session):
+    """
+    Test the /search/user/searches endpoint with an valid cookie and check response schema
+
+    response should look like:
+
+    [
+    {
+        "search_id": 1,
+        "search_keywords": [
+            "test"
+        ],
+        "status": "active",
+        "user_id": 1,
+        "search_date": null,
+        "title": "testuser-2024-10-05 07:34:54.766305"
+    }
+]
+    """
+
+    apiQuery="test"
+    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    #create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+
+    # Step 2: Call the endpoint with the cookie
+    search_history_response = session.get(f"{base_url}/search/user/searches")
+
+  
+    assert search_history_response.status_code == 200
+    data = search_history_response.json()
+    assert isinstance(data[0]["search_id"],int)
+    assert isinstance(data[0]["search_keywords"],list)
+    assert data[0]["search_keywords"][0] == "test"
+    assert isinstance(data[0]["status"],str)
+    assert isinstance(data[0]["user_id"],int)
+    assert data[0]["search_date"] is None
+    
+
+
+def test_get_valid_token_academic_data_response_schema(db_session):
+    """
+    Test the /academic_data endpoint with an valid cookie and check response schema
+
+    response should look like:
+
+    [
+    {
+        "search_id": 1,
+        "search_keywords": [
+            "test"
+        ],
+        "status": "active",
+        "user_id": 1,
+        "search_date": null,
+        "title": "testuser-2024-10-05 07:34:54.766305"
+    }
+]
+    """
+
+    apiQuery="test"
+    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    #create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    
+    """
+    article looks like
+    "id": 0,
+                "title": "Impact of cardiac rehabilitation exercise frequency on exercise capacity in patients with coronary artery disease: a retrospective study",
+                "date": "2024-12-31",
+                "citedby": "0",
+                "link": "https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85204941817&origin=inward",
+                "abstract": "",
+                "document_type": "Article",
+                "source": "Scopus",
+                "evaluation_criteria": "",
+                "color": "red",
+                "relevance_score": 29,
+                "methodology": 0,
+                "clarity": 0,
+                "completeness": 0,
+                "transparency": 0
+    """
+    assert search_request.status_code == 200
+    data = search_request.json()
+    assert isinstance(data["search_id"],int)
+    assert isinstance(data["articles"],list)
+    assert isinstance(data["articles"][0]["title"], str)
+    assert isinstance(data["articles"][0]["date"], str)
+    assert isinstance(data["articles"][0]["citedby"], str)
+    assert isinstance(data["articles"][0]["link"], str)
+    assert isinstance(data["articles"][0]["date"], str)
+    assert isinstance(data["articles"][0]["abstract"], str)
+    assert isinstance(data["articles"][0]["document_type"], str)
+    assert isinstance(data["articles"][0]["source"], str)
+    assert isinstance(data["articles"][0]["evaluation_criteria"], str)
+    assert isinstance(data["articles"][0]["color"], str)
+    assert isinstance(data["articles"][0]["relevance_score"], int)
+    assert isinstance(data["articles"][0]["methodology"], int)
+    assert isinstance(data["articles"][0]["clarity"], int)
+    assert isinstance(data["articles"][0]["completeness"], int)
+    assert isinstance(data["articles"][0]["transparency"], int)
+
+
+
+
+def test_get_valid_token_search_title_response_schema(db_session):
+    """
+    Test the /search/user/search/title endpoint with an valid cookie and check response schema
+
+    response should look like:
+
+{
+    "title": "testuser-2024-10-05 08:06:57.273926",
+    "keywords": [
+        "test"
+    ]
+}
+    """
+    search_id=1
+    apiQuery="test"
+    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    #create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    title = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
+    
+  
+    assert search_request.status_code == 200
+    assert title.status_code == 200
+    data = title.json()
+    assert isinstance(data["title"],str)
+    assert isinstance(data["keywords"],list)
+   
+
+
+def test_put_valid_token_search_title_response_schema(db_session):
+    """
+    Test the /search/user/search/title endpoint with an valid cookie and check response schema
+
+    response should look like:
+
+{
+    "search_id": 1,
+    "search_keywords": [
+        "x"
+    ],
+    "status": "active",
+    "user_id": 1,
+    "search_date": null,
+    "title": "new one"
+}
+    """
+    search_id=1
+    body = {"title":"new test title"}
+    apiQuery="test"
+    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    #create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    new_title = session.put(f"{base_url}/search/user/search/title?search_id={search_id}", json=body)
+    
+  
+    assert search_request.status_code == 200
+    assert new_title.status_code == 200
+    data = new_title.json()
+    assert isinstance(data["search_id"],int)
+    assert isinstance(data["search_keywords"],list)
+    assert isinstance(data["user_id"],int)
+    assert data["search_date"] is None
+    assert isinstance(data["title"],str)
+    assert data["title"] == "new test title"
+
+    title = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
+    data = title.json()
+    assert data["title"] == "new test title"
+
+
+
+def test_delete_valid_token_search_title_response_schema(db_session):
+    """
+    Test the /search/user/search/title endpoint with an valid cookie and check response schema
+
+    response should look like:
+
+{
+    "search_id": 1,
+    "search_keywords": [
+        "x"
+    ],
+    "status": "active",
+    "user_id": 1,
+    "search_date": null,
+    "title": "new one"
+}
+    """
+    search_id=1
+    apiQuery="test"
+    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    #create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    delete = session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+    
+  
+    assert search_request.status_code == 200
+    assert delete.status_code == 200
+    data = delete.json()
+    assert isinstance(data,list)
+    assert len(data) is 0
