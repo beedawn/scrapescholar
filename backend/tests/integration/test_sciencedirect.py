@@ -5,9 +5,7 @@ from api_tools.api_tools import sciencedirect_api_key
 client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
-#todo
-#get access token from login endpoint
-#mimic cookie so that these tests will pass
+
 session = get_cookie()
 def test_sciencedirect_response_returns_correct_elements():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
