@@ -13,21 +13,30 @@ import os
 import time
 import random
 import string
+from sqlalchemy import text
+from sqlalchemy.exc import ProgrammingError
 
 # Initialize TestClient
 client = TestClient(app)
 
-# Password hashing context
-hash_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def db_session():
     """Provides a transactional scope around a series of operations."""
     db = SessionLocal()  # Assuming SessionLocal is defined in your app to connect to the database
     try:
         yield db
     finally:
-        db.close()
+        # Try to truncate the search table, but ignore errors if the table doesn't exist
+        try:
+            db.execute(text("TRUNCATE TABLE \"Search\" RESTART IDENTITY CASCADE;"))
+            db.commit()
+        except ProgrammingError as e:
+            if "UndefinedTable" in str(e):
+                print(f"Warning: {e}. The 'search' table does not exist.")
+            else:
+                raise  # re-raise if it's not an UndefinedTable error
+        finally:
+            db.close()
 
 # ----------------------- SEARCH ENDPOINT TEST SUITE -----------------------
 @pytest.mark.search
@@ -277,3 +286,105 @@ def test_create_search_exceed_limit(db_session):
     # Step 5: Assert that the response status is 400 (limit exceeded)
     assert extra_search_response.status_code == 400  # Expecting a Bad Request error for exceeding limit
     assert extra_search_response.json()["detail"] == "Search limit exceeded. Please delete some searches before creating new ones."
+
+@pytest.mark.search
+def test_get_search_articles_no_articles(db_session):
+    """
+    Test the API endpoint to retrieve a search without articles.
+    """
+    # Step 1: Create a user for authentication
+    user_data = {
+        "username": "search_user_4",
+        "password": "testpassword",
+        "email": "searchuser4@example.com"
+    }
+    user_response = client.post("/users/create", json=user_data)
+    assert user_response.status_code == 201
+    created_user_id = user_response.json()["user_id"]
+
+    # Step 2: Authenticate the user to get an access token
+    login_data = {
+        "username": user_data["username"],
+        "password": user_data["password"]
+    }
+    login_response = client.post("/auth/login", data=login_data)
+    assert login_response.status_code == 200
+    access_token = login_response.json()["access_token"]
+
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    # Step 3: Create a search without articles
+    search_data = {
+        "user_id": created_user_id,
+        "search_keywords": ["test"],
+        "title": "Search Without Articles"
+    }
+    search_response = client.post("/search/create", json=search_data, headers=headers)
+    assert search_response.status_code == 201
+    created_search_id = search_response.json()["search_id"]
+
+    # Step 4: Retrieve articles for the search
+    headers_with_cookie = {
+        "Cookie": f"access_token={access_token}"
+    }
+    get_articles_response = client.get(f"/search/user/articles?search_id={created_search_id}", headers=headers_with_cookie)
+
+    # Step 5: Ensure no articles are returned
+    assert get_articles_response.status_code == 200
+    articles = get_articles_response.json()
+    assert isinstance(articles, list)
+    assert len(articles) == 0  # No articles associated with the search
+
+@pytest.mark.search
+def test_update_search_title(db_session):
+    """
+    Test the API endpoint to update the title of a search.
+    """
+    # Step 1: Create a user for authentication
+    user_data = {
+        "username": "search_user_5",
+        "password": "testpassword",
+        "email": "searchuser5@example.com"
+    }
+    user_response = client.post("/users/create", json=user_data)
+    assert user_response.status_code == 201
+    created_user_id = user_response.json()["user_id"]
+
+    # Step 2: Authenticate the user to get an access token
+    login_data = {
+        "username": user_data["username"],
+        "password": user_data["password"]
+    }
+    login_response = client.post("/auth/login", data=login_data)
+    assert login_response.status_code == 200
+    access_token = login_response.json()["access_token"]
+
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    # Step 3: Create a search
+    search_data = {
+        "user_id": created_user_id,
+        "search_keywords": ["test"],
+        "title": "Old Title"
+    }
+    search_response = client.post("/search/create", json=search_data, headers=headers)
+    assert search_response.status_code == 201
+    created_search_id = search_response.json()["search_id"]
+
+    # Step 4: Update the search title
+    new_title = "Updated Title"
+    update_data = {
+        "title": new_title
+    }
+    headers = {
+        "Cookie": f"access_token={access_token}"
+    }    
+    update_response = client.put(f"/search/user/search/title?search_id={created_search_id}", json=update_data, headers=headers)
+    
+    assert update_response.status_code == 200
+    updated_search = update_response.json()
+    assert updated_search["title"] == new_title
