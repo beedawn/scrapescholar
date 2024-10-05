@@ -62,7 +62,7 @@ def test_scopus_empty_response_is_empty():
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
-    assert len(data) is 0
+    assert len(data["articles"]) is 0
 
 def test_scopus_apiKey_is_filled():
     assert scopus_api_key is not None

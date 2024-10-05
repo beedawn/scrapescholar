@@ -60,7 +60,7 @@ def test_sciencedirect_empty_response_is_empty():
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
-    assert len(data) is 0
+    assert len(data["articles"]) is 0
 
 def test_sciencedirect_apiKey_env_is_filled():
     assert sciencedirect_api_key is not None
