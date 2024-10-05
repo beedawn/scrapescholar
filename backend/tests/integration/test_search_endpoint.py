@@ -15,6 +15,8 @@ import random
 import string
 from sqlalchemy import text
 from sqlalchemy.exc import ProgrammingError
+import jwt
+from datetime import datetime, timedelta
 
 # Initialize TestClient
 client = TestClient(app)
@@ -388,3 +390,44 @@ def test_update_search_title(db_session):
     assert update_response.status_code == 200
     updated_search = update_response.json()
     assert updated_search["title"] == new_title
+
+@pytest.mark.search
+def test_expired_token(db_session):
+    """
+    Test the /search/user/searches endpoint with an expired token.
+    """
+    # Step 1: Create a user
+    user_data = {"username": "user_expired", "password": "password", "email": "user_expired@example.com"}
+    user_response = client.post("/users/create", json=user_data)
+    assert user_response.status_code == 201
+    created_user_id = user_response.json()["user_id"]
+
+    # Step 2: Generate an expired token
+    secret_key = os.getenv("SECRET_KEY")  # Fetch the SECRET key from your environment or config
+    expired_token = jwt.encode({
+        "sub": str(created_user_id),
+        "exp": datetime.utcnow() - timedelta(seconds=1)  # Set expiration in the past
+    }, secret_key, algorithm="HS256")
+
+    # Step 3: Call the endpoint with the expired token
+    headers_with_cookie = {"Cookie": f"access_token={expired_token}"}
+    search_history_response = client.get("/search/user/searches", headers=headers_with_cookie)
+
+    # Step 4: Assert that the response status is 401 Unauthorized
+    assert search_history_response.status_code == 401
+    assert search_history_response.json() == {"detail": "Token has expired"}
+
+@pytest.mark.search
+def test_get_invalid_token(db_session):
+    """
+    Test the /search/user/searches endpoint with an invalid token.
+    """
+    # Create an invalid token
+    invalid_token = "invalid_token_value"
+
+    # Step 2: Call the endpoint with the invalid token
+    headers_with_cookie = {"Cookie": f"access_token={invalid_token}"}
+    search_history_response = client.get("/search/user/searches", headers=headers_with_cookie)
+
+    assert search_history_response.status_code == 401
+    assert search_history_response.json() == {"detail": "Invalid token"}
