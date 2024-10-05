@@ -8,40 +8,42 @@ interface NavBarProps {
     handleResults: (event: React.FormEvent<HTMLFormElement>) => void;
     addInput: () => void;
     inputs: string[];
-    handleSearchChange: (index: number, event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSearchChange: (index: number,
+        event: React.ChangeEvent<HTMLInputElement>) => void;
     handleDropdownChange: (index: number, option: Dropdown) => void;
     removeInput: (index: number) => void;
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     dropdown: Dropdown[];
     addToUserDatabaseList: (item: string) => void;
     removeFromUserDatabaseList: (item: string) => void;
-    searches:any[]; 
-    handlePastSearchSelection: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-
-
+    searches: any[];
+    handlePastSearchSelection:
+    (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
     addInput, inputs, handleSearchChange, removeInput,
     setLoggedIn, dropdown, handleDropdownChange,
-    addToUserDatabaseList, removeFromUserDatabaseList, searches, handlePastSearchSelection }) => {
+    addToUserDatabaseList, removeFromUserDatabaseList,
+    searches, handlePastSearchSelection }) => {
     const handleLogout = () => {
         setLoggedIn(false);
     };
-    const dropdown_values =Object.values(Dropdown);
-   
-   
+    const dropdown_values = Object.values(Dropdown);
     return (
         <>
             <div className="p-5 max-w-sm mr-auto float-left">
                 <div className="float-right pb-6" >
-                    <Button onClick={handleLogout} className="">Logout</Button>
+                    <Button onClick={handleLogout} className="">
+                        Logout
+                    </Button>
                 </div>
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
                 <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
                 <DropdownSearchBox value="past search dropdown"
-                    onDropdownChange={(selectedTitle) =>handlePastSearchSelection(selectedTitle)} valueArray={searches}
+                    onDropdownChange={(selectedTitle) => 
+                        handlePastSearchSelection(selectedTitle)} valueArray={searches}
                     className="w-full" />
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">
@@ -52,7 +54,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     </Button>
                     {inputs.map((input: string, index: number) => {
                         return (<div key={index}>
-                            <SearchBox value={input} onChange={(e) => { handleSearchChange(index, e) }} className="m-2" />
+                            <SearchBox value={input} onChange={(e) => 
+                                { handleSearchChange(index, e) }} className="m-2" />
                             {index != 0
                                 &&
                                 <Button onClick={() => {

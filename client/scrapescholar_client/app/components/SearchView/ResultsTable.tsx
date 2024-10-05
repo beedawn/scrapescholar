@@ -19,7 +19,9 @@ interface ResultsTableProps {
     setSelectedArticle: (index: number) => void;
 }
 
-export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDirection: string): ResultItem[] => {
+export const sortResults = (array: ResultItem[],
+    field: keyof ResultItem,
+    sortDirection: string): ResultItem[] => {
     return array.sort((a, b) => {
         const aValue = a[field];
         const bValue = b[field];
@@ -27,7 +29,8 @@ export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDi
             return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
         }
         if (typeof aValue === "string" && typeof bValue === "string") {
-            return sortDirection === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+            return sortDirection === "asc" ? aValue.localeCompare(bValue) :
+                bValue.localeCompare(aValue);
         }
         if (typeof aValue === "number") {
             // Numbers come before strings
@@ -41,27 +44,37 @@ export const sortResults = (array: ResultItem[], field: keyof ResultItem, sortDi
     })
 };
 
-const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, setSelectedArticle, setResults }) => {
-    const [editableResults, setEditableResults] = useState<ResultItem[]>([...results]);
+const ResultsTable: React.FC<ResultsTableProps> = ({
+    results, selectedArticle, setSelectedArticle, setResults
+}) => {
+    const [editableResults, setEditableResults]
+        = useState<ResultItem[]>([...results]);
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);
         const orderedEditableResults = sortedResults.map(result => {
             // Find the corresponding item in 'editableResults' by matching the 'id'
-            return editableResults.find(editable => editable.id === result.id) || result;
+            return editableResults.find(editable =>
+                editable.id === result.id) || result;
         });
         setEditableResults(orderedEditableResults);
         setResults(sortedResults);
     }
     const [pressedSort, setPressedSort] = useState<keyof ResultItem | null>(null);
-    const [editableCells, setEditableCells] = useState<EditableCell[]>(results.map((result) => ({
-        id: result.id,
-        relevance: false, methodology: false, clarity: false, completeness: false, transparency: false
-    })));
+    const [editableCells, setEditableCells] = useState<EditableCell[]>
+        (results.map((result) => ({
+            id: result.id,
+            relevance: false,
+            methodology: false,
+            clarity: false,
+            completeness: false,
+            transparency: false
+        })));
 
     const handleCellClick = (index: number, field: keyof EditableCell) => {
         const updatedCells: EditableCell[] = [...editableCells];
-        updatedCells[index][field as keyof EditableCell] = !updatedCells[index][field as keyof EditableCell];
+        updatedCells[index][field as keyof EditableCell] =
+            !updatedCells[index][field as keyof EditableCell];
         setEditableCells(updatedCells)
     }
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
@@ -74,7 +87,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
         setResults(editableResults);
         //send request to backend to update value?
     }
-
     return (
         <div className="overflow-x-auto">
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
@@ -82,70 +94,93 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results, selectedArticle, s
                     <tr>
                         <th className="border border-gray-300">
                             Title
-                            <SortToggleButton handleSort={handleSort} field="title" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="title" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Year
-                            <SortToggleButton handleSort={handleSort} field="date" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="date" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Cited By
-                            <SortToggleButton handleSort={handleSort} field="citedby" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="citedby" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             URL
-                            <SortToggleButton handleSort={handleSort} field="link" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="link" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Abstract
-                            <SortToggleButton handleSort={handleSort} field="abstract" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="abstract" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Document Type
-                            <SortToggleButton handleSort={handleSort} field="document_type" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="document_type" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Source
-                            <SortToggleButton handleSort={handleSort} field="source" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="source" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Evaluation Criteria
-                            <SortToggleButton handleSort={handleSort} field="evaluation_criteria" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="evaluation_criteria" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Assessment
-                            <SortToggleButton handleSort={handleSort} field="color" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="color" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Relevance Score
-                            <SortToggleButton handleSort={handleSort} field="relevance_score" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="relevance_score" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Methodology
-                            <SortToggleButton handleSort={handleSort} field="methodology" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="methodology" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Clarity
-                            <SortToggleButton handleSort={handleSort} field="clarity" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="clarity" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Completeness
-                            <SortToggleButton handleSort={handleSort} field="completeness" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="completeness" pressedSort={pressedSort} />
                         </th>
                         <th className="border border-gray-300">
                             Transparency
-                            <SortToggleButton handleSort={handleSort} field="transparency" pressedSort={pressedSort} />
+                            <SortToggleButton handleSort={handleSort}
+                                field="transparency" pressedSort={pressedSort} />
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     {results.map((result, index) => (
-                        <tr key={result.id} className={` ${selectedArticle === result.id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
+                        <tr key={result.id} className=
+                            {` ${selectedArticle === result.id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
                             onClick={() => { setSelectedArticle(result.id) }} data-testid='row'>
-                            <td className="border border-gray-300" ><a href={result.link}>{result.title}</a></td>
+                            <td className="border border-gray-300" >
+                                <a href={result.link}>
+                                    {result.title}
+                                </a>
+                            </td>
                             <td className="border border-gray-300" >{result.date}</td>
                             <td className="border border-gray-300" >{result.citedby}</td>
-                            <td className="border border-gray-300" ><a href={result.link}>{result.link}</a></td>
+                            <td className="border border-gray-300" >
+                                <a href={result.link}>
+                                    {result.link}
+                                </a>
+                            </td>
                             <td className="border border-gray-300" >{result.abstract}</td>
                             <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>

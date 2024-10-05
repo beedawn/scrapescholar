@@ -47,14 +47,14 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
       .append("g")
       .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
-    let xMax = d3.max(data, d=> d.x) ?? 0;
+    let xMax = d3.max(data, d => d.x) ?? 0;
     let x = d3.scaleLinear().domain([0, xMax])
       .range([0, width - 100]);
-    let yMax = d3.max(data, d=> d.y) ?? 0;
+    let yMax = d3.max(data, d => d.y) ?? 0;
     let y = d3.scaleLinear().domain([0, yMax]).range([height - 100, 20]);
 
     // Add a scale for bubble size
-    let zMax = d3.max(data, d=> d.x) ?? 0;
+    let zMax = d3.max(data, d => d.x) ?? 0;
     const z = d3.scaleLinear()
       .domain([0, zMax])
       .range([1, 30]);
@@ -62,7 +62,7 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
     // Define force simulation
     const simulation = d3.forceSimulation(data)
       .force("x", d3.forceX((d, i) => x(i)).strength(0.2))
-      .force("y", d3.forceY(d => y(d.y??0)).strength(0.2))
+      .force("y", d3.forceY(d => y(d.y ?? 0)).strength(0.2))
       .force("collide", d3.forceCollide(d => z(d.x)))
       .on("tick", ticked);
     // Add bubbles
@@ -72,9 +72,9 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
       .enter()
       .append("circle")
       .attr("cx", function (d, i) { return (i) })
-      .attr("cy", function (d, i) { 
-        return (i<6) ? 50:150;
-        
+      .attr("cy", function (d, i) {
+        return (i < 6) ? 50 : 150;
+
       })
       .attr("r", function (d) { return d.radius })
       .style("fill", function (d) { return d.color })
@@ -100,8 +100,6 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
     }
     return () => {
       d3.select("#bubbleplot").selectAll("*").remove();
-      
-
     }
   }, [data]);
 

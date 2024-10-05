@@ -1,48 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import apiCalls from '@/app/api/apiCalls';
-interface SearchTitleFieldProps{
+interface SearchTitleFieldProps {
     searchName: string;
     setSearchName: (item: string) => void;
-    currentSearchId:number;
-    setLoading:(item:boolean)=>void;
+    currentSearchId: number;
+    setLoading: (item: boolean) => void;
 }
 
 const SearchTitleField: React.FC<SearchTitleFieldProps> =
-    ({  searchName, setSearchName, currentSearchId, setLoading
-         }) => {
-
-            const {putSearchTitle}=apiCalls();
-          
-                //when search name changes, send post request to API?
-                const putSearchName = async () => {
-        
-                    const search_title= await putSearchTitle(searchName, currentSearchId, setSearchName, setLoading)
-                    
-                }
-    
-
-
-            const [editableSearchName,setEditableSearchName]=useState(searchName);
-            const [editable, setEditable] = useState(false);
-            const handleClick= () =>{
-                setEditable(!editable)
-            }
+    ({ searchName, setSearchName, currentSearchId, setLoading
+    }) => {
+        const { putSearchTitle } = apiCalls();
+        const putSearchName = async () => {
+            await putSearchTitle(searchName,
+                currentSearchId, setSearchName, setLoading)
+        }
+        const [editableSearchName, setEditableSearchName] = useState(searchName);
+        const [editable, setEditable] = useState(false);
+        const handleClick = () => {
+            setEditable(!editable)
+        }
         return (
             <><div data-testid="search-title">
                 {editable ?
-                    (<><form onSubmit={async (e)=>{
+                    (<><form onSubmit={async (e) => {
                         e.preventDefault();
                         await putSearchName();
-                       
                         handleClick()
-                       
-                        }}>
+                    }}>
                         <input style={{ color: "black", width: "50%" }}
                             value={editableSearchName}
-                            onChange={(e)=>{setEditableSearchName(e.target.value)}}
+                            onChange={(e) => { setEditableSearchName(e.target.value) }}
                         />
                         <button style={{ display: "inline", margin: "5px" }} type="button"
-                            onClick={()=>{
+                            onClick={() => {
                                 handleClick();
                                 setEditableSearchName(searchName)
                             }}
@@ -50,22 +41,22 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
                             ×
                         </button>
                         <button style={{ display: "inline", margin: "5px" }} type="submit"
-                            onClick={()=>{setSearchName(editableSearchName); }}
+                            onClick={() => { setSearchName(editableSearchName); }}
                         >
                             ✔
                         </button>
-                        </form>
+                    </form>
                     </>)
                     :
                     (<>
                         <span data-testid="search-title-span">{searchName}</span>
-                        <button style={{ display: "inline" }} onClick={handleClick }>
+                        <button style={{ display: "inline" }} onClick={handleClick}>
                             ✎
                         </button>
                     </>
                     )
                 }
-              </div>  
+            </div>
             </>)
     };
 

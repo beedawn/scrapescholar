@@ -1,14 +1,17 @@
 import React, { ChangeEvent } from 'react';
 import { ResultItem } from '../../views/SearchView';
 import { EditableCell } from './ResultsTable';
-type EditableField = 'relevance' | 'methodology' | 'clarity' | 'completeness' | 'transparency';
+type EditableField =
+    'relevance' | 'methodology' | 'clarity'
+    | 'completeness' | 'transparency';
 
 interface DynamicUserFieldProps {
     field: EditableField;
     handleCellClick: (index: number, field: EditableField) => void;
     editableCells: EditableCell[];
     result: ResultItem;
-    handleFieldChange: (index: number, field: keyof EditableCell, value: string) => void;
+    handleFieldChange: (index: number, field: keyof EditableCell,
+        value: string) => void;
     handleFieldConfirm: () => void;
     editableResults: ResultItem[];
     index: number;
@@ -17,9 +20,9 @@ interface DynamicUserFieldProps {
 const DynamicUserField: React.FC<DynamicUserFieldProps> =
     ({ field, handleCellClick, result, editableCells,
         handleFieldChange, handleFieldConfirm, editableResults, index }) => {
-
-        const currentResult = editableResults.find((cell) => { return cell.id == result.id })
-
+        const currentResult = editableResults.find((cell) => {
+            return cell.id == result.id
+        })
         return (
             <>
                 {editableCells[result.id]?.[field] ?
@@ -35,7 +38,8 @@ const DynamicUserField: React.FC<DynamicUserFieldProps> =
                             }
                             }
                         />
-                        <button style={{ display: "inline", margin: "5px" }} type="button"
+                        <button style={{ display: "inline", margin: "5px" }}
+                            type="button"
                             onClick={() => {
                                 handleCellClick(result.id, field)
                             }
@@ -43,7 +47,8 @@ const DynamicUserField: React.FC<DynamicUserFieldProps> =
                         >
                             ×
                         </button>
-                        <button style={{ display: "inline", margin: "5px" }} type="submit"
+                        <button style={{ display: "inline", margin: "5px" }}
+                            type="submit"
 
                         >
                             ✔
@@ -53,7 +58,8 @@ const DynamicUserField: React.FC<DynamicUserFieldProps> =
                     :
                     (<>
                         {result[field]}
-                        <button style={{ display: "inline" }} onClick={() => { handleCellClick(result.id, field) }}>
+                        <button style={{ display: "inline" }}
+                            onClick={() => { handleCellClick(result.id, field) }}>
                             ✎
                         </button>
                     </>
