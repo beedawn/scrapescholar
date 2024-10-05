@@ -692,10 +692,13 @@ def test_delete_valid_token_search_title_response_schema(db_session):
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
     delete = session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
-    
+    articles=db_session.query(Article).filter_by(search_id=search_id).first()
+    search= db_session.query(Search).filter_by(search_id=search_id).first()
   
     assert search_request.status_code == 200
     assert delete.status_code == 200
     data = delete.json()
     assert isinstance(data,list)
     assert len(data) is 0
+    assert articles is None
+    assert search is None
