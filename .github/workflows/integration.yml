@@ -82,6 +82,7 @@ jobs:
       working-directory: ./backend  # Adjust to the correct directory
       run: |
         pytest ./tests/integration --disable-warnings -v -s
+        coverage run -m pytest tests --verbose && coverage report -m
 
     - name: Run npm install
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
