@@ -13,7 +13,7 @@ def test_scopus_response_returns_correct_elements():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)
+    assert isinstance(data["articles"], list)
     for item in data["articles"]:
         assert isinstance(item, dict)
         assert "id" in item
@@ -42,7 +42,7 @@ def test_scopus_student_rating_information_available():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)
+    assert isinstance(data["articles"], list)
     for item in data["articles"]:
         assert "methodology" in item
         assert isinstance(item["methodology"], int)
