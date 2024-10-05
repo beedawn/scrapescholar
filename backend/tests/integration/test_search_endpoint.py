@@ -227,3 +227,53 @@ def test_get_search_by_id_not_found(db_session):
     # Step 3: Ensure a 404 status code is returned
     assert get_search_response.status_code == 404
     assert get_search_response.json() == {"detail": "Search not found"}
+
+@pytest.mark.search
+def test_create_search_exceed_limit(db_session):
+    """
+    Test the search creation API endpoint when the user exceeds the search limit (300 searches).
+    """
+    # Step 1: Create a user for authentication
+    user_data = {
+        "username": "search_limit_user",
+        "password": "testpassword",
+        "email": "limituser@example.com"
+    }
+    user_response = client.post("/users/create", json=user_data)
+    assert user_response.status_code == 201
+    created_user_id = user_response.json()["user_id"]
+
+    # Step 2: Authenticate the user to get an access token
+    login_data = {
+        "username": user_data["username"],
+        "password": user_data["password"]
+    }
+    login_response = client.post("/auth/login", data=login_data)
+    assert login_response.status_code == 200
+    access_token = login_response.json()["access_token"]
+
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    # Step 3: Insert 300 searches to reach the limit
+    for i in range(300):
+        search_data = {
+            "user_id": created_user_id,
+            "search_keywords": [f"keyword_{i}", "test"],
+            "title": f"Search {i}"
+        }
+        search_response = client.post("/search/create", json=search_data, headers=headers)
+        assert search_response.status_code == 201
+
+    # Step 4: Try to create one more search and expect a failure
+    extra_search_data = {
+        "user_id": created_user_id,
+        "search_keywords": ["extra", "search"],
+        "title": "Exceed Search"
+    }
+    extra_search_response = client.post("/search/create", json=extra_search_data, headers=headers)
+
+    # Step 5: Assert that the response status is 400 (limit exceeded)
+    assert extra_search_response.status_code == 400  # Expecting a Bad Request error for exceeding limit
+    assert extra_search_response.json()["detail"] == "Search limit exceeded. Please delete some searches before creating new ones."

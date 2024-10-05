@@ -127,9 +127,19 @@ async def create_new_search(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Create a new search and associate articles with it.
+    Create a new search if the user has not exceeded the limit of 300 searches.
     """
-    # Set the user_id from the current_user object
+    # Check if the user has already reached the search limit (300 searches)
+    search_count = db.query(Search).filter(Search.user_id == current_user.user_id).count()
+    
+    if search_count >= 300:
+        # If user has more than or equal to 300 searches, return 400 Bad Request
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Search limit exceeded. Please delete some searches before creating new ones."
+        )
+
+    # If below the limit, create the search
     search = Search(
         user_id=current_user.user_id,
         search_keywords=search_data.search_keywords,
