@@ -564,6 +564,59 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert isinstance(data["articles"][0]["transparency"], int)
 
 
+def test_get_valid_token_past_search_response_schema(db_session):
+    """
+    Test the /academic_data endpoint with an valid cookie and check response schema
+
+    response should look like, a list of articles:
+
+    [
+ {
+        "abstract": "",
+        "search_id": 1,
+        "user_id": 1,
+        "link": "https://www.sciencedirect.com/science/article/pii/S0092867423013193?dgcid=api_sd_search-api-endpoint",
+        "title": "XIST directly regulates X-linked and autosomal genes in naive human pluripotent cells",
+        "relevance_score": 66.0,
+        "evaluation_criteria": "",
+        "citedby": null,
+        "document_type": null,
+        "article_id": 30,
+        "date": "2024-01-04",
+        "doi": null,
+        "source_id": 1
+    },
+]
+    """
+    search_id=1
+    apiQuery="test"
+    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    #create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    past_search = session.get(f"{base_url}/search/user/articles?search_id={search_id}")
+   
+    assert search_request.status_code == 200
+    assert past_search.status_code == 200
+    data = past_search.json()
+ 
+    assert isinstance(data,list)
+    assert isinstance(data[0]["title"], str)
+    assert isinstance(data[0]["date"], str)
+    # assert isinstance(data[0]["citedby"], str)
+    assert isinstance(data[0]["link"], str)
+    assert isinstance(data[0]["date"], str)
+    assert isinstance(data[0]["abstract"], str)
+    # assert isinstance(data[0]["document_type"], str)
+    # assert isinstance(data[0]["source"], str)
+    assert isinstance(data[0]["evaluation_criteria"], str)
+    # assert isinstance(data[0]["color"], str)
+    assert isinstance(data[0]["relevance_score"], float)
+    # assert isinstance(data[0]["methodology"], int)
+    # assert isinstance(data[0]["clarity"], int)
+    # assert isinstance(data[0]["completeness"], int)
+    # assert isinstance(data[0]["transparency"], int)
+
+
 
 
 def test_get_valid_token_search_title_response_schema(db_session):
