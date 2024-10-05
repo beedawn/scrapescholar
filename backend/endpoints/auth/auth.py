@@ -27,6 +27,7 @@ hash_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Setup login manager
 login_manager = LoginManager(SECRET, token_url="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # Create an API router for auth
 router = APIRouter()
@@ -64,7 +65,7 @@ def load_user(user_id: str, db: Session = None):
 
 # Login route
 @router.post("/login")
-def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db) ):
+def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
     # Iterate through all users and decrypt their usernames for comparison
     user = None
@@ -101,16 +102,34 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     response = JSONResponse(content=content)
     # will need to change this to secure for deployment
     response.set_cookie(
-    key="access_token", 
-    value=access_token, 
-    httponly=True, 
-    secure=False,
-    path="/",
-    domain="0.0.0.0",
-    samesite="Lax",
-    max_age=3600)
+        key="access_token", 
+        value=access_token, 
+        httponly=True, 
+        secure=False,
+        path="/",
+        domain="0.0.0.0",
+        samesite="Lax",
+        max_age=3600
+    )
 
     return response
 
+# Get current user based on token
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        user_id = login_manager.get_user_id(token)  # Retrieves user_id from the token
+        user = load_user(user_id, db=db)
+        if not user:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid authentication credentials")
+        return user
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
-
+# Protected route example
+@router.get("/protected_route")
+def protected_route(current_user: User = Depends(get_current_user)):
+    return {
+        "user_id": current_user.user_id,
+        "username": current_user.username,
+        "email": current_user.email
+    }

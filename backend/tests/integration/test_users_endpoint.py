@@ -1,18 +1,16 @@
 # tests/unit/test_users_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
+from unittest.mock import patch
 from sqlalchemy.orm import Session
-from app.main import app  # Import the FastAPI app
+from app.main import app
 from app.models.user import User
-from app.models.search import Search
+from endpoints.auth.auth import get_current_user
 from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 from app.db.session import SessionLocal
 import os
-import time
-import random
-import string
 
 # Initialize TestClient
 client = TestClient(app)
@@ -39,6 +37,19 @@ def db_session():
 def decrypt_username(encrypted_username: str) -> str:
     """Helper function to decrypt the username manually during testing."""
     return fernet.decrypt(encrypted_username.encode()).decode()
+
+# Mocking the get_current_user dependency to return a test user
+def override_get_current_user():
+    return User(user_id=1, username="mockuser", email="mockuser@example.com", password="mockpassword")
+
+@pytest.fixture
+def client_with_mocked_auth():
+    """Fixture to mock authentication by overriding the get_current_user dependency."""
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    with TestClient(app) as c:
+        yield c
+    # Cleanup after the test
+    app.dependency_overrides.clear()
 
 # ----------------------- USER ENDPOINT TEST SUITE -----------------------
 @pytest.mark.user
@@ -81,7 +92,7 @@ def test_create_user(db_session):
     assert hash_context.verify(user_data["password"], created_user.password)
 
     # Email is also hashed, so we can't directly verify the value, but we can check that it's hashed
-    assert created_user.email != user_data["email"]    
+    assert created_user.email != user_data["email"]
     assert created_user.email.startswith("$2b$")  # bcrypt hash prefix
 
 @pytest.mark.user
@@ -119,4 +130,21 @@ def test_get_user_by_id(db_session):
     # Debugging output to verify the test flow
     print(f"Retrieved User: {user}")
     assert user["email"].startswith("$2b$")  # Ensure email is hashed
-    print(f"Retrieved User: {user}") 
+    print(f"Retrieved User: {user}")
+
+# Test protected route with mocked authentication
+@pytest.mark.user
+def test_protected_route_with_mocked_user(client_with_mocked_auth):
+    """
+    Test a protected route by mocking the authentication process.
+    """
+    # Simulate calling a protected route that requires authentication
+    response = client_with_mocked_auth.get("/auth/protected_route")  # Replace with your actual protected route
+
+    # Assert the request was successful and the mocked user was returned
+    assert response.status_code == 200
+    assert response.json() == {
+        "user_id": 1,
+        "username": "mockuser",
+        "email": "mockuser@example.com"
+    }
