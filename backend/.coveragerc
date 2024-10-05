@@ -1,0 +1,17 @@
+[run]
+# Omit certain files or directories
+omit =
+    tests/*
+    */__init__.py
+    */migrations/*
+    */venv/*
+
+# Include branch coverage to see which conditional branches are missed
+branch = True
+
+[report]
+# Show line numbers for missing coverage
+show_missing = True
+
+# Sort by missing lines or cover percentage
+sort = Cover
