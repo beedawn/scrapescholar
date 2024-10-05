@@ -1,5 +1,4 @@
-# tests/unit/test_user.py
-# need to test /users/create and ensure it updates the db with the new user and provides requested  information
+# tests/unit/test_users_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session

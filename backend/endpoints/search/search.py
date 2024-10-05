@@ -147,18 +147,23 @@ async def create_new_search(
 # Retrieve a specific search by its ID
 @router.get("/searchbyid/{search_id}", status_code=status.HTTP_200_OK)
 async def get_search_by_id(search_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
     try:
+        print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
         search = await find_search(db=db, current_user=current_user, search_id=search_id)
 
         if not search:
+            # If search is not found, raise a 404 Not Found
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
 
         return search
+    except HTTPException as http_exc:
+        # Re-raise known HTTPExceptions
+        raise http_exc
     except Exception as e:
         if DEBUG_SCRAPESCHOLAR:
             print(f"Error retrieving search: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error retrieving search: {str(e)}")
+
 # get a searches title thinkt his duplicates above function except this one uses cookie...keeping it for now need to refactor these
 @router.get("/user/search/title", status_code=status.HTTP_200_OK)
 async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,  search_id: int = Query(None, description="ID of the specific search to retrieve")):
@@ -232,12 +237,19 @@ async def find_search_articles(db, search_id):
             .all()
         )
 
-async def find_search(db,current_user,search_id):
-    return  (
+async def find_search(db, current_user, search_id):
+    try:
+        search = (
             db.query(Search)
             .filter(Search.user_id == current_user.user_id, Search.search_id == search_id)
             .first()
         )
+        return search
+    except Exception as e:
+        if DEBUG_SCRAPESCHOLAR:
+            print(f"Error in find_search: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error finding search: {str(e)}")
+
 async def get_300_search(db, current_user):
     return (
             db.query(Search)

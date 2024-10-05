@@ -1,5 +1,4 @@
-# tests/unit/test_user.py
-# need to test /users/create and ensure it updates the db with the new user and provides requested  information
+# tests/unit/test_search_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
@@ -193,4 +192,38 @@ def test_get_search_300(db_session):
     # Check that at least one of the recent searches is in the list
     latest_search_title = f"Search Title 299"  # The last inserted search
     assert any(search["title"].startswith(latest_search_title) for search in searches)
-    print(f"Retrieved {len(searches)} searches") 
+    print(f"Retrieved {len(searches)} searches")
+
+@pytest.mark.search
+def test_get_search_by_id_not_found(db_session):
+    """
+    Test the API endpoint to retrieve a search by its search_id when the search is not found.
+    """
+    # Step 1: Create a user and authenticate them
+    user_data = {
+        "username": "search_user_3",
+        "password": "testpassword",
+        "email": "searchuser3@example.com"
+    }
+    user_response = client.post("/users/create", json=user_data)
+    assert user_response.status_code == 201
+    created_user_id = user_response.json()["user_id"]
+
+    login_data = {
+        "username": user_data["username"],
+        "password": user_data["password"]
+    }
+    login_response = client.post("/auth/login", data=login_data)
+    assert login_response.status_code == 200
+    access_token = login_response.json()["access_token"]
+
+    # Step 2: Attempt to get a non-existent search
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+    non_existent_search_id = 99999  # Some non-existent ID
+    get_search_response = client.get(f"/search/searchbyid/{non_existent_search_id}", headers=headers)
+    
+    # Step 3: Ensure a 404 status code is returned
+    assert get_search_response.status_code == 404
+    assert get_search_response.json() == {"detail": "Search not found"}
