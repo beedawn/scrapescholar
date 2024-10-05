@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.main import app  # Import the FastAPI app
 from app.models.user import User
 from app.models.search import Search
+from app.models.article import Article
 from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
@@ -502,7 +503,8 @@ def test_get_valid_token_search_user_searches_response_schema(db_session):
 
 def test_get_valid_token_academic_data_response_schema(db_session):
     """
-    Test the /academic_data endpoint with an valid cookie and check response schema
+    Test the /academic_data endpoint with a valid cookie and check response schema, 
+    as well as verify that the search results are saved to the database (UT-4.7).
 
     response should look like:
 
@@ -517,14 +519,14 @@ def test_get_valid_token_academic_data_response_schema(db_session):
         "search_date": null,
         "title": "testuser-2024-10-05 07:34:54.766305"
     }
-]
+    ]
     """
 
     apiQuery="test"
     queryString="&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
-    
+
     """
     article looks like
     "id": 0,
@@ -563,6 +565,23 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert isinstance(data["articles"][0]["completeness"], int)
     assert isinstance(data["articles"][0]["transparency"], int)
 
+    # Step 5: Verify that the search and its results were saved to the database
+    search_id = data["search_id"]
+    saved_search = db_session.query(Search).filter_by(search_id=search_id).first()
+    
+    # Ensure the search was saved
+    assert saved_search is not None
+    assert saved_search.search_keywords == apiQuery.split(", ")
+
+    # Ensure the articles associated with the search were saved to the database
+    saved_articles = db_session.query(Article).filter(Article.search_id == search_id).all()
+    assert len(saved_articles) > 0  # Ensure articles were saved
+
+    # Check attributes of the first article in the database
+    saved_article = saved_articles[0]
+    assert saved_article.title == data["articles"][0]["title"]
+    assert saved_article.link == data["articles"][0]["link"]
+    assert saved_article.search_id == search_id
 
 def test_get_valid_token_past_search_response_schema(db_session):
     """
@@ -615,9 +634,6 @@ def test_get_valid_token_past_search_response_schema(db_session):
     # assert isinstance(data[0]["clarity"], int)
     # assert isinstance(data[0]["completeness"], int)
     # assert isinstance(data[0]["transparency"], int)
-
-
-
 
 def test_get_valid_token_search_title_response_schema(db_session):
     """
