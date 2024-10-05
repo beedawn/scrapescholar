@@ -14,7 +14,7 @@ def test_scopus_response_returns_correct_elements():
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
-    for item in data:
+    for item in data["articles"]:
         assert isinstance(item, dict)
         assert "id" in item
         assert isinstance(item["id"], int)    
@@ -43,7 +43,7 @@ def test_scopus_student_rating_information_available():
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
-    for item in data:
+    for item in data["articles"]:
         assert "methodology" in item
         assert isinstance(item["methodology"], int)
         assert item["methodology"] >=0 & item["methodology"] <=1    #May need to change depending on if we implement different logic
@@ -61,7 +61,7 @@ def test_scopus_empty_response_is_empty():
     response = session.get(f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)
+    assert isinstance(data["articles"], list)
     assert len(data) is 0
 
 def test_scopus_apiKey_is_filled():
