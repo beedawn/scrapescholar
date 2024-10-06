@@ -1,4 +1,6 @@
-const itemsJson = {  "search_id":1,
+const itemsJson = {  
+  
+  "search_id":1,
   articles:[
 
           {
@@ -36,5 +38,7 @@ const itemsJson = {  "search_id":1,
             "completeness": "1"
           }
         ]}
+
+        
 
         export default itemsJson;

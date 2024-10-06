@@ -302,7 +302,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     #add loop for 300 search here
-  
+
     created_search = create_search(search=search, db=db)
 
 
