@@ -143,4 +143,35 @@ describe('SearchView US-4 Component', () => {
             expect(await screen.findByText(document_type)).toBeInTheDocument();
         }, { timeout: 5000 });
     })
+
+    test('US-4  Past search dropdown should load a search', async () => {
+        global.fetch = fetchMock.mockImplementation((url) => {
+            const academic_database_url = /^http:\/\/0.0.0.0:8000\/academic_data\?keywords\=/;
+        
+            if (academic_database_url.test(url)) {
+              return Promise.resolve({
+                ok: false,
+                status: 507,
+                json: jest.fn().mockResolvedValue({"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}), // Mock the json method to resolve to an empty object
+                headers: new Headers(),
+                redirected: false,
+                statusText: 'Insufficient Storage',
+              });
+            }
+        
+          });
+         
+        render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+        submitSearch(testInput);
+         
+        await waitFor(async () => {
+             const dataMessage = /SearchData is Full\!/i
+             const dataMsg = await screen.findByText(dataMessage)
+            // expect(dataMsg).toBeInTheDocument();
+        }, { timeout: 5000 });
+        screen.debug(undefined,100000);
+    })
+
+
+   
 });
