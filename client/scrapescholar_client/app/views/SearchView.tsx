@@ -199,6 +199,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     handlePastSearchSelection={handlePastSearchSelection}
                      />
             </div>
+            {dataFull?<p>hi</p>:<></>}
             <div className="flex-1 sm:mx-12 w-full">
                 {error ? (<p>{error.message}</p>) 
                 : loading ? <p>Loading</p> : 

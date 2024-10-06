@@ -65,6 +65,7 @@ const apiCalls = () => {
         jsonData = await data.json()
         if (data.status === 507) {
           setDataFull(true);
+   
         }
       }
       catch (error: any) {
@@ -115,7 +116,7 @@ const apiCalls = () => {
       const url = `http://${host}:8000/search/user/articles?search_id=${search_id}`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
-      console.log(jsonData)
+   
     }
     catch (error: any) {
       // jsonData = [{ "title": error.message, link: '' }]

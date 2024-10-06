@@ -22,7 +22,6 @@ describe('SearchView AR-4 Component', () => {
         
         act(()=>{render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);})
-        screen.debug(undefined,100000);
         await waitFor(() => {
             const rows = screen.getAllByTestId('row')
             expect(rows[0].children[10].textContent).toContain("✎");

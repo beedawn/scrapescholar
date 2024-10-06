@@ -1,10 +1,11 @@
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView from '../../app/views/SearchView';
 import React from 'react';
-import fetchMock from '../helperFunctions/apiMock';
+
 import submitSearch from '../helperFunctions/submitSearch';
 import itemsJson from '../mockData/ItemsTestJson';
+import fetchMock, { setSimulateInsufficientStorage, setDeleteSearch } from '../helperFunctions/apiMock';
 
 beforeEach(() => {
     global.fetch = fetchMock;
@@ -144,33 +145,68 @@ describe('SearchView US-4 Component', () => {
         }, { timeout: 5000 });
     })
 
-    test('US-4  Past search dropdown should load a search', async () => {
-        global.fetch = fetchMock.mockImplementation((url) => {
-            const academic_database_url = /^http:\/\/0.0.0.0:8000\/academic_data\?keywords\=/;
-        
-            if (academic_database_url.test(url)) {
-              return Promise.resolve({
-                ok: false,
-                status: 507,
-                json: jest.fn().mockResolvedValue({"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}), // Mock the json method to resolve to an empty object
-                headers: new Headers(),
-                redirected: false,
-                statusText: 'Insufficient Storage',
-              });
-            }
-        
-          });
+    test('US-4  When user hits 300 searches and submits a search data deletion screen should be displayed', async () => {
+        setSimulateInsufficientStorage(true);
          
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  
         submitSearch(testInput);
-         
+   
         await waitFor(async () => {
              const dataMessage = /SearchData is Full\!/i
              const dataMsg = await screen.findByText(dataMessage)
-            // expect(dataMsg).toBeInTheDocument();
-        }, { timeout: 5000 });
-        screen.debug(undefined,100000);
+            expect(dataMsg).toBeInTheDocument();
+            screen.debug(undefined,100000);
+        }, { timeout: 10000 });
+        setSimulateInsufficientStorage(false);
     })
+
+    test('US-4  When user hits 300 searches and submits multiple search requests data deletion screen should be displayed', async () => {
+        setSimulateInsufficientStorage(true);
+         
+        render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  
+        submitSearch(testInput);
+        submitSearch(testInput);
+   
+        await waitFor(async () => {
+             const dataMessage = /SearchData is Full\!/i
+             const dataMsg = await screen.findByText(dataMessage)
+            expect(dataMsg).toBeInTheDocument();
+            screen.debug(undefined,100000);
+        }, { timeout: 10000 });
+        setSimulateInsufficientStorage(false);
+    })
+
+    test('US-4  When user hits 300 searches and submits a search, then deletes a search, they should be able to submit another search', async () => {
+        setSimulateInsufficientStorage(true);
+         
+        render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+  
+        submitSearch(testInput);
+        submitSearch(testInput);
+   
+        await waitFor(async () => {
+             const dataMessage = /SearchData is Full\!/i
+             const dataMsg = await screen.findByText(dataMessage)
+            expect(dataMsg).toBeInTheDocument();
+            screen.debug(undefined,100000);
+        }, { timeout: 5000 });
+        setDeleteSearch(true);
+        submitSearch(testInput);
+
+
+        await waitFor(async () => {
+            const dataMessage = /SearchData is Full\!/i
+            const dataMsg = screen.queryByText(dataMessage)
+            expect(dataMsg).toBeNull()
+           screen.debug(undefined,100000);
+       }, { timeout: 5000 });
+      
+       setDeleteSearch(false);
+        setSimulateInsufficientStorage(false);
+    })
+
 
 
    
