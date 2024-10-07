@@ -1,6 +1,6 @@
 annotated-types==0.7.0
 anyio==4.4.0
-bcrypt==4.2.0
+bcrypt==3.2.0
 certifi==2024.8.30
 charset-normalizer==3.3.2
 click==8.1.7
@@ -52,3 +52,4 @@ uvicorn==0.30.6
 # uvloop==0.20.0
 watchfiles==0.24.0
 websockets==13.0.1
+cryptography==3.4.8

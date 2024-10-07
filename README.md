@@ -74,4 +74,24 @@ CREATE USER student WITH PASSWORD 'student';
 
 GRANT ALL PRIVILEGES ON DATABASE scrapescholartestdb TO student;
 
-python -m app.db_init.py
+python -m app.init_db
+
+create user curl
+curl -X 'POST' \
+  'http://localhost:8000/users/create' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "admin",
+  "email": "admin@example.com",
+  "password": "admin1234",
+  "role_id": 1
+}'
+
+
+login curl:
+curl -X 'POST' \
+  'http://localhost:8000/auth/login' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=password&username=admin&password=admin1234&scope=&client_id=string&client_secret=string'

@@ -20,6 +20,8 @@ jobs:
       POSTGRES_SERVER: ${{secrets.POSTGRES_SERVER}}
       POSTGRES_PORT: ${{secrets.POSTGRES_PORT}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
+      ENCRYPTION_KEY: ${{secrets.ENCRYPTION_KEY}}
+    
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
@@ -37,4 +39,4 @@ jobs:
     - name: Run Python Unit Tests
       working-directory: ./backend  # Adjust to the correct directory
       run: |
-        pytest ./tests/unit
+        pytest ./tests/unit --disable-warnings -v -s

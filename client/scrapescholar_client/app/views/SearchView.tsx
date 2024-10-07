@@ -6,7 +6,7 @@ import Dropdown from "../types/DropdownType";
 import { queryAllByAltText } from '@testing-library/react';
 import apiCalls from '../api/apiCalls'; 
 import { filter } from 'd3';
-
+import DataFull from '../components/SearchView/DataFull';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -32,8 +32,11 @@ export interface ResultItem {
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
-
-    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
+    const [inputs, setInputs] = useState<string[]>(['']);
+    const [currentSearchId, setCurrentSearchId]=useState<number>(-1);
+    const [searchName, setSearchName]=useState("search name");
+    const [loading, setLoading] = useState<boolean>(false);
+    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle } = apiCalls();
 
       useEffect(() => {
         const fetchDatabases = async () => {
@@ -42,14 +45,31 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
  
     
         };
-        fetchDatabases();  
-    }, []); 
 
-    const [searchName, setSearchName]=useState("search name");
+        const fetchSearches = async () => {
+            const search_list = await getAPISearches(setError);
+            setSearches(search_list);  
+ 
+    
+        };
+
+ 
+        fetchSearches();
+        if(searches.length>=300){
+            setDataFull(true)
+        }else{
+            setDataFull(false)
+        }
+        fetchDatabases();  
+   
+    }, [loading]); 
+
+
     //gets data from api and stores in results
     const [results, setResults] = useState<ResultItem[]>([]);
+    const [dataFull, setDataFull]= useState<boolean>(false);
     //inputs gets user inputs, update everytime user enters character
-    const [inputs, setInputs] = useState<string[]>(['']);
+
     //bubble inputs is passed to bubble plot, pure inputs that update when Search is pressed only
     const [bubbleInputs, setBubbleInputs] = useState<{
         x: number,
@@ -72,8 +92,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     //drop down array for dropdown values
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
     //triggers when search is pressed so that UI is updated to loading
-    const [loading, setLoading] = useState<boolean>(false);
+
     const [error, setError] = useState<any>();
+    const [searches, setSearches]= useState<any[]>([]);
+ 
     //empty string variable to make code easier to read
     const emptyString = '';
     //adds input and drop down when plus is pressed
@@ -92,6 +114,25 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         newInputs[index] = e.target.value;
         setInputs(newInputs);
     }
+
+    const handlePastSearchSelection = async (event:any)=>{
+        const selectedSearchId = event.target.value;
+        setDataFull(false)
+        //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
+     if(selectedSearchId){
+            setCurrentSearchId(selectedSearchId)
+            setLoading(true);
+            setError(null);
+            await getAPIPastSearchResults( setResults, setError, selectedSearchId );
+            await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
+            //need to add something here to update the searchname to the new name
+            setLoading(false);
+        }
+        else{
+        setError({"message":"No search found"});
+        }
+
+    }
     //updates data in dropdown array when and/or/not is selected
     const handleDropdownChange = (index: number, option: Dropdown) => {
         const newDropdown = [...dropdown];
@@ -106,6 +147,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //sets loading to true which triggers "Loading" to show in UI
         setLoading(true);
         setError(null);
+        setDataFull(false);
         //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
         //declare empty array to combien user inputs and values from drop downs
@@ -140,24 +182,31 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //update state with our new array
         setBubbleInputs(newBubbleInputs);
         //initialize data variable to fill up with api response
- 
-        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs);
+
+        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs, setDataFull, setCurrentSearchId);
+        //need something here to load search name
         setLoading(false);
     }
+
+    
     return (
         <div className="flex flex-col sm:flex-row sm:mx-12">
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
-                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}
-                    />
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} 
+                    handlePastSearchSelection={handlePastSearchSelection}
+                     />
             </div>
+            {dataFull?<p>hi</p>:<></>}
             <div className="flex-1 sm:mx-12 w-full">
-                {error ? <p>{error.message}</p> : loading ? <p>Loading</p> :
-                    <SearchResults setResults={setResults} displayInputs={joinedInputsString}
+                {error ? (<p>{error.message}</p>) 
+                : loading ? <p>Loading</p> : 
+                dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
+                    <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
                         results={results} emptyString={emptyString} disableD3={disableD3}
-                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName}/>}
+                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setDisplayInputs={setJoinedInputsString}/>}
             </div>
         </div>
     );

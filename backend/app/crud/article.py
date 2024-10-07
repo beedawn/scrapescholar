@@ -13,8 +13,23 @@ def get_article(db: Session, article_id: int):
 def get_articles(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Article).offset(skip).limit(limit).all()
 
-def create_article(db: Session, article: ArticleCreate, user_id: int):
-    db_article = Article(**article.dict(), user_id=user_id)
+def create_article(db: Session, article: ArticleCreate):
+    #db_article = Article(**article.dict())
+    db_article = Article(
+        source_id=article.source_id,
+        search_id=article.search_id,
+        user_id=article.user_id,
+        title=article.title,
+        date=article.date,
+        link=str(article.link) if article.link else None,  # Convert to string
+        relevance_score=article.relevance_score,
+        evaluation_criteria=article.evaluation_criteria,
+        abstract=article.abstract,
+        citedby=article.citedby,
+        document_type=article.document_type,
+        doi=article.doi
+    )
+
     db.add(db_article)
     db.commit()
     db.refresh(db_article)

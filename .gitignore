@@ -2,3 +2,5 @@
 # Ignore .env files
 .env
 .venv
+.localTestScripts
+.coverage

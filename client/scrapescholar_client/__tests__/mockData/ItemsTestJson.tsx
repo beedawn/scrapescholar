@@ -1,4 +1,8 @@
-const itemsJson = [
+const itemsJson = {  
+  
+  "search_id":1,
+  articles:[
+
           {
             "id": "0",
             "title": "test 1",
@@ -33,6 +37,8 @@ const itemsJson = [
             "transparency": "1",
             "completeness": "1"
           }
-        ]
+        ]}
+
+        
 
         export default itemsJson;
