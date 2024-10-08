@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ResultItem } from '../../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
+import ColorDropdown from './ColorDropdown';
 
 export interface EditableCell {
     relevance: boolean;
@@ -166,9 +167,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                 </thead>
                 <tbody>
                     {results.map((result, index) => (
-                        <tr key={result.id} className=
-                            {` ${selectedArticle === result.id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
-                            onClick={() => { setSelectedArticle(result.id) }} data-testid='row'>
+                        <tr key={result.article_id} className=
+                            {` ${selectedArticle === result.article_id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
+                            onClick={() => { setSelectedArticle(result.article_id) }} data-testid='row'>
                             <td className="border border-gray-300" >
                                 <a href={result.link}>
                                     {result.title}
@@ -186,12 +187,14 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                             <td className="border border-gray-300" >{result.source}</td>
                             <td className="border border-gray-300" >{result.evaluation_criteria}</td>
                             <td className="border border-gray-300" >
-                                {result.color}
+                                {/* {result.color}
                                 <select className="text-black" >
                                     <option value="red" className='bg-red-600'>Red</option>
                                     <option value="yellow" className="bg-yellow">Yellow</option>
                                     <option className="bg-green" value="green">Green</option>
-                                </select>
+                                </select> */}
+                                {result.color}
+                                <ColorDropdown key={result.id}/>
                             </td>
                             <td className="border border-gray-300" >{result.relevance_score}%</td>
                             <td className="border border-gray-300" >

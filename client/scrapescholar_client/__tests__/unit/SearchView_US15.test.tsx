@@ -273,8 +273,8 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(within(rows[0]).queryByText("yellow")).toBeInTheDocument()
-            expect(within(rows[1]).queryByText("red")).toBeInTheDocument()
+            expect(within(rows[0]).queryByText("SemiRelevant")).toBeInTheDocument()
+            expect(within(rows[1]).queryByText("Not Relevant")).toBeInTheDocument()
         }
         else
             fail('no sort button')
@@ -291,8 +291,8 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(within(rows[0]).queryByText("red")).toBeInTheDocument()
-            expect(within(rows[1]).queryByText("yellow")).toBeInTheDocument()
+            expect(within(rows[0]).queryByText("Not Relevant")).toBeInTheDocument()
+            expect(within(rows[1]).queryByText("SemiRelevant")).toBeInTheDocument()
         } else
             fail('no sort button found')
     })

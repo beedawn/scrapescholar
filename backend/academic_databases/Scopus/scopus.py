@@ -44,7 +44,7 @@ def request_data(keywords:str, id:int, key: str=scopus_api_key, subject: str="",
             else:
                 link = ""
             return_articles.append(SearchResult(
-                    id=article_id,
+                    article_id=article_id,
                     title=article.get('dc:title'), 
                     link=link, 
                     date=article.get('prism:coverDate'), 

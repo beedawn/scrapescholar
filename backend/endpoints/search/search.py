@@ -9,7 +9,7 @@ from app.crud.search import create_search
 
 from app.crud.user import decrypt
 from app.schemas.search import SearchCreate, SearchUpdate
-from app.schemas.article import ArticleCreate, ArticleBase
+from app.schemas.article import ArticleCreate, ArticleBase, ArticleRead
 from app.crud.article import create_article
 from pydantic import HttpUrl
 import jwt  # Import JWT

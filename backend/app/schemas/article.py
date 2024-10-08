@@ -4,6 +4,7 @@ from typing import Optional
 from datetime import date 
 
 class ArticleBase(BaseModel):
+    
     source_id: int
     title: str
     # author: Optional[str] = None

@@ -116,6 +116,7 @@ const apiCalls = () => {
       const url = `http://${host}:8000/search/user/articles?search_id=${search_id}`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
+      console.log(jsonData)
    
     }
     catch (error: any) {

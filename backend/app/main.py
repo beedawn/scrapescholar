@@ -46,8 +46,8 @@ app.include_router(role.router, prefix="/roles", tags=["Roles"])
 app.include_router(search.router, prefix="/search", tags=["Search"])
 
 def check_response(response:List, id:int):
-    if len(response) > 0 and response[-1].id is not None:
-        new_id=response[-1].id+1
+    if len(response) > 0 and response[-1].article_id is not None:
+        new_id=response[-1].article_id+1
     else:
         new_id=id
     return new_id
