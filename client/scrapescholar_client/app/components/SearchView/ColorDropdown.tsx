@@ -18,17 +18,21 @@ interface ColorDropdownProps {
 
 
 return(<>
-  <div onClick={()=>{setIsOpen(!isOpen)}} >
+  <div onClick={()=>{setIsOpen(!isOpen)}}  >
       
-      <div className={selected.css}>{selected.value}</div>
+      {!isOpen&&(<div className={`p-2 flex items-center ${selected.css}`}>{selected.value} <svg className={`m-1 w-2 h-2 rotate-180`}
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                strokeWidth="2" d="M9 5 5 1 1 5" />
+                        </svg></div>)}
 
       <div>
-        {isOpen&&(<>        <div className="bg-red-600" onClick={()=>setSelected({value:"Not Relevant",css:"bg-red-600"})}>Not Relevant</div>
-        <div className="bg-yellow-600" onClick={()=>setSelected({value:"SemiRelevant",css:"bg-yellow-600"})}>SemiRelevant</div>
-        <div className="bg-green-600" onClick={()=>setSelected({value:"Relevant",css:"bg-green-600"})}>Relevant</div>
+        {isOpen&&(<div className="p-3 bg-slate-800">   <div>× Close </div>     <div className="p-2 bg-red-600" onClick={()=>setSelected({value:"Not Relevant",css:"bg-red-600"})}>Not Relevant</div>
+        <div className="bg-yellow-600 p-2 " onClick={()=>setSelected({value:"SemiRelevant",css:"bg-yellow-600"})}>SemiRelevant</div>
+        <div className="bg-green-600 p-2 " onClick={()=>setSelected({value:"Relevant",css:"bg-green-600"})}>Relevant</div>
         
         
-        </>
+        </div>
 
         )}</div>
     </div>
