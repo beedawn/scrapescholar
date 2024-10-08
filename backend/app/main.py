@@ -9,6 +9,8 @@ from endpoints.role import role
 from endpoints.user import user
 from endpoints.auth import auth
 from endpoints.search import search
+from endpoints.article import article
+from endpoints.comment import comment
 from typing import List, Annotated
 from pathlib import Path
 from endpoints.search.search import post_search_no_route, get_current_user_no_route, check_if_user_exceeded_search_amount
@@ -44,6 +46,8 @@ app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
 app.include_router(search.router, prefix="/search", tags=["Search"])
+app.include_router(article.router, prefix="/articles", tags=["Articles"])
+app.include_router(comment.router, prefix="/comments", tags=["Comments"])
 
 def check_response(response:List, id:int):
     if len(response) > 0 and response[-1].id is not None:
