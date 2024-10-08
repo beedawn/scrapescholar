@@ -16,8 +16,8 @@ def test_scopus_response_returns_correct_elements():
     assert isinstance(data["articles"], list)
     for item in data["articles"]:
         assert isinstance(item, dict)
-        assert "id" in item
-        assert isinstance(item["id"], int)    
+        assert "article_id" in item
+        assert isinstance(item["article_id"], int)    
         assert "title" in item
         assert isinstance(item["title"], str)
         assert "date" in item
