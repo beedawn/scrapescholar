@@ -18,7 +18,7 @@ interface ColorDropdownProps {
 
 
 return(<>
-  <div onClick={()=>{setIsOpen(!isOpen)}} key={key}>
+  <div onClick={()=>{setIsOpen(!isOpen)}} >
       
       <div className={selected.css}>{selected.value}</div>
 
