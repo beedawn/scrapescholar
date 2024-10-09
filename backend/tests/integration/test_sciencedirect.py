@@ -31,7 +31,7 @@ def test_sciencedirect_response_returns_correct_elements():
         assert item["source"] == "ScienceDirect"
         assert "evaluation_criteria" in item
         assert "color" in item
-        assert item["color"] == "red" or item["color"] == "yellow" or item["color"] == "green"
+        assert item["color"] == "Not Relevant" or item["color"] == "SemiRelevant" or item["color"] == "Relevant"
         assert "relevance_score" in item
         assert isinstance(item["relevance_score"], int)
         assert item["relevance_score"] >= 0 & item["relevance_score"] <= 100
