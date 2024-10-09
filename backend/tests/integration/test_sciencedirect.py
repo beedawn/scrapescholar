@@ -34,7 +34,7 @@ def test_sciencedirect_response_returns_correct_elements():
         assert item["color"] == "Not Relevant" or item["color"] == "SemiRelevant" or item["color"] == "Relevant"
         assert "relevance_score" in item
         assert isinstance(item["relevance_score"], float)
-        assert item["relevance_score"] >= 0 & item["relevance_score"] <= 100
+        assert item["relevance_score"] >= 0 and item["relevance_score"] <= 100
 
 def test_sciencedirect_student_rating_information_available():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
