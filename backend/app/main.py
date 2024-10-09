@@ -11,9 +11,10 @@ from endpoints.auth import auth
 from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
-from endpoints.search.search import post_search_no_route, get_current_user_no_route, check_if_user_exceeded_search_amount
+from endpoints.search.search import post_search_no_route, get_current_user_no_route, check_if_user_exceeded_search_amount, find_search_articles, get_full_article_response
 from app.db.session import get_db, SessionLocal
 from sqlalchemy.orm import Session
+
 
 app = FastAPI()
 
@@ -82,9 +83,16 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
             article_response, id =globals()[item].request_data(keywords, id=new_id,)
             response.extend(article_response)
     #need something here to get search id after its made or associated function
+    print("ARTRICLES BEFORE DB")
+    for item in response:
+        print(item.__dict__)
+    #adds articles to db
     search_valid, search_id = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
+    #instead of returning articles we're going to get the search from the db and return that
+    articles = await get_full_article_response(current_user, db, search_id)
+
     if search_valid and search_id:
-        return {"search_id":search_id, "articles":response}
+        return {"search_id":search_id, "articles":articles}
     else:
         return JSONResponse(
         status_code=404,

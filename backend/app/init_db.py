@@ -45,6 +45,7 @@ def init_db():
     from app.models.researchquestion import ResearchQuestion
     from app.models.researchquestionmapping import ResearchQuestionMapping
     from app.models.researchquestionscore import ResearchQuestionScore
+    from app.models.user_data import UserData
 
     # Create the database tables
     Base.metadata.create_all(bind=engine)
@@ -81,14 +82,20 @@ def insert_test_data(db):
     )
     user = create_user(db=db, user=user_data)
 
-    # Insert a test Source
+    # Insert a  Source
     source_data = SourceCreate(
-        name="Sample Source",
-        api_endpoint="http://api.example.com",
-        scrape_source_url="http://scrape.example.com"
+        name="Scopus",
+        api_endpoint="https://api.elsevier.com/content/search/scopus?",
+        scrape_source_url="https://api.elsevier.com/"
     )
     source = create_source(db=db, source=source_data)
 
+    source_data = SourceCreate(
+        name="ScienceDirect",
+        api_endpoint="https://api.elsevier.com/content/search/sciencedirect?",
+        scrape_source_url="https://api.elsevier.com/"
+    )
+    source = create_source(db=db, source=source_data)
     # Insert a test Search associated with the User
     search_data = SearchCreate(
         user_id=user.user_id,
