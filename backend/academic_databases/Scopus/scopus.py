@@ -52,7 +52,10 @@ def request_data(keywords:str, id:int, key: str=scopus_api_key, subject: str="",
                     source="Scopus",
                     color='red',
                     relevance_score=random.randint(1, 100),
-                    abstract='',
+                    abstract = requests.get("https://api.elsevier.com/content/abstract/scopus_id/" 
+                                            + article.get('dc:identifier').replace("SCOPUS_ID:", "") 
+                                            + "?apiKey=" + key + "&httpAccept=application/json").json()
+                                            .get("abstracts-retrieval-response").get("item").get("bibrecord").get("head").get("abstracts"),
                     document_type=article.get("subtypeDescription"),
                     evaluation_criteria='',
                     methodology=0,
