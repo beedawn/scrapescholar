@@ -84,6 +84,14 @@ def insert_test_data(db):
 
     # Insert a  Source
     source_data = SourceCreate(
+        name="Sample Source",
+        api_endpoint="https://www.sampleapi.com",
+        scrape_source_url="https://scrapesource.com"
+    )
+    source = create_source(db=db, source=source_data)
+
+
+    source_data = SourceCreate(
         name="Scopus",
         api_endpoint="https://api.elsevier.com/content/search/scopus?",
         scrape_source_url="https://api.elsevier.com/"
