@@ -229,19 +229,9 @@ async def delete_search_title(db: Session = Depends(get_db), access_token: Annot
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
 
         articles = await find_search_articles(db, search_id)
-        print("articles found:", articles)
-        #do we need to delete user data?
         for article in articles:
-            print("Article")
-            print(article.__dict__)
-            print("ARTICLE ID")
-            print(article.article_id)
             user_data = await find_user_data(db, article.article_id)
-            
-            print("USER DATA")
-            # print(user_data.__dict__)
             for data in user_data:
-                print(data.__dict__)
                 db.delete(data)
             db.delete(article)
         db.delete(search)
