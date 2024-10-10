@@ -397,7 +397,7 @@ async def get_full_article_response(current_user: User, db, search_id):
                             article_id=article.article_id,  
                             title=article.title,
                             date=article.date,
-                            citedby= article.citedby if article.citedby is not None else 0,
+                            citedby= article.citedby if article.citedby is not None else "?",
                             link=article.link,
                             abstract=article.abstract,
                             document_type=article.document_type, 
