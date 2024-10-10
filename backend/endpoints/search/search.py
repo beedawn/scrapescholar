@@ -314,10 +314,9 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     #add loop for 300 search here
 
-    x =0
-    while (x<300):
-        created_search = create_search(search=search, db=db)
-        x+=1
+ 
+    created_search = create_search(search=search, db=db)
+
     # Define the format
     date_format = "%Y-%m-%d"
 
