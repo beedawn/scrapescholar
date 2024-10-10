@@ -91,12 +91,10 @@ async def get_last_300_searches(db: Session = Depends(get_db), access_token: Ann
     Retrieve the last 300 searches for the logged-in user.
     """
     current_user = await get_current_user_no_route(token=access_token, db=db)
-    print("CURRENT USER")
-    print(current_user)
+
     try:
         # Query the last 300 searches for the authenticated user
         searches = await get_300_search(db=db, current_user=current_user)
-        print(searches)
         return searches if searches else []
 
     except Exception as e:
@@ -231,15 +229,21 @@ async def delete_search_title(db: Session = Depends(get_db), access_token: Annot
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
 
         articles = await find_search_articles(db, search_id)
+        print("articles found:", articles)
         #do we need to delete user data?
         for article in articles:
+            print("Article")
+            print(article.__dict__)
+            print("ARTICLE ID")
             print(article.article_id)
             user_data = await find_user_data(db, article.article_id)
+            
+            print("USER DATA")
+            # print(user_data.__dict__)
             for data in user_data:
-                print("USER DATA")
-                print(user_data)
+                print(data.__dict__)
                 db.delete(data)
-            db.delete(user_data)
+            db.delete(article)
         db.delete(search)
         db.commit()
         return []
@@ -260,8 +264,7 @@ async def find_search_articles(db, search_id):
 async def find_user_data(db, article_id):
       return (
             db.query(UserData)
-            .filter(UserData.article_id== article_id)
-            .order_by(UserData.title.desc())
+            .filter(UserData.article_id == article_id)
             .all()
         )
 
@@ -406,11 +409,9 @@ async def get_full_article_response(current_user: User, db, search_id):
     response = []
     for article in articles:
         user_data = create_user_data(db, current_user.user_id, article.article_id)
-        print("SOURCE ID")
-        print(article.source_id)
+
         source_name = get_source(db, article.source_id)
-        print("SOURCE NAME")
-        print(source_name.name)
+
         article_data = SearchResult(
                             article_id=article.article_id,  
                             title=article.title,
