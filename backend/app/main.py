@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from endpoints.role import role
 from endpoints.user import user
 from endpoints.auth import auth
+from endpoints.user_data import user_data
 from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
@@ -45,7 +46,7 @@ app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
 app.include_router(search.router, prefix="/search", tags=["Search"])
-
+app.include_router(user_data.router, prefix="/user_data", tags=["UserData"])
 def check_response(response:List, id:int):
     if len(response) > 0 and response[-1].article_id is not None:
         new_id=response[-1].article_id+1

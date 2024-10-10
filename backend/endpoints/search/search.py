@@ -112,8 +112,10 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
     try:
         # Query for the search
         search = await find_search(db=db, current_user=current_user,search_id=search_id)
-   
-        articles = await find_search_articles(db=db, search_id=search_id)
+        #this addes new user data and it probably shouldn't just for retreiving an article
+        #probably should rename this to initialize or create or setup articles and make a new function just to get them
+        #and have one function that builds the response
+        articles = await get_full_article_response(db=db, search_id=search_id, current_user=current_user)
         return articles if articles else []
 
     except Exception as e:
