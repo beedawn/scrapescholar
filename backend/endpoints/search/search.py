@@ -233,7 +233,13 @@ async def delete_search_title(db: Session = Depends(get_db), access_token: Annot
         articles = await find_search_articles(db, search_id)
         #do we need to delete user data?
         for article in articles:
-            db.delete(article)
+            print(article.article_id)
+            user_data = await find_user_data(db, article.article_id)
+            for data in user_data:
+                print("USER DATA")
+                print(user_data)
+                db.delete(data)
+            db.delete(user_data)
         db.delete(search)
         db.commit()
         return []
@@ -248,6 +254,14 @@ async def find_search_articles(db, search_id):
             db.query(Article)
             .filter(Article.search_id== search_id)
             .order_by(Article.title.desc())
+            .all()
+        )
+
+async def find_user_data(db, article_id):
+      return (
+            db.query(UserData)
+            .filter(UserData.article_id== article_id)
+            .order_by(UserData.title.desc())
             .all()
         )
 
@@ -306,7 +320,11 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
     # create new search to associate articles to
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords,title=title)
     #add loop for 300 search here
-    created_search = create_search(search=search, db=db)
+
+    x =0
+    while (x<300):
+        created_search = create_search(search=search, db=db)
+        x+=1
     # Define the format
     date_format = "%Y-%m-%d"
 
