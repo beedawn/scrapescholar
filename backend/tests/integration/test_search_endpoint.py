@@ -522,7 +522,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert isinstance(data["articles"][0]["source"], str)
     assert isinstance(data["articles"][0]["evaluation_criteria"], str)
     assert isinstance(data["articles"][0]["color"], str)
-    assert isinstance(data["articles"][0]["relevance_score"], int)
+    assert isinstance(data["articles"][0]["relevance_score"], float)
     assert isinstance(data["articles"][0]["methodology"], int)
     assert isinstance(data["articles"][0]["clarity"], int)
     assert isinstance(data["articles"][0]["completeness"], int)
