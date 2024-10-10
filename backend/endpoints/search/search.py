@@ -115,7 +115,7 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
         # Query for the search
         search = await find_search(db=db, current_user=current_user,search_id=search_id)
    
-        articles = await get_full_article_response(db=db, search_id=search_id)
+        articles = await find_search_articles(db=db, search_id=search_id)
         return articles if articles else []
 
     except Exception as e:
