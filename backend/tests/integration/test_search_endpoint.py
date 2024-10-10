@@ -530,6 +530,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
 
     # Step 5: Verify that the search and its results were saved to the database
     search_id = data["search_id"]
+    article_id = data["articles"][0]["article_id"]
     saved_search = db_session.query(Search).filter_by(search_id=search_id).first()
     
     # Ensure the search was saved
@@ -537,7 +538,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert saved_search.search_keywords == apiQuery.split(", ")
 
     # Ensure the articles associated with the search were saved to the database
-    saved_articles = db_session.query(Article).filter(Article.search_id == search_id).all()
+    saved_articles = db_session.query(Article).filter(Article.article_id == article_id).all()
     assert len(saved_articles) > 0  # Ensure articles were saved
 
     # Check attributes of the first article in the database
@@ -669,7 +670,7 @@ def test_put_valid_token_search_title_response_schema(db_session):
 
 
 
-def test_delete_valid_token_search_title_response_schema(db_session):
+async def test_delete_valid_token_search_title_response_schema(db_session):
     """
     Test the /search/user/search/title endpoint with an valid cookie and check response schema
 
@@ -686,11 +687,12 @@ def test_delete_valid_token_search_title_response_schema(db_session):
     "title": "new one"
 }
     """
-    search_id=1
+    
     apiQuery="test"
     queryString="&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
-    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    search_request = await session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    search_id=search_request["search_id"]
     delete = session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
     articles=db_session.query(Article).filter_by(search_id=search_id).first()
     search= db_session.query(Search).filter_by(search_id=search_id).first()
