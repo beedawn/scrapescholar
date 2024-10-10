@@ -13,7 +13,7 @@ from app.crud.user import decrypt
 from app.schemas.search import SearchCreate, SearchUpdate
 from app.schemas.article import ArticleCreate, ArticleBase, ArticleRead
 from app.crud.article import create_article
-from app.crud.user_data import create_user_data
+from app.crud.user_data import create_user_data, get_user_data
 from academic_databases.SearchResult import SearchResult
 from pydantic import HttpUrl
 import jwt  # Import JWT
@@ -115,7 +115,7 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
         #this addes new user data and it probably shouldn't just for retreiving an article
         #probably should rename this to initialize or create or setup articles and make a new function just to get them
         #and have one function that builds the response
-        articles = await get_full_article_response(db=db, search_id=search_id, current_user=current_user)
+        articles = await get_full_article_response(db=db, search_id=search_id)
         return articles if articles else []
 
     except Exception as e:
@@ -394,14 +394,47 @@ async def get_current_user_no_route(db: Session, token: str = Depends(oauth2_sch
             detail="An error occurred while fetching the current user",
         )
 
-async def get_full_article_response(current_user: User, db, search_id):
+
+async def get_full_article_response(db, search_id):
+    articles = await find_search_articles(db, search_id)
+    response = []
+    for article in articles:
+        print("ARTICLE ID")
+        print(article.article_id)
+ 
+        user_data = await get_user_data(db=db, article_id=article.article_id)
+    
+
+        source_name = await get_source(db, article.source_id)
+        article_data = SearchResult(
+                            article_id=article.article_id,  
+                            title=article.title,
+                            date=article.date,
+                            citedby= article.citedby if article.citedby is not None else "?",
+                            link=article.link,
+                            abstract=article.abstract,
+                            document_type=article.document_type, 
+                            source=source_name.name,
+                            methodology=user_data.methodology,
+                            clarity=user_data.clarity,
+                            transparency=user_data.transparency,
+                            completeness=user_data.completeness,
+                            evaluation_criteria=article.evaluation_criteria,  
+                            color=user_data.relevancy_color,  
+                            relevance_score=article.relevance_score  
+)
+        response.append(article_data)
+    return response
+    
+
+async def initialize_full_article_response(current_user: User, db, search_id):
     articles = await find_search_articles(db, search_id)
     
     response = []
     for article in articles:
-        user_data = create_user_data(db, current_user.user_id, article.article_id)
+        user_data = await create_user_data(db=db, user_id=current_user.user_id, article_id=article.article_id)
 
-        source_name = get_source(db, article.source_id)
+        source_name = await get_source(db, article.source_id)
 
         article_data = SearchResult(
                             article_id=article.article_id,  

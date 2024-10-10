@@ -12,13 +12,16 @@ import os
 
 
 
-# def get_user_data(db: Session, user_id: int):
-#     user = db.query(User).filter(User.user_id == user_id).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return user
+async def get_user_data(db: Session, article_id: int):
+    print(f"Searching for UserData with article_id: {article_id}")
+    user_data = (db.query(UserData)
+                 .filter(UserData.article_id == article_id)
+                 .first())
+    if not user_data:
+        raise HTTPException(status_code=404, detail="Userdata not found in get")
+    return user_data
 
-def create_user_data(db: Session, user_id, article_id):
+async def create_user_data(db: Session, user_id, article_id):
     # Hash the user's password and email, and encrypt the username before storing them
     #get users user id
 
@@ -34,11 +37,11 @@ def create_user_data(db: Session, user_id, article_id):
     db.refresh(db_user_data)
     return db_user_data
 
-def update_user_data(db: Session, article_id:int, user_data:UserData):
-    db_user_data = db.query(UserData).filter(user_data.article_id == article_id).first()
+async def update_user_data(db: Session, article_id:int, user_data:UserData):
+    db_user_data = db.query(UserData).filter(UserData.article_id == article_id).first()
     
     if not db_user_data:
-        raise HTTPException(status_code=404, detail="Search not found")
+        raise HTTPException(status_code=404, detail="Userdata not found in put")
     for key, value in user_data.dict(exclude_unset=True).items():
         setattr(db_user_data, key, value)
     db.commit()

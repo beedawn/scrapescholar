@@ -12,7 +12,7 @@ from endpoints.user_data import user_data
 from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
-from endpoints.search.search import post_search_no_route, get_current_user_no_route, check_if_user_exceeded_search_amount, find_search_articles, get_full_article_response
+from endpoints.search.search import post_search_no_route, get_current_user_no_route, check_if_user_exceeded_search_amount, find_search_articles, initialize_full_article_response
 from app.db.session import get_db, SessionLocal
 from sqlalchemy.orm import Session
 
@@ -55,7 +55,7 @@ def check_response(response:List, id:int):
     return new_id
 
 
-def get_database_list(directory):
+async def get_database_list(directory):
     # Get a list of all folders in the specified directory
     return [folder.name for folder in Path(directory).iterdir() if folder.is_dir() and folder.name != "__pycache__"]
 
@@ -77,7 +77,7 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
     print(current_user.user_id)
     response=[]
     id = 0
-    database_list = get_database_list('academic_databases/')
+    database_list = await get_database_list('academic_databases/')
     for item in database_list:
         if item in academic_databases:
             new_id=check_response(response,id)
@@ -90,7 +90,7 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
     #adds articles to db
     search_valid, search_id = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
     #instead of returning articles we're going to get the search from the db and return that
-    articles = await get_full_article_response(current_user, db, search_id)
+    articles = await initialize_full_article_response(current_user, db, search_id)
 
     if search_valid and search_id:
         return {"search_id":search_id, "articles":articles}
@@ -103,6 +103,6 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
 
 @app.get("/academic_sources")
 async def multiple_apis():
-    database_list = get_database_list('academic_databases/')
+    database_list = await get_database_list('academic_databases/')
     return database_list
 

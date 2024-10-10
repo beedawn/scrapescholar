@@ -32,11 +32,11 @@ router = APIRouter()
 #     return roles
 
 @router.put("/update/{article_id}", response_model=UserDataRead)
-def update_existing_user_data(article_id: int, user_data: UserDataUpdate, db: Session = Depends(get_db)):
+async def update_existing_user_data(article_id: int, user_data: UserDataUpdate, db: Session = Depends(get_db)):
     """
     API endpoint to update an existing user_data.
     """
-    updated_user_data = update_user_data(db=db, article_id=article_id, user_data=user_data)
+    updated_user_data = await update_user_data(db=db, article_id=article_id, user_data=user_data)
     return updated_user_data
 
 # @router.delete("/delete/{role_id}", response_model=RoleRead)
