@@ -28,8 +28,7 @@ const DynamicUserField: React.FC<DynamicUserFieldProps> =
         const currentFoundCell = editableCells.find((cell) => {
             return cell.article_id == result.article_id
         })
-        console.log("current cell")
-        console.log(currentCell)
+
         setCurrentCell(currentFoundCell)
 
     },[editableCells])

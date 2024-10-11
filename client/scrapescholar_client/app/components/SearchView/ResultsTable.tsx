@@ -75,15 +75,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
     const handleCellClick = (article_id: number, field: keyof EditableCell) => {
         const updatedCells: EditableCell[] = [...editableCells];
-        console.log("editableCells")
-        console.log(editableCells)
-        console.log("updatedCells")
-        console.log(updatedCells)
 
-        console.log("index")
-        console.log(article_id)
-        console.log
-        console.log("field of cell")
 
         const targetCell = updatedCells.find(cell => cell.article_id === article_id);
 
@@ -108,12 +100,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         const updatedResults = editableResults.map(result =>
             result.article_id === id ? { ...result, [field]: value } : result
         );
-        console.log(updatedResults)
+
         setEditableResults(updatedResults);
     }
     const handleFieldConfirm = async () => {
         setResults(editableResults);
-        console.log(editableResults)
+
         //send request to backend to update value?
     }
     return (

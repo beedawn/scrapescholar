@@ -1,6 +1,6 @@
 const itemsArray = [
     {
-      id: 0,
+      article_id: 0,
       title: "test 1",
       link: "link x",
       date: "2024-05-31",
@@ -17,7 +17,7 @@ const itemsArray = [
       completeness: "0"
     },
     {
-      id: 1,
+      article_id: 2,
       title: "test 2",
       link: "link a",
       date: "2024-07-01",
@@ -34,7 +34,7 @@ const itemsArray = [
       completeness: "1"
     },
     {
-      id: 1,
+      article_id: 3,
       title: "test 1",
       link: "link a",
       date: "2024-07-01",
