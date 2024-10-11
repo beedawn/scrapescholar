@@ -500,7 +500,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
                 "abstract": "",
                 "document_type": "Article",
                 "source": "Scopus",
-                "evaluation_criteria": "",
+                
                 "color": "red",
                 "relevance_score": 29,
                 "methodology": 0,
@@ -520,7 +520,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert isinstance(data["articles"][0]["abstract"], str)
     assert isinstance(data["articles"][0]["document_type"], str)
     assert isinstance(data["articles"][0]["source"], str)
-    assert isinstance(data["articles"][0]["evaluation_criteria"], str)
+    
     assert isinstance(data["articles"][0]["color"], str)
     assert isinstance(data["articles"][0]["relevance_score"], float)
     assert isinstance(data["articles"][0]["methodology"], int)
@@ -561,7 +561,7 @@ def test_get_valid_token_past_search_response_schema(db_session):
         "link": "https://www.sciencedirect.com/science/article/pii/S0092867423013193?dgcid=api_sd_search-api-endpoint",
         "title": "XIST directly regulates X-linked and autosomal genes in naive human pluripotent cells",
         "relevance_score": 66.0,
-        "evaluation_criteria": "",
+      
         "citedby": null,
         "document_type": null,
         "article_id": 30,
@@ -591,13 +591,7 @@ def test_get_valid_token_past_search_response_schema(db_session):
     assert isinstance(data[0]["abstract"], str)
     # assert isinstance(data[0]["document_type"], str)
     # assert isinstance(data[0]["source"], str)
-    assert isinstance(data[0]["evaluation_criteria"], str)
-    # assert isinstance(data[0]["color"], str)
     assert isinstance(data[0]["relevance_score"], float)
-    # assert isinstance(data[0]["methodology"], int)
-    # assert isinstance(data[0]["clarity"], int)
-    # assert isinstance(data[0]["completeness"], int)
-    # assert isinstance(data[0]["transparency"], int)
 
 def test_get_valid_token_search_title_response_schema(db_session):
     """
