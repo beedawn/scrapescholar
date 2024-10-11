@@ -234,11 +234,11 @@ const apiCalls = () => {
   }
 
 
-  const putUserData = async (new_data: {}, article_id: number,
-    setLoading: (item: boolean) => void) => {
+  const putUserData = async (new_data: {}) => {
     let data: Response;
     let jsonData;
-    setLoading(true);
+
+    console.log(JSON.stringify(new_data))
     try {
 
       const url = `http://${host}:8000/user_data/update`
@@ -247,7 +247,7 @@ const apiCalls = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(
-          { new_data }
+           new_data 
         )
       })
       jsonData = await data.json()
@@ -265,7 +265,7 @@ const apiCalls = () => {
       //something went wrong!
       // console.log(jsonData)
     }
-    setLoading(false)
+
   }
 
 

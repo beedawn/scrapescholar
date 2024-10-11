@@ -4,7 +4,7 @@ import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
 import ColorDropdown from './ColorDropdown';
 import EvaluationCriteriaDropdown from './EvaluationCriteriaDropdown';
-
+import apiCalls from '@/app/api/apiCalls';
 export interface EditableCell {
     relevance: boolean;
     methodology: boolean;
@@ -19,7 +19,9 @@ interface ResultsTableProps {
     setResults: (item: ResultItem[]) => void;
     selectedArticle: number;
     setSelectedArticle: (index: number) => void;
+    setLoading:(state:boolean)=> void;
 }
+
 
 export const sortResults = (array: ResultItem[],
     field: keyof ResultItem,
@@ -47,7 +49,7 @@ export const sortResults = (array: ResultItem[],
 };
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
-    results, selectedArticle, setSelectedArticle, setResults
+    results, selectedArticle, setSelectedArticle, setResults, setLoading
 }) => {
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
@@ -103,9 +105,23 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
         setEditableResults(updatedResults);
     }
+    const {putUserData}=apiCalls();
     const handleFieldConfirm = async () => {
         setResults(editableResults);
+        console.log("editable results")
+        console.log(editableResults)
+        for (let item of editableResults){
+            const putrequest={
+                "article_id":item.article_id,
+                "methodology":item.methodology.toString(),
+                "clarity":item.clarity.toString(),
+                "transparency":item.transparency.toString(),
+                "completeness":item.completeness.toString()
 
+            }
+            
+            await putUserData(putrequest)
+        }
         //send request to backend to update value?
     }
     return (
@@ -219,7 +235,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                     <option className="bg-green" value="green">Green</option>
                                 </select> */}
                                 {result.color}
-                                <ColorDropdown key={result.id}/>
+                                <ColorDropdown article_id={result.article_id} colorValue={result.color}/>
                             </td>
                             <td className="border border-gray-300" >{result.relevance_score}%</td>
                             <td className="border border-gray-300" >

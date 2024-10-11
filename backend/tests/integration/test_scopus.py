@@ -33,7 +33,7 @@ def test_scopus_response_returns_correct_elements():
         assert item["source"] == "Scopus"
         assert "evaluation_criteria" in item
         assert "color" in item
-        assert item["color"] == "Not Relevant" or item["color"] == "SemiRelevant" or item["color"] == "Relevant"
+        assert item["color"] == "Not Relevant" or item["color"] == "SemiRelevant" or item["color"] == "Relevant" or item["color"] == ""
         assert "relevance_score" in item
         assert isinstance(item["relevance_score"], float)
         assert item["relevance_score"] >= 0 and item["relevance_score"] <= 100

@@ -115,7 +115,7 @@ describe('SearchView AR-4 Component', () => {
                 const checkIcons = screen.getAllByText("✔");
                 fireEvent.click(checkIcons[0]);
                 fireEvent.click(checkIcons[1]);
-                screen.debug(undefined,10000);
+       
                 
             }
             else {
@@ -124,7 +124,7 @@ describe('SearchView AR-4 Component', () => {
         }, { timeout: 5000 });
 
         if (methodologyField && methodologyField2) {
-            screen.debug(undefined,10000);
+          
             const rows = screen.getAllByTestId('row');
             expect(rows[0].children[10].textContent).toContain("test input1");
             expect(rows[1].children[10].textContent).toContain("test input2");
