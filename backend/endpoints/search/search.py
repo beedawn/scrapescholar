@@ -333,7 +333,6 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         date=datetime.strptime(article.date, date_format).date(),
         link=HttpUrl(article.link),
         relevance_score=article.relevance_score,
-        evaluation_criteria=article.evaluation_criteria,
         abstract=article.abstract,
         citedby=article.citedby,
         document_type=article.document_type,
@@ -421,7 +420,7 @@ async def get_full_article_response(db, search_id):
                             clarity=user_data.clarity,
                             transparency=user_data.transparency,
                             completeness=user_data.completeness,
-                            evaluation_criteria=article.evaluation_criteria,  
+                            evaluation_criteria=user_data.evaluation_criteria,  
                             color=user_data.relevancy_color,  
                             relevance_score=article.relevance_score  
 )
