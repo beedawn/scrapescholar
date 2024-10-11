@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from app.main import app  # Assuming the main app is instantiated in main.py
-from app.db.session import get_db
+from app.main import app
+from app.db.session import get_db, SessionLocal
 from app.schemas.article import ArticleCreate
 from app.models.article import Article
 
@@ -11,7 +11,7 @@ client = TestClient(app)
 
 # Override the dependency for testing
 def override_get_db():
-    db = SessionLocal()  # Assuming you have SessionLocal for the testing DB session
+    db = SessionLocal()
     try:
         yield db
     finally:
@@ -35,32 +35,31 @@ mock_article_data = {
 }
 
 def test_create_article():
-    response = client.post("/article/", json=mock_article_data)
-    assert response.status_code == 200
+    response = client.post("/articles/", json=mock_article_data)
+    assert response.status_code == 201
     assert response.json()["title"] == mock_article_data["title"]
 
 def test_get_article():
     # First, create the article
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
     
     # Fetch the article by ID
-    response = client.get(f"/article/{article_id}")
+    response = client.get(f"/articles/{article_id}")
     assert response.status_code == 200
     assert response.json()["title"] == mock_article_data["title"]
 
 def test_delete_article():
     # First, create the article
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
 
     # Delete the article
-    response = client.delete(f"/article/{article_id}")
-    assert response.status_code == 200
-    assert response.json()["detail"] == "Article deleted successfully"
+    response = client.delete(f"/articles/{article_id}")
+    assert response.status_code == 204
 
 def test_get_deleted_article():
     # Try to fetch the deleted article
-    response = client.get("/article/9999")  # Assuming 9999 is a non-existent ID
+    response = client.get("/articles/9999")
     assert response.status_code == 404
     assert response.json()["detail"] == "Article not found"

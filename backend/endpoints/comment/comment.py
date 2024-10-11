@@ -10,7 +10,7 @@ from app.db.session import get_db
 router = APIRouter()
 
 # Add a comment to an article
-@router.post("/articles/{article_id}/comments", response_model=Comment)
+@router.post("/articles/{article_id}/comments", response_model=Comment, status_code=201)
 def create_new_comment(article_id: int, comment: CommentCreate, db: Session = Depends(get_db)):
     new_comment = create_comment(db, article_id=article_id, comment=comment)
     return new_comment
@@ -25,7 +25,7 @@ def update_existing_comment(comment_id: int, comment: CommentUpdate, db: Session
     return updated_comment
 
 # Delete a comment
-@router.delete("/comments/{comment_id}")
+@router.delete("/comments/{comment_id}", status_code=204)
 def remove_comment(comment_id: int, db: Session = Depends(get_db)):
     existing_comment = get_comment(db, comment_id=comment_id)
     if existing_comment is None:
@@ -34,7 +34,7 @@ def remove_comment(comment_id: int, db: Session = Depends(get_db)):
     return {"detail": "Comment deleted successfully"}
 
 # Get all comments for an article
-@router.get("/articles/{article_id}/comments", response_model=List[Comment])
+@router.get("/articles/{article_id}/comments", response_model=List[Comment], status_code=200)
 def get_comments(article_id: int, db: Session = Depends(get_db)):
     comments = get_comments_by_article(db, article_id=article_id)
     if not comments:

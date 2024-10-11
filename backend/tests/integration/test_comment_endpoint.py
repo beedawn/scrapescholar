@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from app.main import app  # Assuming the main app is instantiated in main.py
-from app.db.session import get_db
+from app.main import app
+from app.db.session import get_db, SessionLocal
 from app.schemas.comment import CommentCreate
 from app.models.comment import Comment
 
@@ -11,7 +11,7 @@ client = TestClient(app)
 
 # Override the dependency for testing
 def override_get_db():
-    db = SessionLocal()  # Assuming you have SessionLocal for the testing DB session
+    db = SessionLocal()
     try:
         yield db
     finally:
@@ -25,32 +25,34 @@ mock_comment_data = {
     "user_id": 1,
 }
 
+# Mock article data
+mock_article_data = {
+    "title": "Test Article",
+    "date": "2024-10-11",
+    "link": "http://example.com/test_article",
+    "relevance_score": 95,
+    "evaluation_criteria": "High",
+    "abstract": "This is a test article.",
+    "citedby": 100,
+    "document_type": "Journal",
+    "source_id": 1,
+    "search_id": 1,
+    "user_id": 1
+}
+
 def test_create_comment():
     # First, create an article to attach the comment
-    mock_article_data = {
-        "title": "Test Article",
-        "date": "2024-10-11",
-        "link": "http://example.com/test_article",
-        "relevance_score": 95,
-        "evaluation_criteria": "High",
-        "abstract": "This is a test article.",
-        "citedby": 100,
-        "document_type": "Journal",
-        "source_id": 1,
-        "search_id": 1,
-        "user_id": 1
-    }
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
 
     # Add a comment to the article
     response = client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json()["comment_text"] == mock_comment_data["comment_text"]
 
 def test_get_comments():
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
     client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
 
@@ -61,7 +63,7 @@ def test_get_comments():
 
 def test_update_comment():
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
     comment_response = client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
     comment_id = comment_response.json()["comment_id"]
@@ -74,7 +76,7 @@ def test_update_comment():
 
 def test_delete_comment():
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
     comment_response = client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
     comment_id = comment_response.json()["comment_id"]
