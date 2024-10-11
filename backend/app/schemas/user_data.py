@@ -19,7 +19,7 @@ class UserDataCreate(UserDataBase):
 
 class UserDataUpdate(BaseModel):
     article_id:int
-    color: Optional[str] = None
+    relevancy_color: Optional[str] = None
     methodology: Optional[str] = None
     clarity: Optional[str] = None
     transparency: Optional[str] = None
