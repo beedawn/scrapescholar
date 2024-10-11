@@ -24,7 +24,7 @@ interface ResultsTableProps {
 export const sortResults = (array: ResultItem[],
     field: keyof ResultItem,
     sortDirection: string): ResultItem[] => {
-    return array.sort((a, b) => {
+    return [...array].sort((a, b) => {
         const aValue = a[field];
         const bValue = b[field];
         if (typeof aValue === "number" && typeof bValue === "number") {
@@ -57,7 +57,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         const orderedEditableResults = sortedResults.map(result => {
             // Find the corresponding item in 'editableResults' by matching the 'id'
             return editableResults.find(editable =>
-                editable.id === result.id) || result;
+                editable.article_id === result.article_id) || result;
         });
         setEditableResults(orderedEditableResults);
         setResults(sortedResults);
@@ -106,8 +106,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     }
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
         const updatedResults = editableResults.map(result =>
-            result.id === id ? { ...result, [field]: value } : result
+            result.article_id === id ? { ...result, [field]: value } : result
         );
+        console.log(updatedResults)
         setEditableResults(updatedResults);
     }
     const handleFieldConfirm = async () => {

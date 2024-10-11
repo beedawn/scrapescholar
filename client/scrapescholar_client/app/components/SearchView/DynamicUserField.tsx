@@ -25,12 +25,13 @@ const DynamicUserField: React.FC<DynamicUserFieldProps> =
         handleFieldChange, handleFieldConfirm, editableResults, index }) => {
         const [currentCell, setCurrentCell]=useState<EditableCell>();
         useEffect(()=>{
-        const currentCell = editableCells.find((cell) => {
+        const currentFoundCell = editableCells.find((cell) => {
             return cell.article_id == result.article_id
         })
-        setCurrentCell(currentCell)
-        console.log(currentResult)
-        console.log(currentResult?.[field])
+        console.log("current cell")
+        console.log(currentCell)
+        setCurrentCell(currentFoundCell)
+
     },[editableCells])
     const currentResult = editableResults.find((cell) => {
         return cell.article_id == result.article_id
