@@ -5,7 +5,6 @@ from app.schemas.user_data import UserDataCreate, UserDataUpdate
 from fastapi import HTTPException
 
 
-
 import os
 
 
@@ -37,8 +36,8 @@ async def create_user_data(db: Session, user_id, article_id):
     db.refresh(db_user_data)
     return db_user_data
 
-async def update_user_data(db: Session, article_id:int, user_data:UserData):
-    db_user_data = db.query(UserData).filter(UserData.article_id == article_id).first()
+async def update_user_data(db: Session, user_data:UserData):
+    db_user_data = db.query(UserData).filter(UserData.article_id == user_data.article_id).first()
     
     if not db_user_data:
         raise HTTPException(status_code=404, detail="Userdata not found in put")

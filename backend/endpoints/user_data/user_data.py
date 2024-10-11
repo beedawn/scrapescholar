@@ -1,9 +1,11 @@
 # endpoints/user_data/user_data.py
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Cookie
 from sqlalchemy.orm import Session
+from typing import List, Annotated
 from app.schemas.user_data import UserDataBase, UserDataCreate, UserDataRead, UserDataUpdate
 from app.crud.user_data import create_user_data, update_user_data
 from app.db.session import get_db
+from endpoints.search.search import get_current_user_no_route
 
 router = APIRouter()
 
@@ -31,13 +33,19 @@ router = APIRouter()
 #     roles = get_roles(db=db, skip=skip, limit=limit)
 #     return roles
 
-@router.put("/update/{article_id}", response_model=UserDataRead)
-async def update_existing_user_data(article_id: int, user_data: UserDataUpdate, db: Session = Depends(get_db)):
+@router.put("/update", response_model=UserDataRead)
+async def update_existing_user_data(user_data: UserDataUpdate, db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None):
     """
     API endpoint to update an existing user_data.
     """
-    updated_user_data = await update_user_data(db=db, article_id=article_id, user_data=user_data)
-    return updated_user_data
+    print("Access token")
+    print(access_token)
+    user = await get_current_user_no_route(db=db, token=access_token)
+    if user is not None:
+        updated_user_data = await update_user_data(db=db, user_data=user_data)
+        return updated_user_data
+    else:
+        return []
 
 # @router.delete("/delete/{role_id}", response_model=RoleRead)
 # def delete_existing_role(role_id: int, db: Session = Depends(get_db)):

@@ -35,6 +35,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 router = APIRouter()
 
 # Helper function to get the current user from token
+
+#could be broken up into a validate token function and then get user? using it elsewhere for this purpose now
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:
         if DEBUG_SCRAPESCHOLAR:
