@@ -3,6 +3,7 @@ import { ResultItem } from '../../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
 import ColorDropdown from './ColorDropdown';
+import EvaluationCriteriaDropdown from './EvaluationCriteriaDropdown';
 
 export interface EditableCell {
     relevance: boolean;
@@ -185,7 +186,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                             <td className="border border-gray-300" >{result.abstract}</td>
                             <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>
-                            <td className="border border-gray-300" >{result.evaluation_criteria}</td>
+                            <td className="border border-gray-300" >{result.evaluation_criteria}
+                            <EvaluationCriteriaDropdown key={result.id}/>
+
+
+
+                            </td>
                             <td className="border border-gray-300" >
                                 {/* {result.color}
                                 <select className="text-black" >

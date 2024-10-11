@@ -1,15 +1,9 @@
-# app/crud/user.py
+# app/crud/user_data.py
 from sqlalchemy.orm import Session
 from app.models.user_data import UserData
 from app.schemas.user_data import UserDataCreate, UserDataUpdate
 from fastapi import HTTPException
-
-
 import os
-
-
-
-
 
 async def get_user_data(db: Session, article_id: int):
     print(f"Searching for UserData with article_id: {article_id}")
@@ -21,11 +15,6 @@ async def get_user_data(db: Session, article_id: int):
     return user_data
 
 async def create_user_data(db: Session, user_id, article_id):
-    # Hash the user's password and email, and encrypt the username before storing them
-    #get users user id
-
-    #get article id
-
     db_user_data = UserData(
         user_id=user_id,
         article_id=article_id,

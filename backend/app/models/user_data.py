@@ -16,5 +16,6 @@ class UserData(Base):
     clarity= Column(Integer, default=0)
     transparency= Column(Integer, default=0)
     completeness= Column(Integer, default=0)
+    evaluation_criteria = Column(String, nullable=True)
 
  

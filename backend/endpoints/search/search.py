@@ -450,8 +450,7 @@ async def initialize_full_article_response(current_user: User, db, search_id):
                             methodology=user_data.methodology,
                             clarity=user_data.clarity,
                             transparency=user_data.transparency,
-                            completeness=user_data.completeness,
-                            evaluation_criteria=article.evaluation_criteria,  
+                            completeness=user_data.completeness, 
                             color=user_data.relevancy_color,  
                             relevance_score=article.relevance_score  
 )

@@ -13,6 +13,7 @@ class UserDataBase(BaseModel):
     clarity: int
     transparency: int
     completeness: int
+    evaluation_criteria: Optional[str] = None
 
 class UserDataCreate(UserDataBase):
     pass
@@ -24,6 +25,7 @@ class UserDataUpdate(BaseModel):
     clarity: Optional[str] = None
     transparency: Optional[str] = None
     completeness: Optional[str] = None
+    evaluation_criteria: Optional[str] = None
     
 
 class UserDataRead(UserDataBase):

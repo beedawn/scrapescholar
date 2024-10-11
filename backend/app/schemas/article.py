@@ -11,7 +11,7 @@ class ArticleBase(BaseModel):
     date: Optional[date]
     link: Optional[HttpUrl] = None
     relevance_score: Optional[float] = None
-    evaluation_criteria: Optional[str] = None
+    
     abstract: Optional[str] = None
     doi: Optional[str] = None
     document_type: Optional[str] = None
