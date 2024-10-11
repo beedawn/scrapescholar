@@ -65,7 +65,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     const [pressedSort, setPressedSort] = useState<keyof ResultItem | null>(null);
     const [editableCells, setEditableCells] = useState<EditableCell[]>
         (results.map((result) => ({
-            id: result.id,
+            article_id: result.article_id,
             relevance: false,
             methodology: false,
             clarity: false,
@@ -73,11 +73,36 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
             transparency: false
         })));
 
-    const handleCellClick = (index: number, field: keyof EditableCell) => {
+    const handleCellClick = (article_id: number, field: keyof EditableCell) => {
         const updatedCells: EditableCell[] = [...editableCells];
-        updatedCells[index][field as keyof EditableCell] =
-            !updatedCells[index][field as keyof EditableCell];
-        setEditableCells(updatedCells)
+        console.log("editableCells")
+        console.log(editableCells)
+        console.log("updatedCells")
+        console.log(updatedCells)
+
+        console.log("index")
+        console.log(article_id)
+        console.log
+        console.log("field of cell")
+
+        const targetCell = updatedCells.find(cell => cell.article_id === article_id);
+
+        if (targetCell) {
+            console.log("field of cell", targetCell[field as keyof EditableCell]);
+        
+            // Toggle the field value
+            targetCell[field as keyof EditableCell] = !targetCell[field as keyof EditableCell];
+            
+            // Update the state
+            setEditableCells(updatedCells);
+        } else {
+            console.error(`No editable cell found with article_id ${article_id}`);
+        }
+
+
+        // updatedCells[index][field as keyof EditableCell] =
+        //     !updatedCells[index][field as keyof EditableCell];
+        // setEditableCells(updatedCells)
     }
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
         const updatedResults = editableResults.map(result =>
@@ -87,6 +112,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     }
     const handleFieldConfirm = async () => {
         setResults(editableResults);
+        console.log(editableResults)
         //send request to backend to update value?
     }
     return (
