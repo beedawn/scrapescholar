@@ -2,8 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { ResultItem } from '../../views/SearchView';
 import { EditableCell } from './ResultsTable';
 
-import {apiCalls} from '../apiCalls';
-import { ApiError } from 'next/dist/server/api-utils';
 type EditableField =
     'relevance' | 'methodology' | 'clarity'
     | 'completeness' | 'transparency';
