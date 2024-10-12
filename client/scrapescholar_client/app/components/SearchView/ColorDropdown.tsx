@@ -51,7 +51,6 @@ interface ColorDropdownProps {
 
     }
     setSelected({value:selectedValue,css:cssStyling});
-    console.log(article_id)
   const putRequest ={
     "article_id":article_id,
     "relevancy_color":selectedValue
@@ -60,7 +59,7 @@ interface ColorDropdownProps {
   await putUserData(putRequest)
 
   }
-console.log(colorValue)
+
 return(<>
   <div onClick={()=>{setIsOpen(!isOpen)}}  >
       

@@ -221,20 +221,13 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                             <td className="border border-gray-300" >{result.abstract}</td>
                             <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>
-                            <td className="border border-gray-300" >{result.evaluation_criteria}
-                            <EvaluationCriteriaDropdown key={result.id}/>
+                            <td className="border border-gray-300" >
+                            <EvaluationCriteriaDropdown article_id={result.article_id} evaluationValue={result.evaluation_criteria}/>
 
 
 
                             </td>
                             <td className="border border-gray-300" >
-                                {/* {result.color}
-                                <select className="text-black" >
-                                    <option value="red" className='bg-red-600'>Red</option>
-                                    <option value="yellow" className="bg-yellow">Yellow</option>
-                                    <option className="bg-green" value="green">Green</option>
-                                </select> */}
-                                {result.color}
                                 <ColorDropdown article_id={result.article_id} colorValue={result.color}/>
                             </td>
                             <td className="border border-gray-300" >{result.relevance_score}%</td>
