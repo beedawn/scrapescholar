@@ -16,8 +16,8 @@ def test_scopus_response_returns_correct_elements():
     assert isinstance(data["articles"], list)
     for item in data["articles"]:
         assert isinstance(item, dict)
-        assert "id" in item
-        assert isinstance(item["id"], int)    
+        assert "article_id" in item
+        assert isinstance(item["article_id"], int)    
         assert "title" in item
         assert isinstance(item["title"], str)
         assert "date" in item
@@ -33,11 +33,11 @@ def test_scopus_response_returns_correct_elements():
         assert item["source"] == "Scopus"
         assert "evaluation_criteria" in item
         assert "color" in item
-        assert item["color"] == "red" or item["color"] == "yellow" or item["color"] == "green"
+        assert item["color"] == "Not Relevant" or item["color"] == "SemiRelevant" or item["color"] == "Relevant" or item["color"] == ""
         assert "relevance_score" in item
-        assert isinstance(item["relevance_score"], int)
-        assert item["relevance_score"] >= 0 & item["relevance_score"] <= 100
-
+        assert isinstance(item["relevance_score"], float)
+        assert item["relevance_score"] >= 0 and item["relevance_score"] <= 100
+        
 def test_scopus_student_rating_information_available():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200

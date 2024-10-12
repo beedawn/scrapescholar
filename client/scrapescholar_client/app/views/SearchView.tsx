@@ -126,6 +126,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             await getAPIPastSearchResults( setResults, setError, selectedSearchId );
             await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
+            
             setLoading(false);
         }
         else{

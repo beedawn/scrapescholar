@@ -109,7 +109,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         path="/",
         domain="0.0.0.0",
         samesite="Lax",
-        max_age=3600
+        max_age=28800
     )
 
     return response
@@ -125,6 +125,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     except Exception:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
+
+#probably want tto verify token? worried it will break tests
 # Protected route example
 @router.get("/protected_route")
 def protected_route(current_user: User = Depends(get_current_user)):

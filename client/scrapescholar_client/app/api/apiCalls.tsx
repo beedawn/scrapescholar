@@ -116,6 +116,7 @@ const apiCalls = () => {
       const url = `http://${host}:8000/search/user/articles?search_id=${search_id}`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
+      console.log(jsonData)
    
     }
     catch (error: any) {
@@ -124,6 +125,8 @@ const apiCalls = () => {
     }
     if (jsonData !== undefined && jsonData.length > 0) {
       setResults(jsonData)
+      console.log("past results data")
+      console.log(jsonData)
     }
     else {
       //set better error message
@@ -231,8 +234,42 @@ const apiCalls = () => {
   }
 
 
+  const putUserData = async (new_data: {}) => {
+    let data: Response;
+    let jsonData;
 
-  return { getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle, deleteSearch };
+    console.log(JSON.stringify(new_data))
+    try {
+
+      const url = `http://${host}:8000/user_data/update`
+      data = await fetch(url, {
+        method: "PUT", credentials: "include", headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+           new_data 
+        )
+      })
+      jsonData = await data.json()
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+    }
+
+    if (jsonData !== undefined && jsonData.title !== undefined) {
+      //hapy path
+
+    }
+    else {
+      //something went wrong!
+      // console.log(jsonData)
+    }
+
+  }
+
+
+  return { getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle, deleteSearch, putUserData };
 
 }
 

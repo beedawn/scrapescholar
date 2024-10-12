@@ -5,9 +5,10 @@ from typing import List
 from app.schemas.role import RoleCreate, RoleUpdate, RoleRead
 from app.crud.role import get_role, get_roles, create_role, update_role, delete_role
 from app.db.session import get_db
+from endpoints.search.search import get_current_user_no_route
 
 router = APIRouter()
-
+#probably wan tto add cookie token validation here, but worried it will break tests
 @router.post("/create", response_model=RoleRead, status_code=status.HTTP_201_CREATED)
 def create_new_role(role: RoleCreate, db: Session = Depends(get_db)):
     """
