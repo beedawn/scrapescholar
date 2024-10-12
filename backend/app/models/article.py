@@ -17,8 +17,7 @@ class Article(Base):
     abstract = Column(String, nullable=True)
     link = Column(String, nullable=True)
     relevance_score = Column(Float, nullable=True)
-    evaluation_criteria = Column(String, nullable=True)
-    document_type = Column(String, nullable=True)
+    document_type= Column(String, nullable=True)
     doi = Column(String, nullable=True)
 
     # Relationships

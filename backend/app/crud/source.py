@@ -4,11 +4,19 @@ from app.models.source import Source
 from app.schemas.source import SourceCreate, SourceUpdate
 from fastapi import HTTPException
 
-def get_source(db: Session, source_id: int):
+async def get_source(db: Session, source_id: int):
     source = db.query(Source).filter(Source.source_id == source_id).first()
     if not source:
         raise HTTPException(status_code=404, detail="Source not found")
     return source
+
+
+def get_source_by_name(db: Session, source: str):
+    source = db.query(Source).filter(Source.name == source).first()
+    if not source:
+        raise HTTPException(status_code=404, detail="Source not found")
+    return source
+
 
 def get_sources(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Source).offset(skip).limit(limit).all()

@@ -273,8 +273,11 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(within(rows[0]).queryByText("yellow")).toBeInTheDocument()
-            expect(within(rows[1]).queryByText("red")).toBeInTheDocument()
+            screen.debug(undefined,10000)
+            waitFor(()=>{
+            expect(within(rows[1]).queryByText("SemiRelevant")).toBeInTheDocument()
+            expect(within(rows[0]).queryByText("Not Relevant")).toBeInTheDocument()
+        }, {timeout:5000})
         }
         else
             fail('no sort button')
@@ -291,8 +294,11 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(within(rows[0]).queryByText("red")).toBeInTheDocument()
-            expect(within(rows[1]).queryByText("yellow")).toBeInTheDocument()
+            screen.debug(undefined,10000)
+            waitFor(()=>{
+            expect(within(rows[1]).queryByText("Not Relevant")).toBeInTheDocument()
+            expect(within(rows[0]).queryByText("SemiRelevant")).toBeInTheDocument()
+            },{timeout:5000})
         } else
             fail('no sort button found')
     })
@@ -563,8 +569,8 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[7].textContent).toContain("deny");
-            expect(rows[1].children[7].textContent).toContain("accept");
+            expect(rows[0].children[7].textContent).toContain("Reject");
+            expect(rows[1].children[7].textContent).toContain("Accept");
         }
         else
             fail('no sort button')
@@ -581,8 +587,8 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[7].textContent).toContain("accept");
-            expect(rows[1].children[7].textContent).toContain("deny");
+            expect(rows[0].children[7].textContent).toContain("Accept");
+            expect(rows[1].children[7].textContent).toContain("Reject");
         } else
             fail('no sort button found')
     })

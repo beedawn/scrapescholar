@@ -1,8 +1,8 @@
 #   Create SearchResults class
 class SearchResult:
-    def __init__(self, id:int, title:str = None, date:str = None, citedby:int = None, link:str = None, abstract:str = None, document_type:str = None, source:str = None,
+    def __init__(self, article_id:int, title:str = None, date:str = None, citedby:int = None, link:str = None, abstract:str = None, document_type:str = None, source:str = None,
                  evaluation_criteria:str = None, color:str=None, relevance_score:int = None, methodology:int = None, clarity:int = None, completeness:int = None, transparency:int = None):
-        self.id=id
+        self.article_id=article_id
         self.title = title
         self.date = date
         self.citedby = citedby

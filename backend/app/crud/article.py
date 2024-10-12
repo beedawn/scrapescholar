@@ -23,7 +23,6 @@ def create_article(db: Session, article: ArticleCreate):
         date=article.date,
         link=str(article.link) if article.link else None,  # Convert to string
         relevance_score=article.relevance_score,
-        evaluation_criteria=article.evaluation_criteria,
         abstract=article.abstract,
         citedby=article.citedby,
         document_type=article.document_type,

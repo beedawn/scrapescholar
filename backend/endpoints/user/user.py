@@ -7,6 +7,9 @@ from app.crud.user import create_user, get_user, get_user_by_username, update_us
 from app.db.session import get_db
 from cryptography.fernet import Fernet
 import os
+from endpoints.search.search import get_current_user_no_route
+
+#probably wan tto add cookie token validation here, but worried it will break tests
 
 # Load environment variable for encryption key
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
