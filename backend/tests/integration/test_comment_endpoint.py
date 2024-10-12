@@ -42,7 +42,7 @@ mock_article_data = {
 
 def test_create_comment():
     # First, create an article to attach the comment
-    response = client.post("/articles/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data)
     article_id = response.json()["article_id"]
 
     # Add a comment to the article
@@ -52,7 +52,7 @@ def test_create_comment():
 
 def test_get_comments():
     # Create an article and a comment
-    response = client.post("/articles/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data)
     article_id = response.json()["article_id"]
     client.post(f"/comment/article/{article_id}", json=mock_comment_data)
 
@@ -63,7 +63,7 @@ def test_get_comments():
 
 def test_update_comment():
     # Create an article and a comment
-    response = client.post("/articles/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data)
     article_id = response.json()["article_id"]
     comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
     comment_id = comment_response.json()["comment_id"]
@@ -76,7 +76,7 @@ def test_update_comment():
 
 def test_delete_comment():
     # Create an article and a comment
-    response = client.post("/articles/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data)
     article_id = response.json()["article_id"]
     comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
     comment_id = comment_response.json()["comment_id"]
