@@ -5,7 +5,6 @@ from typing import Optional
 
 # Schema for creating a new comment
 class CommentCreate(BaseModel):
-    article_id: int
     user_id: int
     comment_text: str
 

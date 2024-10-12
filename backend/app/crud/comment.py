@@ -2,6 +2,7 @@
 from sqlalchemy.orm import Session
 from app.models.comment import Comment
 from app.schemas.comment import CommentCreate, CommentUpdate
+from fastapi import HTTPException
 
 def get_comment(db: Session, comment_id: int):
     comment = db.query(Comment).filter(Comment.comment_id == comment_id).first()
@@ -34,8 +35,7 @@ def create_comment(db: Session, article_id: int, comment: CommentCreate):
     db_comment = Comment(
         article_id=article_id,
         user_id=comment.user_id,
-        comment_text=comment.comment_text,
-        created_at=comment.created_at
+        comment_text=comment.comment_text
     )
     db.add(db_comment)
     db.commit()

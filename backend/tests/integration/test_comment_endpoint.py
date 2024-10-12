@@ -21,8 +21,8 @@ app.dependency_overrides[get_db] = override_get_db
 
 # Mock comment data
 mock_comment_data = {
-    "comment_text": "This is a test comment",
     "user_id": 1,
+    "comment_text": "This is a test comment"
 }
 
 # Mock article data
@@ -46,7 +46,7 @@ def test_create_comment():
     article_id = response.json()["article_id"]
 
     # Add a comment to the article
-    response = client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
+    response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
     assert response.status_code == 201
     assert response.json()["comment_text"] == mock_comment_data["comment_text"]
 
@@ -54,10 +54,10 @@ def test_get_comments():
     # Create an article and a comment
     response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
-    client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
+    client.post(f"/comment/article/{article_id}", json=mock_comment_data)
 
     # Get comments for the article
-    response = client.get(f"/articles/{article_id}/comments")
+    response = client.get(f"/comment/article/{article_id}/comments")
     assert response.status_code == 200
     assert len(response.json()) > 0
 
@@ -65,12 +65,12 @@ def test_update_comment():
     # Create an article and a comment
     response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
-    comment_response = client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
+    comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
     comment_id = comment_response.json()["comment_id"]
 
     # Update the comment
     updated_comment = {"comment_text": "Updated comment text"}
-    response = client.put(f"/comments/{comment_id}", json=updated_comment)
+    response = client.put(f"/comment/{comment_id}", json=updated_comment)
     assert response.status_code == 200
     assert response.json()["comment_text"] == updated_comment["comment_text"]
 
@@ -78,10 +78,9 @@ def test_delete_comment():
     # Create an article and a comment
     response = client.post("/articles/", json=mock_article_data)
     article_id = response.json()["article_id"]
-    comment_response = client.post(f"/articles/{article_id}/comments", json=mock_comment_data)
+    comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
     comment_id = comment_response.json()["comment_id"]
 
     # Delete the comment
-    response = client.delete(f"/comments/{comment_id}")
-    assert response.status_code == 200
-    assert response.json()["detail"] == "Comment deleted successfully"
+    response = client.delete(f"/comment/{comment_id}")
+    assert response.status_code == 204

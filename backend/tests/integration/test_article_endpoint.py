@@ -35,31 +35,31 @@ mock_article_data = {
 }
 
 def test_create_article():
-    response = client.post("/articles/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data)
     assert response.status_code == 201
     assert response.json()["title"] == mock_article_data["title"]
 
 def test_get_article():
     # First, create the article
-    response = client.post("/articles/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data)
     article_id = response.json()["article_id"]
     
     # Fetch the article by ID
-    response = client.get(f"/articles/{article_id}")
+    response = client.get(f"/article/{article_id}")
     assert response.status_code == 200
     assert response.json()["title"] == mock_article_data["title"]
 
 def test_delete_article():
     # First, create the article
-    response = client.post("/articles/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data)
     article_id = response.json()["article_id"]
 
     # Delete the article
-    response = client.delete(f"/articles/{article_id}")
+    response = client.delete(f"/article/{article_id}")
     assert response.status_code == 204
 
 def test_get_deleted_article():
     # Try to fetch the deleted article
-    response = client.get("/articles/9999")
+    response = client.get("/article/9999")
     assert response.status_code == 404
     assert response.json()["detail"] == "Article not found"

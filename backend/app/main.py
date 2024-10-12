@@ -29,7 +29,6 @@ app.add_middleware(
         allow_headers=["*"],
         )
 
-
 def get_db():
     db = SessionLocal()
     try:
@@ -46,8 +45,8 @@ app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
 app.include_router(search.router, prefix="/search", tags=["Search"])
-app.include_router(article.router, prefix="/articles", tags=["Articles"])
-app.include_router(comment.router, prefix="/comments", tags=["Comments"])
+app.include_router(article.router, prefix="/article", tags=["Articles"])
+app.include_router(comment.router, prefix="/comment", tags=["Articles"])
 
 def check_response(response:List, id:int):
     if len(response) > 0 and response[-1].id is not None:
