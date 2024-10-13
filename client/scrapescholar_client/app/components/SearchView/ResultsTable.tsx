@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { ResultItem } from '../../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
-
+import ColorDropdown from './ColorDropdown';
+import EvaluationCriteriaDropdown from './EvaluationCriteriaDropdown';
+import apiCalls from '@/app/api/apiCalls';
 export interface EditableCell {
     relevance: boolean;
     methodology: boolean;
@@ -17,12 +19,14 @@ interface ResultsTableProps {
     setResults: (item: ResultItem[]) => void;
     selectedArticle: number;
     setSelectedArticle: (index: number) => void;
+    setLoading:(state:boolean)=> void;
 }
+
 
 export const sortResults = (array: ResultItem[],
     field: keyof ResultItem,
     sortDirection: string): ResultItem[] => {
-    return array.sort((a, b) => {
+    return [...array].sort((a, b) => {
         const aValue = a[field];
         const bValue = b[field];
         if (typeof aValue === "number" && typeof bValue === "number") {
@@ -45,7 +49,7 @@ export const sortResults = (array: ResultItem[],
 };
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
-    results, selectedArticle, setSelectedArticle, setResults
+    results, selectedArticle, setSelectedArticle, setResults, setLoading
 }) => {
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
@@ -55,7 +59,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         const orderedEditableResults = sortedResults.map(result => {
             // Find the corresponding item in 'editableResults' by matching the 'id'
             return editableResults.find(editable =>
-                editable.id === result.id) || result;
+                editable.article_id === result.article_id) || result;
         });
         setEditableResults(orderedEditableResults);
         setResults(sortedResults);
@@ -63,7 +67,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     const [pressedSort, setPressedSort] = useState<keyof ResultItem | null>(null);
     const [editableCells, setEditableCells] = useState<EditableCell[]>
         (results.map((result) => ({
-            id: result.id,
+            article_id: result.article_id,
             relevance: false,
             methodology: false,
             clarity: false,
@@ -71,20 +75,53 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
             transparency: false
         })));
 
-    const handleCellClick = (index: number, field: keyof EditableCell) => {
+    const handleCellClick = (article_id: number, field: keyof EditableCell) => {
         const updatedCells: EditableCell[] = [...editableCells];
-        updatedCells[index][field as keyof EditableCell] =
-            !updatedCells[index][field as keyof EditableCell];
-        setEditableCells(updatedCells)
+
+
+        const targetCell = updatedCells.find(cell => cell.article_id === article_id);
+
+        if (targetCell) {
+            console.log("field of cell", targetCell[field as keyof EditableCell]);
+        
+            // Toggle the field value
+            targetCell[field as keyof EditableCell] = !targetCell[field as keyof EditableCell];
+            
+            // Update the state
+            setEditableCells(updatedCells);
+        } else {
+            console.error(`No editable cell found with article_id ${article_id}`);
+        }
+
+
+        // updatedCells[index][field as keyof EditableCell] =
+        //     !updatedCells[index][field as keyof EditableCell];
+        // setEditableCells(updatedCells)
     }
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
         const updatedResults = editableResults.map(result =>
-            result.id === id ? { ...result, [field]: value } : result
+            result.article_id === id ? { ...result, [field]: value } : result
         );
+
         setEditableResults(updatedResults);
     }
+    const {putUserData}=apiCalls();
     const handleFieldConfirm = async () => {
         setResults(editableResults);
+        console.log("editable results")
+        console.log(editableResults)
+        for (let item of editableResults){
+            const putrequest={
+                "article_id":item.article_id,
+                "methodology":item.methodology.toString(),
+                "clarity":item.clarity.toString(),
+                "transparency":item.transparency.toString(),
+                "completeness":item.completeness.toString()
+
+            }
+            
+            await putUserData(putrequest)
+        }
         //send request to backend to update value?
     }
     return (
@@ -166,9 +203,9 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                 </thead>
                 <tbody>
                     {results.map((result, index) => (
-                        <tr key={result.id} className=
-                            {` ${selectedArticle === result.id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
-                            onClick={() => { setSelectedArticle(result.id) }} data-testid='row'>
+                        <tr key={result.article_id} className=
+                            {` ${selectedArticle === result.article_id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
+                            onClick={() => { setSelectedArticle(result.article_id) }} data-testid='row'>
                             <td className="border border-gray-300" >
                                 <a href={result.link}>
                                     {result.title}
@@ -184,14 +221,14 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                             <td className="border border-gray-300" >{result.abstract}</td>
                             <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>
-                            <td className="border border-gray-300" >{result.evaluation_criteria}</td>
                             <td className="border border-gray-300" >
-                                {result.color}
-                                <select className="text-black" >
-                                    <option value="red" className='bg-red-600'>Red</option>
-                                    <option value="yellow" className="bg-yellow">Yellow</option>
-                                    <option className="bg-green" value="green">Green</option>
-                                </select>
+                            <EvaluationCriteriaDropdown article_id={result.article_id} evaluationValue={result.evaluation_criteria}/>
+
+
+
+                            </td>
+                            <td className="border border-gray-300" >
+                                <ColorDropdown article_id={result.article_id} colorValue={result.color}/>
                             </td>
                             <td className="border border-gray-300" >{result.relevance_score}%</td>
                             <td className="border border-gray-300" >

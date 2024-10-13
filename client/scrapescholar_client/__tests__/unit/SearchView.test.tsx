@@ -206,13 +206,13 @@ describe('SearchView Component', () => {
   })
 
   test('sort results ascending', () => {
-    const sorted = sortResults(items, 'title', 'asc')
+    const sorted = sortResults(items, 'article_id', 'asc')
     expect(sorted).toEqual(items)
   })
 
   test('sort results descending', () => {
-    const sorted = sortResults(items, 'title', 'desc')
-    expect(sorted).toEqual([items[0], items[1], items[2]])
+    const sorted = sortResults(items, 'article_id', 'desc')
+    expect(sorted).toEqual([items[2], items[1], items[0]])
   })
 
   test('returns an empty array when sorting an empty array', () => {

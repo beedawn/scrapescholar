@@ -55,7 +55,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                         <ResultsTable setResults={setResults}
                             results={results}
                             selectedArticle={selectedArticle}
-                            setSelectedArticle={setSelectedArticle} />
+                            setSelectedArticle={setSelectedArticle} setLoading={setLoading} />
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''

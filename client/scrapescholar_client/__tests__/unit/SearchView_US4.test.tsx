@@ -156,7 +156,7 @@ describe('SearchView US-4 Component', () => {
              const dataMessage = /SearchData is Full\!/i
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
-            screen.debug(undefined,100000);
+         
         }, { timeout: 10000 });
         setSimulateInsufficientStorage(false);
     })
@@ -173,7 +173,7 @@ describe('SearchView US-4 Component', () => {
              const dataMessage = /SearchData is Full\!/i
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
-            screen.debug(undefined,100000);
+           
         }, { timeout: 10000 });
         setSimulateInsufficientStorage(false);
     })
@@ -190,7 +190,7 @@ describe('SearchView US-4 Component', () => {
              const dataMessage = /SearchData is Full\!/i
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
-            screen.debug(undefined,100000);
+           
         }, { timeout: 5000 });
         setDeleteSearch(true);
         submitSearch(testInput);
@@ -200,7 +200,7 @@ describe('SearchView US-4 Component', () => {
             const dataMessage = /SearchData is Full\!/i
             const dataMsg = screen.queryByText(dataMessage)
             expect(dataMsg).toBeNull()
-           screen.debug(undefined,100000);
+         
        }, { timeout: 5000 });
       
        setDeleteSearch(false);
