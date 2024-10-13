@@ -63,6 +63,7 @@ describe('SearchView US-5 Component', () => {
         expect(rows[0].children[8].textContent).not.toContain(/Relevant/i);
         expect(rows[0].children[8].textContent).not.toContain(/SemiRelevant/i);
         expect(rows[0].children[8].textContent).not.toContain(/Not Relevant/i);
+        expect(rows[0].children[8].textContent).toContain(/Relevancy/i);
     }, { timeout: 5000 })
     });
     test('US-4 UT-5.1 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded', () => {
