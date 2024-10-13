@@ -42,6 +42,29 @@ describe('SearchView US-5 Component', () => {
             expect(rows[0].children[8].textContent).toContain(/Not Relevant/i);
         }, { timeout: 5000 })
     });
+    test('US-4 UT-5.3 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded', () => {
+        render(<SearchView setLoggedIn={mockSetLoggedIn} />);
+        submitSearch(testInput)
+
+        waitFor(() => {
+            const rows = screen.getAllByTestId('row')
+            const defaultRelevancyCell = within(rows[0]).getByTestId("relevancy-column-default")
+            fireEvent.click(defaultRelevancyCell)
+            expect(rows[0].children[8].textContent).toContain(/Relevant/i);
+            expect(rows[0].children[8].textContent).toContain(/SemiRelevant/i);
+            expect(rows[0].children[8].textContent).toContain(/Not Relevant/i);
+        }, { timeout: 5000 })
+        waitFor(() => {
+            const closeRelevancy = screen.getByText(/Close/i)
+            fireEvent.click(closeRelevancy)
+        }, { timeout: 5000 })
+        waitFor(() => {
+        const rows = screen.getAllByTestId('row')
+        expect(rows[0].children[8].textContent).not.toContain(/Relevant/i);
+        expect(rows[0].children[8].textContent).not.toContain(/SemiRelevant/i);
+        expect(rows[0].children[8].textContent).not.toContain(/Not Relevant/i);
+    }, { timeout: 5000 })
+    });
     test('US-4 UT-5.1 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded', () => {
         
         render(<SearchView setLoggedIn={mockSetLoggedIn} />);
