@@ -37,6 +37,8 @@ def test_scopus_response_returns_correct_elements():
         assert "relevance_score" in item
         assert isinstance(item["relevance_score"], float)
         assert item["relevance_score"] >= 0 and item["relevance_score"] <= 100
+    search_id=data["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
         
 def test_scopus_student_rating_information_available():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
@@ -56,6 +58,8 @@ def test_scopus_student_rating_information_available():
         assert "transparency" in item
         assert isinstance(item["transparency"], int)
         assert item["transparency"] >=0 & item["transparency"] <=1
+    search_id=data["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
         
 def test_scopus_empty_response_is_empty():
     response = session.get(f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
@@ -63,6 +67,8 @@ def test_scopus_empty_response_is_empty():
     data = response.json()
     assert isinstance(data["articles"], list)
     assert len(data["articles"]) is 0
+    search_id=data["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 def test_scopus_apiKey_is_filled():
     assert scopus_api_key is not None
