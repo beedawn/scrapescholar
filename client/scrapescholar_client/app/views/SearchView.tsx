@@ -7,6 +7,8 @@ import { queryAllByAltText } from '@testing-library/react';
 import apiCalls from '../api/apiCalls'; 
 import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
+import CommentsSidebar from '../components/SearchView/CommentsSidebar'; 
+
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -236,28 +238,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     onArticleClick={handleArticleClick} />}
             </div>
 
-            {/* Right-side div for comments */}
-            <div className="w-1/4 bg-gray-100 p-4">
-                {selectedArticleId ? (
-                    <div>
-                        <h2>Comments for Article {selectedArticleId}</h2>
-                        {commentsLoading ? (
-                            <p>Loading comments...</p>
-                        ) : comments.length > 0 ? (
-                            <ul>
-                                {comments.map((comment) => (
-                                    <li key={comment.id}>
-                                        <strong>{comment.user}</strong>: {comment.text}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No comments found for this article.</p>
-                        )}
-                    </div>
-                ) : (
-                    <p>Select an article to see comments.</p>
-                )}
+            {/* Sidebar for showing comments */}
+            <div className="w-1/4 bg-gray-100">
+                {selectedArticleId && <CommentsSidebar articleId={selectedArticleId} />}
             </div>
         </div>
     );
