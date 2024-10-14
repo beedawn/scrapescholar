@@ -7,7 +7,31 @@ from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
 session = get_cookie()
-#UT-5.2
+#UT-23.1
+async def test_user_data_slash_update_put_valid_body():
+    data = {
+  "article_id":1,
+  "relevancy_color": "Not Relevant",
+  "evaluation_criteria":"Pending",
+  "clarity": "0",
+  "transparency": "1",
+  "completeness": "1"
+}
+
+    await session.put(f"{base_url}/user_data/update", json=data)
+    apiQuery="test"
+    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    response = await session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data["articles"], list)
+    for item in data["articles"]:
+        print(item)
+        if item["article_id"]==1:
+            assert item["color"] == "Not Relevant" 
+
+
+
 async def test_user_data_slash_update_put():
     data = {
     "article_id": 1,
@@ -16,7 +40,7 @@ async def test_user_data_slash_update_put():
     await session.put(f"{base_url}/user_data/update", json=data)
     apiQuery="test"
     queryString="&academic_database=Scopus&academic_database=ScienceDirect"
-    response = await session.get(f"{base_url}search/user/search/title?search_id=1")
+    response = await session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
@@ -24,4 +48,5 @@ async def test_user_data_slash_update_put():
         print(item)
         if item["article_id"]==1:
             assert item["color"] == "Not Relevant" 
+
 
