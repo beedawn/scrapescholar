@@ -19,6 +19,7 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
+//change for project demo
 describe('SearchView Component', () => {
   const mockSetLoggedIn = jest.fn();
   const testInput = "test input"
