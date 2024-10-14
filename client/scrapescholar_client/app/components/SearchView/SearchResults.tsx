@@ -17,6 +17,7 @@ interface SearchResultsProps {
     currentSearchId: number;
     setDisplayInputs: (item: string[]) => void;
     setLoading: (item: boolean) => void;
+    onArticleClick: (articleId: number) => Promise<void>;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({
@@ -26,6 +27,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     setLoading }) => {
     const [selectedArticle, setSelectedArticle] = useState(-1);
     const { getAPIPastSearchTitle } = apiCalls();
+
+    const onArticleClick = async (articleId: number) => {
+        console.log(`Article clicked: ${articleId}`);
+    };
 
     useEffect(() => {
         const fetchSearchName = async () => {
@@ -55,7 +60,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                         <ResultsTable setResults={setResults}
                             results={results}
                             selectedArticle={selectedArticle}
-                            setSelectedArticle={setSelectedArticle} setLoading={setLoading} />
+                            setSelectedArticle={setSelectedArticle} 
+                            setLoading={setLoading} 
+                            onArticleClick={onArticleClick} />
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''

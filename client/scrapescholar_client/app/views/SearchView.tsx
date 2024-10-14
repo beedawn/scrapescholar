@@ -29,6 +29,7 @@ export interface ResultItem {
     clarity: string;
     completeness: string;
     transparency: string;
+    onArticleClick: (articleId: number) => Promise<void>;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
@@ -36,7 +37,11 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [currentSearchId, setCurrentSearchId]=useState<number>(-1);
     const [searchName, setSearchName]=useState("search name");
     const [loading, setLoading] = useState<boolean>(false);
-    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle } = apiCalls();
+    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, getCommentsByArticle } = apiCalls();
+
+    const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);  // To track the selected article ID
+    const [comments, setComments] = useState<any[]>([]);  // To store the comments of the selected article
+    const [commentsLoading, setCommentsLoading] = useState<boolean>(false);  // To manage the loading state for comments
 
       useEffect(() => {
         const fetchDatabases = async () => {
@@ -140,6 +145,17 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         newDropdown[index] = option;
         setDropdown(newDropdown);
     }
+
+    const handleArticleClick = async (articleId: number) => {
+        setSelectedArticleId(articleId);
+        setCommentsLoading(true);
+
+        const data = await getCommentsByArticle(articleId);
+        setComments(data);
+
+        setCommentsLoading(false);
+    };
+
     //runs when search is pressed
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
        // console.log(userDatabaseList);
@@ -198,16 +214,50 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
                     addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} 
                     handlePastSearchSelection={handlePastSearchSelection}
-                     />
+                />
             </div>
-            {dataFull?<p>hi</p>:<></>}
+            {dataFull ? <p>hi</p> : <></>}
             <div className="flex-1 sm:mx-12 w-full">
                 {error ? (<p>{error.message}</p>) 
                 : loading ? <p>Loading</p> : 
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
-                    <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
-                        results={results} emptyString={emptyString} disableD3={disableD3}
-                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setDisplayInputs={setJoinedInputsString}/>}
+                    <SearchResults 
+                    setResults={setResults} 
+                    displayInputs={joinedInputsString} 
+                    setLoading={setLoading}
+                    results={results} 
+                    emptyString={emptyString} 
+                    disableD3={disableD3}
+                    bubbleInputs={bubbleInputs} 
+                    searchName={searchName} 
+                    setSearchName={setSearchName} 
+                    currentSearchId={currentSearchId} 
+                    setDisplayInputs={setJoinedInputsString}
+                    onArticleClick={handleArticleClick} />}
+            </div>
+
+            {/* Right-side div for comments */}
+            <div className="w-1/4 bg-gray-100 p-4">
+                {selectedArticleId ? (
+                    <div>
+                        <h2>Comments for Article {selectedArticleId}</h2>
+                        {commentsLoading ? (
+                            <p>Loading comments...</p>
+                        ) : comments.length > 0 ? (
+                            <ul>
+                                {comments.map((comment) => (
+                                    <li key={comment.id}>
+                                        <strong>{comment.user}</strong>: {comment.text}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No comments found for this article.</p>
+                        )}
+                    </div>
+                ) : (
+                    <p>Select an article to see comments.</p>
+                )}
             </div>
         </div>
     );

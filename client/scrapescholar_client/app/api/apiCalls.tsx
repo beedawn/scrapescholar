@@ -268,8 +268,23 @@ const apiCalls = () => {
 
   }
 
+  const getCommentsByArticle = async (articleId: number) => {
+    try {
+      const url = `http://${host}:8000/comment/article/${articleId}/comments`;  // Update the URL accordingly
+      const response = await fetch(url, { method: "GET", credentials: "include" });
+      if (!response.ok) {
+        throw new Error(`Error fetching comments for article ${articleId}: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      return [];
+    }
+  };
 
-  return { getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle, deleteSearch, putUserData };
+
+  return { getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle, deleteSearch, putUserData, getCommentsByArticle };
 
 }
 

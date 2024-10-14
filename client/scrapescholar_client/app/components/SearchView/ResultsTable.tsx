@@ -20,6 +20,7 @@ interface ResultsTableProps {
     selectedArticle: number;
     setSelectedArticle: (index: number) => void;
     setLoading:(state:boolean)=> void;
+    onArticleClick: (articleId: number) => void;
 }
 
 
