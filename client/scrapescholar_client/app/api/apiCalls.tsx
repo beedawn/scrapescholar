@@ -270,7 +270,7 @@ const apiCalls = () => {
 
   const getCommentsByArticle = async (articleId: number) => {
     try {
-      const url = `http://${host}:8000/comment/article/${articleId}/comments`;  // Update the URL accordingly
+      const url = `http://${host}:8000/comment/article/${articleId}/comments`;
       const response = await fetch(url, { method: "GET", credentials: "include" });
       if (!response.ok) {
         throw new Error(`Error fetching comments for article ${articleId}: ${response.statusText}`);
@@ -281,7 +281,7 @@ const apiCalls = () => {
       console.error("Error fetching comments:", error);
       return [];
     }
-  };
+  }
 
 
   return { getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle, deleteSearch, putUserData, getCommentsByArticle };
