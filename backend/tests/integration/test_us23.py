@@ -19,13 +19,7 @@ def test_user_data_slash_update_put_valid_body():
   "transparency": "1",
   "completeness": "1"
 }
-
     putrequest=session.put(f"{base_url}/user_data/update", json=data)
-    print("put status code")
-    print(putrequest.status_code)
-    
-
-
     response = session.get(f"{base_url}/search/user/articles?search_id=1")
     assert response.status_code == 200
     data = response.json()
