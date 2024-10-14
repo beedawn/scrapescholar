@@ -63,7 +63,7 @@ interface ColorDropdownProps {
 return(<>
   <div onClick={()=>{setIsOpen(!isOpen)}}  >
       
-      {!isOpen&&(<div className={`p-2 flex items-center ${selected.css}`}>{selected.value} <svg className={`m-1 w-2 h-2 rotate-180`}
+      {!isOpen&&(<div className={`p-2 flex items-center ${selected.css}`} data-testid="relevancy-column-default">{selected.value} <svg className={`m-1 w-2 h-2 rotate-180`}
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                 strokeWidth="2" d="M9 5 5 1 1 5" />

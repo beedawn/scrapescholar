@@ -116,7 +116,7 @@ const apiCalls = () => {
       const url = `http://${host}:8000/search/user/articles?search_id=${search_id}`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
-      console.log(jsonData)
+ 
    
     }
     catch (error: any) {
@@ -125,8 +125,7 @@ const apiCalls = () => {
     }
     if (jsonData !== undefined && jsonData.length > 0) {
       setResults(jsonData)
-      console.log("past results data")
-      console.log(jsonData)
+
     }
     else {
       //set better error message
@@ -238,7 +237,6 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
 
-    console.log(JSON.stringify(new_data))
     try {
 
       const url = `http://${host}:8000/user_data/update`

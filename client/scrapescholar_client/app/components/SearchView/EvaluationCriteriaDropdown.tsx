@@ -60,7 +60,7 @@ interface EvaluationCriteriaDropdownProps {
         "evaluation_criteria":selectedValue
     
       }
-      console.log(putRequest)
+  
       await putUserData(putRequest)
     
       }
