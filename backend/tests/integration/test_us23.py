@@ -36,7 +36,8 @@ def test_user_data_slash_update_put_valid_body():
     search_id=searchdata["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
-def test_user_data_slash_update_put_valid_body():
+#UT-23.2
+def test_user_data_slash_update_put_no_cookie():
     searchdata=session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     data = {
   "article_id":1,
@@ -54,4 +55,28 @@ def test_user_data_slash_update_put_valid_body():
     data = putrequest.json()
     
     assert data["detail"] == "Invalid token" 
+
+
+#UT-23.3     
+def test_user_data_slash_update_put_invalid_body():
+    searchdata=session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    data = {
+  "relevancy_color": "Not Relevant",
+}
+    putrequest=session.put(f"{base_url}/user_data/update", json=data)
+    assert putrequest.status_code == 422
+    # response = session.get(f"{base_url}/search/user/articles?search_id=1")
+    # assert response.status_code == 200
+    data = putrequest.json()
+    
+  
+    assert isinstance(data["detail"], list)
+    assert data["detail"][0]["type"] == "missing" 
+    assert isinstance(data["detail"][0]["loc"], list)
+    assert data["detail"][0]["loc"][0] == "body" 
+    assert data["detail"][0]["loc"][1] == "article_id" 
+    assert data["detail"][0]["msg"] == "Field required" 
+    assert data["detail"][0]["input"]["relevancy_color"]=="Not Relevant"
+
+
      
