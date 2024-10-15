@@ -11,10 +11,6 @@ session = get_cookie()
 #UT-1.2
 
 def test_user_data_slash_relevant_results():
-    data = {
-    "article_id": 1,
-    "relevancy_color": "Not Relevant"
-    }
     searchdata=session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
 
     searchdata=searchdata.json()
@@ -28,3 +24,45 @@ def test_user_data_slash_relevant_results():
     search_id=searchdata["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
+def test_user_data_slash_relevant_results_casing():
+
+    searchdata=session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata_caps=session.get(f"{base_url}/academic_data?keywords=Test&academic_database=Scopus")
+    searchdata=searchdata.json()
+    searchdata_caps=searchdata_caps.json()
+    searchdata_noid =[]
+    for item in searchdata["articles"]:
+        searchdata_noid.append({
+            "title": item["title"],
+            "date": item["date"],
+            "citedby": item["citedby"],
+            "link": item["link"],
+            "abstract": item["abstract"],
+            "document_type": item["document_type"],
+            "source": item["source"],
+            "evaluation_criteria": item["evaluation_criteria"],
+            "color": item["color"],
+        }
+
+        )
+        searchdata_caps_noid =[]
+        for item in searchdata_caps["articles"]:
+            searchdata_caps_noid.append({
+            "title": item["title"],
+            "date": item["date"],
+            "citedby": item["citedby"],
+            "link": item["link"],
+            "abstract": item["abstract"],
+            "document_type": item["document_type"],
+            "source": item["source"],
+            "evaluation_criteria": item["evaluation_criteria"],
+            "color": item["color"],
+
+        }
+
+        )
+    assert searchdata_noid == searchdata_caps_noid
+    search_id=searchdata["search_id"]
+    search_id_caps=searchdata_caps["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id_caps}")

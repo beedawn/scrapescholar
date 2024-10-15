@@ -13,7 +13,7 @@ afterEach(() => {
     jest.restoreAllMocks();
 });
 
-describe('SearchView US-15 Component', () => {
+describe('SearchView US-1 Component', () => {
     const mockSetLoggedIn = jest.fn();
     const testInput = "test input"
     test('US-1 Search results should contain keyword', async () => {
@@ -26,6 +26,10 @@ describe('SearchView US-15 Component', () => {
         
 
     })
+
+
+
+    
 
     
 
