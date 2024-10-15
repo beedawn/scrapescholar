@@ -5,6 +5,7 @@ import DynamicUserField from './DynamicUserField';
 import ColorDropdown from './ColorDropdown';
 import EvaluationCriteriaDropdown from './EvaluationCriteriaDropdown';
 import apiCalls from '@/app/api/apiCalls';
+
 export interface EditableCell {
     relevance: boolean;
     methodology: boolean;
@@ -17,8 +18,8 @@ export interface EditableCell {
 interface ResultsTableProps {
     results: ResultItem[];
     setResults: (item: ResultItem[]) => void;
-    selectedArticle: number;
-    setSelectedArticle: (index: number) => void;
+    selectedArticle: number | null; // Updated to allow null
+    setSelectedArticle: (index: number | null) => void;  // Allow null
     setLoading:(state:boolean)=> void;
     onArticleClick: (articleId: number) => void;
 }

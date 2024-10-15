@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import apiCalls from '@/app/api/apiCalls';
 
 interface Comment {
     id: number;
     user: string;
     text: string;
-    err: string;
 }
 
 interface CommentsSidebarProps {
@@ -16,30 +16,31 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const { getCommentsByArticle } = apiCalls();
+
     useEffect(() => {
         const fetchComments = async () => {
+            setLoading(true); // Start loading
             try {
-                const response = await fetch(`/api/comments?articleId=${articleId}`);
-                const data = await response.json();
-                setComments(data);
+                const fetchedComments = await getCommentsByArticle(articleId);
+                setComments(fetchedComments);
+                setError(null);
             } catch (err) {
-                if (err instanceof Error) {
-                    console.error('Error fetching comments:', err.message);
-                } else {
-                    console.error('Unknown error:', err);
-                }
+                setError('Error fetching comments');
+            } finally {
+                setLoading(false); // Stop loading after fetching
             }
         };
-    
+
         fetchComments();
-    }, [articleId]);    
+    }, [articleId]);
 
     return (
         <div className="p-4">
             <h2 className="font-bold text-xl mb-4">Comments for Article {articleId}</h2>
             {loading && <p>Loading comments...</p>}
             {error && <p className="text-red-500">{error}</p>}
-            {comments.length > 0 ? (
+            {!loading && comments.length > 0 ? (
                 <ul>
                     {comments.map((comment) => (
                         <li key={comment.id}>
