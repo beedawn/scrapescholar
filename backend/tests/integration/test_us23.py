@@ -36,3 +36,22 @@ def test_user_data_slash_update_put_valid_body():
     search_id=searchdata["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
+def test_user_data_slash_update_put_valid_body():
+    searchdata=session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    data = {
+  "article_id":1,
+  "relevancy_color": "Not Relevant",
+  "evaluation_criteria":"Pending",
+  "methodology":"0",
+  "clarity": "0",
+  "transparency": "1",
+  "completeness": "1"
+}
+    putrequest=client.put(f"{base_url}/user_data/update", json=data)
+    assert putrequest.status_code == 401
+    # response = session.get(f"{base_url}/search/user/articles?search_id=1")
+    # assert response.status_code == 200
+    data = putrequest.json()
+    
+    assert data["detail"] == "Invalid token" 
+     
