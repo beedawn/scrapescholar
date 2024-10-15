@@ -207,23 +207,24 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setLoading(false);
     }
 
-    
     return (
-        <div className="flex flex-col sm:flex-row sm:mx-12">
+        <div className="flex flex-row sm:mx-12 h-screen">
+            {/* Left-side NavBar */}
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
-                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} 
-                    handlePastSearchSelection={handlePastSearchSelection}
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} 
+                    searches={searches} handlePastSearchSelection={handlePastSearchSelection}
                 />
             </div>
-            {dataFull ? <p>hi</p> : <></>}
-            <div className="flex-1 sm:mx-12 w-full">
+    
+            {/* Middle SearchResults */}
+            <div className="flex-1 sm:mx-12 w-full overflow-auto">
                 {error ? (<p>{error.message}</p>) 
                 : loading ? <p>Loading</p> : 
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
-                    <SearchResults 
+                <SearchResults 
                     setResults={setResults} 
                     displayInputs={joinedInputsString} 
                     setLoading={setLoading}
@@ -237,9 +238,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     setDisplayInputs={setJoinedInputsString}
                     onArticleClick={handleArticleClick} />}
             </div>
-
+    
             {/* Sidebar for showing comments */}
-            <div className="w-1/4 bg-gray-100">
+            <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
                 {selectedArticleId && <CommentsSidebar articleId={selectedArticleId} />}
             </div>
         </div>

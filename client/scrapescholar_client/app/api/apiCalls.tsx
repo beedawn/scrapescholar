@@ -281,10 +281,98 @@ const apiCalls = () => {
     }
   }
 
+// Add a new comment
+const addComment = async (articleId: number, commentText: string, userId: number) => {
+  try {
+    const url = `http://${host}:8000/comment/article/${articleId}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        comment_text: commentText,
+        user_id: userId,  // Include user_id in the body
+      }),
+    });
 
-  return { getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle, deleteSearch, putUserData, getCommentsByArticle };
+    if (!response.ok) {
+      throw new Error(`Error adding comment for article ${articleId}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;  // Return the added comment data
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    return null;
+  }
+};
+
+
+  // Edit an existing comment
+  const editComment = async (commentId: number, updatedText: string) => {
+    try {
+      const url = `http://${host}:8000/comment/${commentId}`;
+      const response = await fetch(url, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          comment_text: updatedText, 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error editing comment ${commentId}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;  // Return the updated comment data
+    } catch (error) {
+      console.error("Error editing comment:", error);
+      return null;
+    }
+  };
+
+  // Delete an existing comment
+  const deleteComment = async (commentId: number) => {
+    try {
+      const url = `http://${host}:8000/comment/${commentId}`;
+      const response = await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error deleting comment ${commentId}: ${response.statusText}`);
+      }
+
+      return true;  // Return true on successful deletion
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      return false;
+    }
+  };
+
+
+  return { getAPIDatabases, 
+    postAPILogin, 
+    getAPIResults, 
+    getAPISearches, 
+    getAPIPastSearchResults, 
+    getAPIPastSearchTitle, 
+    putSearchTitle, 
+    deleteSearch, 
+    putUserData, 
+    getCommentsByArticle,
+    addComment,
+    editComment,
+    deleteComment    
+  };
 
 }
-
 
 export default apiCalls;
