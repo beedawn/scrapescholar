@@ -50,7 +50,7 @@ export const sortResults = (array: ResultItem[],
 };
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
-    results, selectedArticle, setSelectedArticle, setResults, setLoading
+    results, selectedArticle, setSelectedArticle, setResults, setLoading, onArticleClick
 }) => {
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
@@ -206,7 +206,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                     {results.map((result, index) => (
                         <tr key={result.article_id} className=
                             {` ${selectedArticle === result.article_id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
-                            onClick={() => { setSelectedArticle(result.article_id) }} data-testid='row'>
+                            onClick={() => { 
+                                setSelectedArticle(result.article_id);
+                                onArticleClick(result.article_id); // Call onArticleClick when an article is clicked
+                            }} data-testid='row'>
                             <td className="border border-gray-300" >
                                 <a href={result.link}>
                                     {result.title}

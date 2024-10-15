@@ -28,10 +28,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     const [selectedArticle, setSelectedArticle] = useState(-1);
     const { getAPIPastSearchTitle } = apiCalls();
 
-    const onArticleClick = async (articleId: number) => {
-        console.log(`Article clicked: ${articleId}`);
-    };
-
     useEffect(() => {
         const fetchSearchName = async () => {
             await getAPIPastSearchTitle(
@@ -40,6 +36,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         }
         fetchSearchName();
     }, [])
+
+    const onArticleClick = (articleId: number) => {
+        console.log('Article clicked:', articleId);
+        // Additional logic TBD
+    };
+
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md 
