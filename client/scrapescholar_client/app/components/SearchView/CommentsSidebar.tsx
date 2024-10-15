@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import apiCalls from '@/app/api/apiCalls';
+import apiCalls from '@/app/api/apiCalls'; // Adjust the path as per your project structure
 
 interface Comment {
-    id: number;
-    user: string;
-    text: string;
+    comment_id: number;
+    user_id: number;
+    comment_text: string;
+    article_id: number;
+    created_at: string;
 }
 
 interface CommentsSidebarProps {
@@ -23,6 +25,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
             setLoading(true); // Start loading
             try {
                 const fetchedComments = await getCommentsByArticle(articleId);
+                console.log('Fetched comments:', fetchedComments); // Log comments to debug
                 setComments(fetchedComments);
                 setError(null);
             } catch (err) {
@@ -43,8 +46,8 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
             {!loading && comments.length > 0 ? (
                 <ul>
                     {comments.map((comment) => (
-                        <li key={comment.id}>
-                            <strong>{comment.user}</strong>: {comment.text}
+                        <li key={comment.comment_id}>
+                            <strong>User {comment.user_id}</strong>: {comment.comment_text || '(No content)'}
                         </li>
                     ))}
                 </ul>
