@@ -21,6 +21,9 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, }) => {
         if(cookie.detail=="Cookie not found"){
             console.log("no cookie")
         }else{
+            //need logic here to verify the cookie is legit somehow, i can put "ham" as the cookie value 
+            //and it lets you signin,
+            //nothing else works with the ham cookie though
             setToken(cookie.detail)
             setLoggedIn(true)
         }
