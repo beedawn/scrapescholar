@@ -455,12 +455,16 @@ def test_get_valid_token_search_user_searches_response_schema(db_session):
   
     assert search_history_response.status_code == 200
     data = search_history_response.json()
+
     assert isinstance(data[0]["search_id"],int)
     assert isinstance(data[0]["search_keywords"],list)
     assert data[0]["search_keywords"][0] == "test"
     assert isinstance(data[0]["status"],str)
     assert isinstance(data[0]["user_id"],int)
     assert data[0]["search_date"] is None
+    search_request=search_request.json()
+    search_id=search_request["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
     
 
 
@@ -547,6 +551,9 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert saved_article.link == data["articles"][0]["link"]
     assert saved_article.search_id == search_id
 
+    search_id=data["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+
 def test_get_valid_token_past_search_response_schema(db_session):
     """
     Test the /academic_data endpoint with an valid cookie and check response schema
@@ -592,6 +599,9 @@ def test_get_valid_token_past_search_response_schema(db_session):
     # assert isinstance(data[0]["document_type"], str)
     # assert isinstance(data[0]["source"], str)
     assert isinstance(data[0]["relevance_score"], float)
+    search_request=search_request.json()
+    search_id=search_request["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 def test_get_valid_token_search_title_response_schema(db_session):
     """
@@ -619,6 +629,9 @@ def test_get_valid_token_search_title_response_schema(db_session):
     data = title.json()
     assert isinstance(data["title"],str)
     assert isinstance(data["keywords"],list)
+    search_request=search_request.json()
+    search_id=search_request["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
    
 
 
@@ -661,10 +674,13 @@ def test_put_valid_token_search_title_response_schema(db_session):
     title = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
     data = title.json()
     assert data["title"] == "new test title"
+    search_request=search_request.json()
+    search_id=search_request["search_id"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 
 
-async def test_delete_valid_token_search_title_response_schema(db_session):
+def test_delete_valid_token_search_title_response_schema(db_session):
     """
     Test the /search/user/search/title endpoint with an valid cookie and check response schema
 
@@ -685,8 +701,9 @@ async def test_delete_valid_token_search_title_response_schema(db_session):
     apiQuery="test"
     queryString="&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
-    search_request = await session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
-    search_id=search_request["search_id"]
+    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    search_request_json=search_request.json()
+    search_id=search_request_json["search_id"]
     delete = session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
     articles=db_session.query(Article).filter_by(search_id=search_id).first()
     search= db_session.query(Search).filter_by(search_id=search_id).first()
@@ -698,3 +715,4 @@ async def test_delete_valid_token_search_title_response_schema(db_session):
     assert len(data) is 0
     assert articles is None
     assert search is None
+
