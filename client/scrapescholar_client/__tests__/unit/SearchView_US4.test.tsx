@@ -78,15 +78,19 @@ describe('SearchView US-4 Component', () => {
                 fail('no input found after clicking pencil')
             }
         }, { timeout: 5000 });
+        //something went funky here
+
+      
+        await waitFor(() => {
         const searchTitleSpan = screen.getByTestId('search-title-span')
-     
+   
         if (searchTitleDiv)
             
             expect(searchTitleSpan.textContent).toContain("test 1");
         else {
             fail('no input found after clicking pencil')
         }
-
+    }, { timeout: 5000 });
 
     })
 
