@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, Dispatch, SetStateAction, } from 'react';
+import React, { useState, Dispatch, SetStateAction, useEffect} from 'react';
 import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
@@ -8,10 +8,28 @@ interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
 }
 
+
+
 const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
 const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
-const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
-    const { postAPILogin } = apiCalls();
+const Login: React.FC<LoginProps> = ({ setLoggedIn, }) => {
+    const { postAPILogin, getCookie } = apiCalls();
+    useEffect(() =>{
+        const fetchCookie = async () =>
+        {
+        const cookie = await getCookie();
+        if(cookie.detail=="Cookie not found"){
+            console.log("no cookie")
+        }else{
+            setToken(cookie.detail)
+            setLoggedIn(true)
+        }
+        }
+        fetchCookie();
+    },[])
+
+
+   
     const [token, setToken] = useState();
     const [username, setUserName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -21,6 +39,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
         setError('');
         const tokenResponse = await postAPILogin(username, password);
         if (tokenResponse && typeof tokenResponse === 'string' || (username === admin_user && password === admin_pass)) {
+            console.log(tokenResponse)
             setToken(tokenResponse);
             setLoggedIn(true)
         } else if (tokenResponse.error) {
@@ -28,6 +47,8 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
         }
         setError('Invalid Login');
     }
+
+
     return (
         <div className="flex flex-col mt-40 sm:flex-row sm:mx-12 justify-center items-center">
             <div className="flex-1 sm:mx-12 w-full flex justify-center">

@@ -267,7 +267,29 @@ const apiCalls = () => {
   }
 
 
-  return { getAPIDatabases, postAPILogin, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, putSearchTitle, deleteSearch, putUserData };
+  const getCookie= async ()=>{
+    let data;
+    let jsonData
+
+    try {
+      const url = `http://${host}:8000/auth/get_cookie`
+      data = await fetch(url, { method: "GET", credentials: "include" })
+      jsonData = await data.json()
+      return jsonData;
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+      return [];
+    }
+
+  }
+
+
+  return { getAPIDatabases, postAPILogin, 
+    getAPIResults, getAPISearches, getAPIPastSearchResults, 
+    getAPIPastSearchTitle, putSearchTitle, 
+    deleteSearch, putUserData, getCookie };
 
 }
 

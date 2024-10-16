@@ -1,5 +1,5 @@
 # auth/auth.py
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.user import User
@@ -10,6 +10,7 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 import os
 from fastapi.responses import JSONResponse
+from typing import List, Annotated
 
 load_dotenv()
 
@@ -125,6 +126,13 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     except Exception:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
+
+@router.get("/get_cookie")
+def get_cookie(access_token: Annotated[str | None, Cookie()] = None):
+
+    if access_token is None:
+        raise HTTPException(status_code=404, detail="Cookie not found")
+    return JSONResponse(content={"cookieValue": access_token})
 
 #probably want tto verify token? worried it will break tests
 # Protected route example
