@@ -1,4 +1,5 @@
 # tests/integration/test_comment_endpoint.py
+# tests/integration/test_comment_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
@@ -16,10 +17,17 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
+# Mock user registration data
+mock_user_data = {
+    "username": "testuser_5",
+    "password": "testpassword",
+    "email": "testuser_5@example.com"
+}
+
 # Mock login data
 mock_login_data = {
-    "username": "bv_tester",
-    "password": "test_password"
+    "username": "testuser_5",
+    "password": "testpassword"
 }
 
 # Mock article data
@@ -38,24 +46,27 @@ mock_article_data = {
 
 # Mock comment data
 mock_comment_data = {
-    "comment_text": "This is a test comment",
-    "user_id": 5
+    "comment_text": "This is a test comment"
 }
 
-# Helper function to get auth token
-def get_auth_token():
-    response = client.post("/auth/login", data=mock_login_data)
-    assert response.status_code == 200
-    return response.json()["access_token"]
+# Helper function to register a new user and get auth token
+def create_and_authenticate_user():
+    # Step 1: Register a new user
+    response = client.post("/users/create", json=mock_user_data)
+    assert response.status_code == 201
+    
+    # Step 2: Login to get the token
+    login_response = client.post("/auth/login", data=mock_login_data)
+    assert login_response.status_code == 200
+    return login_response.json()["access_token"]
 
 def test_create_comment():
-    # Get authentication token
-    token = get_auth_token()
+    # Get authentication token for the test user
+    token = create_and_authenticate_user()
 
     # First, create an article
     response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
-    print("Hello I am here")
-    print(response.json())
+    assert response.status_code == 201
     article_id = response.json()["article_id"]
 
     # Add a comment to the article
@@ -64,7 +75,7 @@ def test_create_comment():
     assert response.json()["comment_text"] == mock_comment_data["comment_text"]
 
 def test_get_comments():
-    token = get_auth_token()
+    token = create_and_authenticate_user()
 
     # Create an article and a comment
     response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
@@ -77,7 +88,7 @@ def test_get_comments():
     assert len(response.json()) > 0
 
 def test_update_comment():
-    token = get_auth_token()
+    token = create_and_authenticate_user()
 
     # Create an article and a comment
     response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
@@ -92,7 +103,7 @@ def test_update_comment():
     assert response.json()["comment_text"] == updated_comment["comment_text"]
 
 def test_delete_comment():
-    token = get_auth_token()
+    token = create_and_authenticate_user()
 
     # Create an article and a comment
     response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
