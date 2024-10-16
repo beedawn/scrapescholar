@@ -1,15 +1,12 @@
+# tests/integration/test_comment_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
 from app.main import app
 from app.db.session import get_db, SessionLocal
 from app.schemas.comment import CommentCreate
-from app.models.comment import Comment
 
-# Test client
 client = TestClient(app)
 
-# Override the dependency for testing
 def override_get_db():
     db = SessionLocal()
     try:
@@ -19,10 +16,10 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
-# Mock comment data
-mock_comment_data = {
-    "user_id": 1,
-    "comment_text": "This is a test comment"
+# Mock login data
+mock_login_data = {
+    "username": "bv_tester",
+    "password": "test_password"
 }
 
 # Mock article data
@@ -36,51 +33,73 @@ mock_article_data = {
     "citedby": 100,
     "document_type": "Journal",
     "source_id": 1,
-    "search_id": 1,
-    "user_id": 1
+    "search_id": 1
 }
 
+# Mock comment data
+mock_comment_data = {
+    "comment_text": "This is a test comment",
+    "user_id": 5
+}
+
+# Helper function to get auth token
+def get_auth_token():
+    response = client.post("/auth/login", data=mock_login_data)
+    assert response.status_code == 200
+    return response.json()["access_token"]
+
 def test_create_comment():
-    # First, create an article to attach the comment
-    response = client.post("/article/", json=mock_article_data)
+    # Get authentication token
+    token = get_auth_token()
+
+    # First, create an article
+    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    print("Hello I am here")
+    print(response.json())
     article_id = response.json()["article_id"]
 
     # Add a comment to the article
-    response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
+    response = client.post(f"/comment/article/{article_id}", json=mock_comment_data, headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 201
     assert response.json()["comment_text"] == mock_comment_data["comment_text"]
 
 def test_get_comments():
+    token = get_auth_token()
+
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
     article_id = response.json()["article_id"]
-    client.post(f"/comment/article/{article_id}", json=mock_comment_data)
+    client.post(f"/comment/article/{article_id}", json=mock_comment_data, headers={"Authorization": f"Bearer {token}"})
 
     # Get comments for the article
-    response = client.get(f"/comment/article/{article_id}/comments")
+    response = client.get(f"/comment/article/{article_id}/comments", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert len(response.json()) > 0
 
 def test_update_comment():
+    token = get_auth_token()
+
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
     article_id = response.json()["article_id"]
-    comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
+    comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data, headers={"Authorization": f"Bearer {token}"})
     comment_id = comment_response.json()["comment_id"]
 
     # Update the comment
     updated_comment = {"comment_text": "Updated comment text"}
-    response = client.put(f"/comment/{comment_id}", json=updated_comment)
+    response = client.put(f"/comment/{comment_id}", json=updated_comment, headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert response.json()["comment_text"] == updated_comment["comment_text"]
 
 def test_delete_comment():
+    token = get_auth_token()
+
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data)
+    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
     article_id = response.json()["article_id"]
-    comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data)
+    comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data, headers={"Authorization": f"Bearer {token}"})
     comment_id = comment_response.json()["comment_id"]
 
     # Delete the comment
-    response = client.delete(f"/comment/{comment_id}")
+    response = client.delete(f"/comment/{comment_id}", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 204

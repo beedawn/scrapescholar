@@ -31,10 +31,10 @@ def delete_comment(db: Session, comment_id: int):
 def get_comments_by_article(db: Session, article_id: int):
     return db.query(Comment).filter(Comment.article_id == article_id).all()
 
-def create_comment(db: Session, article_id: int, comment: CommentCreate):
+def create_comment(db: Session, article_id: int, comment: CommentCreate, user_id: int):
     db_comment = Comment(
         article_id=article_id,
-        user_id=comment.user_id,
+        user_id=user_id,
         comment_text=comment.comment_text
     )
     db.add(db_comment)

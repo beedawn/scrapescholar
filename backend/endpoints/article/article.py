@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from app.crud.article import create_article, get_article, delete_article
 from app.schemas.article import ArticleCreate
 from app.db.session import get_db
+from utils.auth import get_current_user  # Import the auth utility
+from app.models.user import User
 
 router = APIRouter()
 
@@ -15,17 +17,19 @@ def read_article(article_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Article not found")
     return article
 
-# Add a new article
+# Add a new article (requires user authentication)
 @router.post("/", status_code=201)
-def create_new_article(article: ArticleCreate, db: Session = Depends(get_db)):
-    created_article = create_article(db, article)
+def create_new_article(article: ArticleCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    created_article = create_article(db, article, user_id=current_user.user_id)
     return created_article
 
-# Delete an article by ID
+# Delete an article by ID (requires user authentication)
 @router.delete("/{article_id}", status_code=204)
-def remove_article(article_id: int, db: Session = Depends(get_db)):
+def remove_article(article_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     article = get_article(db, article_id=article_id)
     if article is None:
         raise HTTPException(status_code=404, detail="Article not found")
+    if article.user_id != current_user.user_id:
+        raise HTTPException(status_code=403, detail="You are not authorized to delete this article")
     delete_article(db, article_id=article_id)
     return None

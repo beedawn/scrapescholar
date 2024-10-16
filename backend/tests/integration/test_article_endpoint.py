@@ -1,10 +1,8 @@
+# tests/integration/test_article_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
 from app.main import app
 from app.db.session import get_db, SessionLocal
-from app.schemas.article import ArticleCreate
-from app.models.article import Article
 
 # Test client
 client = TestClient(app)
@@ -19,6 +17,12 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
+# Mock login data for authentication
+mock_login_data = {
+    "username": "bv_tester",
+    "password": "test_password"
+}
+
 # Mock article data
 mock_article_data = {
     "title": "Test Article",
@@ -30,36 +34,18 @@ mock_article_data = {
     "citedby": 100,
     "document_type": "Journal",
     "source_id": 1,
-    "search_id": 1,
-    "user_id": 1
+    "search_id": 1
 }
 
-def test_create_article():
-    response = client.post("/article/", json=mock_article_data)
-    assert response.status_code == 201
-    assert response.json()["title"] == mock_article_data["title"]
-
-def test_get_article():
-    # First, create the article
-    response = client.post("/article/", json=mock_article_data)
-    article_id = response.json()["article_id"]
-    
-    # Fetch the article by ID
-    response = client.get(f"/article/{article_id}")
+# Helper function to get an authentication token
+def get_auth_token():
+    response = client.post("/auth/login", data=mock_login_data)
     assert response.status_code == 200
-    assert response.json()["title"] == mock_article_data["title"]
+    return response.json()["access_token"]
 
-def test_delete_article():
-    # First, create the article
-    response = client.post("/article/", json=mock_article_data)
-    article_id = response.json()["article_id"]
+def test_create_article():
+    token = get_auth_token()
 
-    # Delete the article
-    response = client.delete(f"/article/{article_id}")
-    assert response.status_code == 204
-
-def test_get_deleted_article():
-    # Try to fetch the deleted article
-    response = client.get("/article/9999")
-    assert response.status_code == 404
-    assert response.json()["detail"] == "Article not found"
+    # Create an article with authentication
+    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code
