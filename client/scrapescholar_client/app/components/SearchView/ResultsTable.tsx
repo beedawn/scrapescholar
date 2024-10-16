@@ -5,6 +5,7 @@ import DynamicUserField from './DynamicUserField';
 import ColorDropdown from './ColorDropdown';
 import EvaluationCriteriaDropdown from './EvaluationCriteriaDropdown';
 import apiCalls from '@/app/api/apiCalls';
+
 export interface EditableCell {
     relevance: boolean;
     methodology: boolean;
@@ -17,9 +18,10 @@ export interface EditableCell {
 interface ResultsTableProps {
     results: ResultItem[];
     setResults: (item: ResultItem[]) => void;
-    selectedArticle: number;
-    setSelectedArticle: (index: number) => void;
+    selectedArticle: number | null; // Updated to allow null
+    setSelectedArticle: (index: number | null) => void;  // Allow null
     setLoading:(state:boolean)=> void;
+    onArticleClick: (articleId: number) => void;
 }
 
 
@@ -49,7 +51,7 @@ export const sortResults = (array: ResultItem[],
 };
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
-    results, selectedArticle, setSelectedArticle, setResults, setLoading
+    results, selectedArticle, setSelectedArticle, setResults, setLoading, onArticleClick
 }) => {
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
@@ -205,7 +207,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                     {results.map((result, index) => (
                         <tr key={result.article_id} className=
                             {` ${selectedArticle === result.article_id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
-                            onClick={() => { setSelectedArticle(result.article_id) }} data-testid='row'>
+                            onClick={() => { 
+                                setSelectedArticle(result.article_id);
+                                onArticleClick(result.article_id); // Call onArticleClick when an article is clicked
+                            }} data-testid='row'>
                             <td className="border border-gray-300" >
                                 <a href={result.link}>
                                     {result.title}

@@ -4,6 +4,8 @@ import { ResultItem } from '../../views/SearchView';
 import SearchHeader from './SearchHeader';
 import ResultsTable from './ResultsTable';
 import apiCalls from '@/app/api/apiCalls';
+import CommentsSidebar from './CommentsSidebar'; // Import the CommentsSidebar component
+
 interface SearchResultsProps {
     displayInputs: string[];
     results: ResultItem[];
@@ -17,6 +19,7 @@ interface SearchResultsProps {
     currentSearchId: number;
     setDisplayInputs: (item: string[]) => void;
     setLoading: (item: boolean) => void;
+    onArticleClick: (articleId: number) => Promise<void>;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({
@@ -24,8 +27,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     disableD3 = false, bubbleInputs, setResults,
     setSearchName, searchName, currentSearchId, setDisplayInputs,
     setLoading }) => {
-    const [selectedArticle, setSelectedArticle] = useState(-1);
-    const { getAPIPastSearchTitle } = apiCalls();
+    const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
+    const { getAPIPastSearchTitle, getCommentsByArticle } = apiCalls();
+
+    const [comments, setComments] = useState<any[]>([]); // Comments state
+    const [commentsLoading, setCommentsLoading] = useState<boolean>(false);     
 
     useEffect(() => {
         const fetchSearchName = async () => {
@@ -35,6 +41,51 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         }
         fetchSearchName();
     }, [])
+
+    const onArticleClick = (articleId: number) => {
+        console.log('Article clicked:', articleId);
+        setSelectedArticle(articleId); // Set the selected article
+    };    
+
+    // const onArticleClick = async (articleId: number) => {
+    //     // Log the articleId and trace the method call stack
+    //     console.trace('onArticleClick called for articleId:', articleId);
+    
+    //     try {
+    //         console.log('Fetching comments for article:', articleId);
+            
+    //         // Set loading state for comments
+    //         setCommentsLoading(true);
+    //         console.log('Comments loading set to true');
+    
+    //         // Fetch comments for the clicked article (assuming you have this API function defined)
+    //         const fetchedComments = await getCommentsByArticle(articleId);
+    
+    //         console.log('Comments fetched:', fetchedComments);
+    
+    //         // Update the state with fetched comments
+    //         setComments(fetchedComments);
+    //         console.log('Comments state updated with fetched data');
+    
+    //         // Set the selected article ID to show comments in the sidebar
+    //         setSelectedArticle(articleId);
+    //         console.log('Selected articleId set:', articleId);
+    
+    //         // Stop the loading state after fetching comments
+    //         setCommentsLoading(false);
+    //         console.log('Comments loading set to false');
+    
+    //     } catch (err) {
+    //         console.error('Error fetching comments for articleId:', articleId);
+    //         console.trace(err); // Log the error and trace where it occurred
+    
+    //         // Stop loading state even if there's an error
+    //         setCommentsLoading(false);
+    //         console.log('Comments loading set to false after error');
+    //     }
+    // };
+    
+
     return (
         <div className={className}>
             <div className="float-left p-12 max-w-md 
@@ -55,7 +106,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                         <ResultsTable setResults={setResults}
                             results={results}
                             selectedArticle={selectedArticle}
-                            setSelectedArticle={setSelectedArticle} setLoading={setLoading} />
+                            setSelectedArticle={setSelectedArticle} 
+                            setLoading={setLoading} 
+                            onArticleClick={onArticleClick} />
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''
@@ -67,6 +120,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             (<p>No Results Found. Please try another search!</p>) :
                             (<p>Loading...</p>))}
             </div>
+            {/* Comments Sidebar */}
+            <div className="w-1/4 bg-gray-100">
+                {selectedArticle && (
+                    <CommentsSidebar articleId={selectedArticle} />
+                )}
+            </div>            
         </div>
     );
 };

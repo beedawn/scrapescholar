@@ -19,7 +19,6 @@ class ArticleBase(BaseModel):
 
 class ArticleCreate(ArticleBase):
     search_id: int
-    user_id: int
 
 class ArticleUpdate(BaseModel):
     title: Optional[str] = None

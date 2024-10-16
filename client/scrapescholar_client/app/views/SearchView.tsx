@@ -7,6 +7,8 @@ import { queryAllByAltText } from '@testing-library/react';
 import apiCalls from '../api/apiCalls'; 
 import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
+import CommentsSidebar from '../components/SearchView/CommentsSidebar'; 
+
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -29,6 +31,7 @@ export interface ResultItem {
     clarity: string;
     completeness: string;
     transparency: string;
+    onArticleClick: (articleId: number) => Promise<void>;
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
@@ -36,7 +39,11 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [currentSearchId, setCurrentSearchId]=useState<number>(-1);
     const [searchName, setSearchName]=useState("search name");
     const [loading, setLoading] = useState<boolean>(false);
-    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle } = apiCalls();
+    const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle, getCommentsByArticle } = apiCalls();
+
+    const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);  // To track the selected article ID
+    const [comments, setComments] = useState<any[]>([]);  // To store the comments of the selected article
+    const [commentsLoading, setCommentsLoading] = useState<boolean>(false);  // To manage the loading state for comments
 
       useEffect(() => {
         const fetchDatabases = async () => {
@@ -140,6 +147,17 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         newDropdown[index] = option;
         setDropdown(newDropdown);
     }
+
+    const handleArticleClick = async (articleId: number) => {
+        setSelectedArticleId(articleId);
+        setCommentsLoading(true);
+
+        const data = await getCommentsByArticle(articleId);
+        setComments(data);
+
+        setCommentsLoading(false);
+    };
+
     //runs when search is pressed
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
        // console.log(userDatabaseList);
@@ -189,25 +207,41 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setLoading(false);
     }
 
-    
     return (
-        <div className="flex flex-col sm:flex-row sm:mx-12">
+        <div className="flex flex-row sm:mx-12 h-screen">
+            {/* Left-side NavBar */}
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
-                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} searches={searches} 
-                    handlePastSearchSelection={handlePastSearchSelection}
-                     />
+                    addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} 
+                    searches={searches} handlePastSearchSelection={handlePastSearchSelection}
+                />
             </div>
-            {dataFull?<p>hi</p>:<></>}
-            <div className="flex-1 sm:mx-12 w-full">
+    
+            {/* Middle SearchResults */}
+            <div className="flex-1 sm:mx-12 w-full overflow-auto">
                 {error ? (<p>{error.message}</p>) 
                 : loading ? <p>Loading</p> : 
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
-                    <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
-                        results={results} emptyString={emptyString} disableD3={disableD3}
-                        bubbleInputs={bubbleInputs} searchName={searchName} setSearchName={setSearchName} currentSearchId={currentSearchId} setDisplayInputs={setJoinedInputsString}/>}
+                <SearchResults 
+                    setResults={setResults} 
+                    displayInputs={joinedInputsString} 
+                    setLoading={setLoading}
+                    results={results} 
+                    emptyString={emptyString} 
+                    disableD3={disableD3}
+                    bubbleInputs={bubbleInputs} 
+                    searchName={searchName} 
+                    setSearchName={setSearchName} 
+                    currentSearchId={currentSearchId} 
+                    setDisplayInputs={setJoinedInputsString}
+                    onArticleClick={handleArticleClick} />}
+            </div>
+    
+            {/* Sidebar for showing comments */}
+            <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
+                {selectedArticleId && <CommentsSidebar articleId={selectedArticleId} />}
             </div>
         </div>
     );
