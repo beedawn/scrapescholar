@@ -35,7 +35,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
                 <form onSubmit={(e) => handleLogin(e)}>
                     <div className="py-3">
                         <label>
-                            <input onChange={(event) => {
+                            <input name="username_input" onChange={(event) => {
                                 setUserName(event.target.value)
                             }}
                                 value={username}
@@ -44,7 +44,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
                     </div>
                     <div className="my-3">
                         <label>
-                            <input type="password"
+                            <input name="password_input" type="password"
                                 onChange={(event) => {
                                     setPassword(event.target.value)
                                 }}
@@ -53,7 +53,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
                         </label>
                     </div>
                     <div className="flex justify-center">
-                        <button type="submit" className={
+                        <button name="login_button" type="submit" className={
                             "m-5 px-4 py-2 bg-blue-500 text-white rounded items-center"
                         }>
                             Login
