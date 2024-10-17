@@ -67,6 +67,8 @@ describe('Home Component', () => {
     const loginButton = screen.getByText('Login');
     fireEvent.click(loginButton);
   }, { timeout: 5000 });
+
+  screen.debug(undefined,10000);
     await waitFor(() => {
       expect(screen.getByText('Invalid Login')).toBeInTheDocument();
     }, { timeout: 5000 });

@@ -283,7 +283,7 @@ const apiCalls = () => {
     catch (error: any) {
       // jsonData = [{ "title": error.message, link: '' }]
       // setError(error);
-      return [];
+      return {detail:"Cookie not found"};
     }
 
   }
