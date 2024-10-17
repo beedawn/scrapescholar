@@ -1,3 +1,5 @@
+import { json } from "d3";
+
 const apiCalls = () => {
 
   const host = "0.0.0.0"
@@ -275,6 +277,27 @@ const apiCalls = () => {
       const url = `http://${host}:8000/auth/get_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
+      console.log(jsonData)
+      return jsonData;
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+      return [];
+    }
+
+  }
+
+
+  const deleteCookie= async ()=>{
+    let data;
+    let jsonData
+
+    try {
+      const url = `http://${host}:8000/auth/remove_cookie`
+      data = await fetch(url, { method: "GET", credentials: "include" })
+      jsonData = await data.json()
+      console.log(jsonData)
       return jsonData;
     }
     catch (error: any) {
@@ -289,7 +312,7 @@ const apiCalls = () => {
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
-    deleteSearch, putUserData, getCookie };
+    deleteSearch, putUserData, getCookie, deleteCookie };
 
 }
 

@@ -22,6 +22,7 @@ from typing import List, Annotated
 import os
 from datetime import datetime
 from sqlalchemy.orm import Session
+from app.db.session import get_db
 
 # Load environment variables
 load_dotenv()
@@ -36,11 +37,12 @@ DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE
 
 
 #could be broken up into a validate token function and then get user? using it elsewhere for this purpose now
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user_modular(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    print(f"Decoding token: {token}")
     try:
         if DEBUG_SCRAPESCHOLAR:
             print(f"Decoding token: {token}")
-
+        
         # Decode the JWT token
         payload = jwt.decode(token, SECRET, algorithms=["HS256"])
         user_id = payload.get("sub")

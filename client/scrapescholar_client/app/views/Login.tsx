@@ -18,9 +18,10 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, }) => {
         const fetchCookie = async () =>
         {
         const cookie = await getCookie();
-        if(cookie.detail=="Cookie not found"){
+        if(cookie.detail=="Cookie not found" || cookie.detail=="Invalid token"){
             console.log("no cookie")
         }else{
+            console.log(cookie)
             //need logic here to verify the cookie is legit somehow, i can put "ham" as the cookie value 
             //and it lets you signin,
             //nothing else works with the ham cookie though

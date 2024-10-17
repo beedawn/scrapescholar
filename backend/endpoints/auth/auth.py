@@ -12,6 +12,8 @@ import os
 from fastapi.responses import JSONResponse
 from typing import List, Annotated
 
+from auth_tools.get_user import get_current_user_modular
+
 load_dotenv()
 
 SECRET = os.getenv("SECRET_KEY")
@@ -128,11 +130,20 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 
 @router.get("/get_cookie")
-def get_cookie(access_token: Annotated[str | None, Cookie()] = None):
-
-    if access_token is None:
+async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+    print(access_token)
+    user= await get_current_user_modular(access_token, db)
+    print(user)
+    if access_token is None or user is None:
         raise HTTPException(status_code=404, detail="Cookie not found")
     return JSONResponse(content={"cookieValue": access_token})
+
+
+
+@router.get("/remove_cookie")
+def remove_cookie(response: Response):
+    response.delete_cookie("access_token")
+    return {"message": "Cookie deleted"}
 
 #probably want tto verify token? worried it will break tests
 # Protected route example
