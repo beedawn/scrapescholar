@@ -79,11 +79,14 @@ describe('SearchView AR-4 Component', () => {
             }
 
         }, { timeout: 5000 });
+
+        await waitFor(() => {
         if (methodologyField)
             expect(methodologyField.textContent).toContain(testInput);
         else {
             fail('no input found after clicking pencil')
         }
+    }, { timeout: 5000 });
     })
 
     test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text after being sorted', async () => {
