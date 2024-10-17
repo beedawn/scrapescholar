@@ -86,7 +86,7 @@ jobs:
     - name: Run Build && unit tests
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: | 
-        npm run dev
+        npm run dev & sleep 10
 
    
     # - name: Install Chrome and ChromeDriver
