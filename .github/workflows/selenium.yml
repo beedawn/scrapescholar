@@ -94,7 +94,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y chromium-browser
         sudo apt-get install -y chromium-chromedriver
-        cp /usr/lib/chromium-browser/chromedriver /usr/bin
+       
 
 
     - name: run selenium tests
