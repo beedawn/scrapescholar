@@ -62,8 +62,11 @@ describe('Home Component', () => {
 
   test('US-4 check login button click denies empty credentials', async () => {
     render(<Home />);
+
+    await waitFor(() => {
     const loginButton = screen.getByText('Login');
     fireEvent.click(loginButton);
+  }, { timeout: 5000 });
     await waitFor(() => {
       expect(screen.getByText('Invalid Login')).toBeInTheDocument();
     }, { timeout: 5000 });
