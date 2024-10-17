@@ -1,4 +1,4 @@
-name: Run Integration Tests
+name: Run Selenium Tests
 on:
   pull_request:
     branches:
