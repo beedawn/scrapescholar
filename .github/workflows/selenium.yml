@@ -24,9 +24,8 @@ jobs:
       SCOPUS_APIKEY: ${{secrets.SCOPUS_APIKEY}}
       NEXT_PUBLIC_ADMIN_USER: ${{ secrets.NEXT_PUBLIC_ADMIN_USER }}
       NEXT_PUBLIC_ADMIN_PASS: ${{ secrets.NEXT_PUBLIC_ADMIN_PASS }}
-      #used in AR-3 tests
 
-      TEST_USER: ${{ secrets.TEST_USER}}
+      TEST_USER: ${{secrets.TEST_USER}}
       TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
     services:
       postgres:
@@ -95,7 +94,10 @@ jobs:
         sudo apt-get install -y chromium-browser
         sudo apt-get install -y chromium-chromedriver
        
-
+    - name: Debug Environment Variables
+      run: |
+        echo "TEST_USER: $TEST_USER"
+        echo "TEST_PASSWORD: $TEST_PASSWORD"
 
     - name: run selenium tests
       env:

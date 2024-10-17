@@ -107,15 +107,10 @@ def test_login_us_16_with_refresh():
         driver.maximize_window()
     
         # Locate and interact with the login elements
-        username_field = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.NAME, 'username_input'))
-            )
-        password_field = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.NAME, 'password_input'))
-        )
-        login_button = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.NAME, 'login_button'))
-        )
+        username_field = driver.find_element(By.NAME, 'username_input')
+        password_field = driver.find_element(By.NAME, 'password_input')
+        login_button = driver.find_element(By.NAME, 'login_button')
+        time.sleep(1)
 
         # Enter login credentials and submit the form
         username_field.send_keys(testuser)
