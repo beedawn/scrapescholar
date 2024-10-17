@@ -89,22 +89,22 @@ jobs:
         npm run dev & sleep 10
 
    
-    # - name: Install Chrome and ChromeDriver
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get install -y chromium-browser
-    #     sudo apt-get install -y chromium-chromedriver
-    #     cp /usr/lib/chromium-browser/chromedriver /usr/bin
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser
+        sudo apt-get install -y chromium-chromedriver
+        cp /usr/lib/chromium-browser/chromedriver /usr/bin
 
 
-    # - name: run selenium tests
-    #   env:
-    #     DISPLAY: :99  
-    #   working-directory: ./selenium_tests
-    #   run: |
-    #     Xvfb :99 -screen 0 1920x1080x24 &
-    #     pip install -r requirements.txt
-    #     pytest *
+    - name: run selenium tests
+      env:
+        DISPLAY: :99  
+      working-directory: ./selenium_tests
+      run: |
+        Xvfb :99 -screen 0 1920x1080x24 &
+        pip install -r requirements.txt
+        pytest *
 
    
 
