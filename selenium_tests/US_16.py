@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 load_dotenv()            
 
 testuser = os.getenv('TEST_USER')
-testpass = os.getenv('TEST_PASS')
+testpass = os.getenv('TEST_PASSWORD')
 
 def test_login_us_16():
     try:
