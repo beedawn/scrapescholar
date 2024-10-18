@@ -4,6 +4,8 @@ import SearchBox from './SearchBox';
 import DropdownSearchBox from './DropdownSearchBox';
 import Dropdown from '../../types/DropdownType';
 import SourcesAccordian from './SourcesAccordian';
+
+import apiCalls from '@/app/api/apiCalls';
 interface NavBarProps {
     handleResults: (event: React.FormEvent<HTMLFormElement>) => void;
     addInput: () => void;
@@ -26,7 +28,10 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     setLoggedIn, dropdown, handleDropdownChange,
     addToUserDatabaseList, removeFromUserDatabaseList,
     searches, handlePastSearchSelection }) => {
-    const handleLogout = () => {
+
+        const {deleteCookie}=apiCalls();
+    const handleLogout = async () => {
+        await deleteCookie();
         setLoggedIn(false);
     };
     const dropdown_values = Object.values(Dropdown);
