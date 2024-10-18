@@ -24,7 +24,7 @@ describe('SearchView US-4 Component', () => {
         expect(logoutButton).toBeInTheDocument();
     });
 
-    test('US-4 pencil is next to value in search title', async () => {
+    test('US-4 search title should be in the document', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);
         await waitFor(() => {
