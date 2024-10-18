@@ -27,6 +27,7 @@ jobs:
 
       TEST_USER: ${{secrets.TEST_USER}}
       TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
+      TEST_PASS: ${{secrets.TEST_PASSWORD}}
     services:
       postgres:
         image: postgres:latest
