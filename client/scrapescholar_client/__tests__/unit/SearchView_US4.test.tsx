@@ -29,7 +29,7 @@ describe('SearchView US-4 Component', () => {
         submitSearch(testInput);
         await waitFor(() => {
             const searchTitleDiv = screen.getByTestId('search-title')
-            expect(searchTitleDiv.textContent).toBeInTheDocument();
+            expect(searchTitleDiv).toBeInTheDocument();
         }, { timeout: 5000 });
     })
 
