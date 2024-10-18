@@ -29,6 +29,15 @@ describe('SearchView US-4 Component', () => {
         submitSearch(testInput);
         await waitFor(() => {
             const searchTitleDiv = screen.getByTestId('search-title')
+            expect(searchTitleDiv.textContent).toBeInTheDocument();
+        }, { timeout: 5000 });
+    })
+
+    test('US-4 pencil is next to value in search title', async () => {
+        render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+        submitSearch(testInput);
+        await waitFor(() => {
+            const searchTitleDiv = screen.getByTestId('search-title')
             expect(searchTitleDiv.textContent).toContain("✎");
         }, { timeout: 5000 });
     })
