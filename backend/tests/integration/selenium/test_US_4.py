@@ -58,7 +58,7 @@ def test_login_us_4():
 
 
 
-def test_login_us_16_with_refresh():
+def test_logout_us_4_delete_cookie():
     try:
         # Initialize the WebDriver
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
