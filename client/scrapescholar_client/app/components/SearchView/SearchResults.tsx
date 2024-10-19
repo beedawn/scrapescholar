@@ -26,7 +26,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     results, displayInputs, className, emptyString,
     disableD3 = false, bubbleInputs, setResults,
     setSearchName, searchName, currentSearchId, setDisplayInputs,
-    setLoading }) => {
+    setLoading, onArticleClick }) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
     const { getAPIPastSearchTitle, getCommentsByArticle } = apiCalls();
 
@@ -42,10 +42,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         fetchSearchName();
     }, [])
 
-    const onArticleClick = (articleId: number) => {
-        console.log('Article clicked:', articleId);
-        setSelectedArticle(articleId); // Set the selected article
-    };    
+    // const onArticleClick = (articleId: number) => {
+    //     // console.log('Article clicked:', articleId);
+    //     setSelectedArticle(articleId); // Set the selected article
+    // };    
 
     // const onArticleClick = async (articleId: number) => {
     //     // Log the articleId and trace the method call stack
@@ -121,11 +121,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             (<p>Loading...</p>))}
             </div>
             {/* Comments Sidebar */}
-            <div className="w-1/4 bg-gray-100">
+            {/* <div className="w-1/4 bg-gray-100">
                 {selectedArticle && (
                     <CommentsSidebar articleId={selectedArticle} />
                 )}
-            </div>            
+            </div>             */}
         </div>
     );
 };
