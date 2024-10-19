@@ -1,3 +1,4 @@
+
 const apiCalls = () => {
 
   const host = "0.0.0.0"
@@ -356,6 +357,46 @@ const apiCalls = () => {
   };
 
 
+
+  const getCookie= async ()=>{
+    let data;
+    let jsonData
+
+    try {
+      const url = `http://${host}:8000/auth/get_cookie`
+      data = await fetch(url, { method: "GET", credentials: "include" })
+      jsonData = await data.json()
+      console.log(jsonData)
+      return jsonData;
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+      return {detail:"Cookie not found"};
+    }
+
+  }
+
+
+  const deleteCookie= async ()=>{
+    let data;
+    let jsonData
+
+    try {
+      const url = `http://${host}:8000/auth/remove_cookie`
+      data = await fetch(url, { method: "GET", credentials: "include" })
+      jsonData = await data.json()
+      console.log(jsonData)
+      return jsonData;
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+      return [];
+    }
+
+  }
+
   return { getAPIDatabases, 
     postAPILogin, 
     getAPIResults, 
@@ -368,9 +409,10 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment    
+    deleteComment,
+    getCookie, 
+    deleteCookie     
   };
-
 }
 
 export default apiCalls;

@@ -36,6 +36,9 @@ router = APIRouter()
 
 # Helper function to get the current user from token
 
+
+#putting this into /auth_tools/ or tried too and this is duplicated in auth.py with differennt logic, i need 
+#to figure out what these are doing and possibly consolidate
 #could be broken up into a validate token function and then get user? using it elsewhere for this purpose now
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:

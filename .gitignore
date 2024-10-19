@@ -5,3 +5,5 @@
 .localTestScripts
 .coverage
 .idea
+.DS_Store
+.env_tristan
