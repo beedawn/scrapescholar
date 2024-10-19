@@ -38,3 +38,6 @@ class ArticleRead(ArticleBase):
 
     class Config:
         orm_mode = True
+
+class Article(ArticleRead):  # This will serve as the main schema used for Article
+    pass
