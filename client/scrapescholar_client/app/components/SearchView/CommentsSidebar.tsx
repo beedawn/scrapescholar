@@ -35,13 +35,13 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
 
     const handleAddComment = async () => {
         try {
-            const addedComment = await addComment(articleId, newComment, userId);;
+            const addedComment = await addComment(articleId, newComment);  // No need for token here
             setComments([...comments, addedComment]);
             setNewComment('');
         } catch (err) {
             setError('Failed to add comment');
         }
-    };
+    };    
 
     const handleEditComment = async (comment_id: number, updatedText: string) => {
         try {
@@ -68,10 +68,10 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
             {error && <p className="text-red-500">{error}</p>}
             {comments.length > 0 ? (
                 <ul>
-                    {comments.map(comment => (
-                        <li key={comment.comment_id} className="mb-4">
+                    {comments.map((comment, index) => (
+                        <li key={comment?.comment_id || index} className="mb-4">
                             <div>
-                                <strong>User {comment.user_id}</strong>: {comment.comment_text}
+                                <strong>User {comment?.user_id || "Unknown"}</strong>: {comment?.comment_text || "No comment text available"}
                             </div>
                             <div className="flex space-x-2">
                                 <button onClick={() => handleEditComment(comment.comment_id, 'Updated Text')} className="text-blue-500">Edit</button>

@@ -281,34 +281,32 @@ const apiCalls = () => {
     }
   }
 
-// Add a new comment
-const addComment = async (articleId: number, commentText: string, userId: number) => {
-  try {
-    const url = `http://${host}:8000/comment/article/${articleId}`;
-    const response = await fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        comment_text: commentText,
-        user_id: userId,  // Include user_id in the body
-      }),
-    });
+  // Add a new comment
+  const addComment = async (articleId: number, commentText: string) => {
+    try {
+        const url = `http://${host}:8000/comment/article/${articleId}`;
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',  // Automatically sends cookies with the request
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                comment_text: commentText
+            }),
+        });
 
-    if (!response.ok) {
-      throw new Error(`Error adding comment for article ${articleId}: ${response.statusText}`);
+        if (!response.ok) {
+            throw new Error(`Error adding comment for article ${articleId}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error adding comment:", error);
+        return null;
     }
-
-    const data = await response.json();
-    return data;  // Return the added comment data
-  } catch (error) {
-    console.error("Error adding comment:", error);
-    return null;
   }
-};
-
 
   // Edit an existing comment
   const editComment = async (commentId: number, updatedText: string) => {
