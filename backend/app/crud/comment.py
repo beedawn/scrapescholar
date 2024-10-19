@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.models.comment import Comment
 from app.schemas.comment import CommentCreate, CommentUpdate
 from fastapi import HTTPException
-import datetime
+from datetime import datetime
 
 def get_comment(db: Session, comment_id: int):
     comment = db.query(Comment).filter(Comment.comment_id == comment_id).first()
