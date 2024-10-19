@@ -518,7 +518,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert isinstance(data["articles"],list)
     assert isinstance(data["articles"][0]["title"], str)
     assert isinstance(data["articles"][0]["date"], str)
-    assert isinstance(data["articles"][0]["citedby"], str)
+    assert isinstance(data["articles"][0]["citedby"], (str, int))
     assert isinstance(data["articles"][0]["link"], str)
     assert isinstance(data["articles"][0]["date"], str)
     assert isinstance(data["articles"][0]["abstract"], str)

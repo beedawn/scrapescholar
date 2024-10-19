@@ -4,3 +4,5 @@
 .venv
 .localTestScripts
 .coverage
+.DS_Store
+.env_tristan

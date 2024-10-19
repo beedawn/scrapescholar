@@ -20,7 +20,7 @@ afterEach(() => {
 describe('SearchView US-5 Component', () => {
     const mockSetLoggedIn = jest.fn();
     const testInput = "test input"
-    test('US-4 check relevancy column contains relevancy', () => {
+    test('US-5 UT-5.1 check relevancy column contains relevancy', () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} />);
         submitSearch(testInput)
 
@@ -29,7 +29,7 @@ describe('SearchView US-5 Component', () => {
             expect(rows[0].children[8].textContent).toContain(/Relevancy/i);
         }, { timeout: 5000 })
     });
-    test('US-4 UT-5.3 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded', () => {
+    test('US-5 UT-5.3 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded', () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} />);
         submitSearch(testInput)
 
@@ -42,7 +42,7 @@ describe('SearchView US-5 Component', () => {
             expect(rows[0].children[8].textContent).toContain(/Not Relevant/i);
         }, { timeout: 5000 })
     });
-    test('US-4 UT-5.3 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded', () => {
+    test('US-5 UT-5.3 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded, and closes when close is pressed', () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} />);
         submitSearch(testInput)
 
@@ -66,7 +66,7 @@ describe('SearchView US-5 Component', () => {
         expect(rows[0].children[8].textContent).toContain(/Relevancy/i);
     }, { timeout: 5000 })
     });
-    test('US-4 UT-5.1 check relevancy column contains Relevant, SemiRelevant, and Not Relevant when expanded', () => {
+    test('US-5 UT-5.1 check relevancy values can be clicked when expanded', () => {
         
         render(<SearchView setLoggedIn={mockSetLoggedIn} />);
         submitSearch(testInput)
