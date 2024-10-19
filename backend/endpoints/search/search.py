@@ -340,7 +340,7 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         source_id=source.source_id,
         search_id=created_search.search_id, 
         user_id=current_user.user_id)
-        create_article(article=format_article, db=db)
+        create_article(article=format_article, db=db, user_id=current_user.user_id)
        
     
     return True, created_search.search_id

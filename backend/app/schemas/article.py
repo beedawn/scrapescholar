@@ -19,7 +19,6 @@ class ArticleBase(BaseModel):
 
 class ArticleCreate(ArticleBase):
     search_id: int
-    user_id: int
 
 class ArticleUpdate(BaseModel):
     title: Optional[str] = None
@@ -39,3 +38,6 @@ class ArticleRead(ArticleBase):
 
     class Config:
         orm_mode = True
+
+class Article(ArticleRead):  # This will serve as the main schema used for Article
+    pass
