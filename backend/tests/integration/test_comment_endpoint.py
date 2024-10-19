@@ -6,7 +6,13 @@ from app.main import app
 from app.db.session import get_db, SessionLocal
 from app.schemas.comment import CommentCreate
 
+
+from tests.integration.tools.base_url import base_url
+from tests.integration.tools.get_cookie import get_cookie
+
 client = TestClient(app)
+
+session = get_cookie()
 
 def override_get_db():
     db = SessionLocal()
@@ -65,7 +71,7 @@ def test_create_comment():
     token = create_and_authenticate_user()
 
     # First, create an article
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    response = session.post(f"{base_url}/article", json=mock_article_data)
     assert response.status_code == 201
     article_id = response.json()["article_id"]
 

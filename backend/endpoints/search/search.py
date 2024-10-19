@@ -336,7 +336,6 @@ async def post_search_no_route(keywords:List[str], articles:List[ArticleBase], d
         abstract=article.abstract,
         citedby=article.citedby,
         document_type=article.document_type,
-        #needs changed to something real
         source_id=source.source_id,
         search_id=created_search.search_id, 
         user_id=current_user.user_id)

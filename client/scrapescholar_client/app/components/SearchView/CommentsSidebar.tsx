@@ -84,6 +84,9 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
             ) : !loading && <p>No comments available.</p>}
             
             <div className="mt-4">
+                {/* we could make this a form so when a user hit's enter it submits the form? */}
+
+                {/* <form onSubmit={handleAddComment}> */}
                 <textarea 
                     value={newComment}
                     onChange={e => setNewComment(e.target.value)}
@@ -91,6 +94,8 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
                     className="w-full p-2 border border-gray-300 rounded mb-2"
                 />
                 <button onClick={handleAddComment} className="bg-blue-500 text-white p-2 rounded">Add Comment</button>
+                {/* make button type=submit  */}
+                {/* </form> */}
             </div>
         </div>
     );
