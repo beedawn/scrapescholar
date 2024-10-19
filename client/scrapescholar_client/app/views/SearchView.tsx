@@ -150,6 +150,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const handleArticleClick = async (articleId: number) => {
         setSelectedArticleId(articleId);
+        console.log(articleId)
         setCommentsLoading(true);
 
         const data = await getCommentsByArticle(articleId);
@@ -240,9 +241,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             </div>
     
             {/* Sidebar for showing comments */}
-            <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
-                {selectedArticleId && <CommentsSidebar articleId={selectedArticleId} />}
-            </div>
+            {(selectedArticleId!== null? <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
+                 <CommentsSidebar articleId={selectedArticleId} />
+            </div>:<></>)}
         </div>
     );
 }

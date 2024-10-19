@@ -62,7 +62,8 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
     };
 
     return (
-        <div className="p-4">
+
+        <div className="p-4 text-black">
             <h2 className="font-bold text-xl mb-4">Comments for Article {articleId}</h2>
             {loading && <p>Loading comments...</p>}
             {error && <p className="text-red-500">{error}</p>}
