@@ -5,13 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bde01256-32ab-4fa1-a5ba-7f375b309645" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/academic_databases/ScienceDirect/sciencedirect.py" beforeDir="false" afterPath="$PROJECT_DIR$/academic_databases/ScienceDirect/sciencedirect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/academic_databases/Scopus/scopus.py" beforeDir="false" afterPath="$PROJECT_DIR$/academic_databases/Scopus/scopus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/article.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/article.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/articlescore.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/articlescore.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/collaboration.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/collaboration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/keyword.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/keyword.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/researchquestion.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/researchquestion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/researchquestionmapping.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/researchquestionmapping.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/researchquestionscore.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/researchquestionscore.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/role.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/role.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/searchkeyword.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/searchkeyword.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/searchshare.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/searchshare.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/source.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/source.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crud/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/crud/user_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/user_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/db/session.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/db/session.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dependencies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/init_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/init_db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/article.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/article.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/articlescore.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/articlescore.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/collaboration.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/collaboration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/comment.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/comment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/keyword.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/keyword.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/researchquestion.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/researchquestion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/researchquestionscore.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/researchquestionscore.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/role.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/role.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/searchkeyword.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/searchkeyword.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/searchshare.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/searchshare.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/source.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/source.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/user_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_tools/get_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_tools/get_user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/endpoints/auth/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/auth/auth.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/endpoints/role/role.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/role/role.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/endpoints/search/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/search/search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/endpoints/user/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/user/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/endpoints/user_data/user_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/user_data/user_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/integration/test_sciencedirect.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_sciencedirect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/integration/test_search_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_search_endpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/integration/test_us1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_us1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/integration/test_us23.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_us23.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/integration/test_us5.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_us5.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/integration/test_users_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_users_endpoint.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +98,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729363610077</updated>
-      <workItem from="1729363611210" duration="2420000" />
+      <workItem from="1729363611210" duration="3715000" />
     </task>
     <servers />
   </component>

@@ -8,7 +8,6 @@ from app.db.session import get_db
 from cryptography.fernet import Fernet
 import os
 
-
 #probably wan tto add cookie token validation here, but worried it will break tests
 
 # Load environment variable for encryption key
@@ -17,9 +16,11 @@ fernet = Fernet(ENCRYPTION_KEY)
 
 router = APIRouter()
 
+
 # Encrypt username helper function
 def encrypt_username(username: str) -> str:
     return fernet.encrypt(username.encode()).decode()
+
 
 @router.post("/create", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
@@ -39,10 +40,11 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
 
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists.")
-    
+
     # Proceed with creating the user
     new_user = create_user(db=db, user=user)
     return new_user
+
 
 @router.get("/get/{user_id}", response_model=UserRead)
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
@@ -52,6 +54,7 @@ def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     #probably want to verify user has valid token
     user = get_user(db=db, user_id=user_id)
     return user
+
 
 @router.get("/get-by-username/{username}", response_model=UserRead)
 def get_user_by_username_api(username: str, db: Session = Depends(get_db)):
@@ -65,6 +68,7 @@ def get_user_by_username_api(username: str, db: Session = Depends(get_db)):
     user = get_user_by_username(db=db, username=encrypted_username)
     return user
 
+
 @router.put("/update/{user_id}", response_model=UserRead)
 def update_existing_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     """
@@ -74,6 +78,7 @@ def update_existing_user(user_id: int, user: UserUpdate, db: Session = Depends(g
 
     updated_user = update_user(db=db, user_id=user_id, user=user)
     return updated_user
+
 
 @router.delete("/delete/{user_id}", response_model=UserRead)
 def delete_existing_user(user_id: int, db: Session = Depends(get_db)):

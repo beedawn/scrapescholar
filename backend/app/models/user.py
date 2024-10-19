@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.db.session import Base
 
+
 class User(Base):
     __tablename__ = "User"
 
@@ -20,7 +21,9 @@ class User(Base):
     comments = relationship("Comment", back_populates="user")
     article_scores = relationship("ArticleScore", foreign_keys="ArticleScore.user_id", back_populates="user")
     collaborations = relationship("Collaboration", back_populates="user")
-    search_shares = relationship("SearchShare", foreign_keys="SearchShare.shared_with_user_id", back_populates="shared_with_user")
-    search_shares_by = relationship("SearchShare", foreign_keys="SearchShare.shared_by_user_id", back_populates="shared_by_user")
+    search_shares = relationship("SearchShare", foreign_keys="SearchShare.shared_with_user_id",
+                                 back_populates="shared_with_user")
+    search_shares_by = relationship("SearchShare", foreign_keys="SearchShare.shared_by_user_id",
+                                    back_populates="shared_by_user")
     research_question_scores = relationship("ResearchQuestionScore", back_populates="last_updated_by")
     searches = relationship("Search", back_populates="user")

@@ -35,10 +35,10 @@ DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 router = APIRouter()
 
+
 # Endpoint to retrieve the last 300 searches for the logged-in user
 @router.get("/user/searches", status_code=status.HTTP_200_OK)
 async def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None):
-
     """
     Retrieve the last 300 searches for the logged-in user.
     """

@@ -4,14 +4,17 @@ from app.models.keyword import Keyword
 from app.schemas.keyword import KeywordCreate, KeywordUpdate
 from fastapi import HTTPException
 
+
 def get_keyword(db: Session, keyword_id: int):
     keyword = db.query(Keyword).filter(Keyword.keyword_id == keyword_id).first()
     if not keyword:
         raise HTTPException(status_code=404, detail="Keyword not found")
     return keyword
 
+
 def get_keywords(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Keyword).offset(skip).limit(limit).all()
+
 
 def create_keyword(db: Session, keyword: KeywordCreate):
     db_keyword = Keyword(**keyword.dict())
@@ -19,6 +22,7 @@ def create_keyword(db: Session, keyword: KeywordCreate):
     db.commit()
     db.refresh(db_keyword)
     return db_keyword
+
 
 def update_keyword(db: Session, keyword_id: int, keyword: KeywordUpdate):
     db_keyword = db.query(Keyword).filter(Keyword.keyword_id == keyword_id).first()
@@ -29,6 +33,7 @@ def update_keyword(db: Session, keyword_id: int, keyword: KeywordUpdate):
     db.commit()
     db.refresh(db_keyword)
     return db_keyword
+
 
 def delete_keyword(db: Session, keyword_id: int):
     db_keyword = db.query(Keyword).filter(Keyword.keyword_id == keyword_id).first()

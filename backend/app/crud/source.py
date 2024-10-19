@@ -4,6 +4,7 @@ from app.models.source import Source
 from app.schemas.source import SourceCreate, SourceUpdate
 from fastapi import HTTPException
 
+
 async def get_source(db: Session, source_id: int):
     source = db.query(Source).filter(Source.source_id == source_id).first()
     if not source:
@@ -21,12 +22,14 @@ def get_source_by_name(db: Session, source: str):
 def get_sources(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Source).offset(skip).limit(limit).all()
 
+
 def create_source(db: Session, source: SourceCreate):
     db_source = Source(**source.dict())
     db.add(db_source)
     db.commit()
     db.refresh(db_source)
     return db_source
+
 
 def update_source(db: Session, source_id: int, source: SourceUpdate):
     db_source = db.query(Source).filter(Source.source_id == source_id).first()
@@ -37,6 +40,7 @@ def update_source(db: Session, source_id: int, source: SourceUpdate):
     db.commit()
     db.refresh(db_source)
     return db_source
+
 
 def delete_source(db: Session, source_id: int):
     db_source = db.query(Source).filter(Source.source_id == source_id).first()

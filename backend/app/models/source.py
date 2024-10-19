@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.db.session import Base
 
+
 class Source(Base):
     __tablename__ = "Source"
 
