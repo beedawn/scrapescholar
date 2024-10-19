@@ -209,7 +209,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
 
     return (
-        <div className="flex flex-col sm:flex-row sm:mx-12">
+        <div className="flex flex-col md:flex-row xs:mx-12 md:mx-0">
             <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5" data-testid="navbar">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
@@ -240,7 +240,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             </div>
     
             {/* Sidebar for showing comments */}
-            {(selectedArticleId!== null? <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
+            {(selectedArticleId!== null? <div className=" w-full md:w-1/5 lg:1/5 bg-gray-100">
                  <CommentsSidebar articleId={selectedArticleId} />
             </div>:<></>)}
         </div>

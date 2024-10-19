@@ -88,8 +88,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
     return (
         <div className={className}>
-            <div className="float-left p-12 max-w-md 
-            sm:max-w-screen-xs md:max-w-screen-xs 
+            <div className="float-left xs:p-12 sm:p-0 max-w-md 
+            sm:w-11/12 md:max-w-screen-xs 
             lg:max-w-screen-md xl:max-w-screen-lg">
                 {results.length !== 0 ? (
                     <div>
