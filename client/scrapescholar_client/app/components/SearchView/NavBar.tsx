@@ -38,8 +38,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     return (
         <>
             <div className="p-5 max-w-sm mr-auto float-left">
-                <div className="float-right pb-6" >
-                    <Button onClick={handleLogout} className="">
+                <div className="float-right pb-6" data-testid="logout-button">
+                    <Button onClick={handleLogout} className="" >
                         Logout
                     </Button>
                 </div>
