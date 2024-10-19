@@ -6,3 +6,4 @@
 .coverage
 .DS_Store
 .env_tristan
+.idea
