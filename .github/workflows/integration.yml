@@ -78,9 +78,22 @@ jobs:
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://0.0.0.0:8000/health_check
 
+
+       
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser
+        sudo apt-get install -y chromium-chromedriver
+       
+
+
     - name: Run Python Integration Tests
       working-directory: ./backend  # Adjust to the correct directory
+      env:
+        DISPLAY: :99  
       run: |
+        Xvfb :99 -screen 0 1920x1080x24 &
         pytest ./tests/integration --disable-warnings -v -s
         coverage run -m pytest tests --verbose && coverage report -m
 
