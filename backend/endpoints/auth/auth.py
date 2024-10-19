@@ -133,7 +133,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
     print(access_token)
     user= await get_current_user_modular(access_token, db)
-    print(user)
     if access_token is None or user is None:
         raise HTTPException(status_code=404, detail="Cookie not found")
     return JSONResponse(content={"cookieValue": access_token})
@@ -145,10 +144,10 @@ def remove_cookie(response: Response):
     response.delete_cookie("access_token")
     return {"message": "Cookie deleted"}
 
-#probably want tto verify token? worried it will break tests
 # Protected route example
 @router.get("/protected_route")
 def protected_route(current_user: User = Depends(get_current_user)):
+    #probably want to add a token or cookie check here
     return {
         "user_id": current_user.user_id,
         "username": current_user.username,

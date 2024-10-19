@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bde01256-32ab-4fa1-a5ba-7f375b309645" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/app/crud/user_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/user_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/endpoints/auth/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/auth/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/endpoints/role/role.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/role/role.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/endpoints/search/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/search/search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/endpoints/user/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/user/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/endpoints/user_data/user_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/endpoints/user_data/user_data.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="2nfUQktzLs4ImTm83UVnp8Ha0ig" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "us-16",
+    "last_opened_file_path": "/Users/bee/GitHub/scrapescholar/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.18034.82" />
+        <option value="bundled-python-sdk-975db3bf15a3-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.18034.82" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bde01256-32ab-4fa1-a5ba-7f375b309645" name="Changes" comment="" />
+      <created>1729363610077</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1729363610077</updated>
+      <workItem from="1729363611210" duration="2420000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

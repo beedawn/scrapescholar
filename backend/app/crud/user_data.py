@@ -19,7 +19,6 @@ async def create_user_data(db: Session, user_id, article_id):
         user_id=user_id,
         article_id=article_id,
     )
-
     db.add(db_user_data)
     db.commit()
     db.refresh(db_user_data)

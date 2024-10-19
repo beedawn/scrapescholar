@@ -7,7 +7,7 @@ from app.crud.user import create_user, get_user, get_user_by_username, update_us
 from app.db.session import get_db
 from cryptography.fernet import Fernet
 import os
-from endpoints.search.search import get_current_user_no_route
+
 
 #probably wan tto add cookie token validation here, but worried it will break tests
 
@@ -26,6 +26,8 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
     """
     API endpoint to create a new user.
     """
+    #probably want to verify user has valid token
+
     # Encrypt the username before checking for existence
     encrypted_username = encrypt_username(user.username)
 
@@ -47,6 +49,7 @@ def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     """
     API endpoint to get a user by their ID.
     """
+    #probably want to verify user has valid token
     user = get_user(db=db, user_id=user_id)
     return user
 
@@ -55,6 +58,8 @@ def get_user_by_username_api(username: str, db: Session = Depends(get_db)):
     """
     API endpoint to get a user by their username.
     """
+    #probably want to verify user has valid token
+
     # Encrypt the username before querying
     encrypted_username = encrypt_username(username)
     user = get_user_by_username(db=db, username=encrypted_username)
@@ -65,6 +70,8 @@ def update_existing_user(user_id: int, user: UserUpdate, db: Session = Depends(g
     """
     API endpoint to update an existing user.
     """
+    #probably want to verify user has valid token
+
     updated_user = update_user(db=db, user_id=user_id, user=user)
     return updated_user
 
@@ -73,5 +80,7 @@ def delete_existing_user(user_id: int, db: Session = Depends(get_db)):
     """
     API endpoint to delete a user by their ID.
     """
+    #probably want to verify user has valid token
+
     deleted_user = delete_user(db=db, user_id=user_id)
     return deleted_user

@@ -1,9 +1,6 @@
 # app/main.py
 from fastapi import FastAPI, Query, Response, Request, Cookie, Depends
 from fastapi.responses import JSONResponse
-import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
-import academic_databases.Scopus.scopus as Scopus
-from api_tools.api_tools import scopus_api_key
 from fastapi.middleware.cors import CORSMiddleware
 from endpoints.role import role
 from endpoints.user import user
@@ -12,9 +9,10 @@ from endpoints.user_data import user_data
 from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
-from endpoints.search.search import post_search_no_route, get_current_user_no_route, check_if_user_exceeded_search_amount, find_search_articles, initialize_full_article_response
+from endpoints.search.search import post_search_no_route, check_if_user_exceeded_search_amount, find_search_articles, initialize_full_article_response
 from app.db.session import get_db, SessionLocal
 from sqlalchemy.orm import Session
+from auth_tools.get_user import get_current_user_modular
 
 
 app = FastAPI()
@@ -65,7 +63,7 @@ async def get_database_list(directory):
 @app.get("/academic_data")
 async def multiple_apis(keywords:str, academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None, 
 access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    current_user= await get_current_user_no_route(token=access_token, db=db)
+    current_user= await get_current_user_modular(token=access_token, db=db)
     exceeded_searches = await check_if_user_exceeded_search_amount(current_user=current_user, db=db)
     if exceeded_searches:
         return JSONResponse(
@@ -73,8 +71,6 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
         content={"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}
         )
     keywords_list = keywords.split()
-    print("USER ID")
-    print(current_user.user_id)
     response=[]
     id = 0
     database_list = await get_database_list('academic_databases/')
@@ -83,10 +79,7 @@ access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_
             new_id=check_response(response,id)
             article_response, id =globals()[item].request_data(keywords, id=new_id,)
             response.extend(article_response)
-    #need something here to get search id after its made or associated function
-    print("ARTRICLES BEFORE DB")
-    for item in response:
-        print(item.__dict__)
+
     #adds articles to db
     search_valid, search_id = await post_search_no_route(keywords=keywords_list, articles=response, current_user=current_user, db=db)
     #instead of returning articles we're going to get the search from the db and return that
