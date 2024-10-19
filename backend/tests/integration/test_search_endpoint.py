@@ -1,25 +1,17 @@
 # tests/unit/test_search_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
 from app.main import app  # Import the FastAPI app
-from app.models.user import User
 from app.models.search import Search
 from app.models.article import Article
-from passlib.context import CryptContext
-from cryptography.fernet import Fernet
-from dotenv import load_dotenv
 from app.db.session import SessionLocal
 import os
 import time
-import random
-import string
 from sqlalchemy import text
 from sqlalchemy.exc import ProgrammingError
 import jwt
 from datetime import datetime, timedelta
 from tests.integration.tools.get_cookie import get_cookie
-from typing import List
 
 # Initialize TestClient
 client = TestClient(app)

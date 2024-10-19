@@ -1,11 +1,13 @@
 # app/main.py
-from fastapi import FastAPI, Query, Response, Request, Cookie, Depends
+from fastapi import FastAPI, Query,Cookie, Depends
 from fastapi.responses import JSONResponse
+
 #needs these for globals call
 import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
 import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
 #end of globals stuff
+
 from fastapi.middleware.cors import CORSMiddleware
 from endpoints.role import role
 from endpoints.user import user
@@ -14,9 +16,9 @@ from endpoints.user_data import user_data
 from endpoints.search import search
 from typing import List, Annotated
 from pathlib import Path
-from endpoints.search.search import post_search_no_route, check_if_user_exceeded_search_amount, find_search_articles, \
+from endpoints.search.search import post_search_no_route, check_if_user_exceeded_search_amount, \
     initialize_full_article_response
-from app.db.session import get_db, SessionLocal
+from app.db.session import SessionLocal
 from sqlalchemy.orm import Session
 from auth_tools.get_user import get_current_user_modular
 

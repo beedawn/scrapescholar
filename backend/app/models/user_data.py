@@ -1,8 +1,6 @@
 # app/models/user_data.py
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, ForeignKey
 from app.db.session import Base
 
 

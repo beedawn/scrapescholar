@@ -1,9 +1,9 @@
 # endpoints/user_data/user_data.py
-from fastapi import APIRouter, Depends, HTTPException, status, Cookie
+from fastapi import APIRouter, Depends, Cookie
 from sqlalchemy.orm import Session
-from typing import List, Annotated
-from app.schemas.user_data import UserDataBase, UserDataCreate, UserDataRead, UserDataUpdate
-from app.crud.user_data import create_user_data, update_user_data
+from typing import Annotated
+from app.schemas.user_data import UserDataRead, UserDataUpdate
+from app.crud.user_data import update_user_data
 from app.db.session import get_db
 from auth_tools.get_user import get_current_user_modular
 

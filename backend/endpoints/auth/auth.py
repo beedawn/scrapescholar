@@ -10,7 +10,7 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 import os
 from fastapi.responses import JSONResponse
-from typing import List, Annotated
+from typing import Annotated
 
 from auth_tools.get_user import get_current_user_modular
 

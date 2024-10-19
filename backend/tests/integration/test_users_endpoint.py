@@ -1,8 +1,6 @@
 # tests/unit/test_users_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch
-from sqlalchemy.orm import Session
 from app.main import app
 from app.models.user import User
 from endpoints.auth.auth import get_current_user

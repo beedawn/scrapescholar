@@ -27,7 +27,7 @@ async def create_user_data(db: Session, user_id, article_id):
     return db_user_data
 
 
-async def update_user_data(db: Session, user_data: UserData):
+async def update_user_data(db: Session, user_data: UserDataUpdate):
     db_user_data = db.query(UserData).filter(UserData.article_id == user_data.article_id).first()
 
     if not db_user_data:

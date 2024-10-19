@@ -1,5 +1,5 @@
 # role/role.py
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.schemas.role import RoleCreate, RoleUpdate, RoleRead

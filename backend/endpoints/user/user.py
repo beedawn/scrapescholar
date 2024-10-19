@@ -1,7 +1,6 @@
 # user/user.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
 from app.schemas.user import UserCreate, UserUpdate, UserRead
 from app.crud.user import create_user, get_user, get_user_by_username, update_user, delete_user
 from app.db.session import get_db

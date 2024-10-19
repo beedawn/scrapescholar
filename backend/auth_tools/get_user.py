@@ -1,26 +1,13 @@
 # search/search.py
-from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
-from app.db.session import get_db
-from app.models.search import Search
-from app.models.article import Article
-from app.models.source import Source
+from fastapi import Depends, HTTPException, status
 from app.models.user import User
-from app.models.user_data import UserData
 from fastapi.security import OAuth2PasswordBearer
-from app.crud.search import create_search
-from app.crud.source import get_source_by_name, get_source
-from app.crud.user import decrypt
-from app.schemas.search import SearchCreate, SearchUpdate
-from app.schemas.article import ArticleCreate, ArticleBase, ArticleRead
-from app.crud.article import create_article
-from app.crud.user_data import create_user_data, get_user_data
-from academic_databases.SearchResult import SearchResult
-from pydantic import HttpUrl
+
 import jwt  # Import JWT
 from dotenv import load_dotenv
-from typing import List, Annotated
+
 import os
-from datetime import datetime
+
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 

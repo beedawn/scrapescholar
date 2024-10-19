@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import app
-import time
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
