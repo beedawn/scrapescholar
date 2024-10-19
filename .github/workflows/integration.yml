@@ -88,14 +88,7 @@ jobs:
        
 
 
-    - name: Run Python Integration Tests
-      working-directory: ./backend  # Adjust to the correct directory
-      env:
-        DISPLAY: :99  
-      run: |
-        Xvfb :99 -screen 0 1920x1080x24 &
-        pytest ./tests/integration --disable-warnings -v -s
-        coverage run -m pytest tests --verbose && coverage report -m
+
 
     - name: Run npm install
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
@@ -105,6 +98,20 @@ jobs:
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: | 
         npm run build
+        
+    - name: Run NPM dev
+      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      run: | 
+        npm run dev & sleep 10
+
+    - name: Run Python Integration Tests
+      working-directory: ./backend  # Adjust to the correct directory
+      env:
+        DISPLAY: :99  
+      run: |
+        Xvfb :99 -screen 0 1920x1080x24 &
+        pytest ./tests/integration --disable-warnings -v -s
+        coverage run -m pytest tests --verbose && coverage report -m
 
     - name: run Integration tests Next.js 
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
