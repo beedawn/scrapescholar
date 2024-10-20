@@ -9,30 +9,34 @@ describe('Home Component', () => {
   const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
   test('US-4 check login button loads', () => {
     render(<Home />);
-    const loginButton = screen.getByText('Login');
-    expect(loginButton).toBeInTheDocument();
+    waitFor(()=>{const loginButton = screen.getByText('Login');
+    expect(loginButton).toBeInTheDocument();},{timeout:5000})
   });
 
   test('US-4 check username field is on page', async () => {
     render(<Home />);
+    waitFor(()=>{
     const usernameInput = screen.getByPlaceholderText('Username');
       expect(usernameInput).toBeInTheDocument();
+    },{timeout:5000})
   });
 
   test('US-4 check password field is on page', async () => {
     render(<Home />);
-    const passwordInput = screen.getByPlaceholderText('Password');
-      expect(passwordInput).toBeInTheDocument();
+    waitFor(()=>{const passwordInput = screen.getByPlaceholderText('Password');
+      expect(passwordInput).toBeInTheDocument();},{timeout:5000})
   }); 
   
   test('US-4 check login button click works', async () => {
     render(<Home />);
+    waitFor(()=>{
     const loginButton = screen.getByText('Login');
     const usernameInput = screen.getByPlaceholderText('Username');
     const passwordInput = screen.getByPlaceholderText('Password');
     fireEvent.change(usernameInput, { target: { value: admin_user } });
     fireEvent.change(passwordInput, { target: { value: admin_pass } });
     fireEvent.click(loginButton);
+  },{timeout:5000})
     await waitFor(()=>{
 
       expect(screen.getAllByRole('textbox')).toHaveLength(1);
@@ -43,12 +47,14 @@ describe('Home Component', () => {
   });
   test('US-4 check logout button works in SearchView', async () => {
     render(<Home />);
+    waitFor(()=>{
     const usernameInput = screen.getByPlaceholderText('Username');
     const passwordInput = screen.getByPlaceholderText('Password');
     fireEvent.change(usernameInput, { target: { value: admin_user } });
     fireEvent.change(passwordInput, { target: { value: admin_pass } });
     const loginButton = screen.getByText('Login');
     fireEvent.click(loginButton);
+  },{timeout:5000})
     await waitFor(() => {
     const logoutButton = screen.getByText('Logout');
     expect(logoutButton).toBeInTheDocument();
@@ -69,7 +75,6 @@ describe('Home Component', () => {
     fireEvent.click(loginButton);
   }, { timeout: 5000 });
 
-  screen.debug(undefined,10000);
     await waitFor(() => {
       expect(screen.getByText('Invalid Login')).toBeInTheDocument();
     }, { timeout: 5000 });
