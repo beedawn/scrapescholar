@@ -15,3 +15,7 @@ class ResearchQuestionRead(ResearchQuestionBase):
 
     class Config:
         orm_mode = True
+
+
+class ResearchQuestionUpdate:
+    pass

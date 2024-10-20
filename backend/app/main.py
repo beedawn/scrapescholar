@@ -7,6 +7,7 @@ import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
 import academic_databases.Scopus.scopus as Scopus
 from api_tools.api_tools import scopus_api_key
 #end of globals stuff
+from app.db.session import get_db
 
 from fastapi.middleware.cors import CORSMiddleware
 from endpoints.role import role
@@ -33,14 +34,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @app.get("/health_check")

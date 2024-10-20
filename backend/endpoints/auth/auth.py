@@ -37,7 +37,7 @@ router = APIRouter()
 
 
 # Hash password
-def hash(text: str):
+def hash_string(text: str):
     return hash_context.hash(text)
 
 

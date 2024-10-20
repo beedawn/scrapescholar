@@ -22,7 +22,8 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     username: Optional[str] = None
     email: Optional[str] = None
-    password: Optional[str] = Field(None, min_length=8, description="Password must be at least 8 characters long.")
+    password: Optional[str] = Field(None, min_length=8,
+                                    description="Password must be at least 8 characters long.")
     role_id: Optional[int] = None
 
 

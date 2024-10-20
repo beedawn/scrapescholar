@@ -16,3 +16,7 @@ class ResearchQuestionMappingRead(ResearchQuestionMappingBase):
 
     class Config:
         orm_mode = True
+
+
+class ResearchQuestionMappingUpdate:
+    pass

@@ -141,7 +141,8 @@ async def get_search_by_id(search_id: int, db: Session = Depends(get_db),
                             detail=f"Error retrieving search: {str(e)}")
 
 
-# get a searches title thinkt his duplicates above function except this one uses cookie...keeping it for now need to refactor these
+# get a searches title thinkt his duplicates above function except this one uses cookie...
+# keeping it for now need to refactor these
 @router.get("/user/search/title", status_code=status.HTTP_200_OK)
 async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                            search_id: int = Query(None, description="ID of the specific search to retrieve")):
@@ -279,7 +280,8 @@ async def post_search_no_route(keywords: List[str], articles: List[ArticleBase],
 
     """
     todo: 
-    need to check if user has 300 searches, then respond with some kind of message to front end to let it know to bug them to delete searches
+    need to check if user has 300 searches, then respond with some kind of message to front 
+    end to let it know to bug them to delete searches
     """
 
     result = await check_if_user_exceeded_search_amount(db, current_user)
