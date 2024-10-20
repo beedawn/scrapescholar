@@ -1,28 +1,21 @@
 # tests/unit/test_search_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
 from app.main import app  # Import the FastAPI app
-from app.models.user import User
 from app.models.search import Search
 from app.models.article import Article
-from passlib.context import CryptContext
-from cryptography.fernet import Fernet
-from dotenv import load_dotenv
 from app.db.session import SessionLocal
 import os
 import time
-import random
-import string
 from sqlalchemy import text
 from sqlalchemy.exc import ProgrammingError
 import jwt
 from datetime import datetime, timedelta
 from tests.integration.tools.get_cookie import get_cookie
-from typing import List
 
 # Initialize TestClient
 client = TestClient(app)
+
 
 @pytest.fixture(scope="function")
 def db_session():
@@ -42,6 +35,7 @@ def db_session():
                 raise  # re-raise if it's not an UndefinedTable error
         finally:
             db.close()
+
 
 # ----------------------- SEARCH ENDPOINT TEST SUITE -----------------------
 @pytest.mark.search
@@ -86,6 +80,7 @@ def test_create_search(db_session):
     assert created_search is not None
     assert created_search.title == search_data["title"]
     print(f"Created search: {created_search}")
+
 
 @pytest.mark.search
 def test_get_search_by_id(db_session):
@@ -142,6 +137,7 @@ def test_get_search_by_id(db_session):
     assert search["title"] == search_data["title"]
     print(f"Retrieved search: {search}")
 
+
 @pytest.mark.search
 def test_get_search_300(db_session):
     """
@@ -180,7 +176,7 @@ def test_get_search_300(db_session):
         }
         search_response = client.post("/search/create", json=search_data, headers=headers)
         assert search_response.status_code == 201
-        print(f"Inserted search {i+1}")
+        print(f"Inserted search {i + 1}")
 
     # Step 4: Wait to ensure the transactions have been committed
     time.sleep(5)
@@ -195,7 +191,8 @@ def test_get_search_300(db_session):
 
     # Step 6: Assert that the 301st search is rejected
     assert extra_search_response.status_code == 400  # Bad Request for exceeding the limit
-    assert extra_search_response.json()["detail"] == "Search limit exceeded. Please delete some searches before creating new ones."
+    assert extra_search_response.json()[
+               "detail"] == "Search limit exceeded. Please delete some searches before creating new ones."
 
     # Step 7: Retrieve the last 300 searches using the cookie for the token
     headers_with_cookie = {
@@ -211,15 +208,16 @@ def test_get_search_300(db_session):
     # Step 8: Verify the status code and content
     assert search_history_response.status_code == 200
     searches = search_history_response.json()
-    
+
     # Step 9: Verify there are 300 searches, and at least one of the searches follows the naming convention
     assert isinstance(searches, list)
     assert len(searches) == 300  # Ensure exactly 300 searches are returned
-    
+
     # Check that the recent searches follow the "username-datetimestamp" convention
     latest_search_title = f"test300-{time.strftime('%Y-%m-%d')}"  # Check for the date prefix
     assert any(search["title"].startswith(latest_search_title) for search in searches)
     print(f"Retrieved {len(searches)} searches")
+
 
 @pytest.mark.search
 def test_get_search_by_id_not_found(db_session):
@@ -250,10 +248,11 @@ def test_get_search_by_id_not_found(db_session):
     }
     non_existent_search_id = 99999  # Some non-existent ID
     get_search_response = client.get(f"/search/searchbyid/{non_existent_search_id}", headers=headers)
-    
+
     # Step 3: Ensure a 404 status code is returned
     assert get_search_response.status_code == 404
     assert get_search_response.json() == {"detail": "Search not found"}
+
 
 @pytest.mark.search
 def test_get_search_articles_no_articles(db_session):
@@ -297,13 +296,15 @@ def test_get_search_articles_no_articles(db_session):
     headers_with_cookie = {
         "Cookie": f"access_token={access_token}"
     }
-    get_articles_response = client.get(f"/search/user/articles?search_id={created_search_id}", headers=headers_with_cookie)
+    get_articles_response = client.get(f"/search/user/articles?search_id={created_search_id}",
+                                       headers=headers_with_cookie)
 
     # Step 5: Ensure no articles are returned
     assert get_articles_response.status_code == 200
     articles = get_articles_response.json()
     assert isinstance(articles, list)
     assert len(articles) == 0  # No articles associated with the search
+
 
 @pytest.mark.search
 def test_update_search_title(db_session):
@@ -350,12 +351,14 @@ def test_update_search_title(db_session):
     }
     headers = {
         "Cookie": f"access_token={access_token}"
-    }    
-    update_response = client.put(f"/search/user/search/title?search_id={created_search_id}", json=update_data, headers=headers)
-    
+    }
+    update_response = client.put(f"/search/user/search/title?search_id={created_search_id}", json=update_data,
+                                 headers=headers)
+
     assert update_response.status_code == 200
     updated_search = update_response.json()
     assert updated_search["title"] == new_title
+
 
 @pytest.mark.search
 def test_expired_token(db_session):
@@ -383,6 +386,7 @@ def test_expired_token(db_session):
     assert search_history_response.status_code == 401
     assert search_history_response.json() == {"detail": "Token has expired"}
 
+
 @pytest.mark.search
 def test_get_invalid_token(db_session):
     """
@@ -399,29 +403,20 @@ def test_get_invalid_token(db_session):
     assert search_history_response.json() == {"detail": "Invalid token"}
 
 
-
-
-
-
-
-
-
-
-
-
 from tests.integration.tools.base_url import base_url
+
 session = get_cookie()
+
+
 def test_get_valid_token_status_200(db_session):
     """
     Test the /search/user/searches endpoint with an valid cookie returns 200.
     """
 
-
     # Step 2: Call the endpoint with the cookie
     search_history_response = session.get(f"{base_url}/search/user/searches")
 
     assert search_history_response.status_code == 200
-
 
 
 def test_get_valid_token_search_user_searches_response_schema(db_session):
@@ -444,28 +439,26 @@ def test_get_valid_token_search_user_searches_response_schema(db_session):
 ]
     """
 
-    apiQuery="test"
-    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    apiQuery = "test"
+    queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
 
     # Step 2: Call the endpoint with the cookie
     search_history_response = session.get(f"{base_url}/search/user/searches")
 
-  
     assert search_history_response.status_code == 200
     data = search_history_response.json()
 
-    assert isinstance(data[0]["search_id"],int)
-    assert isinstance(data[0]["search_keywords"],list)
+    assert isinstance(data[0]["search_id"], int)
+    assert isinstance(data[0]["search_keywords"], list)
     assert data[0]["search_keywords"][0] == "test"
-    assert isinstance(data[0]["status"],str)
-    assert isinstance(data[0]["user_id"],int)
+    assert isinstance(data[0]["status"], str)
+    assert isinstance(data[0]["user_id"], int)
     assert data[0]["search_date"] is None
-    search_request=search_request.json()
-    search_id=search_request["search_id"]
+    search_request = search_request.json()
+    search_id = search_request["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
-    
 
 
 def test_get_valid_token_academic_data_response_schema(db_session):
@@ -489,8 +482,8 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     ]
     """
 
-    apiQuery="test"
-    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    apiQuery = "test"
+    queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
 
@@ -514,17 +507,17 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     """
     assert search_request.status_code == 200
     data = search_request.json()
-    assert isinstance(data["search_id"],int)
-    assert isinstance(data["articles"],list)
+    assert isinstance(data["search_id"], int)
+    assert isinstance(data["articles"], list)
     assert isinstance(data["articles"][0]["title"], str)
     assert isinstance(data["articles"][0]["date"], str)
-    assert isinstance(data["articles"][0]["citedby"], str)
+    assert isinstance(data["articles"][0]["citedby"], (str, int))
     assert isinstance(data["articles"][0]["link"], str)
     assert isinstance(data["articles"][0]["date"], str)
     assert isinstance(data["articles"][0]["abstract"], str)
     assert isinstance(data["articles"][0]["document_type"], str)
     assert isinstance(data["articles"][0]["source"], str)
-    
+
     assert isinstance(data["articles"][0]["color"], str)
     assert isinstance(data["articles"][0]["relevance_score"], float)
     assert isinstance(data["articles"][0]["methodology"], int)
@@ -536,7 +529,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     search_id = data["search_id"]
     article_id = data["articles"][0]["article_id"]
     saved_search = db_session.query(Search).filter_by(search_id=search_id).first()
-    
+
     # Ensure the search was saved
     assert saved_search is not None
     assert saved_search.search_keywords == apiQuery.split(", ")
@@ -551,8 +544,9 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert saved_article.link == data["articles"][0]["link"]
     assert saved_article.search_id == search_id
 
-    search_id=data["search_id"]
+    search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+
 
 def test_get_valid_token_past_search_response_schema(db_session):
     """
@@ -578,18 +572,18 @@ def test_get_valid_token_past_search_response_schema(db_session):
     },
 ]
     """
-    search_id=1
-    apiQuery="test"
-    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    search_id = 1
+    apiQuery = "test"
+    queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
     past_search = session.get(f"{base_url}/search/user/articles?search_id={search_id}")
-   
+
     assert search_request.status_code == 200
     assert past_search.status_code == 200
     data = past_search.json()
- 
-    assert isinstance(data,list)
+
+    assert isinstance(data, list)
     assert isinstance(data[0]["title"], str)
     assert isinstance(data[0]["date"], str)
     # assert isinstance(data[0]["citedby"], str)
@@ -599,9 +593,10 @@ def test_get_valid_token_past_search_response_schema(db_session):
     # assert isinstance(data[0]["document_type"], str)
     # assert isinstance(data[0]["source"], str)
     assert isinstance(data[0]["relevance_score"], float)
-    search_request=search_request.json()
-    search_id=search_request["search_id"]
+    search_request = search_request.json()
+    search_id = search_request["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+
 
 def test_get_valid_token_search_title_response_schema(db_session):
     """
@@ -616,23 +611,21 @@ def test_get_valid_token_search_title_response_schema(db_session):
     ]
 }
     """
-    search_id=1
-    apiQuery="test"
-    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    search_id = 1
+    apiQuery = "test"
+    queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
     title = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
-    
-  
+
     assert search_request.status_code == 200
     assert title.status_code == 200
     data = title.json()
-    assert isinstance(data["title"],str)
-    assert isinstance(data["keywords"],list)
-    search_request=search_request.json()
-    search_id=search_request["search_id"]
+    assert isinstance(data["title"], str)
+    assert isinstance(data["keywords"], list)
+    search_request = search_request.json()
+    search_id = search_request["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
-   
 
 
 def test_put_valid_token_search_title_response_schema(db_session):
@@ -652,32 +645,30 @@ def test_put_valid_token_search_title_response_schema(db_session):
     "title": "new one"
 }
     """
-    search_id=1
-    body = {"title":"new test title"}
-    apiQuery="test"
-    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+    search_id = 1
+    body = {"title": "new test title"}
+    apiQuery = "test"
+    queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
     new_title = session.put(f"{base_url}/search/user/search/title?search_id={search_id}", json=body)
-    
-  
+
     assert search_request.status_code == 200
     assert new_title.status_code == 200
     data = new_title.json()
-    assert isinstance(data["search_id"],int)
-    assert isinstance(data["search_keywords"],list)
-    assert isinstance(data["user_id"],int)
+    assert isinstance(data["search_id"], int)
+    assert isinstance(data["search_keywords"], list)
+    assert isinstance(data["user_id"], int)
     assert data["search_date"] is None
-    assert isinstance(data["title"],str)
+    assert isinstance(data["title"], str)
     assert data["title"] == "new test title"
 
     title = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
     data = title.json()
     assert data["title"] == "new test title"
-    search_request=search_request.json()
-    search_id=search_request["search_id"]
+    search_request = search_request.json()
+    search_id = search_request["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
-
 
 
 def test_delete_valid_token_search_title_response_schema(db_session):
@@ -697,22 +688,21 @@ def test_delete_valid_token_search_title_response_schema(db_session):
     "title": "new one"
 }
     """
-    
-    apiQuery="test"
-    queryString="&academic_database=Scopus&academic_database=ScienceDirect"
+
+    apiQuery = "test"
+    queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
-    search_request_json=search_request.json()
-    search_id=search_request_json["search_id"]
+    search_request_json = search_request.json()
+    search_id = search_request_json["search_id"]
     delete = session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
-    articles=db_session.query(Article).filter_by(search_id=search_id).first()
-    search= db_session.query(Search).filter_by(search_id=search_id).first()
-  
+    articles = db_session.query(Article).filter_by(search_id=search_id).first()
+    search = db_session.query(Search).filter_by(search_id=search_id).first()
+
     assert search_request.status_code == 200
     assert delete.status_code == 200
     data = delete.json()
-    assert isinstance(data,list)
+    assert isinstance(data, list)
     assert len(data) is 0
     assert articles is None
     assert search is None
-

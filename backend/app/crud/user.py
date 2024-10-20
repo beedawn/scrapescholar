@@ -14,27 +14,33 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")  # Store this securely!
 fernet = Fernet(ENCRYPTION_KEY)
 
+
 # Helper function to hash fields
 def hash(text: str) -> str:
     return pwd_context.hash(text)
+
 
 # Helper function to encrypt fields
 def encrypt(text: str) -> str:
     return fernet.encrypt(text.encode()).decode()
 
+
 # Helper function to decrypt fields
 def decrypt(encrypted_text: str) -> str:
     return fernet.decrypt(encrypted_text.encode()).decode()
 
+
 # Helper function to verify passwords
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
+
 
 def get_user(db: Session, user_id: int):
     user = db.query(User).filter(User.user_id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
 
 def get_user_by_username(db: Session, username: str):
     encrypted_username = encrypt(username)
@@ -43,9 +49,11 @@ def get_user_by_username(db: Session, username: str):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+
 def get_user_by_email(db: Session, email: str):
     hashed_email = hash(email)
     return db.query(User).filter(User.email == hashed_email).first()
+
 
 def create_user(db: Session, user: UserCreate):
     # Hash the user's password and email, and encrypt the username before storing them
@@ -64,6 +72,7 @@ def create_user(db: Session, user: UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
 
 def update_user(db: Session, user_id: int, user: UserUpdate):
     db_user = db.query(User).filter(User.user_id == user_id).first()
@@ -85,6 +94,7 @@ def update_user(db: Session, user_id: int, user: UserUpdate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
 
 def delete_user(db: Session, user_id: int):
     db_user = db.query(User).filter(User.user_id == user_id).first()

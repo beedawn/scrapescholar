@@ -1,2 +1,4 @@
 .env
 .venv
+.env_tristan
+.idea

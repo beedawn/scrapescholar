@@ -1,25 +1,27 @@
 # app/schemas/article.py
 from pydantic import BaseModel, HttpUrl
 from typing import Optional
-from datetime import date 
+from datetime import date
+
 
 class ArticleBase(BaseModel):
-    
     source_id: int
     title: str
     # author: Optional[str] = None
     date: Optional[date]
     link: Optional[HttpUrl] = None
     relevance_score: Optional[float] = None
-    
+
     abstract: Optional[str] = None
     doi: Optional[str] = None
     document_type: Optional[str] = None
-    citedby:Optional[int] = None
+    citedby: Optional[int] = None
+
 
 class ArticleCreate(ArticleBase):
     search_id: int
     user_id: int
+
 
 class ArticleUpdate(BaseModel):
     title: Optional[str] = None
@@ -32,6 +34,7 @@ class ArticleUpdate(BaseModel):
     abstract: Optional[str] = None
     doi: Optional[str] = None
     user_id: Optional[int] = None
+
 
 class ArticleRead(ArticleBase):
     article_id: int

@@ -1,12 +1,13 @@
 # app/dependencies.py
 
-from pydantic_settings import BaseSettings 
+from pydantic_settings import BaseSettings
 from pydantic import Field
 from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env file
 load_dotenv()
+
 
 class Settings(BaseSettings):
     # Configuration for the PostgreSQL database connection
@@ -25,14 +26,17 @@ class Settings(BaseSettings):
             return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         return self.DATABASE_URL
 
+
 # Create a global settings object
 settings = Settings()
+
 
 def get_db_uri():
     """
     Generate the database URI dynamically based on environment variables or default settings.
     """
     return settings.database_url
+
 
 # The `get_db` function that provides a SQLAlchemy database session
 def get_db():

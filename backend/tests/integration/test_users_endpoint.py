@@ -1,8 +1,6 @@
 # tests/unit/test_users_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch
-from sqlalchemy.orm import Session
 from app.main import app
 from app.models.user import User
 from endpoints.auth.auth import get_current_user
@@ -25,6 +23,7 @@ fernet = Fernet(ENCRYPTION_KEY)
 # Password hashing context
 hash_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 @pytest.fixture(scope="module")
 def db_session():
     """Provides a transactional scope around a series of operations."""
@@ -34,13 +33,16 @@ def db_session():
     finally:
         db.close()
 
+
 def decrypt_username(encrypted_username: str) -> str:
     """Helper function to decrypt the username manually during testing."""
     return fernet.decrypt(encrypted_username.encode()).decode()
 
+
 # Mocking the get_current_user dependency to return a test user
 def override_get_current_user():
     return User(user_id=1, username="mockuser", email="mockuser@example.com", password="mockpassword")
+
 
 @pytest.fixture
 def client_with_mocked_auth():
@@ -50,6 +52,7 @@ def client_with_mocked_auth():
         yield c
     # Cleanup after the test
     app.dependency_overrides.clear()
+
 
 # ----------------------- USER ENDPOINT TEST SUITE -----------------------
 @pytest.mark.user
@@ -95,6 +98,7 @@ def test_create_user(db_session):
     assert created_user.email != user_data["email"]
     assert created_user.email.startswith("$2b$")  # bcrypt hash prefix
 
+
 @pytest.mark.user
 def test_get_user_by_id(db_session):
     """
@@ -115,22 +119,23 @@ def test_get_user_by_id(db_session):
 
     # Retrieve the user by user_id using the GET endpoint
     get_response = client.get(f"/users/get/{created_user_id}")
-    
+
     # Assert the response status is OK (200)
     assert get_response.status_code == 200
-    
+
     # Verify the data in the response
     user = get_response.json()
     assert user["user_id"] == created_user_id
-    
+
     # Since the email is hashed, we cannot directly compare it to the plain-text value,
     # so we just verify that it's hashed
     assert user["email"].startswith("$2b$")  # Verify it's a bcrypt hash
-    
+
     # Debugging output to verify the test flow
     print(f"Retrieved User: {user}")
     assert user["email"].startswith("$2b$")  # Ensure email is hashed
     print(f"Retrieved User: {user}")
+
 
 # Test protected route with mocked authentication
 @pytest.mark.user

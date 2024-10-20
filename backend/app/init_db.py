@@ -14,7 +14,7 @@ from app.crud.search import create_search
 from dotenv import load_dotenv
 
 load_dotenv()
-test_user=os.getenv("TEST_USER")
+test_user = os.getenv("TEST_USER")
 test_password = os.getenv("TEST_PASSWORD")
 
 # Retrieve the database URI
@@ -25,6 +25,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 
 # Create a session maker
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 def init_db():
     """
@@ -64,6 +65,7 @@ def init_db():
     finally:
         db.close()
 
+
 def insert_test_data(db):
     """
     Insert test data into the database for testing purposes.
@@ -90,7 +92,6 @@ def insert_test_data(db):
     )
     source = create_source(db=db, source=source_data)
 
-
     source_data = SourceCreate(
         name="Scopus",
         api_endpoint="https://api.elsevier.com/content/search/scopus?",
@@ -114,6 +115,7 @@ def insert_test_data(db):
 
     db.commit()
     print("Test data inserted successfully.")
+
 
 if __name__ == "__main__":
     init_db()

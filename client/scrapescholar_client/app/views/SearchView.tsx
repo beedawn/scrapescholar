@@ -7,6 +7,7 @@ import { queryAllByAltText } from '@testing-library/react';
 import apiCalls from '../api/apiCalls'; 
 import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
+import Loading from '../components/Loading';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -192,7 +193,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     
     return (
         <div className="flex flex-col sm:flex-row sm:mx-12">
-            <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
+            <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5" data-testid="navbar">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
@@ -200,10 +201,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     handlePastSearchSelection={handlePastSearchSelection}
                      />
             </div>
-            {dataFull?<p>hi</p>:<></>}
-            <div className="flex-1 sm:mx-12 w-full">
+            
+            <div className="flex-1 w-full p-10">
                 {error ? (<p>{error.message}</p>) 
-                : loading ? <p>Loading</p> : 
+                : loading ? <Loading /> : 
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
                         results={results} emptyString={emptyString} disableD3={disableD3}
