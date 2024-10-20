@@ -36,7 +36,8 @@ export default function Home() {
 
   return (
     <div>
-        {!loadingLogin?<>Loading</>:<>
+        {!loadingLogin?<>  <div className="flex flex-col mt-40 sm:flex-row sm:mx-12 justify-center items-center">
+          <div className="flex-1 sm:mx-12 w-full flex justify-center">Loading</div></div></>:<>
           {loggedIn ? (<SearchView setLoggedIn={setLoggedIn} />
       ) : (
         <>
