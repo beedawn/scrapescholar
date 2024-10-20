@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import os
 from fastapi.responses import JSONResponse
 from typing import Annotated
+from datetime import timedelta
 
 from auth_tools.get_user import get_current_user_modular
 
@@ -101,7 +102,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     if DEBUG_SCRAPESCHOLAR:
         print(f"User found: ID={user.user_id}, Username={user.username}, Email={user.email}")
 
-    access_token = login_manager.create_access_token(data={"sub": str(user.user_id)})
+    access_token = login_manager.create_access_token(data={"sub": str(user.user_id)}, expires=timedelta(hours=8))
     if DEBUG_SCRAPESCHOLAR:
         print(f"Access Token Generated: {access_token}")
 
