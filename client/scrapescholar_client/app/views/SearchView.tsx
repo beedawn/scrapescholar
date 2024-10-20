@@ -7,6 +7,7 @@ import { queryAllByAltText } from '@testing-library/react';
 import apiCalls from '../api/apiCalls'; 
 import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
+import Loading from '../components/Loading';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -203,7 +204,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             
             <div className="flex-1 w-full p-10">
                 {error ? (<p>{error.message}</p>) 
-                : loading ? <p>Loading</p> : 
+                : loading ? <Loading /> : 
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
                     <SearchResults setResults={setResults} displayInputs={joinedInputsString} setLoading={setLoading}
                         results={results} emptyString={emptyString} disableD3={disableD3}

@@ -4,6 +4,7 @@ import Head from 'next/head';
 import SearchView from "./views/SearchView";
 import Login from './views/Login';
 import apiCalls from './api/apiCalls';
+import Loading from './components/Loading';
 export default function Home() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [token, setToken] = useState('');
@@ -36,9 +37,7 @@ export default function Home() {
 
   return (
     <div>
-        {!loadingLogin?<><div className="flex flex-col mt-40 sm:flex-row sm:mx-12 justify-center items-center">
-          <div className="flex-1 sm:mx-12 w-full flex justify-center"><div>Loading</div><div>
-          <div className="lds-ring mt-2"><div></div><div></div><div></div><div></div></div></div></div></div></>:<>
+        {!loadingLogin?<Loading />:<>
           {loggedIn ? (<SearchView setLoggedIn={setLoggedIn} />
       ) : (
         <>

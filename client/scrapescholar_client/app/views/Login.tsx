@@ -1,8 +1,5 @@
 "use client";
-import React, { useState, Dispatch, SetStateAction, useEffect} from 'react';
-import SearchResults from "../components/SearchView/SearchResults";
-import NavBar from "../components/SearchView/NavBar";
-import Dropdown from "../types/DropdownType";
+import React, { useState, Dispatch, SetStateAction} from 'react';
 import apiCalls from '../api/apiCalls';
 interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
