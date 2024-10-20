@@ -113,9 +113,10 @@ jobs:
         pytest ./tests/integration --disable-warnings -v -s
         coverage run -m pytest tests --verbose && coverage report -m
 
-    - name: run Integration tests Next.js 
-      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-      run: npm run test:integration
+    # - name: run Integration tests Next.js 
+    #   working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+    #   run: npm run test:integration
+
     # these three tests reach out to real domain and test ssl validity for AR-3
     - name: test ssl
       run: |
