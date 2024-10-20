@@ -6,35 +6,20 @@ import Dropdown from "../types/DropdownType";
 import apiCalls from '../api/apiCalls';
 interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
+    setToken: (item: string) => void;
 }
 
 
 
 const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
 const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
-const Login: React.FC<LoginProps> = ({ setLoggedIn, }) => {
+const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
     const { postAPILogin, getCookie } = apiCalls();
-    useEffect(() =>{
-        const fetchCookie = async () =>
-        {
-        const cookie = await getCookie();
-        if(cookie.detail=="Cookie not found" || cookie.detail=="Invalid token"){
-            console.log("no cookie")
-        }else{
-            console.log(cookie)
-            //need logic here to verify the cookie is legit somehow, i can put "ham" as the cookie value 
-            //and it lets you signin,
-            //nothing else works with the ham cookie though
-            setToken(cookie.detail)
-            setLoggedIn(true)
-        }
-        }
-        fetchCookie();
-    },[])
+
 
 
    
-    const [token, setToken] = useState();
+    // const [token, setToken] = useState();
     const [username, setUserName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
