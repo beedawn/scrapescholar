@@ -287,7 +287,7 @@ const apiCalls = () => {
         const url = `http://${host}:8000/comment/article/${articleId}`;
         const response = await fetch(url, {
             method: 'POST',
-            credentials: 'include',  // Automatically sends cookies with the request
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },

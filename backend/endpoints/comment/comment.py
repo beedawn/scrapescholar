@@ -2,11 +2,11 @@
 from fastapi import APIRouter, HTTPException, Depends, Cookie
 from sqlalchemy.orm import Session
 from typing import List
-from datetime import datetime  # Make sure this is correctly imported
+from datetime import datetime
 from app.crud.comment import create_comment, update_comment, delete_comment, get_comments_by_article, get_comment
 from app.schemas.comment import CommentCreate, CommentUpdate, Comment
 from app.db.session import get_db
-from utils.auth import get_current_user_no_route  # Import get_current_user_no_route async function
+from utils.auth import get_current_user_no_route
 from app.models.user import User
 
 router = APIRouter()
@@ -19,7 +19,7 @@ async def create_new_comment(
     db: Session = Depends(get_db),
     access_token: str = Cookie(None)
 ):
-    current_user = await get_current_user_no_route(token=access_token, db=db)  # Await the async function
+    current_user = await get_current_user_no_route(token=access_token, db=db)
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
     
@@ -35,7 +35,7 @@ async def update_existing_comment(
     db: Session = Depends(get_db),
     access_token: str = Cookie(None)
 ):
-    current_user = await get_current_user_no_route(token=access_token, db=db)  # Await the async function
+    current_user = await get_current_user_no_route(token=access_token, db=db)
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
 
@@ -55,7 +55,7 @@ async def remove_comment(
     db: Session = Depends(get_db),
     access_token: str = Cookie(None)
 ):
-    current_user = await get_current_user_no_route(token=access_token, db=db)  # Await the async function
+    current_user = await get_current_user_no_route(token=access_token, db=db)
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
 
@@ -66,7 +66,7 @@ async def remove_comment(
         raise HTTPException(status_code=403, detail="You are not authorized to delete this comment")
     
     delete_comment(db, comment_id=comment_id)
-    return {"detail": "Comment deleted successfully"}
+    return None
 
 # Get all comments for an article
 @router.get("/article/{article_id}/comments", response_model=List[Comment], status_code=200)
