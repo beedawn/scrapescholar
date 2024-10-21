@@ -1,12 +1,11 @@
 # endpoints/comment/comment.py
-from fastapi import APIRouter, HTTPException, Depends, Cookie
+from fastapi import APIRouter, HTTPException, Depends, Header, Cookie
 from sqlalchemy.orm import Session
 from typing import List
-from datetime import datetime
 from app.crud.comment import create_comment, update_comment, delete_comment, get_comments_by_article, get_comment
 from app.schemas.comment import CommentCreate, CommentUpdate, Comment
 from app.db.session import get_db
-from utils.auth import get_current_user_no_route
+from utils.auth import get_current_user  # Now using the get_current_user method
 from app.models.user import User
 
 router = APIRouter()
@@ -17,14 +16,15 @@ async def create_new_comment(
     article_id: int,
     comment: CommentCreate,
     db: Session = Depends(get_db),
-    access_token: str = Cookie(None)
+    access_token: str = Cookie(None), 
+    authorization: str = Header(None)
 ):
-    current_user = await get_current_user_no_route(token=access_token, db=db)
+    current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
+    
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
     
     new_comment = create_comment(db, article_id=article_id, comment=comment, user_id=current_user.user_id)
-
     return new_comment
 
 # Edit a comment
@@ -33,9 +33,11 @@ async def update_existing_comment(
     comment_id: int,
     comment: CommentUpdate,
     db: Session = Depends(get_db),
-    access_token: str = Cookie(None)
+    access_token: str = Cookie(None), 
+    authorization: str = Header(None)
 ):
-    current_user = await get_current_user_no_route(token=access_token, db=db)
+    current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
+
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
 
@@ -53,9 +55,11 @@ async def update_existing_comment(
 async def remove_comment(
     comment_id: int,
     db: Session = Depends(get_db),
-    access_token: str = Cookie(None)
+    access_token: str = Cookie(None), 
+    authorization: str = Header(None)
 ):
-    current_user = await get_current_user_no_route(token=access_token, db=db)
+    current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
+
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
 
@@ -64,7 +68,7 @@ async def remove_comment(
         raise HTTPException(status_code=404, detail="Comment not found")
     if existing_comment.user_id != current_user.user_id:
         raise HTTPException(status_code=403, detail="You are not authorized to delete this comment")
-    
+
     delete_comment(db, comment_id=comment_id)
     return None
 

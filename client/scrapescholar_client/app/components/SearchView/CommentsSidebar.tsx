@@ -16,6 +16,9 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
     const [newComment, setNewComment] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+    const [editedText, setEditedText] = useState<string>('');
+
     const { getCommentsByArticle, addComment, editComment, deleteComment } = apiCalls();
 
     useEffect(() => {
@@ -35,18 +38,24 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
 
     const handleAddComment = async () => {
         try {
-            const addedComment = await addComment(articleId, newComment);  // No need for token here
+            const addedComment = await addComment(articleId, newComment);
             setComments([...comments, addedComment]);
             setNewComment('');
         } catch (err) {
             setError('Failed to add comment');
         }
-    };    
+    };
 
-    const handleEditComment = async (comment_id: number, updatedText: string) => {
+    const handleEditClick = (comment: Comment) => {
+        setEditingCommentId(comment.comment_id);
+        setEditedText(comment.comment_text); // Set the current text for editing
+    };
+
+    const handleSaveEdit = async (comment_id: number) => {
         try {
-            const updatedComment = await editComment(comment_id, updatedText);
+            const updatedComment = await editComment(comment_id, editedText);
             setComments(comments.map(comment => comment.comment_id === comment_id ? updatedComment : comment));
+            setEditingCommentId(null); // Exit edit mode after saving
         } catch (err) {
             setError('Failed to edit comment');
         }
@@ -62,7 +71,6 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
     };
 
     return (
-
         <div className="p-4 text-black">
             <h2 className="font-bold text-xl mb-4">Comments for Article {articleId}</h2>
             {loading && <p>Loading comments...</p>}
@@ -72,10 +80,25 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
                     {comments.map((comment, index) => (
                         <li key={comment?.comment_id || index} className="mb-4">
                             <div>
-                                <strong>User {comment?.user_id || "Unknown"}</strong>: {comment?.comment_text || "No comment text available"}
+                                <strong>User {comment?.user_id || "Unknown"}</strong>: 
+                                {editingCommentId === comment.comment_id ? (
+                                    // Editable text area for editing comment
+                                    <textarea
+                                        value={editedText}
+                                        onChange={e => setEditedText(e.target.value)}
+                                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                                    />
+                                ) : (
+                                    <span>{comment?.comment_text || "No comment text available"}</span>
+                                )}
                             </div>
                             <div className="flex space-x-2">
-                                <button onClick={() => handleEditComment(comment.comment_id, 'Updated Text')} className="text-blue-500">Edit</button>
+                                {editingCommentId === comment.comment_id ? (
+                                    // Save button after editing
+                                    <button onClick={() => handleSaveEdit(comment.comment_id)} className="text-green-500">Save</button>
+                                ) : (
+                                    <button onClick={() => handleEditClick(comment)} className="text-blue-500">Edit</button>
+                                )}
                                 <button onClick={() => handleDeleteComment(comment.comment_id)} className="text-red-500">Delete</button>
                             </div>
                         </li>
