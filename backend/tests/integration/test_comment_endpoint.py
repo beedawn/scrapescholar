@@ -1,5 +1,4 @@
 # tests/integration/test_comment_endpoint.py
-# tests/integration/test_comment_endpoint.py
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
@@ -56,17 +55,19 @@ def create_and_authenticate_user():
     assert response.status_code == 201
     
     # Step 2: Login to get the token
-    login_response = client.post("/auth/login", data=mock_login_data)
+    login_response = client.post("/auth/login", data={"username": mock_login_data["username"], "password": mock_login_data["password"]})
+
     assert login_response.status_code == 200
     return login_response.json()["access_token"]
 
 def test_create_comment():
-    # Get authentication token for the test user
     token = create_and_authenticate_user()
-
-    # First, create an article
+    assert token is not None, "Authentication token was not generated."
+    
     response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
-    assert response.status_code == 201
+    
+    assert response.status_code == 201, f"Expected status 201, got {response.status_code}"
+
     article_id = response.json()["article_id"]
 
     # Add a comment to the article
