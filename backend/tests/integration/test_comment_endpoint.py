@@ -40,7 +40,7 @@ mock_article_data = {
     "citedby": 100,
     "document_type": "Journal",
     "source_id": 1,
-    "search_id": 1
+    "search_id": 1  # This will be updated dynamically
 }
 
 # Mock comment data
@@ -48,26 +48,44 @@ mock_comment_data = {
     "comment_text": "This is a test comment"
 }
 
+# Helper function to create a search
+def create_search(token, user_id):
+    search_data = {
+        "user_id": user_id,
+        "title": "Test Search",
+        "search_keywords": ["test", "article"],
+        "status": "active"
+    }
+    response = client.post("/search/create", json=search_data, headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 201
+    return response.json()["search_id"]
+
 # Helper function to register a new user and get auth token
 def create_and_authenticate_user():
     # Step 1: Register a new user
     response = client.post("/users/create", json=mock_user_data)
     assert response.status_code == 201
+    user_id = response.json()["user_id"]
     
     # Step 2: Login to get the token
     login_response = client.post("/auth/login", data={"username": mock_login_data["username"], "password": mock_login_data["password"]})
-
     assert login_response.status_code == 200
-    return login_response.json()["access_token"]
+    return login_response.json()["access_token"], user_id
 
 def test_create_comment():
-    token = create_and_authenticate_user()
-    assert token is not None, "Authentication token was not generated."
-    
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
-    
-    assert response.status_code == 201, f"Expected status 201, got {response.status_code}"
+    # Get the token and user ID
+    token, user_id = create_and_authenticate_user()
 
+    # Create a search first and get the search_id
+    search_id = create_search(token, user_id)
+
+    # Update the mock_article_data with the dynamic search_id
+    mock_article_data_dynamic = mock_article_data.copy()
+    mock_article_data_dynamic["search_id"] = search_id
+
+    # Create the article
+    response = client.post("/article/", json=mock_article_data_dynamic, headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 201
     article_id = response.json()["article_id"]
 
     # Add a comment to the article
@@ -76,11 +94,18 @@ def test_create_comment():
     assert response.json()["comment_text"] == mock_comment_data["comment_text"]
 
 def test_get_comments():
-    token = create_and_authenticate_user()
+    token, user_id = create_and_authenticate_user()
 
-    # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    # Create a search first and get the search_id
+    search_id = create_search(token, user_id)
+
+    # Create an article and add a comment
+    mock_article_data_dynamic = mock_article_data.copy()
+    mock_article_data_dynamic["search_id"] = search_id
+    response = client.post("/article/", json=mock_article_data_dynamic, headers={"Authorization": f"Bearer {token}"})
     article_id = response.json()["article_id"]
+    
+    # Add a comment
     client.post(f"/comment/article/{article_id}", json=mock_comment_data, headers={"Authorization": f"Bearer {token}"})
 
     # Get comments for the article
@@ -89,11 +114,18 @@ def test_get_comments():
     assert len(response.json()) > 0
 
 def test_update_comment():
-    token = create_and_authenticate_user()
+    token, user_id = create_and_authenticate_user()
+
+    # Create a search first and get the search_id
+    search_id = create_search(token, user_id)
 
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    mock_article_data_dynamic = mock_article_data.copy()
+    mock_article_data_dynamic["search_id"] = search_id
+    response = client.post("/article/", json=mock_article_data_dynamic, headers={"Authorization": f"Bearer {token}"})
     article_id = response.json()["article_id"]
+
+    # Add a comment
     comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data, headers={"Authorization": f"Bearer {token}"})
     comment_id = comment_response.json()["comment_id"]
 
@@ -104,11 +136,18 @@ def test_update_comment():
     assert response.json()["comment_text"] == updated_comment["comment_text"]
 
 def test_delete_comment():
-    token = create_and_authenticate_user()
+    token, user_id = create_and_authenticate_user()
+
+    # Create a search first and get the search_id
+    search_id = create_search(token, user_id)
 
     # Create an article and a comment
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    mock_article_data_dynamic = mock_article_data.copy()
+    mock_article_data_dynamic["search_id"] = search_id
+    response = client.post("/article/", json=mock_article_data_dynamic, headers={"Authorization": f"Bearer {token}"})
     article_id = response.json()["article_id"]
+
+    # Add a comment
     comment_response = client.post(f"/comment/article/{article_id}", json=mock_comment_data, headers={"Authorization": f"Bearer {token}"})
     comment_id = comment_response.json()["comment_id"]
 
