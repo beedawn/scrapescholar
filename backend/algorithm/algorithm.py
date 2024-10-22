@@ -31,7 +31,7 @@ def algorithm(text, keywords):
     synonyms = []
     full_list_of_synonyms = []
     for keyword in keyword_list:
-        synonyms.append(api_request(keyword))
+        synonyms = api_request(keyword)
 
     # Neat idea but think this just causes halucinations
     # for synonym in synonyms:
@@ -40,7 +40,7 @@ def algorithm(text, keywords):
 
     # full_list_of_synonyms = list(itertools.chain(*full_list_of_synonyms))
 
-    synonyms = list(itertools.chain(*synonyms))
+    # synonyms = list(itertools.chain(*synonyms))
     # synonyms.extend(full_list_of_synonyms)
 
     print(synonyms)
