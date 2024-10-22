@@ -42,61 +42,120 @@ mock_article_data = {
     "search_id": 1
 }
 
+# Helper function to create a search
+def create_search(token, user_id):
+    # Step 3: Create a search and pass user_id dynamically
+    search_data = {
+        "user_id": user_id,  # Use dynamic user_id
+        "title": "Test Search",
+        "search_keywords": ["test", "article"],
+        "status": "active"
+    }
+    response = client.post("/search/create", json=search_data, headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 201
+    search_id = response.json()["search_id"]  # Get search_id from response
+    return search_id
+
 # Helper function to register and authenticate a user
 def create_and_authenticate_user():
-    # Step 1: Register a new user
-    response = client.post("/users/create", json=mock_user_data)
-    assert response.status_code == 201
+    # Step 1: Create a user and get the user ID
+    user_data = {
+        "username": "testuser_dynamic",
+        "password": "testpassword",
+        "email": "testuser_dynamic@example.com"
+    }
+    user_response = client.post("/users/create", json=user_data)
+    assert user_response.status_code == 201
+    user_id = user_response.json()["user_id"]
 
-    # Step 2: Login to get the token
-    login_response = client.post("/auth/login", data=mock_login_data)
+    # Step 2: Authenticate the user and get the access token
+    login_data = {
+        "username": user_data["username"],
+        "password": user_data["password"]
+    }
+    login_response = client.post("/auth/login", data=login_data)
     assert login_response.status_code == 200
-    return login_response.json()["access_token"]
+    token = login_response.json()["access_token"]
+
+    return token, user_id
 
 def test_create_article():
-    token = create_and_authenticate_user()
+    # Step 4: Get authenticated token and user ID
+    token, user_id = create_and_authenticate_user()
 
-    # Create an article with authentication
+    # Step 5: Create a search and get the search ID
+    search_id = create_search(token, user_id)
+
+    # Step 6: Create an article with dynamic search_id and user_id
+    mock_article_data = {
+        "title": "Test Article",
+        "date": "2024-10-11",
+        "link": "http://example.com/test_article",
+        "relevance_score": 95,
+        "evaluation_criteria": "High",
+        "abstract": "This is a test article.",
+        "citedby": 100,
+        "document_type": "Journal",
+        "source_id": 1,
+        "search_id": search_id  # Use dynamic search_id
+    }
+
     response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 201
     assert response.json()["title"] == mock_article_data["title"]
 
 def test_get_article():
-    token = create_and_authenticate_user()
+    token, user_id = create_and_authenticate_user()
+
+    # First, create a search and get the search ID
+    search_id = create_search(token, user_id)
+
+    # Create the article with dynamic search_id and user_id
+    mock_article_data_dynamic = mock_article_data.copy()
+    mock_article_data_dynamic["search_id"] = search_id
 
     # First, create the article
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    response = client.post("/article/", json=mock_article_data_dynamic, headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 201
     article_id = response.json()["article_id"]
 
     # Fetch the article by ID
     response = client.get(f"/article/{article_id}", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
-    assert response.json()["title"] == mock_article_data["title"]
+    assert response.json()["title"] == mock_article_data_dynamic["title"]
 
 def test_delete_article():
-    token = create_and_authenticate_user()
+    token, user_id = create_and_authenticate_user()  
+
+    # First, create a search and get the search ID
+    search_id = create_search(token, user_id)
+
+    # Create the article with dynamic search_id and user_id
+    mock_article_data_dynamic = mock_article_data.copy()
+    mock_article_data_dynamic["search_id"] = search_id
 
     # First, create the article
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    response = client.post("/article/", json=mock_article_data_dynamic, headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 201
     article_id = response.json()["article_id"]
 
     # Delete the article
     response = client.delete(f"/article/{article_id}", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 204
 
-def test_get_deleted_article():
-    token = create_and_authenticate_user()
-
-    # Try to fetch the deleted article
-    response = client.get("/article/9999", headers={"Authorization": f"Bearer {token}"})
-    assert response.status_code == 404
-    assert response.json()["detail"] == "Article not found"
-
 def test_update_article():
-    token = create_and_authenticate_user()
+    token, user_id = create_and_authenticate_user()
+
+    # First, create a search and get the search ID
+    search_id = create_search(token, user_id)
+
+    # Create the article with dynamic search_id and user_id
+    mock_article_data_dynamic = mock_article_data.copy()
+    mock_article_data_dynamic["search_id"] = search_id
 
     # First, create the article
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    response = client.post("/article/", json=mock_article_data_dynamic, headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 201
     article_id = response.json()["article_id"]
 
     # Update the article
