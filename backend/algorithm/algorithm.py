@@ -25,6 +25,16 @@ def slice_word(word, synonyms, keyword_list):
             # score += .75
         if new_word in keyword_list:
             score += .5
+
+    for i in range(len(word)):
+        for j in range(i + 1, len(word) + 1):
+            substring=word[i:j]
+            if substring in keyword_list:
+                print(substring)
+                score += .25
+            if substring in synonyms:
+                print(substring)
+                score += .10
     return score
 
 
@@ -50,10 +60,11 @@ def algorithm(text, keywords):
     keyword_list = keywords.split()
     text_list = text.split()
     synonyms = []
-    full_list_of_synonyms = []
+
     for keyword in keyword_list:
         synonyms = api_request(keyword)
 
+    # full_list_of_synonyms = []
     # Neat idea but think this just causes halucinations
     # for synonym in synonyms:
     #     for aword in synonym:
