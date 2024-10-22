@@ -121,7 +121,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
                     placeholder="Add a comment"
                     className="w-full p-2 border border-gray-300 rounded mb-2"
                 />
-                <button onClick={handleAddComment} className="bg-blue-500 text-white p-2 rounded">Add Comment</button>
+            <button onClick={handleAddComment} className={`bg-blue-500 text-white p-2 rounded ${newComment.trim() === '' ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={newComment.trim() === ''}>Add Comment</button>
             </div>
         </div>
     );
