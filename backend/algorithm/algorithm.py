@@ -51,7 +51,7 @@ def algorithm(text, keywords):
             elif word in synonyms:
                 score += .5
     if len(text_list) > 0:
-        print(score / len(text.split()) * 100)
+        print(score / len(text_list) * 100)
     else:
         print("Text is empty")
 
