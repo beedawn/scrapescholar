@@ -11,6 +11,7 @@ thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 def slice_word(word, synonyms, keyword_list):
     score = 0
     for i in range(len(word)):
+        #could probably refactor this and 24-31 into one function
         #adds to right side by adding characters to end of word
         new_word = word[:i]
         print(new_word)
@@ -28,7 +29,8 @@ def slice_word(word, synonyms, keyword_list):
             # score += .75
         if new_word in keyword_list:
             score += .5
-    #gets inner strings of word
+
+        #gets inner strings of word
         for j in range(i + 1, len(word) + 1):
             substring = word[i:j]
             print(substring)
