@@ -7,6 +7,27 @@ dotenv.load_dotenv()
 thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 
 
+def slice_word(word, synonyms, keyword_list):
+    score = 0
+    for i in range(len(word)):
+        new_word = word[:i]
+        print(new_word)
+        if new_word in synonyms:
+            print(new_word)
+            score += .25
+        if new_word in keyword_list:
+            score += .5
+    for i in range(len(word)):
+        new_word = word[i:]
+        print(new_word)
+        if new_word in synonyms:
+            print(new_word)
+            # score += .75
+        if new_word in keyword_list:
+            score += .5
+    return score
+
+
 def api_request(keyword):
     try:
         # 1000 queries per day
@@ -48,9 +69,16 @@ def algorithm(text, keywords):
         for word in text_list:
             if keyword == word:
                 score += 1
+                print("plus 1")
+                continue
             elif word in synonyms:
                 score += .5
+            score += (
+                slice_word(word, synonyms, keyword_list)
+                )
+
     if len(text_list) > 0:
+        print(score)
         print(score / len(text_list) * 100)
     else:
         print("Text is empty")
