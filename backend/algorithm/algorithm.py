@@ -7,39 +7,34 @@ dotenv.load_dotenv()
 thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 
 
-#add new function or modify this one to just break down each word and return a list of the substrings
-def slice_word(word, synonyms, keyword_list):
-    score = 0
+def check_gt_three(word, list_of_words):
+    if len(word) > 3 and word not in list_of_words:
+        list_of_words.append(word)
+
+
+def break_word_into_possible_words(word):
+    word_list = []
     for i in range(len(word)):
         #could probably refactor this and 24-31 into one function
         #adds to right side by adding characters to end of word
         new_word = word[:i]
-        print(new_word)
-        if new_word in synonyms:
-            print(new_word)
-            score += .25
-        if new_word in keyword_list:
-            score += .5
+        check_gt_three(new_word, word_list)
 
-        #trims from left side, by moving inward
+        # trims from left side, by moving inward
         new_word = word[i:]
-        print(new_word)
-        if new_word in synonyms:
-            print(new_word)
-            # score += .75
-        if new_word in keyword_list:
-            score += .5
+        check_gt_three(new_word, word_list)
 
-        #gets inner strings of word
         for j in range(i + 1, len(word) + 1):
             substring = word[i:j]
-            print(substring)
-            if substring in keyword_list:
-                print(substring)
-                score += .25
-            if substring in synonyms:
-                print(substring)
-                score += .10
+            check_gt_three(substring, word_list)
+
+    return word_list
+
+
+#add new function or modify this one to just break down each word and return a list of the substrings
+def score_word(word1, word2):
+    score = 0
+    
     return score
 
 
@@ -65,34 +60,28 @@ def algorithm(text, keywords):
     keyword_list = keywords.split()
     text_list = text.split()
     synonyms = []
+    keywords_sliced_list = []
 
     for keyword in keyword_list:
         synonyms = api_request(keyword)
+        keyword_sliced = break_word_into_possible_words(keyword)
+        for index, item in enumerate(keyword_sliced):
+            keywords_sliced_list.append(keyword_sliced[index])
 
-    # full_list_of_synonyms = []
-    # Neat idea but think this just causes halucinations
-    # for synonym in synonyms:
-    #     for aword in synonym:
-    #         full_list_of_synonyms.append(api_request(aword))
-
-    # full_list_of_synonyms = list(itertools.chain(*full_list_of_synonyms))
-
-    # synonyms = list(itertools.chain(*synonyms))
-    # synonyms.extend(full_list_of_synonyms)
-
+    print("keywords sliced")
+    print(keywords_sliced_list)
+    print("synonyms")
     print(synonyms)
-    for keyword in keyword_list:
-        for word in text_list:
-            if keyword == word:
-                score += 1
-                print("plus 1")
-                continue
-            elif word in synonyms:
-                score += .5
-            score += (
-                slice_word(word, synonyms, keyword_list)
-            )
-
+    text_sliced_list_flat = []
+    for text in text_list:
+        text_sliced_list = break_word_into_possible_words(text)
+        for index, item in enumerate(text_sliced_list):
+            text_sliced_list_flat.append(text_sliced_list[index])
+    print("text words")
+    print(text_sliced_list_flat)
+    for text in text_sliced_list_flat:
+        for keyword in keywords_sliced_list:
+            score += score_word(text, keyword)
     if len(text_list) > 0:
         print(score)
         print(score / len(text_list) * 100)
