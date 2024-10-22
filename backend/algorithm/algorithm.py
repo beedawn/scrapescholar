@@ -9,7 +9,7 @@ thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 
 def api_request(keyword):
     try:
-        # 1000 queries per dat
+        # 1000 queries per day
         response = requests.get(
             f"https://www.dictionaryapi.com/api/v3/references/thesaurus/json/{keyword}?key={thesaurus_api_key}")
         response.raise_for_status()
