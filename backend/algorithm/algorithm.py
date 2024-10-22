@@ -7,9 +7,11 @@ dotenv.load_dotenv()
 thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 
 
+#add new function or modify this one to just break down each word and return a list of the substrings
 def slice_word(word, synonyms, keyword_list):
     score = 0
     for i in range(len(word)):
+        #adds to right side by adding characters to end of word
         new_word = word[:i]
         print(new_word)
         if new_word in synonyms:
@@ -17,7 +19,8 @@ def slice_word(word, synonyms, keyword_list):
             score += .25
         if new_word in keyword_list:
             score += .5
-    for i in range(len(word)):
+
+        #trims from left side, by moving inward
         new_word = word[i:]
         print(new_word)
         if new_word in synonyms:
@@ -25,10 +28,10 @@ def slice_word(word, synonyms, keyword_list):
             # score += .75
         if new_word in keyword_list:
             score += .5
-
-    for i in range(len(word)):
+    #gets inner strings of word
         for j in range(i + 1, len(word) + 1):
-            substring=word[i:j]
+            substring = word[i:j]
+            print(substring)
             if substring in keyword_list:
                 print(substring)
                 score += .25
@@ -86,7 +89,7 @@ def algorithm(text, keywords):
                 score += .5
             score += (
                 slice_word(word, synonyms, keyword_list)
-                )
+            )
 
     if len(text_list) > 0:
         print(score)
