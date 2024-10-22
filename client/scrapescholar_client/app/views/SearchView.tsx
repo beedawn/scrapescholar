@@ -44,6 +44,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);  // To track the selected article ID
     const [comments, setComments] = useState<any[]>([]);  // To store the comments of the selected article
     const [commentsLoading, setCommentsLoading] = useState<boolean>(false);  // To manage the loading state for comments
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
       useEffect(() => {
         const fetchDatabases = async () => {
@@ -150,6 +151,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const handleArticleClick = async (articleId: number) => {
         setSelectedArticleId(articleId);
+        setIsSidebarOpen(true);
         console.log(articleId)
         setCommentsLoading(true);
 
@@ -168,6 +170,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setLoading(true);
         setError(null);
         setDataFull(false);
+        setIsSidebarOpen(false);
         //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
         //declare empty array to combien user inputs and values from drop downs
@@ -240,10 +243,12 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     onArticleClick={handleArticleClick} />}
             </div>
     
-            {/* Sidebar for showing comments */}
-            {(selectedArticleId!== null? <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
-                 <CommentsSidebar articleId={selectedArticleId} />
-            </div>:<></>)}
+            {/* Render the CommentsSidebar conditionally */}
+            {isSidebarOpen && selectedArticleId !== null && (
+                <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
+                    <CommentsSidebar articleId={selectedArticleId} onClose={() => setIsSidebarOpen(false)} />
+                </div>
+            )}
         </div>
     );
 }

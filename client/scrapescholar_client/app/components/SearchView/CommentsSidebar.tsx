@@ -9,9 +9,10 @@ interface Comment {
 
 interface CommentsSidebarProps {
     articleId: number;
+    onClose: () => void;
 }
 
-const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
+const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose }) => {
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
@@ -72,7 +73,14 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId }) => {
 
     return (
         <div className="p-4 text-black">
+            <button 
+                onClick={onClose} 
+                className="absolute top-0 right-12 mt-2 mr-2 text-red-500 hover:text-red-700"
+            >
+                ✕
+            </button>            
             <h2 className="font-bold text-xl mb-4">Comments for Article {articleId}</h2>
+
             {loading && <p>Loading comments...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {comments.length > 0 ? (

@@ -76,6 +76,6 @@ async def remove_comment(
 @router.get("/article/{article_id}/comments", response_model=List[Comment], status_code=200)
 async def get_comments(article_id: int, db: Session = Depends(get_db)):
     comments = get_comments_by_article(db, article_id=article_id)
-    if not comments:
-        raise HTTPException(status_code=404, detail="No comments found for this article")
-    return comments
+    if comments:
+        return comments
+    return [] 
