@@ -44,20 +44,20 @@ def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
             return score
     for keyword in keywords_sliced_list:
         if word == keyword:
-            score += .10
+            score += .60
             print("word", word)
             print("keyword", keyword)
             print("plus .1")
             return score
     for synonym in synonyms_list:
         if word == synonym:
-            score += .05
+            score += .40
             print("word", word)
             print("synonym", synonym)
             print("plus .05")
             return score
         elif word in synonym:
-            score += .025
+            score += .20
             print("word", word)
             print("synonym", synonym)
             print("plus .025")
