@@ -7,34 +7,53 @@ dotenv.load_dotenv()
 thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 
 
-def check_gt_three(word, list_of_words):
+def check_limit(word, list_of_words):
     if len(word) > 3 and word not in list_of_words:
         list_of_words.append(word)
 
+
+    # if len(word) > 4 and word not in list_of_words:
+    #     print("5 word")
+    #     list_of_words.append(word)
+    # elif len(word) > 3 and word not in list_of_words:
+    #     print("3 word")
+    #     list_of_words.append(word)
 
 def break_word_into_possible_words(word, list_of_words):
     for i in range(len(word)):
         #could probably refactor this and 24-31 into one function
         #adds to right side by adding characters to end of word
         new_word = word[:i]
-        check_gt_three(new_word, list_of_words)
+        check_limit(new_word, list_of_words)
 
         # trims from left side, by moving inward
         new_word = word[i:]
-        check_gt_three(new_word, list_of_words)
+        check_limit(new_word, list_of_words)
 
         for j in range(i + 1, len(word) + 1):
             substring = word[i:j]
-            check_gt_three(substring, list_of_words)
+            check_limit(substring, list_of_words)
 
 
 def calc_score(score, text_list):
-    return score / len(text_list) * 100
+    sum=0
+    for word in text_list:
+        word_length=len(word)
+        if word_length >4:
+            sum += 1
+
+    weighted_sum = sum
+    print("SUM")
+    print(weighted_sum)
+    print("score")
+    print(score)
+    return score / weighted_sum * 100
 
 
 #add new function or modify this one to just break down each word and return a list of the substrings
 def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
     score = 0
+    #need a way to calculate weight based off total words in text for each score incrementation
     for keyword in keyword_list:
         if word == keyword:
             score += 1
@@ -47,20 +66,20 @@ def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
             score += .60
             print("word", word)
             print("keyword", keyword)
-            print("plus .1")
+            print("plus .6")
             return score
     for synonym in synonyms_list:
         if word == synonym:
             score += .40
             print("word", word)
             print("synonym", synonym)
-            print("plus .05")
+            print("plus .4")
             return score
         elif word in synonym:
             score += .20
             print("word", word)
             print("synonym", synonym)
-            print("plus .025")
+            print("plus .2")
             return score
 
     return score
@@ -122,6 +141,8 @@ def algorithm(text, keywords):
             if keyword == synonym:
                 synonyms_sliced_list.remove(synonym)
     print(keyword_list)
+
+    print(len(text_list))
     # print("keywords sliced")
     # print(keywords_sliced_list)
     #
