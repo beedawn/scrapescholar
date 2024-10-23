@@ -49,11 +49,11 @@ def get_weight(text_list):
 
 def calc_score(score, text_list):
     weighted_sum = get_words_five_char(text_list)
-    print("SUM")
-    print(weighted_sum)
-    print("score")
-    print(score)
-    return score / weighted_sum * 100
+    # print("SUM")
+    # print(weighted_sum)
+    # print("score")
+    # print(score)
+    return round(score / weighted_sum * 100,2)
 
 
 #add new function or modify this one to just break down each word and return a list of the substrings
@@ -63,30 +63,30 @@ def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
     for keyword in keyword_list:
         if word == keyword:
             score += 5
-            print("word", word)
-            print("keyword", keyword)
-            print("plus 5")
+            # print("word", word)
+            # print("keyword", keyword)
+            # print("plus 5")
 
     for keyword in keywords_sliced_list:
         if word == keyword:
             score += 3
-            print("word", word)
-            print("keyword", keyword)
-            print("plus 3")
+            # print("word", word)
+            # print("keyword", keyword)
+            # print("plus 3")
 
     for synonym in synonyms_list:
         if word == synonym:
             score += 2
-            print("word", word)
-            print("synonym", synonym)
-            print("plus 2")
+            # print("word", word)
+            # print("synonym", synonym)
+            # print("plus 2")
 
         elif word in synonym:
             score += 1
-            print("word", word)
-            print("synonym", synonym)
-            print("plus 1")
-     
+            # print("word", word)
+            # print("synonym", synonym)
+            # print("plus 1")
+
 
     return score
 
@@ -113,7 +113,7 @@ def api_request(keyword):
     except (requests.exceptions.RequestException, KeyError, IndexError) as e:
         print(f"Error fetching synonyms for '{keyword}': {e}")
         synonyms = []
-    print("SYNONYMS RETURNED", synonyms)
+    # print("SYNONYMS RETURNED", synonyms)
     return synonyms
 
 
@@ -146,9 +146,9 @@ def algorithm(text, keywords):
         for synonym in synonyms_sliced_list:
             if keyword == synonym:
                 synonyms_sliced_list.remove(synonym)
-    print(keyword_list)
+    # print(keyword_list)
 
-    print(text_sliced_list)
+    # print(text_sliced_list)
     # print("keywords sliced")
     # print(keywords_sliced_list)
     #
