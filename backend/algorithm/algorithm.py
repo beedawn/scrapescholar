@@ -53,7 +53,10 @@ def calc_score(score, text_list):
     # print(weighted_sum)
     # print("score")
     # print(score)
-    return round(score / weighted_sum * 100, 2)
+    if(weighted_sum >0):
+        return round(score / weighted_sum * 100, 2)
+    else:
+        return round(score / len(text_list) * 100, 2)
 
 
 #add new function or modify this one to just break down each word and return a list of the substrings
@@ -157,8 +160,7 @@ def algorithm(text, keywords):
     # print("text words")
     # print(text_sliced_list)
     for text in text_sliced_list:
-        if score < 1:
-            score += score_word(text, synonyms_sliced_list, keywords_sliced_list, keyword_list)
+        score += score_word(text, synonyms_sliced_list, keywords_sliced_list, keyword_list)
     score = calc_score(score, text_list)
     #score function takes synonyms and gives them .5, scores exact word matches as 1
 
