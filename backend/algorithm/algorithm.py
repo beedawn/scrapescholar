@@ -21,7 +21,6 @@ def check_limit(word, list_of_words):
 
 def break_word_into_possible_words(word, list_of_words):
     for i in range(len(word)):
-        #could probably refactor this and 24-31 into one function
         #adds to right side by adding characters to end of word
         new_word = word[:i]
         check_limit(new_word, list_of_words)
@@ -43,6 +42,7 @@ def get_words_five_char(text_list):
             sum += 1
     return sum
 
+
 def get_weight(text_list):
     long_words = get_words_five_char(text_list)
 
@@ -53,7 +53,7 @@ def calc_score(score, text_list):
     # print(weighted_sum)
     # print("score")
     # print(score)
-    return round(score / weighted_sum * 100,2)
+    return round(score / weighted_sum * 100, 2)
 
 
 #add new function or modify this one to just break down each word and return a list of the substrings
@@ -86,7 +86,6 @@ def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
             # print("word", word)
             # print("synonym", synonym)
             # print("plus 1")
-
 
     return score
 

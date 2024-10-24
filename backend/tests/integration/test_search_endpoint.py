@@ -80,6 +80,8 @@ def test_create_search(db_session):
     assert created_search is not None
     assert created_search.title == search_data["title"]
     print(f"Created search: {created_search}")
+    session.delete(f"{base_url}/search/user/search/title?search_id={created_search_id}")
+
 
 
 @pytest.mark.search
@@ -136,6 +138,7 @@ def test_get_search_by_id(db_session):
     assert search["search_id"] == created_search_id
     assert search["title"] == search_data["title"]
     print(f"Retrieved search: {search}")
+    session.delete(f"{base_url}/search/user/search/title?search_id={created_search_id}")
 
 
 @pytest.mark.search
@@ -166,7 +169,7 @@ def test_get_search_300(db_session):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-
+    list_of_300_search_ids =[]
     # Step 3: Insert 300 searches with the "username-datetimestamp" naming convention
     for i in range(300):
         search_data = {
@@ -176,6 +179,7 @@ def test_get_search_300(db_session):
         }
         search_response = client.post("/search/create", json=search_data, headers=headers)
         assert search_response.status_code == 201
+        list_of_300_search_ids.append(search_response.json()["search_id"])
         print(f"Inserted search {i + 1}")
 
     # Step 4: Wait to ensure the transactions have been committed
@@ -217,6 +221,8 @@ def test_get_search_300(db_session):
     latest_search_title = f"test300-{time.strftime('%Y-%m-%d')}"  # Check for the date prefix
     assert any(search["title"].startswith(latest_search_title) for search in searches)
     print(f"Retrieved {len(searches)} searches")
+    for item in list_of_300_search_ids:
+        session.delete(f"{base_url}/search/user/search/title?search_id={item}")
 
 
 @pytest.mark.search
@@ -304,6 +310,7 @@ def test_get_search_articles_no_articles(db_session):
     articles = get_articles_response.json()
     assert isinstance(articles, list)
     assert len(articles) == 0  # No articles associated with the search
+    session.delete(f"{base_url}/search/user/search/title?search_id={created_search_id}")
 
 
 @pytest.mark.search
@@ -358,6 +365,7 @@ def test_update_search_title(db_session):
     assert update_response.status_code == 200
     updated_search = update_response.json()
     assert updated_search["title"] == new_title
+    session.delete(f"{base_url}/search/user/search/title?search_id={created_search_id}")
 
 
 @pytest.mark.search
