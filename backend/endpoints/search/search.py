@@ -43,16 +43,9 @@ async def get_last_300_searches(db: Session = Depends(get_db), access_token: Ann
     # verfies user is valid and has token
     current_user = await get_current_user_modular(token=access_token, db=db)
 
-    try:
-        # Query the last 300 searches for the authenticated user
-        searches = await get_300_search(db=db, current_user=current_user)
-        return searches if searches else []
-
-    except Exception as e:
-        if DEBUG_SCRAPESCHOLAR:
-            print(f"Error retrieving searches: {str(e)}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Error retrieving searches: {str(e)}")
+    # Query the last 300 searches for the authenticated user
+    searches = await get_300_search(db=db, current_user=current_user)
+    return searches if searches else []
 
 
 # get single search and associated articles
@@ -64,20 +57,14 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
     """
     #verifies user has a token and is valid
     current_user = await get_current_user_modular(token=access_token, db=db)
-    try:
-        # Query for the search
-        search = await find_search(db=db, current_user=current_user, search_id=search_id)
-        #this addes new user data and it probably shouldn't just for retreiving an article
-        #probably should rename this to initialize or create or setup articles and make a new function just to get them
-        #and have one function that builds the response
-        articles = await get_full_article_response(db=db, search_id=search_id)
-        return articles if articles else []
 
-    except Exception as e:
-        if DEBUG_SCRAPESCHOLAR:
-            print(f"Error retrieving search and associated articles: {str(e)}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Error retrieving searches: {str(e)}")
+    # Query for the search
+    search = await find_search(db=db, current_user=current_user, search_id=search_id)
+    #this addes new user data and it probably shouldn't just for retreiving an article
+    #probably should rename this to initialize or create or setup articles and make a new function just to get them
+    #and have one function that builds the response
+    articles = await get_full_article_response(db=db, search_id=search_id)
+    return articles if articles else []
 
 
 # Add POST route to create a new search
@@ -134,11 +121,6 @@ async def get_search_by_id(search_id: int, db: Session = Depends(get_db),
     except HTTPException as http_exc:
         # Re-raise known HTTPExceptions
         raise http_exc
-    except Exception as e:
-        if DEBUG_SCRAPESCHOLAR:
-            print(f"Error retrieving search: {str(e)}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Error retrieving search: {str(e)}")
 
 
 # get a searches title thinkt his duplicates above function except this one uses cookie...
@@ -151,16 +133,10 @@ async def get_search_title(db: Session = Depends(get_db), access_token: Annotate
     """
     #verifies user has valid token
     current_user = await get_current_user_modular(token=access_token, db=db)
-    try:
-        # Find the search
-        search = await find_search(db=db, current_user=current_user, search_id=search_id)
-        return {'title': search.title, 'keywords': search.search_keywords} if search else []
 
-    except Exception as e:
-        if DEBUG_SCRAPESCHOLAR:
-            print(f"Error retrieving search and associated search: {str(e)}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Error retrieving searches: {str(e)}")
+    # Find the search
+    search = await find_search(db=db, current_user=current_user, search_id=search_id)
+    return {'title': search.title, 'keywords': search.search_keywords} if search else []
 
 
 # put a new title into a search
@@ -173,19 +149,14 @@ async def get_search_title(db: Session = Depends(get_db), access_token: Annotate
     """
     #verifies user has valid token
     current_user = await get_current_user_modular(token=access_token, db=db)
-    try:
-        # Query the last 300 searches for the authenticated user
-        search = await find_search(db=db, current_user=current_user, search_id=search_id)
-        search.title = search_data.title
-        db.commit()
-        db.refresh(search)
-        return search if search else []
 
-    except Exception as e:
-        if DEBUG_SCRAPESCHOLAR:
-            print(f"Error retrieving search and associated search: {str(e)}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Error retrieving searches: {str(e)}")
+    # Query the last 300 searches for the authenticated user
+    search = await find_search(db=db, current_user=current_user, search_id=search_id)
+    search.title = search_data.title
+    db.commit()
+    db.refresh(search)
+    return search if search else []
+
 
 
 # delete a search
@@ -197,28 +168,21 @@ async def delete_search_title(db: Session = Depends(get_db), access_token: Annot
     """
     #verifies user has valid token
     current_user = await get_current_user_modular(token=access_token, db=db)
-    try:
-        # Query the last 300 searches for the authenticated user
-        search = await find_search(db=db, current_user=current_user, search_id=search_id)
 
-        if search is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
+    search = await find_search(db=db, current_user=current_user, search_id=search_id)
 
-        articles = await find_search_articles(db, search_id)
-        for article in articles:
-            user_data = await find_user_data(db, article.article_id)
-            for data in user_data:
-                db.delete(data)
-            db.delete(article)
-        db.delete(search)
-        db.commit()
-        return []
+    if search is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
 
-    except Exception as e:
-        if DEBUG_SCRAPESCHOLAR:
-            print(f"Error retrieving search and associated search: {str(e)}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f"Error retrieving searches: {str(e)}")
+    articles = await find_search_articles(db, search_id)
+    for article in articles:
+        user_data = await find_user_data(db, article.article_id)
+        for data in user_data:
+            db.delete(data)
+        db.delete(article)
+    db.delete(search)
+    db.commit()
+    return []
 
 
 async def find_search_articles(db, search_id):

@@ -16,6 +16,10 @@ from tests.integration.tools.get_cookie import get_cookie
 # Initialize TestClient
 client = TestClient(app)
 
+from tests.integration.tools.base_url import base_url
+
+session = get_cookie()
+
 
 @pytest.fixture(scope="function")
 def db_session():
@@ -411,9 +415,23 @@ def test_get_invalid_token(db_session):
     assert search_history_response.json() == {"detail": "Invalid token"}
 
 
-from tests.integration.tools.base_url import base_url
 
-session = get_cookie()
+
+def test_get_no_token(db_session):
+    """
+    Test the /search/user/searches endpoint with an invalid token.
+    """
+    # Create an invalid token
+    invalid_token = "invalid_token_value"
+
+    # Step 2: Call the endpoint with the invalid token
+    headers_with_cookie = {"Cookie": f"access_token={invalid_token}"}
+    search_history_response = client.get("/search/user/searches")
+
+    assert search_history_response.status_code == 401
+
+
+
 
 
 def test_get_valid_token_status_200(db_session):
@@ -604,6 +622,22 @@ def test_get_valid_token_past_search_response_schema(db_session):
     search_request = search_request.json()
     search_id = search_request["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+
+
+def test_get_valid_token_past_search_bad_search_id(db_session):
+    """
+    Test the /academic_data endpoint with an valid cookie and bad search id
+
+
+    """
+    search_id = 907848397
+
+    past_search = session.get(f"{base_url}/search/user/articles?search_id={search_id}")
+    data = past_search.json()
+    assert data == []
+
+
+
 
 
 def test_get_valid_token_search_title_response_schema(db_session):
