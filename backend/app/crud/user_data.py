@@ -31,7 +31,7 @@ async def update_user_data(db: Session, user_data: UserDataUpdate):
     db_user_data = db.query(UserData).filter(UserData.article_id == user_data.article_id).first()
 
     if not db_user_data:
-        raise HTTPException(status_code=404, detail="Userdata not found in put")
+        raise HTTPException(status_code=404, detail="Userdata not found in put, user not valid in db")
     for key, value in user_data.dict(exclude_unset=True).items():
         setattr(db_user_data, key, value)
     db.commit()

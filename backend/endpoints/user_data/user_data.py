@@ -18,10 +18,6 @@ async def update_existing_user_data(user_data: UserDataUpdate, db: Session = Dep
     """
     #checks user has valid token
     user = await get_current_user_modular(db=db, token=access_token)
-    if user is not None:
-        updated_user_data = await update_user_data(db=db, user_data=user_data)
-        return updated_user_data
-    else:
-        return []
 
-
+    updated_user_data = await update_user_data(db=db, user_data=user_data)
+    return updated_user_data
