@@ -70,14 +70,14 @@ async def get_search_articles(db: Session = Depends(get_db), access_token: Annot
 # Add POST route to create a new search
 @router.post("/create", status_code=status.HTTP_201_CREATED)
 async def create_new_search(
-        search_data: SearchCreate,
+        search_data: SearchCreate, access_token: Annotated[str | None, Cookie()] = None,
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user_modular)
 ):
     #probably want to verify user has valid token
     """
     Create a new search if the user has not exceeded the limit of 300 searches.
     """
+    current_user = await get_current_user_modular(token=access_token, db=db)
     # Check if the user has already reached the search limit (300 searches)
     search_count = db.query(Search).filter(Search.user_id == current_user.user_id).count()
 
@@ -107,8 +107,9 @@ async def create_new_search(
 # Retrieve a specific search by its ID
 @router.get("/searchbyid/{search_id}", status_code=status.HTTP_200_OK)
 async def get_search_by_id(search_id: int, db: Session = Depends(get_db),
-                           current_user: User = Depends(get_current_user_modular)):
+                            access_token: Annotated[str | None, Cookie()] = None):
     #probably want to verify user has valid token?
+    current_user = await get_current_user_modular(token=access_token, db=db)
     try:
         print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
         search = await find_search(db=db, current_user=current_user, search_id=search_id)

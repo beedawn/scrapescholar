@@ -53,7 +53,7 @@ def test_create_search(db_session):
         "password": "testpassword",
         "email": "searchuser@example.com"
     }
-    user_response = client.post("/users/create", json=user_data)
+    user_response = session.post(f"{base_url}/users/create", json=user_data)
     assert user_response.status_code == 201
     created_user_id = user_response.json()["user_id"]
 
@@ -62,7 +62,7 @@ def test_create_search(db_session):
         "username": user_data["username"],
         "password": user_data["password"]
     }
-    login_response = client.post("/auth/login", data=login_data)
+    login_response = client.post(f"{base_url}/auth/login", data=login_data)
     assert login_response.status_code == 200
     access_token = login_response.json()["access_token"]
 
@@ -75,7 +75,7 @@ def test_create_search(db_session):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-    search_response = client.post("/search/create", json=search_data, headers=headers)
+    search_response = session.post(f"{base_url}/search/create", json=search_data, headers=headers)
     assert search_response.status_code == 201
 
     # Step 4: Verify the created search in the database
@@ -99,7 +99,7 @@ def test_get_search_by_id(db_session):
         "password": "testpassword",
         "email": "searchuser2@example.com"
     }
-    user_response = client.post("/users/create", json=user_data)
+    user_response = session.post(f"{base_url}/users/create", json=user_data)
     assert user_response.status_code == 201
     created_user_id = user_response.json()["user_id"]
 
@@ -121,7 +121,7 @@ def test_get_search_by_id(db_session):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-    search_response = client.post("/search/create", json=search_data, headers=headers)
+    search_response = session.post(f"{base_url}/search/create", json=search_data, headers=headers)
     assert search_response.status_code == 201
 
     created_search_id = search_response.json()["search_id"]
@@ -134,7 +134,7 @@ def test_get_search_by_id(db_session):
     time.sleep(5)
 
     # Step 5: Use the access token to retrieve the search
-    get_search_response = client.get(f"/search/searchbyid/{created_search_id}", headers=headers)
+    get_search_response = session.get(f"{base_url}/search/searchbyid/{created_search_id}", headers=headers)
 
     assert get_search_response.status_code == 200
 
@@ -157,7 +157,7 @@ def test_get_search_300(db_session):
         "password": "testpassword",
         "email": "searchuser2@example.com"
     }
-    user_response = client.post("/users/create", json=user_data)
+    user_response = session.post(f"{base_url}/users/create", json=user_data)
     assert user_response.status_code == 201
     created_user_id = user_response.json()["user_id"]
 
@@ -181,7 +181,7 @@ def test_get_search_300(db_session):
             "search_keywords": [f"keyword_{i}"],
             "title": f"test300-{time.strftime('%Y-%m-%d %H:%M:%S')}"
         }
-        search_response = client.post("/search/create", json=search_data, headers=headers)
+        search_response = session.post(f"{base_url}/search/create", json=search_data, headers=headers)
         assert search_response.status_code == 201
         list_of_300_search_ids.append(search_response.json()["search_id"])
         print(f"Inserted search {i + 1}")
@@ -195,7 +195,7 @@ def test_get_search_300(db_session):
         "search_keywords": ["extra", "search"],
         "title": "test300-extra-search"
     }
-    extra_search_response = client.post("/search/create", json=extra_search_data, headers=headers)
+    extra_search_response = session.post(f"{base_url}/search/create", json=extra_search_data, headers=headers)
 
     # Step 6: Assert that the 301st search is rejected
     assert extra_search_response.status_code == 400  # Bad Request for exceeding the limit
@@ -207,7 +207,7 @@ def test_get_search_300(db_session):
         "Cookie": f"access_token={access_token}"
     }
 
-    search_history_response = client.get("/search/user/searches", headers=headers_with_cookie)
+    search_history_response = session.get(f"{base_url}/search/user/searches")
 
     # Log the response for debugging
     print(f"Response content for /user/searches: {search_history_response.json()}")
@@ -240,7 +240,7 @@ def test_get_search_by_id_not_found(db_session):
         "password": "testpassword",
         "email": "searchuser3@example.com"
     }
-    user_response = client.post("/users/create", json=user_data)
+    user_response = session.post(f"{base_url}/users/create", json=user_data)
     assert user_response.status_code == 201
     created_user_id = user_response.json()["user_id"]
 
@@ -257,7 +257,7 @@ def test_get_search_by_id_not_found(db_session):
         "Authorization": f"Bearer {access_token}"
     }
     non_existent_search_id = 99999  # Some non-existent ID
-    get_search_response = client.get(f"/search/searchbyid/{non_existent_search_id}", headers=headers)
+    get_search_response = session.get(f"{base_url}/search/searchbyid/{non_existent_search_id}", headers=headers)
 
     # Step 3: Ensure a 404 status code is returned
     assert get_search_response.status_code == 404
@@ -275,7 +275,7 @@ def test_get_search_articles_no_articles(db_session):
         "password": "testpassword",
         "email": "searchuser4@example.com"
     }
-    user_response = client.post("/users/create", json=user_data)
+    user_response = session.post(f"{base_url}/users/create", json=user_data)
     assert user_response.status_code == 201
     created_user_id = user_response.json()["user_id"]
 
@@ -298,7 +298,7 @@ def test_get_search_articles_no_articles(db_session):
         "search_keywords": ["test"],
         "title": "Search Without Articles"
     }
-    search_response = client.post("/search/create", json=search_data, headers=headers)
+    search_response = session.post(f"{base_url}/search/create", json=search_data)
     assert search_response.status_code == 201
     created_search_id = search_response.json()["search_id"]
 
@@ -306,8 +306,7 @@ def test_get_search_articles_no_articles(db_session):
     headers_with_cookie = {
         "Cookie": f"access_token={access_token}"
     }
-    get_articles_response = client.get(f"/search/user/articles?search_id={created_search_id}",
-                                       headers=headers_with_cookie)
+    get_articles_response = session.get(f"{base_url}/search/user/articles?search_id={created_search_id}")
 
     # Step 5: Ensure no articles are returned
     assert get_articles_response.status_code == 200
@@ -328,7 +327,7 @@ def test_update_search_title(db_session):
         "password": "testpassword",
         "email": "searchuser5@example.com"
     }
-    user_response = client.post("/users/create", json=user_data)
+    user_response = session.post(f"{base_url}/users/create", json=user_data)
     assert user_response.status_code == 201
     created_user_id = user_response.json()["user_id"]
 
@@ -351,7 +350,7 @@ def test_update_search_title(db_session):
         "search_keywords": ["test"],
         "title": "Old Title"
     }
-    search_response = client.post("/search/create", json=search_data, headers=headers)
+    search_response = session.post(f"{base_url}/search/create", json=search_data, headers=headers)
     assert search_response.status_code == 201
     created_search_id = search_response.json()["search_id"]
 
@@ -363,8 +362,7 @@ def test_update_search_title(db_session):
     headers = {
         "Cookie": f"access_token={access_token}"
     }
-    update_response = client.put(f"/search/user/search/title?search_id={created_search_id}", json=update_data,
-                                 headers=headers)
+    update_response = session.put(f"{base_url}/search/user/search/title?search_id={created_search_id}", json=update_data)
 
     assert update_response.status_code == 200
     updated_search = update_response.json()
@@ -379,7 +377,7 @@ def test_expired_token(db_session):
     """
     # Step 1: Create a user
     user_data = {"username": "user_expired", "password": "password", "email": "user_expired@example.com"}
-    user_response = client.post("/users/create", json=user_data)
+    user_response = session.post(f"{base_url}/users/create", json=user_data)
     assert user_response.status_code == 201
     created_user_id = user_response.json()["user_id"]
 
@@ -392,7 +390,7 @@ def test_expired_token(db_session):
 
     # Step 3: Call the endpoint with the expired token
     headers_with_cookie = {"Cookie": f"access_token={expired_token}"}
-    search_history_response = client.get("/search/user/searches", headers=headers_with_cookie)
+    search_history_response = client.get(f"{base_url}/search/user/searches", headers=headers_with_cookie)
 
     # Step 4: Assert that the response status is 401 Unauthorized
     assert search_history_response.status_code == 401
@@ -425,13 +423,9 @@ def test_get_no_token(db_session):
     invalid_token = "invalid_token_value"
 
     # Step 2: Call the endpoint with the invalid token
-    headers_with_cookie = {"Cookie": f"access_token={invalid_token}"}
     search_history_response = client.get("/search/user/searches")
 
     assert search_history_response.status_code == 401
-
-
-
 
 
 def test_get_valid_token_status_200(db_session):

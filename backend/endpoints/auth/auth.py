@@ -101,7 +101,6 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
 
     if DEBUG_SCRAPESCHOLAR:
         print(f"User found: ID={user.user_id}, Username={user.username}, Email={user.email}")
-
     access_token = login_manager.create_access_token(data={"sub": str(user.user_id)}, expires=timedelta(hours=8))
     if DEBUG_SCRAPESCHOLAR:
         print(f"Access Token Generated: {access_token}")
@@ -119,7 +118,6 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         samesite="Lax",
         max_age=28800
     )
-
     return response
 
 
@@ -149,8 +147,7 @@ def remove_cookie(response: Response):
     response.delete_cookie("access_token")
     return {"message": "Cookie deleted"}
 
-
-# Protected route example
+#Protected route example
 @router.get("/protected_route")
 def protected_route(current_user: User = Depends(get_current_user)):
     #probably want to add a token or cookie check here
