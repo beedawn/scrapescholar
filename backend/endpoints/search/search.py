@@ -61,64 +61,6 @@ def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[s
     articles = get_full_article_response(db=db, search_id=search_id)
     return articles if articles else []
 
-#
-# #Add POST route to create a new search
-# @router.post("/create", status_code=status.HTTP_201_CREATED)
-# async def create_new_search(
-#         search_data: SearchCreate, access_token: Annotated[str | None, Cookie()] = None,
-#         db: Session = Depends(get_db),
-# ):
-#     #probably want to verify user has valid token
-#     """
-#     Create a new search if the user has not exceeded the limit of 300 searches.
-#     """
-#     current_user = get_current_user_modular(token=access_token, db=db)
-#     # Check if the user has already reached the search limit (300 searches)
-#     search_count = db.query(Search).filter(Search.user_id == current_user.user_id).count()
-#
-#     if search_count >= 300:
-#         # If user has more than or equal to 300 searches, return 400 Bad Request
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST,
-#             detail="Search limit exceeded. Please delete some searches before creating new ones."
-#         )
-#
-#     # If below the limit, create the search
-#     search = Search(
-#         user_id=current_user.user_id,
-#         search_keywords=search_data.search_keywords,
-#         title=search_data.title,
-#         status=search_data.status,
-#         search_date=datetime.utcnow()
-#     )
-#
-#     db.add(search)
-#     db.commit()
-#     db.refresh(search)
-#
-#     return {"search_id": search.search_id}
-
-#
-# # Retrieve a specific search by its ID
-# @router.get("/searchbyid/{search_id}", status_code=status.HTTP_200_OK)
-# async def get_search_by_id(search_id: int, db: Session = Depends(get_db),
-#                            access_token: Annotated[str | None, Cookie()] = None):
-#     #probably want to verify user has valid token?
-#     current_user = get_current_user_modular(token=access_token, db=db)
-#     try:
-#         print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
-#         search = find_search(db=db, current_user=current_user, search_id=search_id)
-#
-#         if not search:
-#             # If search is not found, raise a 404 Not Found
-#             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
-#
-#         return search
-#     except HTTPException as http_exc:
-#         # Re-raise known HTTPExceptions
-#         raise http_exc
-
-
 # get a searches title thinkt his duplicates above function except this one uses cookie...
 # keeping it for now need to refactor these
 @router.get("/user/search/title", status_code=status.HTTP_200_OK)
@@ -232,7 +174,7 @@ def check_if_user_exceeded_search_amount(db: Session, current_user: User):
         return False
 
 
-async def post_search_no_route(keywords: List[str], articles: List[ArticleBase], db: Session, current_user: User):
+def post_search_no_route(keywords: List[str], articles: List[ArticleBase], db: Session, current_user: User):
     """
     Save a search to the DB
     """
@@ -337,3 +279,5 @@ def initialize_full_article_response(current_user: User, db, search_id):
         )
         response.append(article_data)
     return response
+
+

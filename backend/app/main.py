@@ -86,7 +86,7 @@ async def multiple_apis(keywords: str,
             article_response, id = globals()[item].request_data(keywords, id=new_id, )
             response.extend(article_response)
     #adds articles to db
-    search_valid, search_id = await post_search_no_route(keywords=keywords_list, articles=response,
+    search_valid, search_id = post_search_no_route(keywords=keywords_list, articles=response,
                                                          current_user=current_user, db=db)
     #instead of returning articles we're going to get the search from the db and return that
     articles = initialize_full_article_response(current_user, db, search_id)
