@@ -36,148 +36,142 @@ router = APIRouter()
 
 # Endpoint to retrieve the last 300 searches for the logged-in user
 @router.get("/user/searches", status_code=status.HTTP_200_OK)
-async def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None):
+def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None):
     """
     Retrieve the last 300 searches for the logged-in user.
     """
     # verfies user is valid and has token
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
 
     # Query the last 300 searches for the authenticated user
-    searches = await get_300_search(db=db, current_user=current_user)
+    searches = get_300_search(db=db, current_user=current_user)
     return searches if searches else []
 
 
 # get single search and associated articles
 @router.get("/user/articles", status_code=status.HTTP_200_OK)
-async def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
+def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                               search_id: int = Query(None, description="ID of the specific search to retrieve")):
     """
     Retrieve a single search and associated articles
     """
     #verifies user has a token and is valid
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
 
-    # Query for the search
-    search = await find_search(db=db, current_user=current_user, search_id=search_id)
-    #this addes new user data and it probably shouldn't just for retreiving an article
-    #probably should rename this to initialize or create or setup articles and make a new function just to get them
-    #and have one function that builds the response
-    articles = await get_full_article_response(db=db, search_id=search_id)
+    articles = get_full_article_response(db=db, search_id=search_id)
     return articles if articles else []
 
+#
+# #Add POST route to create a new search
+# @router.post("/create", status_code=status.HTTP_201_CREATED)
+# async def create_new_search(
+#         search_data: SearchCreate, access_token: Annotated[str | None, Cookie()] = None,
+#         db: Session = Depends(get_db),
+# ):
+#     #probably want to verify user has valid token
+#     """
+#     Create a new search if the user has not exceeded the limit of 300 searches.
+#     """
+#     current_user = get_current_user_modular(token=access_token, db=db)
+#     # Check if the user has already reached the search limit (300 searches)
+#     search_count = db.query(Search).filter(Search.user_id == current_user.user_id).count()
+#
+#     if search_count >= 300:
+#         # If user has more than or equal to 300 searches, return 400 Bad Request
+#         raise HTTPException(
+#             status_code=status.HTTP_400_BAD_REQUEST,
+#             detail="Search limit exceeded. Please delete some searches before creating new ones."
+#         )
+#
+#     # If below the limit, create the search
+#     search = Search(
+#         user_id=current_user.user_id,
+#         search_keywords=search_data.search_keywords,
+#         title=search_data.title,
+#         status=search_data.status,
+#         search_date=datetime.utcnow()
+#     )
+#
+#     db.add(search)
+#     db.commit()
+#     db.refresh(search)
+#
+#     return {"search_id": search.search_id}
 
-# Add POST route to create a new search
-@router.post("/create", status_code=status.HTTP_201_CREATED)
-async def create_new_search(
-        search_data: SearchCreate, access_token: Annotated[str | None, Cookie()] = None,
-        db: Session = Depends(get_db),
-):
-    #probably want to verify user has valid token
-    """
-    Create a new search if the user has not exceeded the limit of 300 searches.
-    """
-    current_user = await get_current_user_modular(token=access_token, db=db)
-    # Check if the user has already reached the search limit (300 searches)
-    search_count = db.query(Search).filter(Search.user_id == current_user.user_id).count()
-
-    if search_count >= 300:
-        # If user has more than or equal to 300 searches, return 400 Bad Request
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Search limit exceeded. Please delete some searches before creating new ones."
-        )
-
-    # If below the limit, create the search
-    search = Search(
-        user_id=current_user.user_id,
-        search_keywords=search_data.search_keywords,
-        title=search_data.title,
-        status=search_data.status,
-        search_date=datetime.utcnow()
-    )
-
-    db.add(search)
-    db.commit()
-    db.refresh(search)
-
-    return {"search_id": search.search_id}
-
-
-# Retrieve a specific search by its ID
-@router.get("/searchbyid/{search_id}", status_code=status.HTTP_200_OK)
-async def get_search_by_id(search_id: int, db: Session = Depends(get_db),
-                            access_token: Annotated[str | None, Cookie()] = None):
-    #probably want to verify user has valid token?
-    current_user = await get_current_user_modular(token=access_token, db=db)
-    try:
-        print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
-        search = await find_search(db=db, current_user=current_user, search_id=search_id)
-
-        if not search:
-            # If search is not found, raise a 404 Not Found
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
-
-        return search
-    except HTTPException as http_exc:
-        # Re-raise known HTTPExceptions
-        raise http_exc
+#
+# # Retrieve a specific search by its ID
+# @router.get("/searchbyid/{search_id}", status_code=status.HTTP_200_OK)
+# async def get_search_by_id(search_id: int, db: Session = Depends(get_db),
+#                            access_token: Annotated[str | None, Cookie()] = None):
+#     #probably want to verify user has valid token?
+#     current_user = get_current_user_modular(token=access_token, db=db)
+#     try:
+#         print(f"Fetching search for search_id: {search_id}, user_id: {current_user.user_id}")
+#         search = find_search(db=db, current_user=current_user, search_id=search_id)
+#
+#         if not search:
+#             # If search is not found, raise a 404 Not Found
+#             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
+#
+#         return search
+#     except HTTPException as http_exc:
+#         # Re-raise known HTTPExceptions
+#         raise http_exc
 
 
 # get a searches title thinkt his duplicates above function except this one uses cookie...
 # keeping it for now need to refactor these
 @router.get("/user/search/title", status_code=status.HTTP_200_OK)
-async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
+def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                            search_id: int = Query(None, description="ID of the specific search to retrieve")):
     """
     Retrieve a single search and associtated articles
     """
     #verifies user has valid token
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
 
     # Find the search
-    search = await find_search(db=db, current_user=current_user, search_id=search_id)
+    search = find_search(db=db, current_user=current_user, search_id=search_id)
     return {'title': search.title, 'keywords': search.search_keywords} if search else []
 
 
 # put a new title into a search
 @router.put("/user/search/title", status_code=status.HTTP_200_OK)
-async def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
+def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                            search_id: int = Query(None, description="ID of the specific search to retrieve"),
                            search_data: SearchUpdate = Body(...)):
     """
     Update the title of an existing search
     """
     #verifies user has valid token
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
 
     # Query the last 300 searches for the authenticated user
-    search = await find_search(db=db, current_user=current_user, search_id=search_id)
+    search = find_search(db=db, current_user=current_user, search_id=search_id)
     search.title = search_data.title
     db.commit()
     db.refresh(search)
     return search if search else []
 
 
-
 # delete a search
 @router.delete("/user/search/title", status_code=status.HTTP_200_OK)
-async def delete_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
+def delete_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                               search_id: int = Query(None, description="ID of the specific search to delete")):
     """
     delete a search and associated articles
     """
     #verifies user has valid token
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
 
-    search = await find_search(db=db, current_user=current_user, search_id=search_id)
+    search = find_search(db=db, current_user=current_user, search_id=search_id)
 
     if search is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
 
-    articles = await find_search_articles(db, search_id)
+    articles = find_search_articles(db, search_id)
     for article in articles:
-        user_data = await find_user_data(db, article.article_id)
+        user_data = find_user_data(db, article.article_id)
         for data in user_data:
             db.delete(data)
         db.delete(article)
@@ -186,7 +180,7 @@ async def delete_search_title(db: Session = Depends(get_db), access_token: Annot
     return []
 
 
-async def find_search_articles(db, search_id):
+def find_search_articles(db, search_id):
     return (
         db.query(Article)
         .filter(Article.search_id == search_id)
@@ -195,7 +189,7 @@ async def find_search_articles(db, search_id):
     )
 
 
-async def find_user_data(db, article_id):
+def find_user_data(db, article_id):
     return (
         db.query(UserData)
         .filter(UserData.article_id == article_id)
@@ -203,7 +197,7 @@ async def find_user_data(db, article_id):
     )
 
 
-async def find_search(db, current_user, search_id):
+def find_search(db, current_user, search_id):
     try:
         search = (
             db.query(Search)
@@ -217,7 +211,7 @@ async def find_search(db, current_user, search_id):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error finding search: {str(e)}")
 
 
-async def get_300_search(db, current_user):
+def get_300_search(db, current_user):
     return (
         db.query(Search)
         .filter(Search.user_id == current_user.user_id)
@@ -227,9 +221,9 @@ async def get_300_search(db, current_user):
     )
 
 
-async def check_if_user_exceeded_search_amount(db: Session, current_user: User):
+def check_if_user_exceeded_search_amount(db: Session, current_user: User):
     #check if there are 300 searches if there are return true
-    existing_searches = await get_300_search(db=db, current_user=current_user)
+    existing_searches = get_300_search(db=db, current_user=current_user)
     if (len(existing_searches) >= 300):
         print("amount exceeded!")
         return True
@@ -249,7 +243,7 @@ async def post_search_no_route(keywords: List[str], articles: List[ArticleBase],
     end to let it know to bug them to delete searches
     """
 
-    result = await check_if_user_exceeded_search_amount(db, current_user)
+    result = check_if_user_exceeded_search_amount(db, current_user)
 
     if result:
         return False, None
@@ -277,7 +271,6 @@ async def post_search_no_route(keywords: List[str], articles: List[ArticleBase],
             abstract=article.abstract,
             citedby=article.citedby,
             document_type=article.document_type,
-            #needs changed to something real
             source_id=source.source_id,
             search_id=created_search.search_id,
             user_id=current_user.user_id)
@@ -286,16 +279,16 @@ async def post_search_no_route(keywords: List[str], articles: List[ArticleBase],
     return True, created_search.search_id
 
 
-async def get_full_article_response(db, search_id):
-    articles = await find_search_articles(db, search_id)
+def get_full_article_response(db, search_id):
+    articles = find_search_articles(db, search_id)
     response = []
     for article in articles:
         print("ARTICLE ID")
         print(article.article_id)
 
-        user_data = await get_user_data(db=db, article_id=article.article_id)
+        user_data = get_user_data(db=db, article_id=article.article_id)
 
-        source_name = await get_source(db, article.source_id)
+        source_name = get_source(db, article.source_id)
         article_data = SearchResult(
             article_id=article.article_id,
             title=article.title,
@@ -317,14 +310,14 @@ async def get_full_article_response(db, search_id):
     return response
 
 
-async def initialize_full_article_response(current_user: User, db, search_id):
-    articles = await find_search_articles(db, search_id)
+def initialize_full_article_response(current_user: User, db, search_id):
+    articles = find_search_articles(db, search_id)
 
     response = []
     for article in articles:
-        user_data = await create_user_data(db=db, user_id=current_user.user_id, article_id=article.article_id)
+        user_data = create_user_data(db=db, user_id=current_user.user_id, article_id=article.article_id)
 
-        source_name = await get_source(db, article.source_id)
+        source_name = get_source(db, article.source_id)
 
         article_data = SearchResult(
             article_id=article.article_id,

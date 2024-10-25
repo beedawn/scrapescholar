@@ -18,7 +18,7 @@ async def create_new_role(role: RoleCreate, access_token: Annotated[str | None, 
     """
     API endpoint to create a new role.
     """
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
     new_role = create_role(db=db, role=role)
     return new_role
 
@@ -29,7 +29,7 @@ async def get_role_by_id(role_id: int, access_token: Annotated[str | None, Cooki
     """
     API endpoint to get a role by its ID.
     """
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
     role = get_role(db=db, role_id=role_id)
     return role
 
@@ -40,7 +40,7 @@ async def get_all_roles(access_token: Annotated[str | None, Cookie()] = None, sk
     """
     API endpoint to retrieve all roles.
     """
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
     roles = get_roles(db=db, skip=skip, limit=limit)
     return roles
 
@@ -52,7 +52,7 @@ async def update_existing_role(role_id: int, role: RoleUpdate, access_token: Ann
     """
     API endpoint to update an existing role.
     """
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
     updated_role = update_role(db=db, role_id=role_id, role=role)
     return updated_role
 
@@ -63,6 +63,6 @@ async def delete_existing_role(role_id: int, access_token: Annotated[str | None,
     """
     API endpoint to delete a role by its ID.
     """
-    current_user = await get_current_user_modular(token=access_token, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
     deleted_role = delete_role(db=db, role_id=role_id)
     return deleted_role

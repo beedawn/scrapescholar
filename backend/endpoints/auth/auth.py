@@ -136,7 +136,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 @router.get("/get_cookie")
 async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
     print(access_token)
-    user = await get_current_user_modular(access_token, db)
+    user = get_current_user_modular(access_token, db)
     if access_token is None or user is None:
         raise HTTPException(status_code=404, detail="Cookie not found")
     return JSONResponse(content={"cookieValue": access_token})
