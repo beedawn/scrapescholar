@@ -7,6 +7,7 @@ load_dotenv()
 # Access an environment variable
 scopus_api_key = os.getenv('SCOPUS_APIKEY')
 sciencedirect_api_key = os.getenv('SCIENCEDIRECT_APIKEY')
+institution_key = os.getenv('SCOPUS_INSTTOKEN')
 
 
 def parse_data_scopus(response):
