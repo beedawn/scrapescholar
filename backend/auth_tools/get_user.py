@@ -23,7 +23,7 @@ DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE
 
 
 #could be broken up into a validate token function and then get user? using it elsewhere for this purpose now
-async def get_current_user_modular(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def get_current_user_modular(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     print(f"Decoding token: {token}")
     try:
         if DEBUG_SCRAPESCHOLAR:

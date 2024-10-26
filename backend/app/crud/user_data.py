@@ -6,7 +6,7 @@ from fastapi import HTTPException
 import os
 
 
-async def get_user_data(db: Session, article_id: int):
+def get_user_data(db: Session, article_id: int):
     print(f"Searching for UserData with article_id: {article_id}")
     user_data = (db.query(UserData)
                  .filter(UserData.article_id == article_id)
@@ -16,7 +16,7 @@ async def get_user_data(db: Session, article_id: int):
     return user_data
 
 
-async def create_user_data(db: Session, user_id, article_id):
+def create_user_data(db: Session, user_id, article_id):
     db_user_data = UserData(
         user_id=user_id,
         article_id=article_id,
