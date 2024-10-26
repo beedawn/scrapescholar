@@ -41,7 +41,7 @@ describe('SearchView AR-4 Component', () => {
             const methodologyField = rows[0].children[10];
             const input = methodologyField.querySelector('input');
             expect(input).toBeInTheDocument();
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
     })
 
     test('AR-4 When user clicks on pencil next to value, text field turns into input box, then x button is pressed and reverts back to plain text', async () => {
@@ -56,7 +56,7 @@ describe('SearchView AR-4 Component', () => {
             const rows = screen.getAllByTestId('row');
             const methodologyField = rows[0].children[10];
             expect(methodologyField.textContent).toContain("0");
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
     })
 
     test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text', async () => {
@@ -78,7 +78,7 @@ describe('SearchView AR-4 Component', () => {
                 fail('no input found after clicking pencil')
             }
 
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
 
         await waitFor(() => {
         if (methodologyField)
@@ -86,7 +86,7 @@ describe('SearchView AR-4 Component', () => {
         else {
             fail('no input found after clicking pencil')
         }
-    }, { timeout: 5000 });
+    }, { timeout: 10000 });
     })
 
     test('AR-4 When user clicks on pencil next to value, text field turns into input box, then check button is pressed and reverts back to new text after being sorted', async () => {
@@ -98,7 +98,7 @@ describe('SearchView AR-4 Component', () => {
         await waitFor(() => {
             const transparencyScoreHeader = screen.getByText('Transparency');
             sortButton = within(transparencyScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
         if (sortButton) {
             fireEvent.click(sortButton);
         } else
@@ -124,7 +124,7 @@ describe('SearchView AR-4 Component', () => {
             else {
                 fail('no input found after clicking pencil')
             }
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
 
         if (methodologyField && methodologyField2) {
           

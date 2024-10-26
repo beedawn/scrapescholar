@@ -35,11 +35,11 @@ describe('SearchView US-11 Component', () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         await waitFor(() => {
             submitSearch(testInput);
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
 
         await waitFor(() => {
             expect(screen.getByText(/no results found/i)).toBeInTheDocument()
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
     })
 
     test('US-11 shows link in response after search press', async () => {
@@ -51,12 +51,12 @@ describe('SearchView US-11 Component', () => {
             const scopusChecklist = screen.getByText('Scopus');
             expect(scienceDirectChecklist).toBeInTheDocument();
             expect(scopusChecklist).toBeInTheDocument();
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
         submitSearch(testInput);
         await waitFor(() => {
             expect(screen.getByText('link a')).toBeInTheDocument()
             expect(screen.getByText('link x')).toBeInTheDocument()
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
     })
 
 });

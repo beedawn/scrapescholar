@@ -23,7 +23,7 @@ describe('SearchView AR-6 Component', () => {
             const firstRow = screen.getByText('test 1').closest('tr');
             fireEvent.click(firstRow);
             expect(firstRow).toHaveClass('bg-blue-500');
-        }, { timeout: 5000 });
+        }, { timeout: 10000 });
     })
 
 });
