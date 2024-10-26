@@ -30,7 +30,7 @@ describe('SearchView US-4 Component', () => {
         await waitFor(() => {
             const searchTitleDiv = screen.getByTestId('search-title')
             expect(searchTitleDiv).toBeInTheDocument();
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-4 pencil is next to value in search title', async () => {
@@ -39,7 +39,7 @@ describe('SearchView US-4 Component', () => {
         await waitFor(() => {
             const searchTitleDiv = screen.getByTestId('search-title')
             expect(searchTitleDiv.textContent).toContain("✎");
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-4 When user clicks on pencil next to search title, text field turns into input box', async () => {
@@ -51,7 +51,7 @@ describe('SearchView US-4 Component', () => {
             const searchTitleDiv = screen.getByTestId('search-title')
             const input = searchTitleDiv.querySelector('input');
             expect(input).toBeInTheDocument();
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-4 When user clicks on pencil next to search title, text field turns into input box, then x button is pressed and reverts back to plain text', async () => {
@@ -65,7 +65,7 @@ describe('SearchView US-4 Component', () => {
             const searchTitleDiv = screen.getByTestId('search-title')
             const span = searchTitleDiv.querySelector('span');
             expect(span).toBeInTheDocument();
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-4 When user clicks on pencil next to search title, text field turns into input box, then check button is pressed and reverts back to new text', async () => {
@@ -86,7 +86,7 @@ describe('SearchView US-4 Component', () => {
             else {
                 fail('no input found after clicking pencil')
             }
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         //something went funky here
 
       
@@ -99,7 +99,7 @@ describe('SearchView US-4 Component', () => {
         else {
             fail('no input found after clicking pencil')
         }
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
 
     })
 
@@ -112,7 +112,7 @@ describe('SearchView US-4 Component', () => {
             fireEvent.click(pastDropdown[0]);
             expect(pastDropdown[0]).toBeInTheDocument();
 
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
        
     
 
@@ -128,7 +128,7 @@ describe('SearchView US-4 Component', () => {
            
             
 
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         const dropdownSearch = await screen.findByText('test dropdown');
 
         expect(dropdownSearch).toBeInTheDocument();
@@ -155,7 +155,7 @@ describe('SearchView US-4 Component', () => {
             expect(await screen.findByText(link)).toBeInTheDocument();
             expect(await screen.findByText(date)).toBeInTheDocument();
             expect(await screen.findByText(document_type)).toBeInTheDocument();
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-4  When user hits 300 searches and submits a search data deletion screen should be displayed', async () => {
@@ -170,7 +170,7 @@ describe('SearchView US-4 Component', () => {
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
          
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         setSimulateInsufficientStorage(false);
     })
 
@@ -187,7 +187,7 @@ describe('SearchView US-4 Component', () => {
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
            
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         setSimulateInsufficientStorage(false);
     })
 
@@ -204,7 +204,7 @@ describe('SearchView US-4 Component', () => {
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
            
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         setDeleteSearch(true);
         submitSearch(testInput);
 
@@ -214,7 +214,7 @@ describe('SearchView US-4 Component', () => {
             const dataMsg = screen.queryByText(dataMessage)
             expect(dataMsg).toBeNull()
          
-       }, { timeout: 10000 });
+       }, { timeout: 5000 });
       
        setDeleteSearch(false);
         setSimulateInsufficientStorage(false);

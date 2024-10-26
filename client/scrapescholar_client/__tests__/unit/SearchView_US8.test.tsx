@@ -21,7 +21,7 @@ describe('SearchView US-8 Component', () => {
         submitSearch(testInput);
         await waitFor(() => {
             expect(screen.getByText('Download')).toBeInTheDocument()
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-8 Download button is a link', async () => {
@@ -30,7 +30,7 @@ describe('SearchView US-8 Component', () => {
         await waitFor(() => {
             const downloadButton = screen.getByText('Download');
             expect(downloadButton).toHaveAttribute('href', '/csv');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
 });

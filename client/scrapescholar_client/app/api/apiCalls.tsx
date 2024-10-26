@@ -358,20 +358,7 @@ const apiCalls = () => {
   };
 
 
-  return { getAPIDatabases, 
-    postAPILogin, 
-    getAPIResults, 
-    getAPISearches, 
-    getAPIPastSearchResults, 
-    getAPIPastSearchTitle, 
-    putSearchTitle, 
-    deleteSearch, 
-    putUserData, 
-    getCommentsByArticle,
-    addComment,
-    editComment,
-    deleteComment    
-  };
+
   const getCookie= async ()=>{
     let data;
     let jsonData
@@ -415,7 +402,11 @@ const apiCalls = () => {
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
-    deleteSearch, putUserData, getCookie, deleteCookie };
+    deleteSearch, putUserData, getCookie, deleteCookie, 
+    getCommentsByArticle,
+    addComment,
+    editComment,
+    deleteComment   };
 
 }
 

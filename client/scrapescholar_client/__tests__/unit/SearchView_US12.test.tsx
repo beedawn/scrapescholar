@@ -33,7 +33,7 @@ describe('SearchView US-12 Component', () => {
     clickAccordian();
     await waitFor(() => {
       accordianContainsSources()
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
   });
 
   test('US-12 press sources accordian twice', async () => {

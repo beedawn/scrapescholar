@@ -25,7 +25,7 @@ describe('SearchView US-10 Component', () => {
       const rows = screen.getAllByTestId('row')
       expect(rows[0].children[6].textContent).toContain("Science Direct");
       expect(rows[1].children[6].textContent).toContain("Scopus");
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
   })
 });
 

@@ -46,7 +46,7 @@ describe('Home Component', () => {
       expect(screen.getAllByRole('textbox')).toHaveLength(1);
       expect(screen.getByText('ScrapeScholar')).toBeInTheDocument();
       expect(screen.getByText('Search')).toBeInTheDocument();
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
   });
 
   test('US-4 check logout button works in SearchView', async () => {
@@ -63,11 +63,11 @@ describe('Home Component', () => {
       const logoutButton = screen.getByText('Logout');
       expect(logoutButton).toBeInTheDocument();
       fireEvent.click(logoutButton);
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
     await waitFor(() => {
       const loginButton2 = screen.getByText('Login');
       expect(loginButton2).toBeInTheDocument();
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
   });
 
   test('US-4 check login button click denies empty credentials', async () => {
@@ -76,12 +76,12 @@ describe('Home Component', () => {
     await waitFor(() => {
     const loginButton = screen.getByText('Login');
     fireEvent.click(loginButton);
-  }, { timeout: 10000 });
+  }, { timeout: 5000 });
 
   screen.debug(undefined,10000);
     await waitFor(() => {
       expect(screen.getByText('Invalid Login')).toBeInTheDocument();
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
 
   });
 

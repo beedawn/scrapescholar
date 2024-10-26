@@ -25,7 +25,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const relevanceScoreHeader = screen.getByText('Relevance Score');
             sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -44,7 +44,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const relevanceScoreHeader = screen.getByText('Relevance Score');
             sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -61,7 +61,7 @@ describe('SearchView US-15 Component', () => {
             const relevanceScoreHeader = screen.getByText('Relevance Score');
             const sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 when user clicks arrow next to relevance, it turns dark gray', async () => {
@@ -72,7 +72,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(relevanceScoreHeader.closest('th')).getByRole('button');
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to date, results are sorted by date
@@ -83,7 +83,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const yearScoreHeader = screen.getByText('Year');
             sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -102,7 +102,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const yearScoreHeader = screen.getByText('Year');
             sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -119,7 +119,7 @@ describe('SearchView US-15 Component', () => {
             const yearHeader = screen.getByText('Year');
             const sortButton = within(yearHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to date, bg color turns dark gray', async () => {
@@ -130,7 +130,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(yearHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to database, results are sorted by database
@@ -141,7 +141,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const sourceScoreHeader = screen.getByText('Source');
             sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -160,7 +160,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const sourceScoreHeader = screen.getByText('Source');
             sortButton = within(sourceScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -177,7 +177,7 @@ describe('SearchView US-15 Component', () => {
             const sourceHeader = screen.getByText('Source');
             const sortButton = within(sourceHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to source, bg color turns dark gray', async () => {
@@ -188,7 +188,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(sourceHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to source,bg color turns dark gray', async () => {
@@ -199,7 +199,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(sourceHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to title, results are sorted by title
@@ -210,7 +210,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const titleScoreHeader = screen.getByText('Title');
             sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -229,7 +229,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const titleScoreHeader = screen.getByText('Title');
             sortButton = within(titleScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -246,7 +246,7 @@ describe('SearchView US-15 Component', () => {
             const titleHeader = screen.getByText('Title');
             const sortButton = within(titleHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to title,bg color turns dark gray', async () => {
@@ -257,7 +257,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(titleHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to color, results are sorted by color
@@ -268,7 +268,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const colorScoreHeader = screen.getByText('Assessment');
             sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -290,7 +290,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const colorScoreHeader = screen.getByText('Assessment');
             sortButton = within(colorScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -310,7 +310,7 @@ describe('SearchView US-15 Component', () => {
             const colorHeader = screen.getByText('Assessment');
             const sortButton = within(colorHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to color,bg color turns dark gray', async () => {
@@ -321,7 +321,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(colorHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to cited by, results are sorted by cited by
@@ -332,7 +332,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const citedbyScoreHeader = screen.getByText('Cited By');
             sortButton = within(citedbyScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -351,7 +351,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const citedbyScoreHeader = screen.getByText('Cited By');
             sortButton = within(citedbyScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -368,7 +368,7 @@ describe('SearchView US-15 Component', () => {
             const citedbyHeader = screen.getByText('Cited By');
             const sortButton = within(citedbyHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to citedby,bg citedby turns dark gray', async () => {
@@ -379,7 +379,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(citedbyHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to URL, results are sorted by URL
@@ -390,7 +390,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const urlScoreHeader = screen.getByText('URL');
             sortButton = within(urlScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -409,7 +409,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const urlScoreHeader = screen.getByText('URL');
             sortButton = within(urlScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -426,7 +426,7 @@ describe('SearchView US-15 Component', () => {
             const urlHeader = screen.getByText('URL');
             const sortButton = within(urlHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to url,bg url turns dark gray', async () => {
@@ -437,7 +437,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(urlHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to Abstract, results are sorted by Abstract
@@ -448,7 +448,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const abstractScoreHeader = screen.getByText('Abstract');
             sortButton = within(abstractScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -467,7 +467,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const abstractScoreHeader = screen.getByText('Abstract');
             sortButton = within(abstractScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -484,7 +484,7 @@ describe('SearchView US-15 Component', () => {
             const abstractHeader = screen.getByText('Abstract');
             const sortButton = within(abstractHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to abstract,bg abstract turns dark gray', async () => {
@@ -495,7 +495,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(abstractHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to doctype, results are sorted by doctype
@@ -506,7 +506,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const doctypeScoreHeader = screen.getByText('Document Type');
             sortButton = within(doctypeScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -525,7 +525,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const doctypeScoreHeader = screen.getByText('Document Type');
             sortButton = within(doctypeScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -542,7 +542,7 @@ describe('SearchView US-15 Component', () => {
             const doctypeHeader = screen.getByText('Document Type');
             const sortButton = within(doctypeHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to doctype,bg doctype turns dark gray', async () => {
@@ -553,7 +553,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(doctypeHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to evaluationCritera, results are sorted by evaluationCritera
@@ -564,7 +564,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const evaluationCriteraScoreHeader = screen.getByText('Evaluation Criteria');
             sortButton = within(evaluationCriteraScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -583,7 +583,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const evaluationCriteraScoreHeader = screen.getByText('Evaluation Criteria');
             sortButton = within(evaluationCriteraScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -600,7 +600,7 @@ describe('SearchView US-15 Component', () => {
             const evaluationCriteraHeader = screen.getByText('Evaluation Criteria');
             const sortButton = within(evaluationCriteraHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to evaluationCritera,bg evaluationCritera turns dark gray', async () => {
@@ -611,7 +611,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(evaluationCriteraHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to methodology, results are sorted by methodology
@@ -622,7 +622,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const methodologyScoreHeader = screen.getByText('Methodology');
             sortButton = within(methodologyScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -641,7 +641,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const methodologyScoreHeader = screen.getByText('Methodology');
             sortButton = within(methodologyScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -658,7 +658,7 @@ describe('SearchView US-15 Component', () => {
             const methodologyHeader = screen.getByText('Methodology');
             const sortButton = within(methodologyHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to methodology,bg methodology turns dark gray', async () => {
@@ -669,7 +669,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(methodologyHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to clarity, results are sorted by clarity
@@ -680,7 +680,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const clarityScoreHeader = screen.getByText('Clarity');
             sortButton = within(clarityScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -699,7 +699,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const clarityScoreHeader = screen.getByText('Clarity');
             sortButton = within(clarityScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -716,7 +716,7 @@ describe('SearchView US-15 Component', () => {
             const clarityHeader = screen.getByText('Clarity');
             const sortButton = within(clarityHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to clarity,bg clarity turns dark gray', async () => {
@@ -727,7 +727,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(clarityHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to completeness, results are sorted by completeness
@@ -738,7 +738,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const completenessScoreHeader = screen.getByText('Completeness');
             sortButton = within(completenessScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -757,7 +757,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const completenessScoreHeader = screen.getByText('Completeness');
             sortButton = within(completenessScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -774,7 +774,7 @@ describe('SearchView US-15 Component', () => {
             const completenessHeader = screen.getByText('Completeness');
             const sortButton = within(completenessHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to completeness,bg completeness turns dark gray', async () => {
@@ -785,7 +785,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(completenessHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     // When user clicks on arrow next to transparency, results are sorted by transparency
@@ -796,7 +796,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const transparencyScoreHeader = screen.getByText('Transparency');
             sortButton = within(transparencyScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
@@ -815,7 +815,7 @@ describe('SearchView US-15 Component', () => {
         await waitFor(() => {
             const transparencyScoreHeader = screen.getByText('Transparency');
             sortButton = within(transparencyScoreHeader.closest('th')).getByRole('button');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
@@ -832,7 +832,7 @@ describe('SearchView US-15 Component', () => {
             const transparencyHeader = screen.getByText('Transparency');
             const sortButton = within(transparencyHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to transparency,bg transparency turns dark gray', async () => {
@@ -843,7 +843,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(transparencyHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
     test('US-15 When user clicks on arrow next to title,bg color turns dark gray, then clicks on color arrow, and title should be light grey', async () => {
@@ -859,7 +859,7 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton2);
             expect(sortButton2).toHaveClass('bg-gray-600');
             expect(sortButton).toHaveClass('bg-gray-400');
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
     })
 
 });
