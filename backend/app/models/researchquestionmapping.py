@@ -12,4 +12,5 @@ class ResearchQuestionMapping(Base):
 
     article = relationship("Article", back_populates="research_question_mappings")
     research_question = relationship("ResearchQuestion", back_populates="research_question_mappings")
-    research_question_scores = relationship("ResearchQuestionScore", back_populates="research_question_mapping")
+    research_question_scores = relationship("ResearchQuestionScore",
+                                            back_populates="research_question_mapping")

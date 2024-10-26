@@ -24,6 +24,15 @@ describe('SearchView US-4 Component', () => {
         expect(logoutButton).toBeInTheDocument();
     });
 
+    test('US-4 search title should be in the document', async () => {
+        render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
+        submitSearch(testInput);
+        await waitFor(() => {
+            const searchTitleDiv = screen.getByTestId('search-title')
+            expect(searchTitleDiv).toBeInTheDocument();
+        }, { timeout: 5000 });
+    })
+
     test('US-4 pencil is next to value in search title', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);
@@ -78,15 +87,19 @@ describe('SearchView US-4 Component', () => {
                 fail('no input found after clicking pencil')
             }
         }, { timeout: 5000 });
+        //something went funky here
+
+      
+        await waitFor(() => {
         const searchTitleSpan = screen.getByTestId('search-title-span')
-     
+   
         if (searchTitleDiv)
             
             expect(searchTitleSpan.textContent).toContain("test 1");
         else {
             fail('no input found after clicking pencil')
         }
-
+    }, { timeout: 5000 });
 
     })
 

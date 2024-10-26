@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, TIMESTAMP, ARRAY, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.session import Base
 
+
 class Search(Base):
     __tablename__ = "Search"
 
@@ -14,4 +15,4 @@ class Search(Base):
     title = Column(String(255), nullable=False)
 
     user = relationship("User", back_populates="searches")
-    articles = relationship("Article", back_populates="search")    
+    articles = relationship("Article", back_populates="search")

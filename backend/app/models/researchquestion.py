@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, Text
 from sqlalchemy.orm import relationship
 from app.db.session import Base
 
+
 class ResearchQuestion(Base):
     __tablename__ = "ResearchQuestion"
 

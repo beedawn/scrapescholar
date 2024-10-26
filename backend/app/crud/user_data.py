@@ -5,6 +5,7 @@ from app.schemas.user_data import UserDataCreate, UserDataUpdate
 from fastapi import HTTPException
 import os
 
+
 async def get_user_data(db: Session, article_id: int):
     print(f"Searching for UserData with article_id: {article_id}")
     user_data = (db.query(UserData)
@@ -14,20 +15,21 @@ async def get_user_data(db: Session, article_id: int):
         raise HTTPException(status_code=404, detail="Userdata not found in get")
     return user_data
 
+
 async def create_user_data(db: Session, user_id, article_id):
     db_user_data = UserData(
         user_id=user_id,
         article_id=article_id,
     )
-
     db.add(db_user_data)
     db.commit()
     db.refresh(db_user_data)
     return db_user_data
 
-async def update_user_data(db: Session, user_data:UserData):
+
+async def update_user_data(db: Session, user_data: UserDataUpdate):
     db_user_data = db.query(UserData).filter(UserData.article_id == user_data.article_id).first()
-    
+
     if not db_user_data:
         raise HTTPException(status_code=404, detail="Userdata not found in put")
     for key, value in user_data.dict(exclude_unset=True).items():

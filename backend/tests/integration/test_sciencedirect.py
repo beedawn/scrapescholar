@@ -2,11 +2,14 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import app
 from api_tools.api_tools import sciencedirect_api_key
+
 client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
 session = get_cookie()
+
+
 def test_sciencedirect_response_returns_correct_elements():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
     assert response.status_code == 200
@@ -31,13 +34,13 @@ def test_sciencedirect_response_returns_correct_elements():
         assert item["source"] == "ScienceDirect"
         assert "evaluation_criteria" in item
         assert "color" in item
-        assert item["color"] == "Not Relevant" or item["color"] == "SemiRelevant" or item["color"] == "Relevant" or item["color"] == ""
+        assert item["color"] == "Not Relevant" or item["color"] == "SemiRelevant" or item["color"] == "Relevant" or \
+               item["color"] == ""
         assert "relevance_score" in item
         assert isinstance(item["relevance_score"], float)
-        assert item["relevance_score"] >= 0 and item["relevance_score"] <= 100
+        assert 0 <= item["relevance_score"] <= 100
 
-    
-    search_id=data["search_id"]
+    search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 
@@ -49,27 +52,31 @@ def test_sciencedirect_student_rating_information_available():
     for item in data["articles"]:
         assert "methodology" in item
         assert isinstance(item["methodology"], int)
-        assert item["methodology"] >=0 & item["methodology"] <=1    #May need to change depending on if we implement different logic
+        assert item["methodology"] >= 0 & item[
+            "methodology"] <= 1  #May need to change depending on if we implement different logic
         assert "clarity" in item
         assert isinstance(item["clarity"], int)
-        assert item["clarity"] >=0 & item["clarity"] <=1
+        assert item["clarity"] >= 0 & item["clarity"] <= 1
         assert "completeness" in item
         assert isinstance(item["completeness"], int)
-        assert item["completeness"] >=0 & item["completeness"] <=1
+        assert item["completeness"] >= 0 & item["completeness"] <= 1
         assert "transparency" in item
         assert isinstance(item["transparency"], int)
-        assert item["transparency"] >=0 & item["transparency"] <=1
-    search_id=data["search_id"]
+        assert item["transparency"] >= 0 & item["transparency"] <= 1
+    search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
+
 def test_sciencedirect_empty_response_is_empty():
-    response = session.get(f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=ScienceDirect")
+    response = session.get(
+        f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=ScienceDirect")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
     assert len(data["articles"]) is 0
-    search_id=data["search_id"]
+    search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+
 
 def test_sciencedirect_apiKey_env_is_filled():
     assert sciencedirect_api_key is not None

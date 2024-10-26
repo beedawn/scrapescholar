@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.session import Base
 
+
 class Article(Base):
     __tablename__ = "Article"
 

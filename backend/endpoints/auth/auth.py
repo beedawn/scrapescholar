@@ -1,5 +1,5 @@
 # auth/auth.py
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.user import User
@@ -10,6 +10,10 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 import os
 from fastapi.responses import JSONResponse
+from typing import Annotated
+from datetime import timedelta
+
+from auth_tools.get_user import get_current_user_modular
 
 load_dotenv()
 
@@ -34,16 +38,19 @@ router = APIRouter()
 
 
 # Hash password
-def hash(text: str):
+def hash_string(text: str):
     return hash_context.hash(text)
+
 
 # Verify password
 def verify_hash(plain_text, hashed_text: str):
     return hash_context.verify(plain_text, hashed_text)
 
+
 # Encrypt username
 def encrypt_username(username: str) -> str:
     return fernet.encrypt(username.encode()).decode()
+
 
 # Decrypt username
 def decrypt_username(encrypted_username: str) -> str:
@@ -54,6 +61,7 @@ def decrypt_username(encrypted_username: str) -> str:
             print(f"Decryption failed: {str(e)}")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid username")
 
+
 # Register the user_loader callback with the login_manager
 @login_manager.user_loader
 def load_user(user_id: str, db: Session = None):
@@ -63,10 +71,10 @@ def load_user(user_id: str, db: Session = None):
         print(f"Loading user by user_id: {user_id}")
     return db.query(User).filter(User.user_id == int(user_id)).first()
 
+
 # Login route
 @router.post("/login")
 def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-
     # Iterate through all users and decrypt their usernames for comparison
     user = None
     for candidate in db.query(User).all():
@@ -77,7 +85,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
                 break
         except HTTPException:
             continue  # Skip if decryption fails
-    
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -94,7 +102,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     if DEBUG_SCRAPESCHOLAR:
         print(f"User found: ID={user.user_id}, Username={user.username}, Email={user.email}")
 
-    access_token = login_manager.create_access_token(data={"sub": str(user.user_id)})
+    access_token = login_manager.create_access_token(data={"sub": str(user.user_id)}, expires=timedelta(hours=8))
     if DEBUG_SCRAPESCHOLAR:
         print(f"Access Token Generated: {access_token}")
 
@@ -102,9 +110,9 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     response = JSONResponse(content=content)
     # will need to change this to secure for deployment
     response.set_cookie(
-        key="access_token", 
-        value=access_token, 
-        httponly=True, 
+        key="access_token",
+        value=access_token,
+        httponly=True,
         secure=False,
         path="/",
         domain="0.0.0.0",
@@ -113,6 +121,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     )
 
     return response
+
 
 # Get current user based on token
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
@@ -126,10 +135,25 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 
-#probably want tto verify token? worried it will break tests
+@router.get("/get_cookie")
+async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+    print(access_token)
+    user = await get_current_user_modular(access_token, db)
+    if access_token is None or user is None:
+        raise HTTPException(status_code=404, detail="Cookie not found")
+    return JSONResponse(content={"cookieValue": access_token})
+
+
+@router.get("/remove_cookie")
+def remove_cookie(response: Response):
+    response.delete_cookie("access_token")
+    return {"message": "Cookie deleted"}
+
+
 # Protected route example
 @router.get("/protected_route")
 def protected_route(current_user: User = Depends(get_current_user)):
+    #probably want to add a token or cookie check here
     return {
         "user_id": current_user.user_id,
         "username": current_user.username,

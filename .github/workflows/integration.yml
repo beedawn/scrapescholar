@@ -78,11 +78,17 @@ jobs:
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://0.0.0.0:8000/health_check
 
-    - name: Run Python Integration Tests
-      working-directory: ./backend  # Adjust to the correct directory
+
+       
+    - name: Install Chrome and ChromeDriver
       run: |
-        pytest ./tests/integration --disable-warnings -v -s
-        coverage run -m pytest tests --verbose && coverage report -m
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser
+        sudo apt-get install -y chromium-chromedriver
+       
+
+
+
 
     - name: Run npm install
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
@@ -92,10 +98,25 @@ jobs:
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
       run: | 
         npm run build
-
-    - name: run Integration tests Next.js 
+        
+    - name: Run NPM dev
       working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-      run: npm run test:integration
+      run: | 
+        npm run dev & sleep 10
+
+    - name: Run Python Integration Tests
+      working-directory: ./backend  # Adjust to the correct directory
+      env:
+        DISPLAY: :99  
+      run: |
+        Xvfb :99 -screen 0 1920x1080x24 &
+        pytest ./tests/integration --disable-warnings -v -s
+        coverage run -m pytest tests --verbose && coverage report -m
+
+    # - name: run Integration tests Next.js 
+    #   working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+    #   run: npm run test:integration
+
     # these three tests reach out to real domain and test ssl validity for AR-3
     - name: test ssl
       run: |

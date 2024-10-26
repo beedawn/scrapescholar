@@ -2,6 +2,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from app.db.session import Base
 
+
 class SearchKeyword(Base):
     __tablename__ = "SearchKeyword"
 

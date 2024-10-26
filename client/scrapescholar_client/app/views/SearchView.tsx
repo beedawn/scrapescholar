@@ -8,6 +8,7 @@ import apiCalls from '../api/apiCalls';
 import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
 import CommentsSidebar from '../components/SearchView/CommentsSidebar'; 
+import Loading from '../components/Loading';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -213,8 +214,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     return (
         <div className="flex flex-row sm:mx-12 h-screen">
-            {/* Left-side NavBar */}
-            <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5">
+            <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5" data-testid="navbar">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
@@ -226,7 +226,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             {/* Middle SearchResults */}
             <div className="flex-1 sm:mx-12 w-full overflow-auto">
                 {error ? (<p>{error.message}</p>) 
-                : loading ? <p>Loading</p> : 
+                : loading ? <Loading /> : 
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
                 <SearchResults 
                     setResults={setResults} 
