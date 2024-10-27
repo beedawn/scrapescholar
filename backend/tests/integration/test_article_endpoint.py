@@ -3,7 +3,9 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 from app.db.session import get_db, SessionLocal
-
+from tests.integration.tools.get_cookie import get_cookie
+from tests.integration.tools.base_url import base_url
+session = get_cookie()
 client = TestClient(app)
 
 def override_get_db():
@@ -84,7 +86,12 @@ def test_create_article():
     token, user_id = create_and_authenticate_user()
 
     # Step 5: Create a search and get the search ID
-    search_id = create_search(token, user_id)
+    api_query = "test"
+    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
+    # create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request_data = search_request.json()
+    search_id = search_request_data["search_id"]
 
     # Step 6: Create an article with dynamic search_id and user_id
     mock_article_data = {
@@ -100,7 +107,7 @@ def test_create_article():
         "search_id": search_id  # Use dynamic search_id
     }
 
-    response = client.post("/article/", json=mock_article_data, headers={"Authorization": f"Bearer {token}"})
+    response = session.post(f"{base_url}/article", json=mock_article_data)
     assert response.status_code == 201
     assert response.json()["title"] == mock_article_data["title"]
 
@@ -108,7 +115,13 @@ def test_get_article():
     token, user_id = create_and_authenticate_user()
 
     # First, create a search and get the search ID
-    search_id = create_search(token, user_id)
+    # Step 5: Create a search and get the search ID
+    api_query = "test"
+    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
+    # create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request_data = search_request.json()
+    search_id = search_request_data["search_id"]
 
     # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
@@ -128,7 +141,13 @@ def test_delete_article():
     token, user_id = create_and_authenticate_user()  
 
     # First, create a search and get the search ID
-    search_id = create_search(token, user_id)
+    # Step 5: Create a search and get the search ID
+    api_query = "test"
+    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
+    # create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request_data = search_request.json()
+    search_id = search_request_data["search_id"]
 
     # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
@@ -147,7 +166,13 @@ def test_update_article():
     token, user_id = create_and_authenticate_user()
 
     # First, create a search and get the search ID
-    search_id = create_search(token, user_id)
+    # Step 5: Create a search and get the search ID
+    api_query = "test"
+    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
+    # create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request_data = search_request.json()
+    search_id = search_request_data["search_id"]
 
     # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
