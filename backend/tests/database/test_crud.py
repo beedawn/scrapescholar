@@ -47,8 +47,6 @@ def test_db_session():
         db.close()
 
 def test_create_article(test_db_session: Session):
-    """Test creating an article"""
-
     # Step 1: Create a user entry (required for user_id foreign key)
     user_in = UserCreate(**mock_user_data)
     created_user = create_user(test_db_session, user_in)
@@ -58,8 +56,8 @@ def test_create_article(test_db_session: Session):
     created_search = create_search(test_db_session, search_in)
 
     # Step 3: Insert the article with the newly created search_id and user_id
-    article_in = ArticleCreate(search_id=created_search.search_id, user_id=created_user.user_id, **mock_article_data)
-    created_article = create_article(test_db_session, article_in)
+    article_in = ArticleCreate(search_id=created_search.search_id, **mock_article_data)
+    created_article = create_article(test_db_session, article_in, user_id=created_user.user_id)
 
     # Step 4: Validate the article creation
     assert created_article.title == mock_article_data["title"]
@@ -77,8 +75,8 @@ def test_get_article_by_id(test_db_session: Session):
     created_search = create_search(test_db_session, search_in)
 
     # Step 3: Create an article for retrieval
-    article_in = ArticleCreate(search_id=created_search.search_id, user_id=created_user.user_id, **mock_article_data)
-    created_article = create_article(test_db_session, article_in)
+    article_in = ArticleCreate(search_id=created_search.search_id, **mock_article_data)
+    created_article = create_article(test_db_session, article_in, user_id=created_user.user_id)  # Pass user_id
 
     # Step 4: Retrieve the article by its ID
     article = get_article(test_db_session, created_article.article_id)
@@ -99,8 +97,8 @@ def test_update_article(test_db_session: Session):
     created_search = create_search(test_db_session, search_in)
 
     # Step 3: Create an article
-    article_in = ArticleCreate(search_id=created_search.search_id, user_id=created_user.user_id, **mock_article_data)
-    created_article = create_article(test_db_session, article_in)
+    article_in = ArticleCreate(search_id=created_search.search_id, **mock_article_data)
+    created_article = create_article(test_db_session, article_in, user_id=created_user.user_id)  # Pass user_id
 
     # Step 4: Update the article with new data
     update_data = ArticleUpdate(title="Updated Title", relevance_score=99)
@@ -109,6 +107,7 @@ def test_update_article(test_db_session: Session):
     # Step 5: Validate the updated article
     assert updated_article.title == "Updated Title"
     assert updated_article.relevance_score == 99
+
 
 def test_delete_article(test_db_session: Session):
     """Test deleting an article"""
@@ -122,8 +121,8 @@ def test_delete_article(test_db_session: Session):
     created_search = create_search(test_db_session, search_in)
 
     # Step 3: Create an article
-    article_in = ArticleCreate(search_id=created_search.search_id, user_id=created_user.user_id, **mock_article_data)
-    created_article = create_article(test_db_session, article_in)
+    article_in = ArticleCreate(search_id=created_search.search_id, **mock_article_data)
+    created_article = create_article(test_db_session, article_in, user_id=created_user.user_id)  # Pass user_id
 
     # Step 4: Delete the article by ID
     deleted_article = delete_article(test_db_session, article_id=created_article.article_id)

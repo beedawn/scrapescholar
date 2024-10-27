@@ -15,13 +15,11 @@ def get_article(db: Session, article_id: int):
 def get_articles(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Article).offset(skip).limit(limit).all()
 
-
-def create_article(db: Session, article: ArticleCreate):
+def create_article(db: Session, article: ArticleCreate, user_id: int):
     #db_article = Article(**article.dict())
     db_article = Article(
         source_id=article.source_id,
         search_id=article.search_id,
-        user_id=article.user_id,
         title=article.title,
         date=article.date,
         link=str(article.link) if article.link else None,  # Convert to string
@@ -29,7 +27,8 @@ def create_article(db: Session, article: ArticleCreate):
         abstract=article.abstract,
         citedby=article.citedby,
         document_type=article.document_type,
-        doi=article.doi
+        doi=article.doi,
+        user_id=user_id
     )
 
     db.add(db_article)

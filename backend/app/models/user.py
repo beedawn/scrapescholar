@@ -18,9 +18,8 @@ class User(Base):
 
     role = relationship("Role", back_populates="users")
     articles = relationship("Article", back_populates="user")
-    comments = relationship("Comment", back_populates="user")
-    article_scores = relationship("ArticleScore",
-                                  foreign_keys="ArticleScore.user_id", back_populates="user")
+    comments = relationship("Comment", back_populates="user", cascade="all, delete")
+    article_scores = relationship("ArticleScore", foreign_keys="ArticleScore.user_id", back_populates="user")
     collaborations = relationship("Collaboration", back_populates="user")
     search_shares = relationship("SearchShare",
                                  foreign_keys="SearchShare.shared_with_user_id",
