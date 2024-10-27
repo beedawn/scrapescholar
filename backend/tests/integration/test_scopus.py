@@ -30,7 +30,6 @@ def test_scopus_response_returns_correct_elements():
         assert "abstract" in item
         assert item["asbtract"] != ''
         assert len(item["abstract"]) > 0
-        print(item["asbtract"])
         assert "document_type" in item
         assert "source" in item 
         assert item["source"] == "Scopus"
