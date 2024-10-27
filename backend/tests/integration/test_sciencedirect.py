@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import app
 from api_tools.api_tools import sciencedirect_api_key
+from academic_databases.ScienceDirect.sciencedirect import request_data
+import json
+import os
 
 client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
@@ -43,7 +46,6 @@ def test_sciencedirect_response_returns_correct_elements():
     search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
-
 def test_sciencedirect_student_rating_information_available():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
     assert response.status_code == 200
@@ -66,7 +68,6 @@ def test_sciencedirect_student_rating_information_available():
     search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
-
 def test_sciencedirect_empty_response_is_empty():
     response = session.get(
         f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=ScienceDirect")
@@ -77,6 +78,8 @@ def test_sciencedirect_empty_response_is_empty():
     search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
-
 def test_sciencedirect_apiKey_env_is_filled():
     assert sciencedirect_api_key is not None
+
+def test_sciencedirect_static_json():
+    request_data()
