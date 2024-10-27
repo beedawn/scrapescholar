@@ -5,6 +5,8 @@ from app.main import app
 from app.db.session import get_db, SessionLocal
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
+
+from tests.integration.tools.create_search import create_search
 session = get_cookie()
 client = TestClient(app)
 
@@ -45,15 +47,7 @@ mock_article_data = {
 }
 
 # Helper function to create a search
-def create_search():
-    # Step 3: Create a search and pass user_id dynamically
-    api_query = "test"
-    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    # create a new search to query
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
-    search_request_data = search_request.json()
-    search_id = search_request_data["search_id"]
-    return search_id
+
 
 # Helper function to register and authenticate a user
 def create_and_authenticate_user():

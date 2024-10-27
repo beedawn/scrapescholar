@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.db.session import get_db, SessionLocal
 from app.schemas.comment import CommentCreate
+from tests.integration.tools.create_search import create_search
 
 client = TestClient(app)
 
@@ -48,17 +49,7 @@ mock_comment_data = {
     "comment_text": "This is a test comment"
 }
 
-# Helper function to create a search
-def create_search(token, user_id):
-    search_data = {
-        "user_id": user_id,
-        "title": "Test Search",
-        "search_keywords": ["test", "article"],
-        "status": "active"
-    }
-    response = client.post("/search/create", json=search_data, headers={"Authorization": f"Bearer {token}"})
-    assert response.status_code == 201
-    return response.json()["search_id"]
+
 
 # Helper function to register a new user and get auth token
 def create_and_authenticate_user():
@@ -77,7 +68,7 @@ def test_create_comment():
     token, user_id = create_and_authenticate_user()
 
     # Create a search first and get the search_id
-    search_id = create_search(token, user_id)
+    search_id = create_search()
 
     # Update the mock_article_data with the dynamic search_id
     mock_article_data_dynamic = mock_article_data.copy()
@@ -97,7 +88,7 @@ def test_get_comments():
     token, user_id = create_and_authenticate_user()
 
     # Create a search first and get the search_id
-    search_id = create_search(token, user_id)
+    search_id = create_search()
 
     # Create an article and add a comment
     mock_article_data_dynamic = mock_article_data.copy()
@@ -117,7 +108,7 @@ def test_update_comment():
     token, user_id = create_and_authenticate_user()
 
     # Create a search first and get the search_id
-    search_id = create_search(token, user_id)
+    search_id = create_search()
 
     # Create an article and a comment
     mock_article_data_dynamic = mock_article_data.copy()
@@ -139,7 +130,7 @@ def test_delete_comment():
     token, user_id = create_and_authenticate_user()
 
     # Create a search first and get the search_id
-    search_id = create_search(token, user_id)
+    search_id = create_search()
 
     # Create an article and a comment
     mock_article_data_dynamic = mock_article_data.copy()
