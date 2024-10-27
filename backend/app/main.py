@@ -15,6 +15,8 @@ from endpoints.user import user
 from endpoints.auth import auth
 from endpoints.user_data import user_data
 from endpoints.search import search
+from endpoints.article import article
+from endpoints.comment import comment
 from typing import List, Annotated
 from pathlib import Path
 from endpoints.search.search import post_search_no_route, check_if_user_exceeded_search_amount, \
@@ -35,6 +37,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @app.get("/health_check")
 async def health_check():
@@ -46,6 +54,8 @@ app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
 app.include_router(search.router, prefix="/search", tags=["Search"])
+app.include_router(article.router, prefix="/article", tags=["Articles"])
+app.include_router(comment.router, prefix="/comment", tags=["Articles"])
 app.include_router(user_data.router, prefix="/user_data", tags=["UserData"])
 
 

@@ -204,19 +204,20 @@ def post_search_no_route(keywords: List[str], articles: List[ArticleBase], db: S
 
     for article in articles:
         source = get_source_by_name(db, article.source)
-
-        format_article = ArticleCreate(
-            title=article.title,
-            date=datetime.strptime(article.date, date_format).date(),
-            link=HttpUrl(article.link),
-            relevance_score=article.relevance_score,
-            abstract=article.abstract,
-            citedby=article.citedby,
-            document_type=article.document_type,
-            source_id=source.source_id,
-            search_id=created_search.search_id,
-            user_id=current_user.user_id)
-        create_article(article=format_article, db=db)
+        format_article= ArticleCreate(
+        title=article.title,
+        date=datetime.strptime(article.date, date_format).date(),
+        link=HttpUrl(article.link),
+        relevance_score=article.relevance_score,
+        abstract=article.abstract,
+        citedby=article.citedby,
+        document_type=article.document_type,
+        source_id=source.source_id,
+        search_id=created_search.search_id, 
+        user_id=current_user.user_id)
+        create_article(article=format_article, db=db, user_id=current_user.user_id)
+       
+    
 
     return True, created_search.search_id
 

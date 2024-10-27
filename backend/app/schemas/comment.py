@@ -1,25 +1,22 @@
 # app/schemas/comment.py
 from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
+# Schema for creating a new comment
+class CommentCreate(BaseModel):
+    comment_text: str
 
-class CommentBase(BaseModel):
-    article_id: int
-    user_id: int
-    comment_text: Optional[str] = None
-
-
-class CommentCreate(CommentBase):
-    pass
-
-
+# Schema for updating an existing comment
 class CommentUpdate(BaseModel):
     comment_text: Optional[str] = None
 
-
-class CommentRead(CommentBase):
+# Schema for reading a comment (response model)
+class Comment(BaseModel):
     comment_id: int
+    article_id: int
+    user_id: int
+    comment_text: str
     created_at: datetime
 
     class Config:
