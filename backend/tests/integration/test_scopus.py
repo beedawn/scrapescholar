@@ -28,8 +28,11 @@ def test_scopus_response_returns_correct_elements():
         parsed_url = urlparse(item["link"])
         assert parsed_url.hostname and parsed_url.hostname.endswith(".scopus.com")
         assert "abstract" in item
+        assert item["asbtract"] != ''
+        assert len(item["abstract"]) > 0
+        print(item["asbtract"])
         assert "document_type" in item
-        assert "source" in item
+        assert "source" in item 
         assert item["source"] == "Scopus"
         assert "evaluation_criteria" in item
         assert "color" in item

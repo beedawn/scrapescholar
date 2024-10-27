@@ -3,7 +3,7 @@ import datetime
 import csv
 from urllib.parse import quote
 import random
-from api_tools.api_tools import scopus_api_key, parse_data_scopus
+from api_tools.api_tools import scopus_api_key, scopus_inst_token, parse_data_scopus
 from academic_databases.SearchResult import SearchResult
 
 
@@ -13,12 +13,13 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
     min_year = quote(min_year)
     #Other Parameters
     http_accept = "application/json"
-    view = "STANDARD"  #Note: COMPLETE view is inaccessible with a standard token
+    view = "COMPLETE"               #Note: COMPLETE view is needed to view abstract
     today = datetime.date.today()
     current_year = today.year
     date_range = min_year + "-" + str(current_year)
     count = "25"
     sort = "relevancy"
+    insttoken = scopus_inst_token
 
     built_query = "https://api.elsevier.com/content/search/scopus?" \
                   + "apiKey=" + key \
@@ -28,7 +29,8 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                   + "&date=" + date_range \
                   + "&count=" + count \
                   + "&sort=" + sort \
-                  + "&subj=" + subject
+                  + "&subj=" + subject \
+                  + "&insttoken=" + insttoken
     response = requests.get(built_query)
     articles = parse_data_scopus(response)
     #return entries to scopus endpoint response
@@ -51,8 +53,8 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                 source="Scopus",
                 color='red',
                 relevance_score=random.randint(1, 100),
-                abstract='',
-                document_type=article.get("subtypeDescription"),
+                abstract=article.get('dc:description'),
+                document_type=article.get('subtypeDescription'),
                 evaluation_criteria='',
                 methodology=0,
                 clarity=0,
