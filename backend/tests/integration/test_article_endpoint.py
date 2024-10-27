@@ -45,17 +45,14 @@ mock_article_data = {
 }
 
 # Helper function to create a search
-def create_search(token, user_id):
+def create_search():
     # Step 3: Create a search and pass user_id dynamically
-    search_data = {
-        "user_id": user_id,  # Use dynamic user_id
-        "title": "Test Search",
-        "search_keywords": ["test", "article"],
-        "status": "active"
-    }
-    response = client.post("/search/create", json=search_data, headers={"Authorization": f"Bearer {token}"})
-    assert response.status_code == 201
-    search_id = response.json()["search_id"]  # Get search_id from response
+    api_query = "test"
+    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
+    # create a new search to query
+    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request_data = search_request.json()
+    search_id = search_request_data["search_id"]
     return search_id
 
 # Helper function to register and authenticate a user
@@ -86,12 +83,7 @@ def test_create_article():
     token, user_id = create_and_authenticate_user()
 
     # Step 5: Create a search and get the search ID
-    api_query = "test"
-    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    # create a new search to query
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
-    search_request_data = search_request.json()
-    search_id = search_request_data["search_id"]
+    search_id = create_search()
 
     # Step 6: Create an article with dynamic search_id and user_id
     mock_article_data = {
@@ -110,18 +102,14 @@ def test_create_article():
     response = session.post(f"{base_url}/article", json=mock_article_data)
     assert response.status_code == 201
     assert response.json()["title"] == mock_article_data["title"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 def test_get_article():
     token, user_id = create_and_authenticate_user()
 
     # First, create a search and get the search ID
     # Step 5: Create a search and get the search ID
-    api_query = "test"
-    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    # create a new search to query
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
-    search_request_data = search_request.json()
-    search_id = search_request_data["search_id"]
+    search_id = create_search()
 
     # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
@@ -136,18 +124,14 @@ def test_get_article():
     response = client.get(f"/article/{article_id}", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert response.json()["title"] == mock_article_data_dynamic["title"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 def test_delete_article():
     token, user_id = create_and_authenticate_user()  
 
     # First, create a search and get the search ID
     # Step 5: Create a search and get the search ID
-    api_query = "test"
-    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    # create a new search to query
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
-    search_request_data = search_request.json()
-    search_id = search_request_data["search_id"]
+    search_id = create_search()
 
     # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
@@ -161,18 +145,14 @@ def test_delete_article():
     # Delete the article
     response = client.delete(f"/article/{article_id}", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 204
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 def test_update_article():
     token, user_id = create_and_authenticate_user()
 
     # First, create a search and get the search ID
     # Step 5: Create a search and get the search ID
-    api_query = "test"
-    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    # create a new search to query
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
-    search_request_data = search_request.json()
-    search_id = search_request_data["search_id"]
+    search_id = create_search()
 
     # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
@@ -188,3 +168,4 @@ def test_update_article():
     response = client.put(f"/article/{article_id}", json=updated_data, headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert response.json()["title"] == "Updated Test Article"
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
