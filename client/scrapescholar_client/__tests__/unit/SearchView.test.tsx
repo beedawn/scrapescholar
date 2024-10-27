@@ -178,7 +178,7 @@ describe('SearchView Component', () => {
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
     await waitFor(() => {
-      expect(screen.getByText('You searched ' + testInput + ' NOT ' + testInput + ' 2')).toBeInTheDocument()
+      expect(screen.getByText('You searched ' + testInput + ' AND NOT ' + testInput + ' 2')).toBeInTheDocument()
     }, { timeout: 5000 })
   },);
 
