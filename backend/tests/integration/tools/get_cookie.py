@@ -27,7 +27,6 @@ def get_cookie():
             token_value = section.split('=')[1]
     # Set a cookie in the session
     session.cookies.set('access_token', token_value)
-    print(session.cookies)
     return session
 
 # if __name__ == "__main__":

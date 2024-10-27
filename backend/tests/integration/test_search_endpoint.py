@@ -38,7 +38,7 @@ def db_session():
             db.commit()
         except ProgrammingError as e:
             if "UndefinedTable" in str(e):
-                print(f"Warning: {e}. The 'search' table does not exist.")
+                # print(f"Warning: {e}. The 'search' table does not exist.")
             else:
                 raise  # re-raise if it's not an UndefinedTable error
         finally:
