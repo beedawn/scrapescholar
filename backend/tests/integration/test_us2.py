@@ -13,9 +13,44 @@ from tests.integration.tools.base_url import base_url
 
 #UT-2.3
 def test_academic_data_and():
-    api_query = "test+AND+pizza"
+    keyword_one="cheese"
+    keyword_two="pizza"
+    api_query = f"{keyword_one}%20AND%20{keyword_two}"
     query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
     search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
     assert search_request.status_code ==200
-    assert isinstance(search_request.json()["search_id"],int)
-    assert isinstance(search_request.json()["articles"],List)
+    search_request_data = search_request.json()
+    print(search_request_data["articles"])
+    assert isinstance(search_request_data["search_id"],int)
+    assert isinstance(search_request_data["articles"],List)
+    keyword_one_found = False
+    keyword_two_found = False
+    for item in search_request_data["articles"]:
+        if keyword_one in item["title"]:
+            keyword_one_found = True
+        if keyword_two in item["title"]:
+            keyword_two_found = True
+    assert keyword_one_found == True
+    assert keyword_two_found == True
+
+
+def test_academic_data_NOT():
+    keyword_one="fish"
+    keyword_two="pizza"
+    api_query = f"{keyword_one}%20AND%20NOT%20{keyword_two}"
+    query_string = "&academic_database=Scopus"
+    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    assert search_request.status_code ==200
+    search_request_data = search_request.json()
+    print(search_request_data["articles"])
+    assert isinstance(search_request_data["search_id"],int)
+    assert isinstance(search_request_data["articles"],List)
+    keyword_one_found = False
+    keyword_two_found = False
+    for item in search_request_data["articles"]:
+        if keyword_one in item["title"]:
+            keyword_one_found = True
+        if keyword_two in item["title"]:
+            keyword_two_found = True
+    assert keyword_one_found == True
+    assert keyword_two_found == False

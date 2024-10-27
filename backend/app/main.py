@@ -87,6 +87,8 @@ async def multiple_apis(keywords: str,
         )
     keywords_list = keywords.split()
 
+    print(keywords_list)
+
     response = []
     id = 0
     database_list = await get_database_list('academic_databases/')
