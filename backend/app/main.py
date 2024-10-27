@@ -78,8 +78,8 @@ async def get_database_list(directory):
 async def multiple_apis(keywords: str,
                         academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None,
                         access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    current_user = await get_current_user_modular(token=access_token, db=db)
-    exceeded_searches = await check_if_user_exceeded_search_amount(current_user=current_user, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
+    exceeded_searches = check_if_user_exceeded_search_amount(current_user=current_user, db=db)
     if exceeded_searches:
         return JSONResponse(
             status_code=507,
@@ -96,10 +96,10 @@ async def multiple_apis(keywords: str,
             article_response, id = globals()[item].request_data(keywords, id=new_id, )
             response.extend(article_response)
     #adds articles to db
-    search_valid, search_id = await post_search_no_route(keywords=keywords_list, articles=response,
+    search_valid, search_id = post_search_no_route(keywords=keywords_list, articles=response,
                                                          current_user=current_user, db=db)
     #instead of returning articles we're going to get the search from the db and return that
-    articles = await initialize_full_article_response(current_user, db, search_id)
+    articles = initialize_full_article_response(current_user, db, search_id)
 
     if search_valid and search_id:
         return {"search_id": search_id, "articles": articles}
