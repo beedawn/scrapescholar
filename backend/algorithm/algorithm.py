@@ -169,6 +169,7 @@ def algorithm(text, keywords):
         print(f"{score}%")
     else:
         print("Text is empty")
+    return score
 
 
 if __name__ == '__main__':
