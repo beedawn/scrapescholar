@@ -20,7 +20,6 @@ def test_user_data_slash_relevant_results():
     found_word = False
     for item in searchdata["articles"]:
         for word in item["title"].split():
-            print(word)
             if "test" in word:
                 found_word = True
     assert found_word == True

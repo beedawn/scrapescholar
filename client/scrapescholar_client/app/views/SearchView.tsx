@@ -185,10 +185,14 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 //make sure there is more than 1 item in the inputs, if there is only one item we don't need a logical operator 
                 && filterBlankInputs.length > 1) {
                 //add logical operator under input field to array
+                if (dropdown[i]=="NOT"){
+                    inputsAndLogicalOperators.push("AND")
+                }
                 inputsAndLogicalOperators.push(dropdown[i])
             }
         }
         const inputsAndLogicalOperatorsString = inputsAndLogicalOperators.join(' ')
+        console.log(inputsAndLogicalOperatorsString)
         setJoinedInputsString([inputsAndLogicalOperatorsString]);
         //can probably move this to bubbleplot
         const newBubbleInputs = filterBlankInputs.map((keyword, i) => ({

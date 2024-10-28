@@ -12,7 +12,6 @@ client = TestClient(app)
 def test_user_data_slash_update_put_valid_body():
     searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     searchdata = searchdata.json()
-    print(searchdata['articles'][0])
     article = searchdata['articles'][0]
     data = {
         "article_id": article['article_id'],
@@ -27,7 +26,7 @@ def test_user_data_slash_update_put_valid_body():
     response = session.get(f"{base_url}/search/user/articles?search_id={searchdata['search_id']}")
     assert response.status_code == 200
     data = response.json()
-    print(putrequest.json())
+
     assert isinstance(data, list)
     for item in data:
         if item["article_id"] == article['article_id']:
@@ -37,7 +36,7 @@ def test_user_data_slash_update_put_valid_body():
             assert item["clarity"] == 0
             assert item["transparency"] == 1
             assert item["completeness"] == 1
-    print("PUT RESPONSE")
+
 
     putrequest=putrequest.json()
     assert putrequest['user_id']== 1

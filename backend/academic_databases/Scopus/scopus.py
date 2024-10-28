@@ -8,7 +8,7 @@ from academic_databases.SearchResult import SearchResult
 
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
-    encoded_keywords = quote(keywords).replace(" ", "+")
+    encoded_keywords = quote(keywords)
     subject = quote(subject)
     min_year = quote(min_year)
     #Other Parameters

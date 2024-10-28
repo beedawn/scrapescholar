@@ -25,7 +25,6 @@ def test_user_data_slash_update_put():
     data = response.json()
     assert isinstance(data, list)
     for item in data:
-        print(item)
         if item["article_id"] == 1:
             assert item["color"] == "Not Relevant"
     search_id = searchdata["search_id"]
