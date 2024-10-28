@@ -36,10 +36,6 @@ def get_words_five_char(text_list):
     return sum
 
 
-def get_weight(text_list):
-    long_words = get_words_five_char(text_list)
-
-
 def calc_score(score, text_list):
     weighted_sum = get_words_five_char(text_list)
     if (weighted_sum > 0):
@@ -54,18 +50,18 @@ def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
     #need a way to calculate weight based off total words in text for each score incrementation
     for keyword in keyword_list:
         if word == keyword:
-            score += 5
+            score += 1
 
     for keyword in keywords_sliced_list:
         if word == keyword:
-            score += 3
+            score += 0.75
 
     for synonym in synonyms_list:
         if word == synonym:
-            score += 2
+            score += 0.5
 
         elif word in synonym:
-            score += 1
+            score += 0.25
 
     return score
 
@@ -129,11 +125,10 @@ def algorithm(text, keywords):
         score += score_word(text, synonyms_sliced_list, keywords_sliced_list, keyword_list)
     score = calc_score(score, text_list)
 
-
     return score
 
-
-if __name__ == '__main__':
-    keyword_input = input("What is the keywords?")
-    text_input = input("What is the text?")
-    algorithm(text_input, keyword_input)
+#
+# if __name__ == '__main__':
+#     keyword_input = input("What is the keywords?")
+#     text_input = input("What is the text?")
+#     algorithm(text_input, keyword_input)
