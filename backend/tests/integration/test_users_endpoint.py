@@ -83,10 +83,10 @@ def test_create_user(db_session):
     created_user = db_session.query(User).filter_by(user_id=created_user_id).first()
 
     # Debugging output to verify the test flow
-    if created_user:
-        print(f"User ID: {created_user.user_id}, Encrypted Username: {created_user.username}")
-    else:
-        print("No user found with the given user_id")
+    # if created_user:
+    #     print(f"User ID: {created_user.user_id}, Encrypted Username: {created_user.username}")
+    # else:
+    #     print("No user found with the given user_id")
 
     # Ensure the user was created and fields are properly hashed/encrypted
     assert created_user is not None
@@ -132,9 +132,9 @@ def test_get_user_by_id(db_session):
     assert user["email"].startswith("$2b$")  # Verify it's a bcrypt hash
 
     # Debugging output to verify the test flow
-    print(f"Retrieved User: {user}")
+    # print(f"Retrieved User: {user}")
     assert user["email"].startswith("$2b$")  # Ensure email is hashed
-    print(f"Retrieved User: {user}")
+    # print(f"Retrieved User: {user}")
 
 
 # Test protected route with mocked authentication
