@@ -26,6 +26,7 @@ describe('SearchView US-25 Component', () => {
 
         waitFor(() => {
             const rows = screen.getAllByTestId('row')
+            expect(rows[0].children[9].textContent).toContain(/92/i);
             expect(rows[0].children[9].textContent).toContain(/%/i);
         }, { timeout: 5000 })
     });
