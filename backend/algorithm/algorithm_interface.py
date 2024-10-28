@@ -11,4 +11,5 @@ def algorithm_interface(keywords, article_title, article_abstract=None, authorke
     if article_title is not None and article_abstract is None:
         relevance_score = title_score
 
-    return round(relevance_score * 0.307, 0)
+    return round(relevance_score * (100/325), 0)
+#325 is the max score returned by algorithm

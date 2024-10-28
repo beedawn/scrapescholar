@@ -38,7 +38,7 @@ def test_sciencedirect_response_returns_correct_elements():
                item["color"] == ""
         assert "relevance_score" in item
         assert isinstance(item["relevance_score"], float)
-        # assert 0 <= item["relevance_score"] <= 100
+        assert 0 <= item["relevance_score"] <= 100
 
     search_id = data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
