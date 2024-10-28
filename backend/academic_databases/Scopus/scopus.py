@@ -10,7 +10,7 @@ from typing import List
 from algorithm.algorithm_interface import algorithm_interface
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
-    encoded_keywords = quote(keywords).replace(" ", "+")
+    encoded_keywords = quote(keywords)
     subject = quote(subject)
     min_year = quote(min_year)
     #Other Parameters
