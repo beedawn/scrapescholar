@@ -6,7 +6,7 @@ import random
 from api_tools.api_tools import scopus_api_key, parse_data_scopus
 from academic_databases.SearchResult import SearchResult
 from algorithm.algorithm import algorithm
-
+from typing import List
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
     encoded_keywords = quote(keywords).replace(" ", "+")
@@ -53,6 +53,7 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
             relevance_score = 0
             print("TITLE SCORE SCOPUS")
             print(title_score)
+            print(keywords)
             if article_title is not None and article_abstract is not None:
                 relevance_score = (title_score + abstract_score) / 2
             if article_title is not None and article_abstract is None:
