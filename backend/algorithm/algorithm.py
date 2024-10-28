@@ -7,31 +7,24 @@ dotenv.load_dotenv()
 thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 
 
-def check_limit(word, list_of_words):
-    if len(word) > 3 and word not in list_of_words:
-        list_of_words.append(word)
-
-    # if len(word) > 4 and word not in list_of_words:
-    #     print("5 word")
-    #     list_of_words.append(word)
-    # elif len(word) > 3 and word not in list_of_words:
-    #     print("3 word")
-    #     list_of_words.append(word)
+def check_limit(word, set_of_words):
+    if len(word) > 3 and word not in set_of_words:
+        set_of_words.add(word)
 
 
-def break_word_into_possible_words(word, list_of_words):
+def break_word_into_possible_words(word, set_of_words):
     for i in range(len(word)):
         #adds to right side by adding characters to end of word
         new_word = word[:i]
-        check_limit(new_word, list_of_words)
+        check_limit(new_word, set_of_words)
 
         # trims from left side, by moving inward
         new_word = word[i:]
-        check_limit(new_word, list_of_words)
+        check_limit(new_word, set_of_words)
 
         for j in range(i + 1, len(word) + 1):
             substring = word[i:j]
-            check_limit(substring, list_of_words)
+            check_limit(substring, set_of_words)
 
 
 def get_words_five_char(text_list):
@@ -49,11 +42,7 @@ def get_weight(text_list):
 
 def calc_score(score, text_list):
     weighted_sum = get_words_five_char(text_list)
-    # print("SUM")
-    # print(weighted_sum)
-    # print("score")
-    # print(score)
-    if(weighted_sum >0):
+    if (weighted_sum > 0):
         return round(score / weighted_sum * 100, 2)
     else:
         return round(score / len(text_list) * 100, 2)
@@ -66,56 +55,43 @@ def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
     for keyword in keyword_list:
         if word == keyword:
             score += 5
-            # print("word", word)
-            # print("keyword", keyword)
-            # print("plus 5")
 
     for keyword in keywords_sliced_list:
         if word == keyword:
             score += 3
-            # print("word", word)
-            # print("keyword", keyword)
-            # print("plus 3")
 
     for synonym in synonyms_list:
         if word == synonym:
             score += 2
-            # print("word", word)
-            # print("synonym", synonym)
-            # print("plus 2")
 
         elif word in synonym:
             score += 1
-            # print("word", word)
-            # print("synonym", synonym)
-            # print("plus 1")
 
     return score
 
 
 def api_request(keyword):
     try:
-        synonyms = []
-        relevant_synonyms = []
+        synonyms = set()
+        relevant_synonyms = set()
         # 1000 queries per day
         response = requests.get(
             f"https://www.dictionaryapi.com/api/v3/references/thesaurus/json/{keyword}?key={thesaurus_api_key}")
         response.raise_for_status()
         similar_words = response.json()
         if similar_words and isinstance(similar_words, list) and 'meta' in similar_words[0]:
-            synonyms = similar_words[0]['meta']['syns'][0]
+            synonyms.update(similar_words[0]['meta']['syns'][0])
         if similar_words and isinstance(similar_words, list) and 'def' in similar_words[0]:
             relevant_synonyms = similar_words[0]['def'][0]['sseq'][0][0][1]['rel_list']
         else:
-            synonyms = []
+            synonyms = set()
         if len(relevant_synonyms) > 0:
             for index, group in enumerate(relevant_synonyms):
                 for item in group:
-                    synonyms.append(item['wd'])
+                    synonyms.add(item['wd'])
     except (requests.exceptions.RequestException, KeyError, IndexError) as e:
         print(f"Error fetching synonyms for '{keyword}': {e}")
-        synonyms = []
-    # print("SYNONYMS RETURNED", synonyms)
+        synonyms = set()
     return synonyms
 
 
@@ -128,13 +104,13 @@ def algorithm(text, keywords):
     score = 0
     keyword_list = keywords.split()
     text_list = text.split()
-    synonyms_list = []
-    keywords_sliced_list = []
-    synonyms_sliced_list = []
-    text_sliced_list = []
+    synonyms_list = set()
+    keywords_sliced_list = set()
+    synonyms_sliced_list = set()
+    text_sliced_list = set()
 
     for keyword in keyword_list:
-        synonyms_list.append(api_request(keyword))
+        synonyms_list.update(api_request(keyword))
         break_word_into_possible_words(keyword, keywords_sliced_list)
     #flatten synonyms list since its not flat
     synonyms_list = flatten_list(synonyms_list)
@@ -148,27 +124,12 @@ def algorithm(text, keywords):
         for synonym in synonyms_sliced_list:
             if keyword == synonym:
                 synonyms_sliced_list.remove(synonym)
-    # print(keyword_list)
 
-    # print(text_sliced_list)
-    # print("keywords sliced")
-    # print(keywords_sliced_list)
-    #
-    # print("synonyms sliced")
-    # print(synonyms_sliced_list)
-    #
-    # print("text words")
-    # print(text_sliced_list)
     for text in text_sliced_list:
         score += score_word(text, synonyms_sliced_list, keywords_sliced_list, keyword_list)
     score = calc_score(score, text_list)
-    #score function takes synonyms and gives them .5, scores exact word matches as 1
 
-    if len(text_list) > 0:
-        # print(score)
-        print(f"{score}%")
-    else:
-        print("Text is empty")
+
     return score
 
 
