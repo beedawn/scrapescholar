@@ -30,8 +30,6 @@ def get_download(db: Session = Depends(get_db), access_token: Annotated[str | No
     search_title = search_title["title"]
     if not articles:
         return []
-
-
     else:
         return StreamingResponse(
             csv_generator(articles, db),
@@ -40,10 +38,21 @@ def get_download(db: Session = Depends(get_db), access_token: Annotated[str | No
         )
 
 
-
 def csv_generator(data: List, db) -> Generator[str, None, None]:
     buffer = StringIO()
-    #make 100 comment headers
+    fieldnames = build_fieldnames(data)
+    writer = csv.DictWriter(buffer, fieldnames=fieldnames)
+    writer.writeheader()
+    for row in data:
+        row_data = add_user_comments_to_list(row,db)
+        writer.writerow(row_data)
+        buffer.seek(0)
+        yield buffer.read()
+        buffer.truncate(0)
+        buffer.seek(0)
+
+
+def build_fieldnames(data):
     comment_headers = []
     user_name_headers = []
     i = 1
@@ -55,23 +64,14 @@ def csv_generator(data: List, db) -> Generator[str, None, None]:
     for comment, user in zip(comment_headers, user_name_headers):
         fieldnames.append(user)
         fieldnames.append(comment)
-    writer = csv.DictWriter(buffer, fieldnames=fieldnames)
-    writer.writeheader()
-    for row in data:
-        article_comment = get_comments(db=db, article_id=row.article_id)
-        print(article_comment)
-        row_data = vars(row)
-        for i, comment_builder in enumerate(article_comment, start=1):
-            print(i)
-            # we gotta get the user from the user id
-            user = get_user(db, comment_builder.user_id)
-            print(decrypt(user.username))
-            print(comment_builder.user_id)
-            print(comment_builder.comment_text)
-            row_data[f"Username Comment {i}"] = decrypt(user.username)
-            row_data[f"Comment {i}"] = comment_builder.comment_text
-        writer.writerow(row_data)
-        buffer.seek(0)
-        yield buffer.read()
-        buffer.truncate(0)
-        buffer.seek(0)
+    return fieldnames
+
+
+def add_user_comments_to_list(row, db):
+    article_comment = get_comments(db=db, article_id=row.article_id)
+    row_data = vars(row)
+    for i, comment_builder in enumerate(article_comment, start=1):
+        user = get_user(db, comment_builder.user_id)
+        row_data[f"Username Comment {i}"] = decrypt(user.username)
+        row_data[f"Comment {i}"] = comment_builder.comment_text
+    return row_data

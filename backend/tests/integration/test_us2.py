@@ -32,6 +32,7 @@ def test_academic_data_and():
             keyword_two_found = True
     assert keyword_one_found == True
     assert keyword_two_found == True
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 
 def test_academic_data_NOT():
@@ -54,3 +55,4 @@ def test_academic_data_NOT():
             keyword_two_found = True
     assert keyword_one_found == True
     assert keyword_two_found == False
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
