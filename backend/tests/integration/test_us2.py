@@ -14,7 +14,7 @@ from tests.integration.tools.base_url import base_url
 #UT-2.3
 def test_academic_data_and():
     keyword_one="cheese"
-    keyword_two="pizza"
+    keyword_two="milk"
     api_query = f"{keyword_one}%20AND%20{keyword_two}"
     query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
     search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
@@ -22,7 +22,7 @@ def test_academic_data_and():
     search_request_data = search_request.json()
     print(search_request_data["articles"])
     assert isinstance(search_request_data["search_id"],int)
-    assert isinstance(search_request_data["articles"],List)
+    assert isinstance(search_request_data["articles"], List)
     keyword_one_found = False
     keyword_two_found = False
     for item in search_request_data["articles"]:

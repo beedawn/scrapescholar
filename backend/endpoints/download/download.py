@@ -14,7 +14,6 @@ from typing import List, Dict, Generator
 router = APIRouter()
 
 
-# Endpoint to retrieve the last 300 searches for the logged-in user
 @router.get("/", status_code=status.HTTP_200_OK)
 def get_download(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                  search_id: int = Query(None, description="ID of the specific search to retrieve")):
@@ -35,6 +34,8 @@ def get_download(db: Session = Depends(get_db), access_token: Annotated[str | No
             media_type="application/json",
             headers={"Content-Disposition": f"attachment; filename={article_title}.csv"}
         )
+
+
 #should we add comments?
 
 def csv_generator(data: List[Dict]) -> Generator[str, None, None]:
