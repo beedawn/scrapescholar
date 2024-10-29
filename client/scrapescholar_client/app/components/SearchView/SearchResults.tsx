@@ -28,7 +28,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     setSearchName, searchName, currentSearchId, setDisplayInputs,
     setLoading, onArticleClick }) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
-    const { getAPIPastSearchTitle, getCommentsByArticle } = apiCalls();
+    const { getAPIPastSearchTitle, getCommentsByArticle, downloadURL } = apiCalls();
 
     const [comments, setComments] = useState<any[]>([]); // Comments state
     const [commentsLoading, setCommentsLoading] = useState<boolean>(false);     
@@ -50,7 +50,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
             lg:max-w-screen-md xl:max-w-screen-lg">
                 {results.length !== 0 ? (
                     <div>
-                        <SearchHeader downloadURL="/csv"
+                        <SearchHeader downloadURL={`${downloadURL}${currentSearchId}`}
                             searchName={searchName} setSearchName={setSearchName}
                             currentSearchId={currentSearchId} setLoading={setLoading} />
                         <p>
