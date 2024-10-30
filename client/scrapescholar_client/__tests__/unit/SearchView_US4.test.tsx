@@ -170,7 +170,7 @@ describe('SearchView US-4 Component', () => {
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
          
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         setSimulateInsufficientStorage(false);
     })
 
@@ -187,7 +187,7 @@ describe('SearchView US-4 Component', () => {
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
            
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         setSimulateInsufficientStorage(false);
     })
 

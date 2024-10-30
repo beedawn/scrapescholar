@@ -1,30 +1,33 @@
-# search/search.py
-from fastapi import Depends, HTTPException, status
+# utils/auth.py
+import jwt
+from fastapi import Depends, HTTPException, status, Header, Cookie
+from sqlalchemy.orm import Session
+from app.db.session import get_db 
 from app.models.user import User
+import os
 from fastapi.security import OAuth2PasswordBearer
-
-import jwt  # Import JWT
 from dotenv import load_dotenv
 
-import os
-
-from sqlalchemy.orm import Session
-from app.db.session import get_db
-
-# Load environment variables
 load_dotenv()
 
-# Define OAuth2PasswordBearer scheme
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-
-# Get the SECRET key from the environment
 SECRET = os.getenv("SECRET_KEY")
 DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE"
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-#could be broken up into a validate token function and then get user? using it elsewhere for this purpose now
-def get_current_user_modular(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    print(f"Decoding token: {token}")
+# Helper function to extract token from either cookie or Authorization header
+async def get_token_from_cookie_or_header(access_token: str = Cookie(None), authorization: str = Header(None)):
+    if authorization:
+        token = authorization.split(" ")[1]  # Extract token from "Bearer {token}"
+    elif access_token:
+        token = access_token  # Use token from the cookie
+    else:
+        raise HTTPException(status_code=401, detail="Authorization token missing")
+    return token
+
+async def get_current_user(db: Session = Depends(get_db), access_token: str = Cookie(None), authorization: str = Header(None)):
+    token = await get_token_from_cookie_or_header(access_token, authorization)
+    
     try:
         if DEBUG_SCRAPESCHOLAR:
             print(f"Decoding token: {token}")

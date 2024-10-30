@@ -15,6 +15,8 @@ from endpoints.user import user
 from endpoints.auth import auth
 from endpoints.user_data import user_data
 from endpoints.search import search
+from endpoints.article import article
+from endpoints.comment import comment
 from typing import List, Annotated
 from pathlib import Path
 from endpoints.search.search import post_search_no_route, check_if_user_exceeded_search_amount, \
@@ -35,6 +37,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @app.get("/health_check")
 async def health_check():
@@ -46,6 +54,8 @@ app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(role.router, prefix="/roles", tags=["Roles"])
 app.include_router(search.router, prefix="/search", tags=["Search"])
+app.include_router(article.router, prefix="/article", tags=["Articles"])
+app.include_router(comment.router, prefix="/comment", tags=["Articles"])
 app.include_router(user_data.router, prefix="/user_data", tags=["UserData"])
 
 
@@ -68,8 +78,8 @@ async def get_database_list(directory):
 async def multiple_apis(keywords: str,
                         academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None,
                         access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    current_user = await get_current_user_modular(token=access_token, db=db)
-    exceeded_searches = await check_if_user_exceeded_search_amount(current_user=current_user, db=db)
+    current_user = get_current_user_modular(token=access_token, db=db)
+    exceeded_searches = check_if_user_exceeded_search_amount(current_user=current_user, db=db)
     if exceeded_searches:
         return JSONResponse(
             status_code=507,
@@ -86,10 +96,10 @@ async def multiple_apis(keywords: str,
             article_response, id = globals()[item].request_data(keywords, id=new_id, )
             response.extend(article_response)
     #adds articles to db
-    search_valid, search_id = await post_search_no_route(keywords=keywords_list, articles=response,
+    search_valid, search_id = post_search_no_route(keywords=keywords_list, articles=response,
                                                          current_user=current_user, db=db)
     #instead of returning articles we're going to get the search from the db and return that
-    articles = await initialize_full_article_response(current_user, db, search_id)
+    articles = initialize_full_article_response(current_user, db, search_id)
 
     if search_valid and search_id:
         return {"search_id": search_id, "articles": articles}

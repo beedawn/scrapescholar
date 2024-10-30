@@ -26,7 +26,7 @@ describe('SearchView AR-4 Component', () => {
             const rows = screen.getAllByTestId('row')
             expect(rows[0].children[10].textContent).toContain("✎");
             expect(rows[1].children[10].textContent).toContain("✎");
-        }, { timeout: 10000 });
+        }, { timeout: 5000 });
         
     })
 
