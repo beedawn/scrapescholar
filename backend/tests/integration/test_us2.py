@@ -20,7 +20,7 @@ def test_academic_data_and():
     search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
     assert search_request.status_code ==200
     search_request_data = search_request.json()
-    print(search_request_data["articles"])
+    search_id = search_request_data["search_id"]
     assert isinstance(search_request_data["search_id"],int)
     assert isinstance(search_request_data["articles"], List)
     keyword_one_found = False
@@ -43,7 +43,7 @@ def test_academic_data_NOT():
     search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
     assert search_request.status_code ==200
     search_request_data = search_request.json()
-    print(search_request_data["articles"])
+    search_id = search_request_data["search_id"]
     assert isinstance(search_request_data["search_id"],int)
     assert isinstance(search_request_data["articles"],List)
     keyword_one_found = False
