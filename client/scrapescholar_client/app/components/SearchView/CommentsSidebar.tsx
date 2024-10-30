@@ -38,7 +38,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
     }, [articleId]);
 
     const handleAddComment = async () => {
-        if (comments.length >= 2) {
+        if (comments.length >= 100) {
             setError('Cannot add more than 100 comments for this article.');
             return;
         }    

@@ -23,8 +23,11 @@ async def create_new_comment(
     
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
-    
-    new_comment = create_comment(db, article_id=article_id, comment=comment, user_id=current_user.user_id)
+    comments = get_comments_by_article(db, article_id=article_id)
+    if len(comments) < 100:
+        new_comment = create_comment(db, article_id=article_id, comment=comment, user_id=current_user.user_id)
+    else:
+        raise HTTPException(status_code=507, detail="Insufficient storage, article has 100 comments")
     return new_comment
 
 # Edit a comment
