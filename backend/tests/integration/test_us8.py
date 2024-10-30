@@ -6,6 +6,7 @@ from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 from academic_databases.SearchResult import SearchResult
 from io import StringIO
+from tests.integration.tools.create_search import create_search
 import csv
 
 session = get_cookie()
@@ -53,3 +54,17 @@ def test_generate_data(test_db_session: Session):
 
     assert csv_result == test_result
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+
+
+
+# UT-8.3
+def test_csv_filename_in_response():
+    search_id = create_search()
+    response = session.get(f"{base_url}/download?search_id={search_id}")
+    content_disposition = response.headers["Content-Disposition"]
+    #get title
+    response = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
+    response = response.json()
+    title = response["title"]
+    #compare search title to downloaded filed
+    assert f'attachment; filename={title}' in content_disposition
