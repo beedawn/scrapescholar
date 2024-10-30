@@ -397,7 +397,8 @@ const apiCalls = () => {
     }
 
   }
-
+  
+  const downloadURL= `http://${host}:8000/download?search_id=`
 
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
@@ -406,7 +407,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment   };
+    deleteComment, downloadURL   };
 
 }
 
