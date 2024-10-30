@@ -38,14 +38,19 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
     }, [articleId]);
 
     const handleAddComment = async () => {
+        if (comments.length >= 2) {
+            setError('Cannot add more than 100 comments for this article.');
+            return;
+        }    
         try {
             const addedComment = await addComment(articleId, newComment);
             setComments([...comments, addedComment]);
             setNewComment('');
+            setError(null); // Clear any previous errors
         } catch (err) {
             setError('Failed to add comment');
         }
-    };
+    };    
 
     const handleEditClick = (comment: Comment) => {
         setEditingCommentId(comment.comment_id);
