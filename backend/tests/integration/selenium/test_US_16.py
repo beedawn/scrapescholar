@@ -122,7 +122,7 @@ def test_login_us_16_with_refresh():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         
-        print(driver.get_cookie("access_token"))
+
         #refresh page
         driver.refresh()
 
