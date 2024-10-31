@@ -11,12 +11,7 @@ from api_tools.api_tools import scopus_api_key
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 client = TestClient(app)
-
-@pytest.fixture(scope="module")
-def session():
-    session = get_cookie()
-    yield session
-    session.close()
+session = get_cookie()
 
 @pytest.fixture
 def setup_mock_scopus():
@@ -26,7 +21,7 @@ def setup_mock_scopus():
         mock_get.return_value = mock_response
         yield mock_get
 
-def test_scopus_response_returns_correct_elements(session):
+def test_scopus_response_returns_correct_elements():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
@@ -57,7 +52,7 @@ def test_scopus_response_returns_correct_elements(session):
     search_id=data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
         
-def test_scopus_student_rating_information_available(session):
+def test_scopus_student_rating_information_available():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
@@ -78,7 +73,7 @@ def test_scopus_student_rating_information_available(session):
     search_id=data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
         
-def test_scopus_empty_response_is_empty(session):
+def test_scopus_empty_response_is_empty():
     response = session.get(f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
