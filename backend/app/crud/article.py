@@ -11,9 +11,11 @@ def get_article(db: Session, article_id: int):
         raise HTTPException(status_code=404, detail="Article not found")
     return article
 
-
+# app/crud/article.py
 def get_articles(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Article).offset(skip).limit(limit).all()
+    # Ordering by `article_id` to ensure consistent results
+    return db.query(Article).order_by(Article.article_id).offset(skip).limit(limit).all()
+
 
 def create_article(db: Session, article: ArticleCreate, user_id: int):
     #db_article = Article(**article.dict())
