@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
 from academic_databases.SearchResult import SearchResult
-import requests
+import pytest
 from academic_databases.Scopus.scopus import request_data
 
 from app.main import app
@@ -11,9 +11,22 @@ from api_tools.api_tools import scopus_api_key
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 client = TestClient(app)
-session = get_cookie()
 
-def test_scopus_response_returns_correct_elements():
+@pytest.fixture(scope="module")
+def session():
+    session = get_cookie()
+    yield session
+    session.close()
+
+@pytest.fixture
+def setup_mock_scopus():
+    with patch('requests.get') as mock_get:
+        mock_response = MagicMock()
+        mock_response.json.return_value = mock_scopus_response
+        mock_get.return_value = mock_response
+        yield mock_get
+
+def test_scopus_response_returns_correct_elements(session):
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
@@ -44,7 +57,7 @@ def test_scopus_response_returns_correct_elements():
     search_id=data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
         
-def test_scopus_student_rating_information_available():
+def test_scopus_student_rating_information_available(session):
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
@@ -65,7 +78,7 @@ def test_scopus_student_rating_information_available():
     search_id=data["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
         
-def test_scopus_empty_response_is_empty():
+def test_scopus_empty_response_is_empty(session):
     response = session.get(f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
     assert response.status_code == 200
     data = response.json()
@@ -171,12 +184,7 @@ mock_scopus_response = {
     }
 }
 
-@patch('requests.get')
-def test_mock_scopus(mock_get):
-    mock_response = MagicMock()
-    mock_response.json.return_value = mock_scopus_response
-    mock_get.return_value = mock_response
-
+def test_mock_scopus(setup_mock_scopus):
     keywords = "training"
     id = 1
     key = scopus_api_key
