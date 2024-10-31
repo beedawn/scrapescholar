@@ -171,7 +171,7 @@ def setup_mock_get():
 def test_sciencedirect_apiKey_env_is_filled():
     assert sciencedirect_api_key is not None
 
-def test_mock_sciencedirect(mock_get):
+def test_mock_sciencedirect(setup_mock_get):
     query = "test"
     start_id = 1
     result_articles, article_id = request_data(query, start_id)
