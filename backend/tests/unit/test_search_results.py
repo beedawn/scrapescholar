@@ -1,7 +1,5 @@
 from academic_databases.SearchResult import SearchResult
 
-
-
 def test_search_result_initialization():
     testResult = SearchResult(
         article_id = 1,
@@ -59,3 +57,6 @@ def test_search_result_initialization_optional_fields():
     assert testResult.clarity is None
     assert testResult.completeness is None
     assert testResult.transparency is None
+
+test_search_result_initialization()
+test_search_result_initialization_optional_fields
