@@ -21,6 +21,7 @@ def test_search_result_initialization():
         transparency = 1
     )
 
+    print("Hi im tristan and I am dumb")
     assert testResult.article_id == 1
     assert testResult.title == "A quest for research and knowledge gaps in cybersecurity awareness for small and medium-sized enterprises"
     assert testResult.date == "2024-10-27"
