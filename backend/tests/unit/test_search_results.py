@@ -59,4 +59,4 @@ def test_search_result_initialization_optional_fields():
     assert testResult.transparency is None
 
 test_search_result_initialization()
-test_search_result_initialization_optional_fields
+test_search_result_initialization_optional_fields()
