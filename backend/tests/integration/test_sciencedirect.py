@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
+import pytest
 from academic_databases.SearchResult import SearchResult
 from app.main import app
 from api_tools.api_tools import sciencedirect_api_key
@@ -77,9 +78,6 @@ session = get_cookie()
 #     assert len(data["articles"]) == 0
 #     search_id = data["search_id"]
 #     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
-
-def test_sciencedirect_apiKey_env_is_filled():
-    assert sciencedirect_api_key is not None
 
 mock_sciencedirect_response = {
     "search-results": {
@@ -162,12 +160,18 @@ mock_sciencedirect_response = {
     }
 }
 
-@patch('requests.get')
-def test_mock_sciencedirect(mock_get):
-    mock_response = MagicMock()
-    mock_response.json.return_value = mock_sciencedirect_response
-    mock_get.return_value = mock_response
+@pytest.fixture
+def setup_mock_get():
+    with patch('requests.get') as mock_get:
+        mock_response = MagicMock()
+        mock_response.json.return_value = mock_sciencedirect_response
+        mock_get.return_value = mock_response
+        yield mock_get
 
+def test_sciencedirect_apiKey_env_is_filled():
+    assert sciencedirect_api_key is not None
+
+def test_mock_sciencedirect(mock_get):
     query = "test"
     start_id = 1
     result_articles, article_id = request_data(query, start_id)
