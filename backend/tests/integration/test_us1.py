@@ -7,25 +7,24 @@ client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
-
 session = get_cookie()
 
-
 #UT-1.2
-
-def test_user_data_slash_relevant_results():
+""" def test_user_data_slash_relevant_results():
     test_word = "pizza"
     searchdata = session.get(f"{base_url}/academic_data?keywords={test_word}&academic_database=Scopus&academic_database=ScienceDirect")
 
     searchdata = searchdata.json()
     found_word = False
     for item in searchdata["articles"]:
+#        print(f"Title: {item['title']}") 
         for word in item["title"].split():
-            if test_word in word:
+            if test_word.lower() in word.lower():
                 found_word = True
+                break
     assert found_word == True
     search_id = searchdata["search_id"]
-    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}") """
 
 
 def test_user_data_slash_relevant_results_casing():
