@@ -170,9 +170,8 @@ def test_mock_sciencedirect(mock_get):
 
     query = "test"
     start_id = 1
-    result_articles, last_id = request_data(query, start_id)
+    result_articles, article_id = request_data(query, start_id)
 
-    print("is it working?")
     assert len(result_articles) == 1
     assert isinstance(result_articles[0], SearchResult)
     assert result_articles[0].article_id
