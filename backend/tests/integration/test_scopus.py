@@ -171,7 +171,7 @@ mock_scopus_response = {
     }
 }
 
-@patch('reqests.get')
+@patch('requests.get')
 def test_mock_scopus(mock_get):
     mock_response = MagicMock()
     mock_response.json.return_value = mock_scopus_response
