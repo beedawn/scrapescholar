@@ -3,13 +3,14 @@ import random
 
 from api_tools.api_tools import sciencedirect_api_key, parse_data_scopus
 from academic_databases.SearchResult import SearchResult
+from algorithm.algorithm_interface import algorithm_interface
 
 
 # triggers for science direct endpoint
-def request_data(query: str, id: int):
+def request_data(keywords: str, id: int):
     #request data from science direct
     response = requests.get(
-        f"https://api.elsevier.com/content/search/sciencedirect?query={query}&apiKey={sciencedirect_api_key}")
+        f"https://api.elsevier.com/content/search/sciencedirect?query={keywords}&apiKey={sciencedirect_api_key}")
     articles = parse_data_scopus(response)
     #return entries to sciencedirect endpoint response
     return_articles = []
@@ -23,6 +24,11 @@ def request_data(query: str, id: int):
                 link = links[1].get('@href')
             else:
                 link = ""
+
+            article_title = article.get('dc:title')
+
+            relevance_score = algorithm_interface(keywords, article_title)
+
             return_articles.append(SearchResult(
                 article_id=article_id,
                 title=article.get('dc:title'),
@@ -31,7 +37,7 @@ def request_data(query: str, id: int):
                 citedby='',
                 source="ScienceDirect",
                 color='red',
-                relevance_score=random.randint(1, 100),
+                relevance_score=relevance_score,
                 abstract='',
                 document_type=article.get("subtypeDescription", "Unknown"),
                 evaluation_criteria='',

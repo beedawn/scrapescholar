@@ -14,14 +14,14 @@ session = get_cookie()
 #UT-1.2
 
 def test_user_data_slash_relevant_results():
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    test_word = "pizza"
+    searchdata = session.get(f"{base_url}/academic_data?keywords={test_word}&academic_database=Scopus&academic_database=ScienceDirect")
 
     searchdata = searchdata.json()
     found_word = False
     for item in searchdata["articles"]:
         for word in item["title"].split():
-            print(word)
-            if "test" in word:
+            if test_word in word:
                 found_word = True
     assert found_word == True
     search_id = searchdata["search_id"]

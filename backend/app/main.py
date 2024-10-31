@@ -17,6 +17,7 @@ from endpoints.user_data import user_data
 from endpoints.search import search
 from endpoints.article import article
 from endpoints.comment import comment
+from endpoints.download import download
 from typing import List, Annotated
 from pathlib import Path
 from endpoints.search.search import post_search_no_route, check_if_user_exceeded_search_amount, \
@@ -57,6 +58,8 @@ app.include_router(search.router, prefix="/search", tags=["Search"])
 app.include_router(article.router, prefix="/article", tags=["Articles"])
 app.include_router(comment.router, prefix="/comment", tags=["Articles"])
 app.include_router(user_data.router, prefix="/user_data", tags=["UserData"])
+
+app.include_router(download.router, prefix="/download", tags=["Download"])
 
 
 def check_response(response: List, id: int):

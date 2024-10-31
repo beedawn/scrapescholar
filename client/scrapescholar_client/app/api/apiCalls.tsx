@@ -60,7 +60,7 @@ const apiCalls = () => {
       setInputs([emptyString])
     else {
       setInputs([...filterBlankInputs])
-      const apiQuery = inputsAndLogicalOperators.join('+')
+      const apiQuery = inputsAndLogicalOperators.join('%20')
       try {
         const url = `http://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
         data = await fetch(url, { method: "GET", credentials: "include" })
@@ -397,7 +397,8 @@ const apiCalls = () => {
     }
 
   }
-
+  
+  const downloadURL= `http://${host}:8000/download?search_id=`
 
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
@@ -406,7 +407,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment   };
+    deleteComment, downloadURL   };
 
 }
 
