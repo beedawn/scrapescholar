@@ -13,14 +13,6 @@ from tests.integration.tools.base_url import base_url
 client = TestClient(app)
 session = get_cookie()
 
-@pytest.fixture
-def setup_mock_scopus():
-    with patch('requests.get') as mock_get:
-        mock_response = MagicMock()
-        mock_response.json.return_value = mock_scopus_response
-        mock_get.return_value = mock_response
-        yield mock_get
-
 def test_scopus_response_returns_correct_elements():
     response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     assert response.status_code == 200
@@ -178,6 +170,14 @@ mock_scopus_response = {
         ]
     }
 }
+
+@pytest.fixture
+def setup_mock_scopus():
+    with patch('requests.get') as mock_get:
+        mock_response = MagicMock()
+        mock_response.json.return_value = mock_scopus_response
+        mock_get.return_value = mock_response
+        yield mock_get
 
 def test_mock_scopus(setup_mock_scopus):
     keywords = "training"
