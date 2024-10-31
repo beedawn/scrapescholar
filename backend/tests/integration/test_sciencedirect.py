@@ -177,7 +177,7 @@ def test_mock_sciencedirect(mock_get):
     assert isinstance(result_articles[0], SearchResult)
     assert result_articles[0].article_id
     assert result_articles[0].title == "Cybersecurity activities for education and curriculum design: A survey"
-    assert result_articles[0].link == "https://api.elsevier.com/"
+    assert result_articles[0].link == "https://www.sciencedirect.com/science/article/pii/S2451958824001349?dgcid=api_sd_search-api-endpoint"
     assert result_articles[0].date == "2024-12-31"
     assert result_articles[0].citedby == ''
     assert result_articles[0].source == "ScienceDirect"
