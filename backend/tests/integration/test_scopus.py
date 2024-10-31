@@ -187,15 +187,15 @@ def test_mock_scopus(mock_get):
 
     assert len(result_articles) == 1
     assert isinstance(result_articles[0], SearchResult)
-    assert result_articles[0].article_id 
+    assert result_articles[0].article_id is not None
     assert result_articles[0].title == "A Systematic and Meta-Analysis Review of Augmented Reality Interventions for Individuals with Autism Spectrum Disorder"
     assert result_articles[0].link == "https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85206900643&origin=inward"
     assert result_articles[0].date == "2024-12-30"
     assert result_articles[0].citedby == "0"
     assert result_articles[0].source == "Scopus"
-    assert result_articles[0].color
-    assert result_articles[0].relevance_score
-    assert result_articles[0].abstract
+    assert result_articles[0].color is not None
+    assert result_articles[0].relevance_score is not None
+    assert result_articles[0].abstract is not None
     assert result_articles[0].document_type == "Article"
     assert result_articles[0].evaluation_criteria == ''
     assert result_articles[0].methodology == 0

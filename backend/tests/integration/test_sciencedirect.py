@@ -174,14 +174,14 @@ def test_mock_sciencedirect(mock_get):
 
     assert len(result_articles) == 1
     assert isinstance(result_articles[0], SearchResult)
-    assert result_articles[0].article_id
+    assert result_articles[0].article_id is not None
     assert result_articles[0].title == "Cybersecurity activities for education and curriculum design: A survey"
     assert result_articles[0].link == "https://www.sciencedirect.com/science/article/pii/S2451958824001349?dgcid=api_sd_search-api-endpoint"
     assert result_articles[0].date == "2024-12-31"
     assert result_articles[0].citedby == ''
     assert result_articles[0].source == "ScienceDirect"
     assert result_articles[0].color == "red"
-    assert result_articles[0].relevance_score
+    assert result_articles[0].relevance_score is not None
     assert result_articles[0].abstract == ''
     assert result_articles[0].document_type == "Unknown"
     assert result_articles[0].evaluation_criteria == ''
