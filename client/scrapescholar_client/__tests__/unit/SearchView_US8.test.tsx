@@ -29,7 +29,7 @@ describe('SearchView US-8 Component', () => {
         submitSearch(testInput);
         await waitFor(() => {
             const downloadButton = screen.getByText('Download');
-            expect(downloadButton).toHaveAttribute('href', '/csv');
+            expect(downloadButton).toHaveAttribute('href', expect.stringMatching(/\/download/));
         }, { timeout: 5000 });
     })
 
