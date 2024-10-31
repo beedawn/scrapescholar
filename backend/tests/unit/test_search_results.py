@@ -19,7 +19,6 @@ def test_search_result_initialization():
         transparency = 1
     )
 
-    print("Hi im tristan and I am dumb")
     assert testResult.article_id == 1
     assert testResult.title == "A quest for research and knowledge gaps in cybersecurity awareness for small and medium-sized enterprises"
     assert testResult.date == "2024-10-27"
@@ -35,7 +34,6 @@ def test_search_result_initialization():
     assert testResult.clarity == 1
     assert testResult.completeness == 1
     assert testResult.transparency == 1
-
 
 def test_search_result_initialization_optional_fields():
     testResult = SearchResult(
@@ -58,5 +56,3 @@ def test_search_result_initialization_optional_fields():
     assert testResult.completeness is None
     assert testResult.transparency is None
 
-test_search_result_initialization()
-test_search_result_initialization_optional_fields()
