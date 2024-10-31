@@ -12,10 +12,10 @@ session = get_cookie()
 
 
 def test_sciencedirect_response_returns_correct_elements():
-    response = request_data("test", 1)
-    print(response)
-    print("hello world")
-    # response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
+    # response = request_data("test", 1)
+    # print(response)
+    # print("hello world")
+    response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
