@@ -14,7 +14,9 @@ def get_article(db: Session, article_id: int):
 # app/crud/article.py
 def get_articles(db: Session, skip: int = 0, limit: int = 10):
     # Ordering by `article_id` to ensure consistent results
-    return db.query(Article).order_by(Article.article_id).offset(skip).limit(limit).all()
+    #return db.query(Article).order_by(Article.article_id).offset(skip).limit(limit).all()
+    return db.query(Article).offset(skip).limit(limit).all()
+
 
 
 def create_article(db: Session, article: ArticleCreate, user_id: int):
