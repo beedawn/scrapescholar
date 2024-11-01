@@ -93,8 +93,8 @@ jobs:
 
     - name: Run frontend coverage
       working-directory: ./client/scrapescholar_client
-      run: | 
-        npm run test:unit -- --coverage 
+      run: |
+        npm run test:unit -- --coverage --silent 
 
     - name: Run Frontend NPM dev
       working-directory: ./client/scrapescholar_client
