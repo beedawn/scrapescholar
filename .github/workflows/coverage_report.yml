@@ -1,4 +1,5 @@
-name: Run Coverage Report
+name: Run Coverage Reports
+
 on:
   pull_request:
     branches:
@@ -6,8 +7,9 @@ on:
   push:
     branches:
       - '*'
+
 jobs:
-  test:
+  coverage:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: ${{secrets.DATABASE_URL}}
@@ -44,7 +46,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U student" 
+          --health-cmd "pg_isready -U ${{secrets.POSTGRES_USER}}" 
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 5
@@ -65,18 +67,14 @@ jobs:
 
     - name: Wait for PostgreSQL to be ready
       run: |
-        until pg_isready -h ${{secrets.POSTGRES_SERVER}} -p 5432 -U student; do
+        until pg_isready -h ${{secrets.POSTGRES_SERVER}} -p 5432 -U ${{secrets.POSTGRES_USER}}; do
           echo "Waiting for PostgreSQL to be ready..."
           sleep 5
         done
-    - name: Run init_db script  
-      run: python backend/app/init_db.py
 
-    - name: Run FastAPI Server
+    - name: Run init_db script  
       working-directory: ./backend
-      run: |
-        uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
-        curl -X GET http://0.0.0.0:8000/health_check
+      run: python app/init_db.py
 
     - name: Install Chrome and ChromeDriver
       run: |
@@ -84,24 +82,33 @@ jobs:
         sudo apt-get install -y chromium-browser
         sudo apt-get install -y chromium-chromedriver
 
-    - name: Run npm install
+    - name: Run FastAPI Server
+      working-directory: ./backend
+      run: |
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
+        curl -X GET http://0.0.0.0:8000/health_check
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install frontend dependencies
       working-directory: ./client/scrapescholar_client
       run: npm install
 
-    - name: Run Build && unit tests
+    - name: Run Frontend Coverage Report
       working-directory: ./client/scrapescholar_client
-      run: | 
-        npm run build
-        
-    - name: Run NPM dev
-      working-directory: ./client/scrapescholar_client
-      run: | 
-        npm run dev & sleep 10
+      run: npm run test:unit -- --coverage
 
-    - name: Run Python Integration Tests
+    - name: Run Backend Coverage Report
       working-directory: ./backend
-      env:
-        DISPLAY: :99  
       run: |
-        Xvfb :99 -screen 0 1920x1080x24 &
-        coverage run -m pytest tests --verbose && coverage report -m
+        pytest --cov=app --cov-report=html
+
+    - name: Upload Backend Coverage Report
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend-coverage-report
+        path: backend/htmlcov
