@@ -34,7 +34,7 @@ def request_data(keywords: str, id: int):
                 title=article.get('dc:title'),
                 link=link,
                 date=article.get('prism:coverDate'),
-                citedby='',
+                citedby=article.get('citedby-count'),
                 source="ScienceDirect",
                 color='red',
                 relevance_score=relevance_score,
