@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from fastapi.exceptions import HTTPException
 from app.crud.user_data import get_user_data, create_user_data, update_user_data
 from app.crud.article import create_article
-from app.models.user_data import UserData
 from app.schemas.user_data import UserDataUpdate
 from app.schemas.article import ArticleCreate
 from app.db.session import SessionLocal
@@ -15,9 +14,7 @@ def test_db_session():
     """Fixture to provide a database session with rollback for testing."""
     db = SessionLocal()
     db.begin_nested()
-
     yield db
-
     db.rollback()
     db.close()
 
@@ -47,7 +44,6 @@ def test_create_user_data(test_db_session: Session):
         user_id=1,
         article_id=created_article.article_id
     )
-
     assert created_user_data.user_id == 1
     assert created_user_data.article_id == created_article.article_id
 
@@ -74,3 +70,50 @@ def test_get_user_data_not_found(test_db_session: Session):
     with pytest.raises(HTTPException) as exc_info:
         get_user_data(test_db_session, article_id=9999)
     assert exc_info.value.status_code == 404
+
+@pytest.mark.asyncio
+async def test_update_user_data(test_db_session: Session):
+    """Test updating an existing user data entry."""
+    article_in = ArticleCreate(**mock_article_data)
+    created_article = create_article(test_db_session, article_in, user_id=1)
+
+    created_user_data = create_user_data(
+        test_db_session,
+        user_id=1,
+        article_id=created_article.article_id
+    )
+
+    # Update the user data entry with integer values
+    update_data = UserDataUpdate(
+        article_id=created_user_data.article_id,
+        relevancy_color="blue",
+        methodology=4,
+        clarity=5,
+        transparency=4,
+        completeness=5
+    )
+    updated_user_data = await update_user_data(test_db_session, update_data)
+
+    # Verify the updated fields
+    assert updated_user_data.relevancy_color == "blue"
+    assert updated_user_data.methodology == 4
+    assert updated_user_data.clarity == 5
+    assert updated_user_data.transparency == 4
+    assert updated_user_data.completeness == 5
+
+
+@pytest.mark.asyncio
+async def test_update_user_data_not_found(test_db_session: Session):
+    """Test updating a non-existent user data entry."""
+    update_data = UserDataUpdate(
+        article_id=9999,  # Non-existent article_id
+        relevancy_color="blue",
+        methodology="4",
+        clarity="5",
+        transparency="4",
+        completeness="5"
+    )
+    with pytest.raises(HTTPException) as exc_info:
+        await update_user_data(test_db_session, update_data)
+    assert exc_info.value.status_code == 404
+    assert exc_info.value.detail == "Userdata not found in put, user not valid in db"
