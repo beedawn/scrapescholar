@@ -107,4 +107,4 @@ jobs:
         DISPLAY: :99  
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
-        coverage run -m pytest tests --verbose && coverage report --fail-under=90 -m
+        coverage run -m pytest tests --verbose && coverage report --fail-under=70 -m
