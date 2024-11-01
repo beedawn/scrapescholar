@@ -91,10 +91,10 @@ jobs:
       working-directory: ./client/scrapescholar_client
       run: npm install
 
-    - name: Run Build && unit tests
+    - name: Run frontend coverage
       working-directory: ./client/scrapescholar_client
       run: | 
-        npm run build
+        npm run test:unit -- --coverage 
 
     - name: Run Frontend NPM dev
       working-directory: ./client/scrapescholar_client
@@ -108,7 +108,3 @@ jobs:
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
         coverage run -m pytest tests --verbose && coverage report -m
-
-    - name: Run Frontend Coverage Report
-      working-directory: ./client/scrapescholar_client
-      run: npm run test:unit -- --coverage        
