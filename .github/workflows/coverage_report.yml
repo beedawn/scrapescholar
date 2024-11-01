@@ -1,4 +1,4 @@
-name: Run Integration Tests
+name: Run Coverage Report
 on:
   pull_request:
     branches:
@@ -59,7 +59,7 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      working-directory: ./backend  # Adjust to the correct directory
+      working-directory: ./backend
       run: |
         pip install -r requirements.txt
 
@@ -73,94 +73,35 @@ jobs:
       run: python backend/app/init_db.py
 
     - name: Run FastAPI Server
-      working-directory: ./backend  # Adjust to the correct directory
+      working-directory: ./backend
       run: |
         uvicorn app.main:app --host 0.0.0.0 --port 8000 & sleep 5
         curl -X GET http://0.0.0.0:8000/health_check
 
-
-       
     - name: Install Chrome and ChromeDriver
       run: |
         sudo apt-get update
         sudo apt-get install -y chromium-browser
         sudo apt-get install -y chromium-chromedriver
-       
-
-
-
 
     - name: Run npm install
-      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      working-directory: ./client/scrapescholar_client
       run: npm install
 
     - name: Run Build && unit tests
-      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      working-directory: ./client/scrapescholar_client
       run: | 
         npm run build
         
     - name: Run NPM dev
-      working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
+      working-directory: ./client/scrapescholar_client
       run: | 
         npm run dev & sleep 10
 
     - name: Run Python Integration Tests
-      working-directory: ./backend  # Adjust to the correct directory
+      working-directory: ./backend
       env:
         DISPLAY: :99  
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
-        pytest ./tests/integration --disable-warnings -v -s
-
-    # - name: run Integration tests Next.js 
-    #   working-directory: ./client/scrapescholar_client  # Adjust to the correct directory
-    #   run: npm run test:integration
-
-    # these three tests reach out to real domain and test ssl validity for AR-3
-    - name: test ssl
-      run: |
-        curl https://$DOMAIN
-
-    - name: test http redirection to https
-      run: |
-
-        # Perform an HTTP request and follow redirects
-        REDIRECTS=$(curl -I -L -s -w "%{http_code} %{url_effective}\n" http://$DOMAIN)
-
-        # Extract HTTP status code and final URL from last line of output
-        STATUS_CODE=$(echo "$REDIRECTS" | tail -n 1 | awk '{print $1}')
-        FINAL_URL=$(echo "$REDIRECTS" | tail -n 1 | awk '{print $2}')
-
-        # Print status code and final redirected url for debugging purposes
-        echo "Status Code: $STATUS_CODE"
-        echo "Final URL: $FINAL_URL"
-
-        # check if final url is https, and status code is 200, otherwise exit with 1 
-        if [[ "$FINAL_URL" == https://*  &&  "$STATUS_CODE" -eq 200 ]]; then
-            echo "Redirection from HTTP to HTTPS is working correctly."
-        else
-            echo "Redirection does not go to HTTPS."
-        exit 1
-        fi
-    - name: test cert not expired
-      run: |
-        CERT_EXPIRE=$(curl https://$DOMAIN -vI --stderr - | grep "expire date" | awk '{print $4 " " $5 " " $7}')
-        CERT_DOMAIN=$(curl https://$DOMAIN -vI --stderr - | grep "subject" | head -n 1|awk '{print $3}'| cut -d'=' -f2)
-        TODAY=$(date | awk '{print $2 " " $3 " " $6}')
-        CERT_EXPIRE_SECONDS=$(date -d "$CERT_EXPIRE" +%s)
-        TODAY_SECONDS=$(date -d "$TODAY" +%s)
-        echo "Cert expires $CERT_EXPIRE"
-        echo "cert domain $CERT_DOMAIN"
-        if [[ $TODAY_SECONDS -lt $CERT_EXPIRE_SECONDS && $CERT_DOMAIN == $DOMAIN ]]; then
-          echo "valid"
-        else
-          echo "not valid"
-          echo "expired or domain mismatch"
-          exit 1
-        fi  
-
-
-
-
-
-
+        coverage run -m pytest tests --verbose && coverage report -m
