@@ -73,8 +73,7 @@ jobs:
         done
 
     - name: Run init_db script  
-      working-directory: ./backend
-      run: python app/init_db.py
+      run: python backend/app/init_db.py
 
     - name: Install Chrome and ChromeDriver
       run: |
@@ -97,18 +96,19 @@ jobs:
       working-directory: ./client/scrapescholar_client
       run: npm install
 
-    - name: Run Frontend Coverage Report
+    - name: Run Frontend NPM dev
       working-directory: ./client/scrapescholar_client
-      run: npm run test:unit -- --coverage
+      run: | 
+        npm run dev & sleep 10
 
     - name: Run Backend Coverage Report
       working-directory: ./backend
+      env:
+        DISPLAY: :99  
       run: |
-        pytest --cov=app --cov-report=html
+        Xvfb :99 -screen 0 1920x1080x24 &
+        coverage run -m pytest tests --verbose && coverage report -m
 
-    - name: Upload Backend Coverage Report
-      if: success()
-      uses: actions/upload-artifact@v3
-      with:
-        name: backend-coverage-report
-        path: backend/htmlcov
+    - name: Run Frontend Coverage Report
+      working-directory: ./client/scrapescholar_client
+      run: npm run test:unit -- --coverage        
