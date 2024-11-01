@@ -46,7 +46,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U ${{secrets.POSTGRES_USER}}" 
+          --health-cmd "pg_isready -U student" 
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 5
@@ -67,7 +67,7 @@ jobs:
 
     - name: Wait for PostgreSQL to be ready
       run: |
-        until pg_isready -h ${{secrets.POSTGRES_SERVER}} -p 5432 -U ${{secrets.POSTGRES_USER}}; do
+        until pg_isready -h ${{secrets.POSTGRES_SERVER}} -p 5432 -U student; do
           echo "Waiting for PostgreSQL to be ready..."
           sleep 5
         done
