@@ -81,6 +81,7 @@ def create_user(db: Session, user: UserCreate):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    # i think we need to get the actual user from the db so it has an associated ID
     return db_user
 
 
