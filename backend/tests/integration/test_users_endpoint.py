@@ -81,7 +81,8 @@ def test_create_user(db_session):
     assert response.status_code == 201
 
     # Retrieve the created user ID from the response
-    created_user_id = response.json()["user_id"]
+    response_json = response.json()
+    created_user_id = response.user_id
 
     # Commit the transaction to ensure the user is saved in the database
     db_session.commit()
