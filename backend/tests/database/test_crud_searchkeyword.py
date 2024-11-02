@@ -38,9 +38,7 @@ def test_db_session():
     """Fixture to provide a database session with rollback for testing."""
     db = SessionLocal()
     db.begin_nested()
-
     yield db
-
     db.rollback()
     db.close()
 
@@ -68,24 +66,29 @@ def create_search_keyword_test(search_keyword_data, test_db_session):
     created_search_keyword = create_search_keyword(test_db_session, search_keyword_in)
     return created_search_keyword
 
-def create_keyword_test( test_db_session):
+
+def create_keyword_test(test_db_session):
     keyword_in = KeywordCreate(**mock_keyword_data)
     created_keyword = create_keyword(test_db_session, keyword_in)
     return created_keyword
+def delete_keyword_test(test_db_session):
+    #need to delete keywords after making them
+    return None
 
 
 def setup(test_db_session):
     test_user = get_user_by_username(test_db_session, "testuser")
-
-    # Step 2: Create a Search entry using the created user
     created_search = create_search_test(test_user, test_db_session)
-
     created_keyword = create_keyword_test(test_db_session)
     search_keyword_data = {
         "search_id": created_search.search_id,
         "keyword_id": created_keyword.keyword_id
     }
     return search_keyword_data
+def teardown():
+    # delete_search_test(mock_user_data, test_db_session)
+    # delete_keyword_test(mock_user_data)
+    return None
 
 def test_create_search_keyword(test_db_session: Session):
     """Test creating a new search keyword."""
@@ -94,6 +97,7 @@ def test_create_search_keyword(test_db_session: Session):
     # Verifying the fields in the created search keyword
     assert created_search_keyword.search_id == search_keyword_data["search_id"]
     assert created_search_keyword.keyword_id == search_keyword_data["keyword_id"]
+    teardown()
 
 
 def test_get_search_keyword(test_db_session: Session):
@@ -102,7 +106,7 @@ def test_get_search_keyword(test_db_session: Session):
     created_search_keyword = create_search_keyword_test(search_keyword_data, test_db_session)
     fetched_search_keyword = get_search_keyword(test_db_session, created_search_keyword.search_keyword_id)
     assert fetched_search_keyword.search_keyword_id == created_search_keyword.search_keyword_id
-
+    teardown()
 
 def test_get_search_keywords(test_db_session: Session):
     """Test retrieving a list of search keywords with pagination."""
@@ -115,14 +119,12 @@ def test_get_search_keywords(test_db_session: Session):
         generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=2),
         generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=3)
     ]
-
     for search_keyword_data in search_keyword_data_list:
         create_search_keyword_test(search_keyword_data, test_db_session)
-
     # Retrieve paginated search keywords
     search_keywords = get_search_keywords(test_db_session, skip=0, limit=2)
     assert len(search_keywords) == 2
-
+    teardown()
 
 def test_delete_search_keyword(test_db_session: Session):
     """Test deleting a search keyword."""
@@ -131,12 +133,11 @@ def test_delete_search_keyword(test_db_session: Session):
     # Delete the search keyword
     deleted_search_keyword = delete_search_keyword(test_db_session, created_search_keyword.search_keyword_id)
     assert deleted_search_keyword.search_keyword_id == created_search_keyword.search_keyword_id
-
     # Verify search keyword no longer exists
     with pytest.raises(HTTPException) as exc_info:
         get_search_keyword(test_db_session, created_search_keyword.search_keyword_id)
     assert exc_info.value.status_code == 404
-
+    teardown()
 
 def test_get_search_keyword_not_found(test_db_session: Session):
     """Test error handling when a search keyword is not found."""
