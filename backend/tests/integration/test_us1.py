@@ -7,14 +7,12 @@ client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
-
 session = get_cookie()
 
-
 #UT-1.2
-
+# does not work consistently as this test is entirely dependent on Scopus and ScienceDirect results, which can change
 # def test_user_data_slash_relevant_results():
-#     test_word = "pizza"
+#     test_word = "test"
 #     searchdata = session.get(f"{base_url}/academic_data?keywords={test_word}&academic_database=Scopus&academic_database=ScienceDirect")
 #     searchdata = searchdata.json()
 #     found_word = False
@@ -25,6 +23,7 @@ session = get_cookie()
 #     assert found_word == True
 #     search_id = searchdata["search_id"]
 #     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
+
 
 
 def test_user_data_slash_relevant_results_casing():

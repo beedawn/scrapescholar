@@ -1,6 +1,8 @@
 # backend/tests/test_crud.py
+
 import pytest
-from app.crud.article import create_article, get_article, update_article, delete_article
+from app.crud.article import create_article, get_article, update_article, delete_article, get_articles
+from app.models.user_data import UserData
 from app.crud.search import create_search
 from app.crud.user import create_user
 from app.schemas.article import ArticleCreate, ArticleUpdate
@@ -135,3 +137,53 @@ def test_delete_article(test_db_session: Session):
         fetched_article = get_article(test_db_session, created_article.article_id)
     except HTTPException as e:
         assert e.status_code == 404
+
+# Test for deleting a non-existent article
+def test_delete_article_not_found(test_db_session: Session):
+    with pytest.raises(HTTPException) as exc_info:
+        delete_article(test_db_session, article_id=9999)
+    assert exc_info.value.status_code == 404
+
+# Test for error handling in `get_article`
+def test_get_article_not_found(test_db_session: Session):
+    with pytest.raises(HTTPException) as exc_info:
+        get_article(test_db_session, article_id=9999)  # Non-existent ID
+    assert exc_info.value.status_code == 404
+
+def test_get_articles_pagination(test_db_session: Session):
+    """Test retrieving a paginated list of articles."""
+
+    # Step 1: Clear existing UserData and Article entries in the database (if not using a rollback approach)
+    test_db_session.query(UserData).delete()
+    test_db_session.query(Article).delete()
+    test_db_session.commit()
+
+    # Step 2: Create a user and search entry for setting up foreign key references
+    user_in = UserCreate(**mock_user_data)
+    created_user = create_user(test_db_session, user_in)
+    search_in = SearchCreate(user_id=created_user.user_id, **mock_search_data)
+    created_search = create_search(test_db_session, search_in)
+
+    # Step 3: Create multiple articles to test pagination
+    article_data_list = [
+        ArticleCreate(search_id=created_search.search_id, **{**mock_article_data, "title": "First Article"}),
+        ArticleCreate(search_id=created_search.search_id, **{**mock_article_data, "title": "Second Article"}),
+        ArticleCreate(search_id=created_search.search_id, **{**mock_article_data, "title": "Third Article"})
+    ]
+    for article_data in article_data_list:
+        create_article(test_db_session, article_data, user_id=created_user.user_id)
+
+    # Step 4: Retrieve a paginated list of articles
+    skip = 0
+    limit = 2
+    articles = get_articles(test_db_session, skip=skip, limit=limit)
+
+    # Step 5: Verify the number of articles returned matches the limit and order
+    assert len(articles) == limit
+    assert articles[0].title == "First Article"
+    assert articles[1].title == "Second Article"
+
+    # Step 6: Test the pagination by changing the `skip` parameter
+    articles_with_skip = get_articles(test_db_session, skip=2, limit=limit)
+    assert len(articles_with_skip) == 1
+    assert articles_with_skip[0].title == "Third Article"
