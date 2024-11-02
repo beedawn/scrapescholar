@@ -10,7 +10,6 @@ class UserLogin(BaseModel):
 
 
 class UserBase(BaseModel):
-    user_id: int
     username: str
     email: Optional[str] = None
 
