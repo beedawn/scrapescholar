@@ -70,6 +70,7 @@ def get_user_by_username_api(username: str, db: Session = Depends(get_db)):
     #probably want to verify user has valid token
 
     # Encrypt the username before querying
+
     encrypted_username = encrypt_username(username)
     user = get_user_by_username(db=db, username=encrypted_username)
     return user

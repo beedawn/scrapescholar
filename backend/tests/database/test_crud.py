@@ -1,5 +1,6 @@
 # backend/tests/test_crud.py
 import pytest
+from app.main import app
 from app.crud.article import create_article, get_article, update_article, delete_article
 from app.crud.search import create_search
 from app.crud.user import create_user, get_user_by_username
@@ -76,6 +77,7 @@ def test_get_article_by_id(test_db_session: Session):
     # user_in = UserCreate(**mock_user_data)
     # created_user = create_user(test_db_session, user_in)
     created_user = get_user_by_username(test_db_session, "testuser")
+
     # Step 2: Create a search entry (required for search_id foreign key)
     search_in = SearchCreate(user_id=created_user.user_id, **mock_search_data)
     created_search = create_search(test_db_session, search_in)
