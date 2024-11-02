@@ -9,10 +9,13 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 from app.db.session import SessionLocal
 import os
+from tests.integration.tools.get_cookie import get_cookie
+from tests.integration.tools.base_url import base_url
+from tests.integration.tools.delete_user import delete_user
 
 # Initialize TestClient
 client = TestClient(app)
-
+session = get_cookie()
 # Load environment variables
 load_dotenv()
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
@@ -135,6 +138,7 @@ def test_get_user_by_id(db_session):
     # print(f"Retrieved User: {user}")
     assert user["email"].startswith("$2b$")  # Ensure email is hashed
     # print(f"Retrieved User: {user}")
+    delete_user(created_user_id, session, base_url)
 
 
 # Test protected route with mocked authentication

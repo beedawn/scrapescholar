@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from tests.integration.tools.get_cookie import get_cookie
 from app.models.user import User
 from types import SimpleNamespace
-
+from tests.integration.tools.delete_user import delete_user
 # Initialize TestClient
 client = TestClient(app)
 
@@ -72,6 +72,7 @@ def test_expired_token(db_session):
     # Step 4: Assert that the response status is 401 Unauthorized
     assert search_history_response.status_code == 401
     assert search_history_response.json() == {"detail": "Token has expired"}
+    delete_user(created_user_id, session, base_url)
 
 
 @pytest.mark.search

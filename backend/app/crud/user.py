@@ -43,7 +43,17 @@ def get_user(db: Session, user_id: int):
 
 
 def get_user_by_username(db: Session, username: str):
+    #i dont think this works
     encrypted_username = encrypt(username)
+    print("ENCRYPTED USERNAME")
+    print(encrypted_username)
+    #should we get all users, decrypt them, then compare? hmm
+
+    users = db.query(User).all()
+    for user in users:
+        plaintext_user=decrypt(user.username)
+        print(plaintext_user)
+
     user = db.query(User).filter(User.username == encrypted_username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
