@@ -13,8 +13,8 @@ from app.schemas.searchkeyword import SearchKeywordCreate
 from app.schemas.search import SearchCreate
 from app.schemas.keyword import KeywordCreate
 from app.schemas.user import UserCreate
-from app.crud.search import create_search
-from app.crud.keyword import create_keyword
+from app.crud.search import create_search, delete_search
+from app.crud.keyword import create_keyword, delete_keyword
 from app.crud.user import create_user, get_user_by_username
 from app.db.session import SessionLocal
 from fastapi.exceptions import HTTPException
@@ -56,8 +56,10 @@ def create_search_test(created_user, test_db_session):
     return created_search
 
 
-def delete_search_test(created_user, test_db_session):
+def delete_search_test(search_id, test_db_session):
     #figure out how to delete search
+    #need search id
+    delete_search(test_db_session, search_id)
     return None
 
 
@@ -71,8 +73,11 @@ def create_keyword_test(test_db_session):
     keyword_in = KeywordCreate(**mock_keyword_data)
     created_keyword = create_keyword(test_db_session, keyword_in)
     return created_keyword
-def delete_keyword_test(test_db_session):
+
+
+def delete_keyword_test(keyword_id, test_db_session):
     #need to delete keywords after making them
+    delete_keyword(test_db_session, keyword_id)
     return None
 
 
@@ -85,10 +90,17 @@ def setup(test_db_session):
         "keyword_id": created_keyword.keyword_id
     }
     return search_keyword_data
-def teardown():
-    # delete_search_test(mock_user_data, test_db_session)
-    # delete_keyword_test(mock_user_data)
+
+
+def teardown(search_keyword_data, test_db_session):
+    #TODO:
+    #need to delete search_keyword
+    delete_search_keyword(test_db_session, search_keyword_data["search_id"])
+    delete_keyword_test(search_keyword_data["keyword_id"], test_db_session)
+    delete_search_test(search_keyword_data["search_id"], test_db_session)
+
     return None
+
 
 def test_create_search_keyword(test_db_session: Session):
     """Test creating a new search keyword."""
@@ -97,7 +109,7 @@ def test_create_search_keyword(test_db_session: Session):
     # Verifying the fields in the created search keyword
     assert created_search_keyword.search_id == search_keyword_data["search_id"]
     assert created_search_keyword.keyword_id == search_keyword_data["keyword_id"]
-    teardown()
+    teardown(search_keyword_data, test_db_session)
 
 
 def test_get_search_keyword(test_db_session: Session):
@@ -106,7 +118,8 @@ def test_get_search_keyword(test_db_session: Session):
     created_search_keyword = create_search_keyword_test(search_keyword_data, test_db_session)
     fetched_search_keyword = get_search_keyword(test_db_session, created_search_keyword.search_keyword_id)
     assert fetched_search_keyword.search_keyword_id == created_search_keyword.search_keyword_id
-    teardown()
+    teardown(search_keyword_data, test_db_session)
+
 
 def test_get_search_keywords(test_db_session: Session):
     """Test retrieving a list of search keywords with pagination."""
@@ -124,7 +137,8 @@ def test_get_search_keywords(test_db_session: Session):
     # Retrieve paginated search keywords
     search_keywords = get_search_keywords(test_db_session, skip=0, limit=2)
     assert len(search_keywords) == 2
-    teardown()
+    teardown(search_keyword_data, test_db_session)
+
 
 def test_delete_search_keyword(test_db_session: Session):
     """Test deleting a search keyword."""
@@ -137,7 +151,8 @@ def test_delete_search_keyword(test_db_session: Session):
     with pytest.raises(HTTPException) as exc_info:
         get_search_keyword(test_db_session, created_search_keyword.search_keyword_id)
     assert exc_info.value.status_code == 404
-    teardown()
+    teardown(search_keyword_data, test_db_session)
+
 
 def test_get_search_keyword_not_found(test_db_session: Session):
     """Test error handling when a search keyword is not found."""
