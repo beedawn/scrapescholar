@@ -64,7 +64,7 @@ def test_create_article(test_db_session: Session):
     # Step 4: Validate the article creation
     assert created_article.title == mock_article_data["title"]
     assert created_article.relevance_score == mock_article_data["relevance_score"]
-    delete_user(user_in["user_id"], session, base_url)
+    delete_user(user_in.user_id, session, base_url)
 
 def test_get_article_by_id(test_db_session: Session):
     """Test retrieving an article by ID"""
