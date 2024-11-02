@@ -6,10 +6,11 @@ from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 import os
-
+from dotenv import load_dotenv
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+load_dotenv()
 # Encryption key
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")  # Store this securely!
 fernet = Fernet(ENCRYPTION_KEY)

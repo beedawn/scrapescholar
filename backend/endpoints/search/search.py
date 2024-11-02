@@ -73,8 +73,9 @@ def put_search_share(db: Session = Depends(get_db), access_token: Annotated[str 
     #     search_id: int
     #     shared_with_user_id: int
     #     shared_by_user_id: int
-    search_share = SearchShareCreate(search_id=search_id, shared_with_userid=share_user.user_id, shared_by_user_id=user_id)
-    create_search_share(db, search_share)
+
+    # search_share = SearchShareCreate(search_id=search_id, shared_with_userid=share_user.user_id, shared_by_user_id=user_id)
+    # create_search_share(db, search_share)
 
 
 # get single search and associated articles

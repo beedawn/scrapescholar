@@ -36,6 +36,8 @@ def test_db_session():
 
 def test_create_search_share(test_db_session: Session):
     """Test creating a new search share."""
+    #need to have two users and a search to share a search
+
     search_share_data = generate_unique_share_data()
     search_share_in = SearchShareCreate(**search_share_data)
     created_search_share = create_search_share(test_db_session, search_share_in)
