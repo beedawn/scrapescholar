@@ -10,7 +10,9 @@ from app.models.article import Article
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from fastapi.exceptions import HTTPException
-
+from tests.integration.tools.delete_user import delete_user
+from tests.integration.tools.get_cookie import get_cookie
+from tests.integration.tools.base_url import base_url
 # Mock data for user
 mock_user_data = {
     "username": "testuser",
@@ -36,7 +38,7 @@ mock_article_data = {
     "document_type": "Journal",
     "source_id": 1
 }
-
+session = get_cookie()
 @pytest.fixture
 def test_db_session():
     """Fixture to provide a database session for testing"""
@@ -62,6 +64,7 @@ def test_create_article(test_db_session: Session):
     # Step 4: Validate the article creation
     assert created_article.title == mock_article_data["title"]
     assert created_article.relevance_score == mock_article_data["relevance_score"]
+    delete_user(user_in["user_id"], session, base_url)
 
 def test_get_article_by_id(test_db_session: Session):
     """Test retrieving an article by ID"""
@@ -84,7 +87,7 @@ def test_get_article_by_id(test_db_session: Session):
     # Step 5: Validate the retrieved article
     assert article is not None
     assert article.title == mock_article_data["title"]
-
+    delete_user(user_in["user_id"], session, base_url)
 def test_update_article(test_db_session: Session):
     """Test updating an article"""
 
@@ -107,6 +110,7 @@ def test_update_article(test_db_session: Session):
     # Step 5: Validate the updated article
     assert updated_article.title == "Updated Title"
     assert updated_article.relevance_score == 99
+    delete_user(user_in["user_id"], session, base_url)
 
 
 def test_delete_article(test_db_session: Session):
@@ -135,3 +139,4 @@ def test_delete_article(test_db_session: Session):
         fetched_article = get_article(test_db_session, created_article.article_id)
     except HTTPException as e:
         assert e.status_code == 404
+    delete_user(user_in["user_id"], session, base_url)

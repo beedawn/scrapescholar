@@ -1,16 +1,23 @@
 # user/user.py
-from fastapi import APIRouter, Depends, HTTPException, status
+
+from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
 from sqlalchemy.orm import Session
 from app.schemas.user import UserCreate, UserUpdate, UserRead
 from app.crud.user import create_user, get_user, get_user_by_username, update_user, delete_user
 from app.db.session import get_db
 from cryptography.fernet import Fernet
 import os
+from auth_tools.get_user import get_current_user_modular
+from typing import List, Annotated
+from dotenv import load_dotenv
 
-#probably wan tto add cookie token validation here, but worried it will break tests
+
+load_dotenv()
 
 # Load environment variable for encryption key
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+
+
 fernet = Fernet(ENCRYPTION_KEY)
 
 router = APIRouter()
@@ -22,12 +29,12 @@ def encrypt_username(username: str) -> str:
 
 
 @router.post("/create", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
+def create_new_user(user: UserCreate,access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
     """
     API endpoint to create a new user.
     """
     #probably want to verify user has valid token
-
+    user_1 = get_current_user_modular(access_token, db)
     # Encrypt the username before checking for existence
     encrypted_username = encrypt_username(user.username)
 

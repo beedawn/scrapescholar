@@ -23,18 +23,7 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
-# Mock user registration data
-mock_user_data = {
-    "username": "testuser_5",
-    "password": "testpassword",
-    "email": "testuser_5@example.com"
-}
 
-# Mock login data
-mock_login_data = {
-    "username": "testuser_5",
-    "password": "testpassword"
-}
 
 # Mock article data
 mock_article_data = {
