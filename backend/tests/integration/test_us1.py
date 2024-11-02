@@ -16,7 +16,6 @@ session = get_cookie()
 # def test_user_data_slash_relevant_results():
 #     test_word = "pizza"
 #     searchdata = session.get(f"{base_url}/academic_data?keywords={test_word}&academic_database=Scopus&academic_database=ScienceDirect")
-
 #     searchdata = searchdata.json()
 #     found_word = False
 #     for item in searchdata["articles"]:
