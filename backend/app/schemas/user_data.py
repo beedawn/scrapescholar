@@ -1,6 +1,6 @@
 # app/schemas/user.py
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
 
 
 class UserDataBase(BaseModel):
@@ -22,10 +22,10 @@ class UserDataCreate(UserDataBase):
 class UserDataUpdate(BaseModel):
     article_id: int
     relevancy_color: Optional[str] = None
-    methodology: Optional[str] = None
-    clarity: Optional[str] = None
-    transparency: Optional[str] = None
-    completeness: Optional[str] = None
+    methodology: Optional[Union[str, int]] = None
+    clarity: Optional[Union[str, int]] = None
+    transparency: Optional[Union[str, int]] = None
+    completeness: Optional[Union[str, int]] = None
     evaluation_criteria: Optional[str] = None
 
 
