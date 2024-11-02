@@ -7,7 +7,7 @@ from app.schemas.comment import CommentCreate
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.create_search import create_search
 from tests.integration.tools.base_url import base_url
-from tests.integration.tools.delete_user import delete_user
+
 
 client = TestClient(app)
 session = get_cookie()

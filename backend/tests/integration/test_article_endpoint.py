@@ -5,7 +5,6 @@ from app.main import app
 from app.db.session import get_db, SessionLocal
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
-from tests.integration.tools.delete_user import delete_user
 from tests.integration.tools.create_search import create_search
 
 session = get_cookie()
