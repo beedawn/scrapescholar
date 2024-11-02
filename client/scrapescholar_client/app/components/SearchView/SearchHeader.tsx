@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './../Button';
 import SearchTitleField from './SearchTitleField';
 import DOMPurify from 'dompurify';
-
+import ShareModal from './modal/ShareModal';
+import { Share } from 'next/font/google';
 
 interface SearchHeaderProps {
     downloadURL: string;
@@ -15,8 +16,11 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     downloadURL, searchName, setSearchName,
     currentSearchId, setLoading }) => {
     const sanitizedDownloadURL = DOMPurify.sanitize(downloadURL);
+
+    const [shareModalActive, setShareModalActive]= useState(false);
     return (
         <div>
+            {shareModalActive?<ShareModal setShareModalActive={setShareModalActive}></ShareModal>:<></>}
             <div className="topContainer">
                 <div className="searchName">
 
@@ -28,6 +32,11 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                 <div className="downloadButton text-right">
                     <Button>
                         <a href={sanitizedDownloadURL}>Download</a>
+                    </Button>
+                </div>
+                <div className="shareButton text-right">
+                    <Button className="bg-purple-700" onClick={()=>{ setShareModalActive(true)}}>
+                        Share
                     </Button>
                 </div>
             </div>
