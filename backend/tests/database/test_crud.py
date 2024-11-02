@@ -2,7 +2,7 @@
 import pytest
 from app.crud.article import create_article, get_article, update_article, delete_article
 from app.crud.search import create_search
-from app.crud.user import create_user
+from app.crud.user import create_user, get_user_by_username
 from app.schemas.article import ArticleCreate, ArticleUpdate
 from app.schemas.search import SearchCreate
 from app.schemas.user import UserCreate
@@ -13,6 +13,8 @@ from fastapi.exceptions import HTTPException
 from tests.integration.tools.delete_user import delete_user
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
+import app
+from auth_tools.get_user import get_current_user_modular
 # Mock data for user
 mock_user_data = {
     "username": "testuser",
@@ -50,8 +52,9 @@ def test_db_session():
 
 def test_create_article(test_db_session: Session):
     # Step 1: Create a user entry (required for user_id foreign key)
-    user_in = UserCreate(**mock_user_data)
-    created_user = create_user(test_db_session, user_in)
+    # user_in = UserCreate(**mock_user_data)
+    # created_user = create_user(test_db_session, user_in)
+    created_user = get_user_by_username(test_db_session, "testuser")
 
     # Step 2: Create a search entry (required for search_id foreign key)
     search_in = SearchCreate(user_id=created_user.user_id, **mock_search_data)
@@ -64,15 +67,15 @@ def test_create_article(test_db_session: Session):
     # Step 4: Validate the article creation
     assert created_article.title == mock_article_data["title"]
     assert created_article.relevance_score == mock_article_data["relevance_score"]
-    delete_user(user_in.user_id, session, base_url)
+    # delete_user(user_in.user_id, session, base_url)
 
 def test_get_article_by_id(test_db_session: Session):
     """Test retrieving an article by ID"""
 
     # Step 1: Create a user entry (required for user_id foreign key)
-    user_in = UserCreate(**mock_user_data)
-    created_user = create_user(test_db_session, user_in)
-
+    # user_in = UserCreate(**mock_user_data)
+    # created_user = create_user(test_db_session, user_in)
+    created_user = get_user_by_username(test_db_session, "testuser")
     # Step 2: Create a search entry (required for search_id foreign key)
     search_in = SearchCreate(user_id=created_user.user_id, **mock_search_data)
     created_search = create_search(test_db_session, search_in)
@@ -87,14 +90,14 @@ def test_get_article_by_id(test_db_session: Session):
     # Step 5: Validate the retrieved article
     assert article is not None
     assert article.title == mock_article_data["title"]
-    delete_user(user_in["user_id"], session, base_url)
+    # delete_user(user_in["user_id"], session, base_url)
 def test_update_article(test_db_session: Session):
     """Test updating an article"""
 
     # Step 1: Create a user entry (required for user_id foreign key)
-    user_in = UserCreate(**mock_user_data)
-    created_user = create_user(test_db_session, user_in)
-
+    # user_in = UserCreate(**mock_user_data)
+    # created_user = create_user(test_db_session, user_in)
+    created_user = get_user_by_username(test_db_session, "testuser")
     # Step 2: Create a search entry (required for search_id foreign key)
     search_in = SearchCreate(user_id=created_user.user_id, **mock_search_data)
     created_search = create_search(test_db_session, search_in)
@@ -110,15 +113,16 @@ def test_update_article(test_db_session: Session):
     # Step 5: Validate the updated article
     assert updated_article.title == "Updated Title"
     assert updated_article.relevance_score == 99
-    delete_user(user_in["user_id"], session, base_url)
+    # delete_user(user_in["user_id"], session, base_url)
 
 
 def test_delete_article(test_db_session: Session):
     """Test deleting an article"""
 
     # Step 1: Create a user entry (required for user_id foreign key)
-    user_in = UserCreate(**mock_user_data)
-    created_user = create_user(test_db_session, user_in)
+    # user_in = UserCreate(**mock_user_data)
+    # created_user = create_user(test_db_session, user_in)
+    created_user = get_user_by_username(test_db_session, "testuser")
 
     # Step 2: Create a search entry (required for search_id foreign key)
     search_in = SearchCreate(user_id=created_user.user_id, **mock_search_data)
@@ -139,4 +143,4 @@ def test_delete_article(test_db_session: Session):
         fetched_article = get_article(test_db_session, created_article.article_id)
     except HTTPException as e:
         assert e.status_code == 404
-    delete_user(user_in["user_id"], session, base_url)
+    # delete_user(user_in["user_id"], session, base_url)

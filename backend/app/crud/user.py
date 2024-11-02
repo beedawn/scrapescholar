@@ -2,7 +2,7 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 import os
@@ -51,7 +51,7 @@ def get_user_by_username(db: Session, username: str):
 
     users = db.query(User).all()
     for user in users:
-        plaintext_user=decrypt(user.username)
+        plaintext_user = decrypt(user.username)
         print(plaintext_user)
 
     user = db.query(User).filter(User.username == encrypted_username).first()
@@ -70,6 +70,12 @@ def create_user(db: Session, user: UserCreate):
     hashed_password = hash(user.password)
     hashed_email = hash(user.email)
     encrypted_username = encrypt(user.username)
+
+    if db.query(User).filter(User.username == encrypted_username).first():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
+
+    if db.query(User).filter(User.email == hashed_email).first():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
     db_user = User(
         username=encrypted_username,
