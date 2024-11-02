@@ -51,7 +51,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive }) => {
 
                                 <div className="mt-2">
                                     <p className="text-sm text-gray-500 text-center">
-                                        Please enter a username, or email address of the user you&apos;d like to share your search with
+                                        Please enter a username, or email address of the user you would like to share your search with
                                     </p>
                                 </div>
                             </div>
