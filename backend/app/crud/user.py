@@ -71,7 +71,7 @@ def create_user(db: Session, user: UserCreate):
     hashed_password = hash(user.password)
     hashed_email = hash(user.email)
     encrypted_username = encrypt(user.username)
-
+    #not sure if these actually work might need to decrypt
     if db.query(User).filter(User.username == encrypted_username).first():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
 
