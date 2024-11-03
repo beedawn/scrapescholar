@@ -12,6 +12,7 @@ jobs:
     env:
       NEXT_PUBLIC_ADMIN_USER: ${{ secrets.NEXT_PUBLIC_ADMIN_USER }}
       NEXT_PUBLIC_ADMIN_PASS: ${{ secrets.NEXT_PUBLIC_ADMIN_PASS }}
+      NEXT_PUBLIC_ADMIN_PASS: ${{ secrets.NEXT_PUBLIC_HOST_IP}}
     steps:
     - name: Check out repository
       uses: actions/checkout@v4

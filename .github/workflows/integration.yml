@@ -28,6 +28,7 @@ jobs:
       DOMAIN: scrapescholar.me
       TEST_USER: ${{ secrets.TEST_USER}}
       TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
+      HOST_IP: ${{secrets.HOST_IP}}
     services:
       postgres:
         image: postgres:latest
