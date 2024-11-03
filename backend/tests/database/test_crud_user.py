@@ -83,6 +83,8 @@ def test_update_user(test_db_session: Session):
 
     # Verify password change using hashing verification
     assert verify_password("newpassword", updated_user.password)
+    delete_user(test_db_session, created_user.user_id)
+
 
 
 def test_delete_user(test_db_session: Session):
