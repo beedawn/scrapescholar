@@ -35,6 +35,7 @@ def test_create_search(test_db_session: Session):
     assert created_search.title == mock_search_data["title"]
     assert created_search.user_id == mock_search_data["user_id"]
     assert created_search.status == mock_search_data["status"]
+    delete_search(test_db_session, created_search.search_id)
 
 def test_get_search(test_db_session: Session):
     """Test retrieving a search by ID."""
@@ -43,6 +44,7 @@ def test_get_search(test_db_session: Session):
     fetched_search = get_search(test_db_session, created_search.search_id)
     assert fetched_search.search_id == created_search.search_id
     assert fetched_search.title == created_search.title
+    delete_search(test_db_session, created_search.search_id)
 
 def test_get_search_not_found(test_db_session: Session):
     """Test handling of retrieving a non-existent search."""
@@ -58,11 +60,15 @@ def test_get_searches(test_db_session: Session):
         SearchCreate(**mock_search_data),
         SearchCreate(**{**mock_search_data, "title": "Test Search 2"})
     ]
+    created_searches = []
     for search_data in search_data_list:
-        create_search(test_db_session, search_data)
+        created_search = create_search(test_db_session, search_data)
+        created_searches.append(created_search)
 
     searches = get_searches(test_db_session, skip=0, limit=2)
     assert len(searches) == 2  # Expected number of retrieved searches
+    for search in created_searches:
+        delete_search(test_db_session, search.search_id)
 
 def test_update_search(test_db_session: Session):
     """Test updating a search entry."""
@@ -75,6 +81,7 @@ def test_update_search(test_db_session: Session):
     
     assert updated_search.title == "Updated Search Title"
     assert updated_search.status == "completed"
+    delete_search(test_db_session, created_search.search_id)
 
 def test_update_search_not_found(test_db_session: Session):
     """Test updating a non-existent search."""
