@@ -70,21 +70,28 @@ def get_user_by_email(db: Session, email: str):
 def create_user(db: Session, user: UserCreate):
     # Hash the user's password and email, and encrypt the username before storing them
     hashed_password = hash(user.password)
-    hashed_email = hash(user.email)
     encrypted_username = encrypt(user.username)
-    #not sure if these actually work might need to decrypt
+    # not sure if these actually work might need to decrypt
     if db.query(User).filter(User.username == encrypted_username).first():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
 
-    if db.query(User).filter(User.email == hashed_email).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    if user.email is not None:
+        hashed_email = hash(user.email)
+        if db.query(User).filter(User.email == hashed_email).first():
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+        db_user = User(
+            username=encrypted_username,
+            email=hashed_email,
+            password=hashed_password,
+            role_id=user.role_id
+        )
 
-    db_user = User(
-        username=encrypted_username,
-        email=hashed_email,
-        password=hashed_password,
-        role_id=user.role_id
-    )
+    else:
+        db_user = User(
+            username=encrypted_username,
+            password=hashed_password,
+            role_id=user.role_id
+        )
 
     db.add(db_user)
     db.commit()
