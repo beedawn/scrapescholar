@@ -1,8 +1,7 @@
-import { json } from "d3";
 
 const apiCalls = () => {
 
-  const host = "0.0.0.0"
+  const host = process.env.NEXT_PUBLIC_HOST_IP;
 
   const getAPIDatabases = async () => {
     const url = `http://${host}:8000/academic_sources`;
