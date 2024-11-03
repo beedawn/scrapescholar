@@ -81,7 +81,9 @@ def test_create_search_share(test_db_session: Session):
 
 def test_get_search_share(test_db_session: Session):
     """Test retrieving a search share by ID."""
-    search_share_data = generate_unique_share_data()
+    new_search, test_user, new_user = setup(test_db_session)
+
+    search_share_data = generate_unique_share_data(new_search.search_id, test_user.user_id, new_user.user_id)
     search_share_in = SearchShareCreate(**search_share_data)
     created_search_share = create_search_share(test_db_session, search_share_in)
 
@@ -123,7 +125,10 @@ def test_get_search_shares(test_db_session: Session):
 
 def test_delete_search_share(test_db_session: Session):
     """Test deleting a search share."""
-    search_share_data = generate_unique_share_data()
+
+    new_search, test_user, new_user = setup(test_db_session)
+
+    search_share_data = generate_unique_share_data(new_search.search_id, test_user.user_id, new_user.user_id)
     search_share_in = SearchShareCreate(**search_share_data)
     created_search_share = create_search_share(test_db_session, search_share_in)
 
