@@ -130,12 +130,14 @@ def test_get_search_keywords(test_db_session: Session):
     created_search = create_search_test(test_user, test_db_session)
 
     #maybe need to create new keywords? yes i do
-    created_keyword = create_keyword(test_user, created_search)
+    created_keyword_1 = create_keyword_test(test_db_session)
+    created_keyword_2 = create_keyword_test(test_db_session)
+    created_keyword_3 = create_keyword_test(test_db_session)
     # Create a few search keywords for pagination test
     search_keyword_data_list = [
-        generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=9),
-        generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=10),
-        generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=11)
+        generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=created_keyword_1.keyword_id),
+        generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=created_keyword_2.keyword_id),
+        generate_unique_search_keyword_data(search_id=created_search.search_id, keyword_id=created_keyword_3.keyword_id)
     ]
     created_search_keywords = []
     for search_keyword_data in search_keyword_data_list:
@@ -148,7 +150,6 @@ def test_get_search_keywords(test_db_session: Session):
         delete_search_keyword(test_db_session, created_search_keyword.search_keyword_id)
     for search_keyword_data in search_keyword_data_list:
         delete_keyword_test(search_keyword_data["keyword_id"], test_db_session)
-
     delete_search_test(created_search.search_id, test_db_session)
 
 
