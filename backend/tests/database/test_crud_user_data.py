@@ -3,8 +3,8 @@
 import pytest
 from sqlalchemy.orm import Session
 from fastapi.exceptions import HTTPException
-from app.crud.user_data import get_user_data, create_user_data, update_user_data
-from app.crud.article import create_article
+from app.crud.user_data import get_user_data, create_user_data, update_user_data, delete_user_data
+from app.crud.article import create_article, delete_article
 from app.schemas.user_data import UserDataUpdate
 from app.schemas.article import ArticleCreate
 from app.db.session import SessionLocal
@@ -30,40 +30,37 @@ mock_article_data = {
     "document_type": "Journal",
     "doi": "10.1000/testdoi"
 }
+def setup(test_db_session):
+    article_in = ArticleCreate(**mock_article_data)
+    created_article = create_article(test_db_session, article_in, user_id=1)
+
+    created_user_data = create_user_data(
+        test_db_session,
+        user_id=1,
+        article_id=created_article.article_id
+    )
+    return created_article, created_user_data
+def teardown(test_db_session, created_article, created_user_data):
+    delete_user_data(test_db_session, created_user_data.userdata_id)
+    delete_article(test_db_session, created_article.article_id)
 
 def test_create_user_data(test_db_session: Session):
     """Test creating a new user data entry."""
 
-    # Step 1: Create an Article entry for the foreign key reference
-    article_in = ArticleCreate(**mock_article_data)
-    created_article = create_article(test_db_session, article_in, user_id=1)
-
-    # Step 2: Create a UserData entry using the article_id
-    created_user_data = create_user_data(
-        test_db_session,
-        user_id=1,
-        article_id=created_article.article_id
-    )
+    created_article, created_user_data = setup(test_db_session)
     assert created_user_data.user_id == 1
     assert created_user_data.article_id == created_article.article_id
+    teardown(test_db_session, created_article, created_user_data)
 
 def test_get_user_data(test_db_session: Session):
     """Test retrieving a user data entry by article_id."""
 
-    # Step 1: Create an Article entry for the foreign key reference
-    article_in = ArticleCreate(**mock_article_data)
-    created_article = create_article(test_db_session, article_in, user_id=1)
-
-    # Step 2: Create a UserData entry using the article_id
-    created_user_data = create_user_data(
-        test_db_session,
-        user_id=1,
-        article_id=created_article.article_id
-    )
+    created_article, created_user_data = setup(test_db_session)
 
     # Retrieve the UserData entry
     fetched_user_data = get_user_data(test_db_session, article_id=created_user_data.article_id)
     assert fetched_user_data.article_id == created_user_data.article_id
+    teardown(test_db_session, created_article, created_user_data)
 
 def test_get_user_data_not_found(test_db_session: Session):
     """Test error handling when a user data entry is not found by article_id."""
@@ -74,14 +71,7 @@ def test_get_user_data_not_found(test_db_session: Session):
 @pytest.mark.asyncio
 async def test_update_user_data(test_db_session: Session):
     """Test updating an existing user data entry."""
-    article_in = ArticleCreate(**mock_article_data)
-    created_article = create_article(test_db_session, article_in, user_id=1)
-
-    created_user_data = create_user_data(
-        test_db_session,
-        user_id=1,
-        article_id=created_article.article_id
-    )
+    created_article, created_user_data = setup(test_db_session)
 
     # Update the user data entry with integer values
     update_data = UserDataUpdate(
@@ -100,6 +90,7 @@ async def test_update_user_data(test_db_session: Session):
     assert updated_user_data.clarity == 5
     assert updated_user_data.transparency == 4
     assert updated_user_data.completeness == 5
+    teardown(test_db_session, created_article, created_user_data)
 
 
 @pytest.mark.asyncio

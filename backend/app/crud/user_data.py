@@ -38,11 +38,11 @@ async def update_user_data(db: Session, user_data: UserDataUpdate):
     db.refresh(db_user_data)
     return db_user_data
 
-# def delete_user(db: Session, user_id: int):
-#     db_user = db.query(User).filter(User.user_id == user_id).first()
-#     if not db_user:
-#         raise HTTPException(status_code=404, detail="User not found")
+def delete_user_data(db: Session, userdata_id: int):
+    db_userdata = db.query(UserData).filter(UserData.userdata_id == userdata_id).first()
+    if not db_userdata:
+        raise HTTPException(status_code=404, detail="User not found")
 
-#     db.delete(db_user)
-#     db.commit()
-#     return db_user
+    db.delete(db_userdata)
+    db.commit()
+    return db_userdata
