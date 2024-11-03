@@ -91,7 +91,8 @@ def test_get_search_share(test_db_session: Session):
     fetched_search_share = get_search_share(test_db_session, created_search_share.share_id)
     assert fetched_search_share.share_id == created_search_share.share_id
     delete_search_share(test_db_session, created_search_share.share_id)
-
+    delete_search(test_db_session, new_search.search_id)
+    delete_user(test_db_session, new_user.user_id)
 
 def test_get_search_shares(test_db_session: Session):
     """Test retrieving a list of search shares with pagination."""
@@ -118,7 +119,6 @@ def test_get_search_shares(test_db_session: Session):
         delete_search_share(test_db_session, share.share_id)
     for search in searches:
         delete_search(test_db_session, search.search_id)
-
     delete_user(test_db_session, new_user.user_id)
 
 
@@ -140,6 +140,8 @@ def test_delete_search_share(test_db_session: Session):
     with pytest.raises(HTTPException) as exc_info:
         get_search_share(test_db_session, created_search_share.share_id)
     assert exc_info.value.status_code == 404
+    delete_user(test_db_session, new_user.user_id)
+    delete_search(test_db_session, new_search.search_id)
 
 
 def test_get_search_share_not_found(test_db_session: Session):
