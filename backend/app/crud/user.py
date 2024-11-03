@@ -56,10 +56,10 @@ def get_user_by_username(db: Session, username: str):
         print(plaintext_user)
         if plaintext_user == username:
             return user
-    # user = db.query(User).filter(User.username == encrypted_username).first()
-    # if not user:
-    #     raise HTTPException(status_code=404, detail="User not found")
-    # return user
+    user = db.query(User).filter(User.username == encrypted_username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 
 def get_user_by_email(db: Session, email: str):
