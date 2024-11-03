@@ -10,31 +10,38 @@ from app.models.user import User
 
 router = APIRouter()
 
+
 # Add a comment to an article
 @router.post("/article/{article_id}", response_model=Comment, status_code=201)
 async def create_new_comment(
-    article_id: int,
-    comment: CommentCreate,
-    db: Session = Depends(get_db),
-    access_token: str = Cookie(None), 
-    authorization: str = Header(None)
+        article_id: int,
+        comment: CommentCreate,
+        db: Session = Depends(get_db),
+        access_token: str = Cookie(None),
+        authorization: str = Header(None)
 ):
     current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
-    
+
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
-    
-    new_comment = create_comment(db, article_id=article_id, comment=comment, user_id=current_user.user_id)
+
+    comments = get_comments_by_article(db, article_id=article_id)
+    if len(comments) < 100:
+        new_comment = create_comment(db, article_id=article_id, comment=comment, user_id=current_user.user_id)
+    else:
+        raise HTTPException(status_code=507, detail="Insufficient storage, article has 100 comments")
+
     return new_comment
+
 
 # Edit a comment
 @router.put("/{comment_id}", response_model=Comment)
 async def update_existing_comment(
-    comment_id: int,
-    comment: CommentUpdate,
-    db: Session = Depends(get_db),
-    access_token: str = Cookie(None), 
-    authorization: str = Header(None)
+        comment_id: int,
+        comment: CommentUpdate,
+        db: Session = Depends(get_db),
+        access_token: str = Cookie(None),
+        authorization: str = Header(None)
 ):
     current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
 
@@ -46,17 +53,18 @@ async def update_existing_comment(
         raise HTTPException(status_code=404, detail="Comment not found")
     if existing_comment.user_id != current_user.user_id:
         raise HTTPException(status_code=403, detail="You are not authorized to edit this comment")
-    
+
     updated_comment = update_comment(db, comment_id=comment_id, comment=comment)
     return updated_comment
+
 
 # Delete a comment
 @router.delete("/{comment_id}", status_code=204)
 async def remove_comment(
-    comment_id: int,
-    db: Session = Depends(get_db),
-    access_token: str = Cookie(None), 
-    authorization: str = Header(None)
+        comment_id: int,
+        db: Session = Depends(get_db),
+        access_token: str = Cookie(None),
+        authorization: str = Header(None)
 ):
     current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
 
@@ -72,10 +80,11 @@ async def remove_comment(
     delete_comment(db, comment_id=comment_id)
     return None
 
+
 # Get all comments for an article
 @router.get("/article/{article_id}/comments", response_model=List[Comment], status_code=200)
-async def get_comments(article_id: int, db: Session = Depends(get_db)):
+def get_comments(article_id: int, db: Session = Depends(get_db)):
     comments = get_comments_by_article(db, article_id=article_id)
     if comments:
         return comments
-    return [] 
+    return []

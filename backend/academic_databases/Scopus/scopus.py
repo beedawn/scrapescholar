@@ -6,6 +6,8 @@ import random
 from api_tools.api_tools import scopus_api_key, scopus_inst_token, parse_data_scopus
 from academic_databases.SearchResult import SearchResult
 
+from typing import List
+from algorithm.algorithm_interface import algorithm_interface
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
     encoded_keywords = quote(keywords)
@@ -44,9 +46,16 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                 link = links[2].get('@href')
             else:
                 link = ""
+
+                # could be refactored into its ownfunction
+            article_title = article.get('dc:title')
+
+            relevance_score = algorithm_interface(keywords, article_title)
+
+            # end refactoring
             return_articles.append(SearchResult(
                 article_id=article_id,
-                title=article.get('dc:title'),
+                title=article_title,
                 link=link,
                 date=article.get('prism:coverDate'),
                 citedby=article.get('citedby-count'),

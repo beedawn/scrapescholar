@@ -79,7 +79,7 @@ def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str 
 
 # put a new title into a search
 @router.put("/user/search/title", status_code=status.HTTP_200_OK)
-def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
+def put_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                            search_id: int = Query(None, description="ID of the specific search to retrieve"),
                            search_data: SearchUpdate = Body(...)):
     """
