@@ -56,6 +56,7 @@ def test_create_user(test_db_session: Session):
     fetched_user = get_user(test_db_session, created_user.user_id)
     assert decrypt(fetched_user.username) == mock_user_data["username"]
     assert verify_password(mock_user_data["password"], fetched_user.password)
+    delete_user(test_db_session, created_user.user_id)
 
 def test_get_user(test_db_session: Session):
     """Test retrieving a user by ID."""
@@ -63,6 +64,7 @@ def test_get_user(test_db_session: Session):
     created_user = create_user(test_db_session, user_in)
     fetched_user = get_user(test_db_session, created_user.user_id)
     assert fetched_user.user_id == created_user.user_id
+    delete_user(test_db_session, created_user.user_id)
 
 def test_update_user(test_db_session: Session):
     """Test updating user information."""
@@ -83,6 +85,8 @@ def test_update_user(test_db_session: Session):
 
     # Verify password change using hashing verification
     assert verify_password("newpassword", updated_user.password)
+    delete_user(test_db_session, created_user.user_id)
+
 
 
 def test_delete_user(test_db_session: Session):

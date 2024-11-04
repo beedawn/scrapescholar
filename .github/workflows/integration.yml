@@ -24,10 +24,12 @@ jobs:
       SCOPUS_APIKEY: ${{secrets.SCOPUS_APIKEY}}
       NEXT_PUBLIC_ADMIN_USER: ${{ secrets.NEXT_PUBLIC_ADMIN_USER }}
       NEXT_PUBLIC_ADMIN_PASS: ${{ secrets.NEXT_PUBLIC_ADMIN_PASS }}
+      NEXT_PUBLIC_HOST_IP: ${{ secrets.NEXT_PUBLIC_HOST_IP }}
       #used in AR-3 tests
       DOMAIN: scrapescholar.me
       TEST_USER: ${{ secrets.TEST_USER}}
       TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
+      HOST_IP: ${{secrets.HOST_IP}}
     services:
       postgres:
         image: postgres:latest

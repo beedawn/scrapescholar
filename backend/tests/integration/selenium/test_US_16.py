@@ -16,6 +16,7 @@ load_dotenv()
 
 testuser = os.getenv('TEST_USER')
 testpass = os.getenv('TEST_PASSWORD')
+host_ip = os.getenv('HOST_IP')
 
 def test_login_us_16():
     try:
@@ -23,7 +24,7 @@ def test_login_us_16():
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     
         # Navigate to the login page
-        driver.get("http://0.0.0.0:3000/")
+        driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
     
         # Locate and interact with the login elements
@@ -62,7 +63,7 @@ def test_bad_login_us_16():
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     
         # Navigate to the login page
-        driver.get("http://0.0.0.0:3000/")
+        driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
     
         # Locate and interact with the login elements
@@ -103,7 +104,7 @@ def test_login_us_16_with_refresh():
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     
         # Navigate to the login page
-        driver.get("http://0.0.0.0:3000/")
+        driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
     
         # Locate and interact with the login elements

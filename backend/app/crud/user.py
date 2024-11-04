@@ -2,14 +2,15 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 import os
-
+from dotenv import load_dotenv
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+load_dotenv()
 # Encryption key
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")  # Store this securely!
 fernet = Fernet(ENCRYPTION_KEY)
@@ -43,7 +44,18 @@ def get_user(db: Session, user_id: int):
 
 
 def get_user_by_username(db: Session, username: str):
+    #i dont think this works
     encrypted_username = encrypt(username)
+    print("ENCRYPTED USERNAME")
+    print(encrypted_username)
+    #should we get all users, decrypt them, then compare? hmm
+
+    users = db.query(User).all()
+    for user in users:
+        plaintext_user = decrypt(user.username)
+        print(plaintext_user)
+        if plaintext_user == username:
+            return user
     user = db.query(User).filter(User.username == encrypted_username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -58,19 +70,33 @@ def get_user_by_email(db: Session, email: str):
 def create_user(db: Session, user: UserCreate):
     # Hash the user's password and email, and encrypt the username before storing them
     hashed_password = hash(user.password)
-    hashed_email = hash(user.email)
     encrypted_username = encrypt(user.username)
+    # not sure if these actually work might need to decrypt
+    if db.query(User).filter(User.username == encrypted_username).first():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
 
-    db_user = User(
-        username=encrypted_username,
-        email=hashed_email,
-        password=hashed_password,
-        role_id=user.role_id
-    )
+    if user.email is not None:
+        hashed_email = hash(user.email)
+        if db.query(User).filter(User.email == hashed_email).first():
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+        db_user = User(
+            username=encrypted_username,
+            email=hashed_email,
+            password=hashed_password,
+            role_id=user.role_id
+        )
+
+    else:
+        db_user = User(
+            username=encrypted_username,
+            password=hashed_password,
+            role_id=user.role_id
+        )
 
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    # i think we need to get the actual user from the db so it has an associated ID
     return db_user
 
 

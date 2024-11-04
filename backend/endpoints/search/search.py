@@ -7,10 +7,12 @@ from app.models.user import User
 from app.models.user_data import UserData
 from fastapi.security import OAuth2PasswordBearer
 from app.crud.search import create_search
+from app.crud.searchshare import create_search_share
 from app.crud.source import get_source_by_name, get_source
-from app.crud.user import decrypt
+from app.crud.user import decrypt, get_user_by_email, get_user_by_username
 from app.schemas.search import SearchCreate, SearchUpdate
 from app.schemas.article import ArticleCreate, ArticleBase
+from app.schemas.searchshare import SearchShareCreate
 from app.crud.article import create_article
 from app.crud.user_data import create_user_data, get_user_data
 from academic_databases.SearchResult import SearchResult
@@ -45,13 +47,41 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
 
     # Query the last 300 searches for the authenticated user
     searches = get_300_search(db=db, current_user=current_user)
+
+    #also need to get searches shared with user
     return searches if searches else []
+
+
+#create search share
+@router.put("/share", status_code=status.HTTP_200_OK)
+def put_search_share(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
+                     search_id: int = Query(None, description="ID of the specific search to retrieve"),
+                     share_user: str = Query(None, description="Username or Email of the specific user "
+                                                               "to share search with")):
+    print(access_token)
+    # verifies user has a token and is valid
+    user_id = get_current_user_modular(token=access_token, db=db)
+    try:
+        share_user = get_user_by_username(db, share_user)
+        if not share_user:
+            share_user = get_user_by_email(db, share_user)
+        if not share_user:
+            raise HTTPException(status_code=404, detail="User not found by either username or email.")
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    #searchshare
+    #     search_id: int
+    #     shared_with_user_id: int
+    #     shared_by_user_id: int
+
+    # search_share = SearchShareCreate(search_id=search_id, shared_with_userid=share_user.user_id, shared_by_user_id=user_id)
+    # create_search_share(db, search_share)
 
 
 # get single search and associated articles
 @router.get("/user/articles", status_code=status.HTTP_200_OK)
 def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
-                              search_id: int = Query(None, description="ID of the specific search to retrieve")):
+                        search_id: int = Query(None, description="ID of the specific search to retrieve")):
     """
     Retrieve a single search and associated articles
     """
@@ -61,11 +91,12 @@ def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[s
     articles = get_full_article_response(db=db, search_id=search_id)
     return articles if articles else []
 
+
 # get a searches title thinkt his duplicates above function except this one uses cookie...
 # keeping it for now need to refactor these
 @router.get("/user/search/title", status_code=status.HTTP_200_OK)
 def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
-                           search_id: int = Query(None, description="ID of the specific search to retrieve")):
+                     search_id: int = Query(None, description="ID of the specific search to retrieve")):
     """
     Retrieve a single search and associtated articles
     """
@@ -80,8 +111,8 @@ def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str 
 # put a new title into a search
 @router.put("/user/search/title", status_code=status.HTTP_200_OK)
 def put_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
-                           search_id: int = Query(None, description="ID of the specific search to retrieve"),
-                           search_data: SearchUpdate = Body(...)):
+                     search_id: int = Query(None, description="ID of the specific search to retrieve"),
+                     search_data: SearchUpdate = Body(...)):
     """
     Update the title of an existing search
     """
@@ -99,7 +130,7 @@ def put_search_title(db: Session = Depends(get_db), access_token: Annotated[str 
 # delete a search
 @router.delete("/user/search/title", status_code=status.HTTP_200_OK)
 def delete_search_title(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
-                              search_id: int = Query(None, description="ID of the specific search to delete")):
+                        search_id: int = Query(None, description="ID of the specific search to delete")):
     """
     delete a search and associated articles
     """
@@ -163,6 +194,17 @@ def get_300_search(db, current_user):
     )
 
 
+def get_shared_searches(db, current_user):
+    #TODO:
+    #need to get searches, from search that join/align with user's shared with sharesearch
+    return (
+        db.query(Search)
+        .filter(Search.user_id == current_user.user_id)
+        .order_by(Search.search_date.desc())
+        .all()
+    )
+
+
 def check_if_user_exceeded_search_amount(db: Session, current_user: User):
     #check if there are 300 searches if there are return true
     existing_searches = get_300_search(db=db, current_user=current_user)
@@ -204,20 +246,18 @@ def post_search_no_route(keywords: List[str], articles: List[ArticleBase], db: S
 
     for article in articles:
         source = get_source_by_name(db, article.source)
-        format_article= ArticleCreate(
-        title=article.title,
-        date=datetime.strptime(article.date, date_format).date(),
-        link=HttpUrl(article.link),
-        relevance_score=article.relevance_score,
-        abstract=article.abstract,
-        citedby=article.citedby,
-        document_type=article.document_type,
-        source_id=source.source_id,
-        search_id=created_search.search_id, 
-        user_id=current_user.user_id)
+        format_article = ArticleCreate(
+            title=article.title,
+            date=datetime.strptime(article.date, date_format).date(),
+            link=HttpUrl(article.link),
+            relevance_score=article.relevance_score,
+            abstract=article.abstract,
+            citedby=article.citedby,
+            document_type=article.document_type,
+            source_id=source.source_id,
+            search_id=created_search.search_id,
+            user_id=current_user.user_id)
         create_article(article=format_article, db=db, user_id=current_user.user_id)
-       
-    
 
     return True, created_search.search_id
 
@@ -280,5 +320,3 @@ def initialize_full_article_response(current_user: User, db, search_id):
         )
         response.append(article_data)
     return response
-
-

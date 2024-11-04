@@ -19,6 +19,7 @@ load_dotenv()
 
 SECRET = os.getenv("SECRET_KEY")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+host_ip = os.getenv("HOST_IP")
 fernet = Fernet(ENCRYPTION_KEY)
 
 DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE"
@@ -114,7 +115,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         httponly=True,
         secure=False,
         path="/",
-        domain="0.0.0.0",
+        domain=f"{host_ip}",
         samesite="Lax",
         max_age=28800
     )
