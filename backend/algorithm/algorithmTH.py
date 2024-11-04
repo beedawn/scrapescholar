@@ -3,6 +3,7 @@ import os
 import dotenv
 import itertools
 import json
+import string
 
 dotenv.load_dotenv()
 thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
@@ -106,13 +107,17 @@ def flatten_list(word_list):
     flat_list = list(itertools.chain.from_iterable(word_list))
     return flat_list
 
+def remove_punctuation(text):
+    translator = str.maketrans('', '', string.punctuation)
+    return text.translate(translator)
 
 def algorithm(text, keywords):
     score = 0
     keyword_list = keywords.split()
     print("Keyword List")
     print(keyword_list)
-    text_list = text.split()
+    no_punctuation_text_list = remove_punctuation(text)
+    text_list = no_punctuation_text_list.split()
     print("Text List")
     print(text_list)
     synonyms_list = set()
