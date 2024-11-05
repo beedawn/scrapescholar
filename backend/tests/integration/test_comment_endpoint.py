@@ -62,6 +62,7 @@ def test_create_comment():
     response = session.post(f"{base_url}/comment/article/{article_id}", json=mock_comment_data)
     assert response.status_code == 201
     assert response.json()["comment_text"] == mock_comment_data["comment_text"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 
 def test_get_comments():
@@ -81,6 +82,7 @@ def test_get_comments():
     response = session.get(f"{base_url}/comment/article/{article_id}/comments")
     assert response.status_code == 200
     assert len(response.json()) > 0
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 
 def test_update_comment():
@@ -102,6 +104,7 @@ def test_update_comment():
     response = session.put(f"{base_url}/comment/{comment_id}", json=updated_comment)
     assert response.status_code == 200
     assert response.json()["comment_text"] == updated_comment["comment_text"]
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 
 def test_delete_comment():
@@ -120,3 +123,4 @@ def test_delete_comment():
     # Delete the comment
     response = session.delete(f"{base_url}/comment/{comment_id}")
     assert response.status_code == 204
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
