@@ -7,6 +7,7 @@ from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 import os
 from dotenv import load_dotenv
+
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -19,6 +20,10 @@ fernet = Fernet(ENCRYPTION_KEY)
 # Helper function to hash fields
 def hash(text: str) -> str:
     return pwd_context.hash(text)
+
+
+def verify_hash(text: str, hashed_text: str) -> bool:
+    return pwd_context.verify(text, hashed_text)
 
 
 # Helper function to encrypt fields
@@ -57,14 +62,19 @@ def get_user_by_username(db: Session, username: str):
         if plaintext_user == username:
             return user
     user = db.query(User).filter(User.username == encrypted_username).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+
+    return None
+
 
 
 def get_user_by_email(db: Session, email: str):
-    hashed_email = hash(email)
-    return db.query(User).filter(User.email == hashed_email).first()
+    hashed_emails = db.query(User).all()
+    for hashed_email in hashed_emails:
+        print("ASHED EMAIL")
+        print(hashed_email.email)
+        if verify_hash(email, hashed_email.email):
+            return hashed_email
+    return False
 
 
 def create_user(db: Session, user: UserCreate):

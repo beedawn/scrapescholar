@@ -58,17 +58,21 @@ def put_search_share(db: Session = Depends(get_db), access_token: Annotated[str 
                      search_id: int = Query(None, description="ID of the specific search to retrieve"),
                      share_user: str = Query(None, description="Username or Email of the specific user "
                                                                "to share search with")):
-    print(access_token)
     # verifies user has a token and is valid
-    user_id = get_current_user_modular(token=access_token, db=db)
+    user = get_current_user_modular(token=access_token, db=db)
     try:
-        share_user = get_user_by_username(db, share_user)
-        if not share_user:
-            share_user = get_user_by_email(db, share_user)
-        if not share_user:
+        share_user_new = get_user_by_username(db, share_user)
+        if share_user_new is None:
+            share_user_new = get_user_by_email(db, share_user)
+        if not share_user_new:
             raise HTTPException(status_code=404, detail="User not found by either username or email.")
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+    
+    search_share = SearchShareCreate(search_id=search_id, shared_with_user_id=share_user_new.user_id,
+                                     shared_by_user_id=user.user_id)
+    create_search_share(db, search_share)
+
     #searchshare
     #     search_id: int
     #     shared_with_user_id: int

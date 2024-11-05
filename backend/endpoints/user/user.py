@@ -73,6 +73,9 @@ def get_user_by_username_api(username: str, db: Session = Depends(get_db)):
 
     encrypted_username = encrypt_username(username)
     user = get_user_by_username(db=db, username=encrypted_username)
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
     return user
 
 
