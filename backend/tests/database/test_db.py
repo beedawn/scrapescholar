@@ -192,7 +192,7 @@ def test_full_search_insert_and_share(db: Session):
 
 
     # Step 4: Verify that both articles have been added
-    articles = db.query(Article).filter(Article.search_id == search.search_id).all()
+    articles = db.query(Article).filter(Article.search_id == search.search_id).order_by(Article.title.asc()).all()
     assert len(articles) == 2
     assert articles[0].title == "Article 1"
     assert articles[1].title == "Article 2"

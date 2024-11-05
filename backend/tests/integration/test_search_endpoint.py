@@ -262,7 +262,7 @@ def test_get_valid_token_past_search_bad_search_id(db_session):
     search_id = 907848397
     past_search = session.get(f"{base_url}/search/user/articles?search_id={search_id}")
     data = past_search.json()
-    assert data == []
+    assert data == {'detail': 'Search not found'}
 
 
 def test_get_valid_token_search_title_response_schema(db_session):

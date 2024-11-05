@@ -7,8 +7,8 @@ from app.models.article import Article
 from app.models.user import User
 from app.models.user_data import UserData
 from fastapi.security import OAuth2PasswordBearer
-from app.crud.search import create_search
-from app.crud.searchshare import create_search_share
+from app.crud.search import create_search, get_search
+from app.crud.searchshare import create_search_share, get_search_share, get_search_share_by_search
 from app.crud.source import get_source_by_name, get_source
 from app.crud.user import decrypt, get_user_by_email, get_user_by_username
 from app.schemas.search import SearchCreate, SearchUpdate
@@ -50,7 +50,7 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
     searches = get_300_search(db=db, current_user=current_user)
     #TODO
     #need logic in here somewhere to get shared searches, get associated search info and add to response
-    shared_searches = get_shared_searches(db,current_user)
+    shared_searches = get_shared_searches(db, current_user)
     print(shared_searches)
 
     searches = searches + shared_searches
@@ -89,9 +89,32 @@ def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[s
     Retrieve a single search and associated articles
     """
     #verifies user has a token and is valid
-    get_current_user_modular(token=access_token, db=db)
+    user = get_current_user_modular(token=access_token, db=db)
+    #check if user has permission to the search
+    #get the search with search id, get search share with search_id and see if user id is listed anywhere
+    search = get_search(db, search_id)
+    match_search = None
+    articles = None
 
-    articles = get_full_article_response(db=db, search_id=search_id)
+    if search is None or search.user_id != user.user_id:
+        searchshares = get_search_share_by_search(db, search_id)
+        print("search shares")
+        print(searchshares)
+        if searchshares is None:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+        for searchshare in searchshares:
+            print("Search Share ID")
+            print(searchshare.shared_with_user_id)
+            if (searchshare.shared_with_user_id == user.user_id):
+                match_search = searchshare
+                break
+    print("Search")
+    print(search)
+    print("match search")
+    print(match_search)
+    if (search is not None and search.user_id == user.user_id) or match_search is not None:
+        articles = get_full_article_response(db=db, search_id=search_id)
+
     return articles if articles else []
 
 
@@ -221,8 +244,6 @@ def get_shared_searches(db, current_user):
     return shared_searches
 
 
-
-
 def check_if_user_exceeded_search_amount(db: Session, current_user: User):
     #check if there are 300 searches if there are return true
     existing_searches = get_300_search(db=db, current_user=current_user)
@@ -284,9 +305,6 @@ def get_full_article_response(db, search_id):
     articles = find_search_articles(db, search_id)
     response = []
     for article in articles:
-        print("ARTICLE ID")
-        print(article.article_id)
-
         user_data = get_user_data(db=db, article_id=article.article_id)
 
         source_name = get_source(db, article.source_id)
