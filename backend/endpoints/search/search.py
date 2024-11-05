@@ -68,11 +68,11 @@ def put_search_share(db: Session = Depends(get_db), access_token: Annotated[str 
             raise HTTPException(status_code=404, detail="User not found by either username or email.")
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
-    
+
     search_share = SearchShareCreate(search_id=search_id, shared_with_user_id=share_user_new.user_id,
                                      shared_by_user_id=user.user_id)
-    create_search_share(db, search_share)
-
+    created_share= create_search_share(db, search_share)
+    return created_share
     #searchshare
     #     search_id: int
     #     shared_with_user_id: int
