@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 # Add a comment to an article
-@router.post("/article/{article_id}", response_model=Comment, status_code=201)
+@router.post("/article/{article_id}", status_code=201)
 async def create_new_comment(
         article_id: int,
         comment: CommentCreate,

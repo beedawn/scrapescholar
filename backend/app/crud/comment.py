@@ -50,7 +50,7 @@ def get_comments_by_article(db: Session, article_id: int):
             "username": decrypted_username,
             "article_id": comment.article_id,
             "comment_id": comment.comment_id,
-            "comment_text":comment.comment_text,
+            "comment_text": comment.comment_text,
             "created_at": comment.created_at,
             "user_id": comment.user_id
         })
@@ -58,6 +58,7 @@ def get_comments_by_article(db: Session, article_id: int):
         for item in return_array:
             print(item["username"])
     return return_array
+
 
 def create_comment(db: Session, article_id: int, comment: CommentCreate, user_id: int):
     new_comment = Comment(
@@ -69,4 +70,15 @@ def create_comment(db: Session, article_id: int, comment: CommentCreate, user_id
     db.add(new_comment)
     db.commit()
     db.refresh(new_comment)
-    return new_comment
+    found_username = db.query(User).filter(new_comment.user_id == User.user_id).first()
+    decrypted_username = decrypt(found_username.username)
+
+    new_comment_with_username = {
+        "username": decrypted_username,
+        "article_id": new_comment.article_id,
+        "comment_id": new_comment.comment_id,
+        "comment_text": new_comment.comment_text,
+        "created_at": new_comment.created_at,
+        "user_id": new_comment.user_id
+    }
+    return new_comment_with_username
