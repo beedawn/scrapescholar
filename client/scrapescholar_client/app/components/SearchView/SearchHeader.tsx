@@ -20,7 +20,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     const [shareModalActive, setShareModalActive]= useState(false);
     return (
         <div>
-            {shareModalActive?<ShareModal setShareModalActive={setShareModalActive}></ShareModal>:<></>}
+            {shareModalActive?<ShareModal setShareModalActive={setShareModalActive} search_id={currentSearchId}></ShareModal>:<></>}
             <div className="topContainer">
                 <div className="searchName">
 

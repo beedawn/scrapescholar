@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
 from app.db.session import get_db
 from app.models.search import Search
+from app.models.searchshare import SearchShare
 from app.models.article import Article
 from app.models.user import User
 from app.models.user_data import UserData
@@ -49,7 +50,10 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
     searches = get_300_search(db=db, current_user=current_user)
     #TODO
     #need logic in here somewhere to get shared searches, get associated search info and add to response
+    shared_searches = get_shared_searches(db,current_user)
+    print(shared_searches)
 
+    searches = searches + shared_searches
     #also need to get searches shared with user
     return searches if searches else []
 
@@ -196,12 +200,27 @@ def get_300_search(db, current_user):
 def get_shared_searches(db, current_user):
     #TODO:
     #need to get searches, from search that join/align with user's shared with sharesearch
-    return (
+
+    shared_searches = (
         db.query(Search)
-        .filter(Search.user_id == current_user.user_id)
+        .join(SearchShare, Search.search_id == SearchShare.search_id)
+        .filter(SearchShare.shared_with_user_id == current_user.user_id)
         .order_by(Search.search_date.desc())
         .all()
     )
+
+    # shared_searches = (db.query(SearchShare)
+    #                    .filter(SearchShare.shared_with_user_id == current_user.user_id)
+    #                    .order_by(Search.search_date.desc())
+    #                    .all())
+    # #now need to take shared_searches and get their search ID's
+    # shared_searches_list=[]
+    # for shared_search in shared_searches:
+    #     search_result = (db.query(Search).filter(Search.search_id == shared_search.search_id).first())
+    #     shared_searches_list.append(search_result)
+    return shared_searches
+
+
 
 
 def check_if_user_exceeded_search_amount(db: Session, current_user: User):

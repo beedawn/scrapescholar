@@ -1,13 +1,25 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Button from '../../Button';
+import apiCalls from '@/app/api/apiCalls';
 
 interface ShareModalProps {
     setShareModalActive: (item: boolean) => void;
+    search_id: number;
 }
-const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive }) => {
+
+const {putSearchShare}=apiCalls();
+//need to get search id
+const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id }) => {
     const clearModal = () => {
         setShareModalActive(false);
     }
+    const submitSearchShare = async () =>{
+        await putSearchShare(username,search_id)
+        clearModal()
+        
+    }
+    const [username, setUsername] = useState(''); 
+
     return (
         <div>
 
@@ -58,12 +70,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive }) => {
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
                                     <input className="border rounded border-slate-800 text-center p-2"
-                                        placeholder="Username" />
+                                        placeholder="Username" onChange={(e)=>{setUsername(e.target.value)}}/>
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
-                                    <Button onClick={() => clearModal()}>Submit</Button>
+                                    <Button onClick={() => submitSearchShare()}>Submit</Button>
                                 </div>
                             </div>
                         </div>
