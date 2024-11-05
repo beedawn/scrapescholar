@@ -14,10 +14,11 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id 
         setShareModalActive(false);
     }
     const submitSearchShare = async () =>{
-        await putSearchShare(username,search_id)
-        clearModal()
+        setResult(await putSearchShare(username,search_id))
+   
         
     }
+    const [result, setResult]=useState<boolean | null>(null);
     const [username, setUsername] = useState(''); 
 
     return (
@@ -70,7 +71,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id 
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
                                     <input className="border rounded border-slate-800 text-center p-2"
-                                        placeholder="Username" onChange={(e)=>{setUsername(e.target.value)}}/>
+                                        placeholder="Username" onClick={()=>{setResult(null)}} onChange={(e)=>{setUsername(e.target.value)}}/>
+                                </div>
+                            </div>
+                            <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
+                                <div>
+                                    {result==null?<></>:result?<div className="text-green-600">Success</div>:<div className="text-red-600">Failure</div>}
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">

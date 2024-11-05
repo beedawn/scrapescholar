@@ -426,11 +426,18 @@ const apiCalls = () => {
           'Content-Type': 'application/json'
         },
       })
+
+      if (data.status === 404) {
+        // Handle 404 error specifically by returning false
+        return false;
+      }
       jsonData = await data.json()
+      return true
     }
     catch (error: any) {
       // jsonData = [{ "title": error.message, link: '' }]
       // setError(error);
+      return false
     }
 
     // setLoading(false)
