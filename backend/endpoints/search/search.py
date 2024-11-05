@@ -47,6 +47,8 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
 
     # Query the last 300 searches for the authenticated user
     searches = get_300_search(db=db, current_user=current_user)
+    #TODO
+    #need logic in here somewhere to get shared searches, get associated search info and add to response
 
     #also need to get searches shared with user
     return searches if searches else []
@@ -71,15 +73,8 @@ def put_search_share(db: Session = Depends(get_db), access_token: Annotated[str 
 
     search_share = SearchShareCreate(search_id=search_id, shared_with_user_id=share_user_new.user_id,
                                      shared_by_user_id=user.user_id)
-    created_share= create_search_share(db, search_share)
+    created_share = create_search_share(db, search_share)
     return created_share
-    #searchshare
-    #     search_id: int
-    #     shared_with_user_id: int
-    #     shared_by_user_id: int
-
-    # search_share = SearchShareCreate(search_id=search_id, shared_with_userid=share_user.user_id, shared_by_user_id=user_id)
-    # create_search_share(db, search_share)
 
 
 # get single search and associated articles
