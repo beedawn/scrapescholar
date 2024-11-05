@@ -68,5 +68,6 @@ def test_csv_filename_in_response():
     title = response["title"]
     #compare search title to downloaded filed
     assert f'attachment; filename={title}' in content_disposition
+    session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 
