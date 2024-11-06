@@ -9,17 +9,7 @@ interface SettingsAccordionProps {
 const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement }) => {
     const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
     const [databases, setDatabases] = useState([])
-    useEffect(() => {
-        const fetchDatabases = async () => {
-            const db_list = await getAPIDatabases();
-            setDatabases(db_list);
-            // Initialize checkboxes with default checked state
-            const initialCheckboxes = db_list.reduce(
-                (accumulator: any[], db_source: any) => ({ ...accumulator, [db_source]: true }), {});
-            setCheckboxes(initialCheckboxes);
-        };
-        fetchDatabases();
-    }, []);
+
     const [hoveredClasses, setHoveredClasses]=useState<any>({1:"text-blue-400 underline",2:"text-blue-400 underline"});
     const updateHovered = (key:number) => {
         setHoveredClasses((prevState:any) => ({
@@ -36,27 +26,12 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
      }
 
     const [openIndex, setOpenIndex] = useState(null);
-    const [checkboxes, setCheckboxes] =
-        useState<Record<string, boolean>>({});
+
     const toggleAccordion = (index: any) => {
         setOpenIndex(openIndex === index ? null : index);
     };
 
-    const handleCheckboxChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        database: string
-    ) => {
-        const checked = event.target.checked;
-        setCheckboxes((prevState) => ({
-            ...prevState,
-            [database]: checked
-        }))
-        if (checked) {
-            addToUserDatabaseList(database)
-        } else {
-            removeFromUserDatabaseList(database)
-        }
-    }
+
     const index = 1;
     return (
         <div id="accordion-color">
