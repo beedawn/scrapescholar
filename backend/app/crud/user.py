@@ -47,6 +47,24 @@ def get_user(db: Session, user_id: int):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+def get_all_users(db: Session):
+    users = db.query(User).all()
+    if not users:
+        raise HTTPException(status_code=404, detail="Users not found")
+    decrypted_usernames = []
+    for user in users:
+        decrypt_username = decrypt(user.username)
+        decrypted_user = {"username":decrypt_username,
+                          "password":user.password,
+                          "email":user.email,
+                          "user_id":user.user_id,
+                          "role_id":user.role_id,
+                          "registration_date":user.registration_date,
+                          }
+        decrypted_usernames.append(decrypted_user)
+    return decrypted_usernames
+
+
 
 def get_user_by_username(db: Session, username: str):
     #i dont think this works
