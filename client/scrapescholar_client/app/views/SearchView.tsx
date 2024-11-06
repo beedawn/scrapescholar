@@ -46,7 +46,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [comments, setComments] = useState<any[]>([]);  // To store the comments of the selected article
     const [commentsLoading, setCommentsLoading] = useState<boolean>(false);  // To manage the loading state for comments
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-
+    const [openUserManagement, setOpenUserManagement]=useState<boolean>(false);
       useEffect(() => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabases();
@@ -135,7 +135,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             await getAPIPastSearchResults( setResults, setError, selectedSearchId );
             await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
-            
+            setOpenUserManagement(false)
             setLoading(false);
         }
         else{
@@ -148,6 +148,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         const newDropdown = [...dropdown];
         newDropdown[index] = option;
         setDropdown(newDropdown);
+        
     }
 
     const handleArticleClick = async (articleId: number) => {
@@ -171,6 +172,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setLoading(true);
         setError(null);
         setDataFull(false);
+        setOpenUserManagement(false);
         setIsSidebarOpen(false);
         //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
@@ -223,14 +225,14 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
                     addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} 
-                    searches={searches} handlePastSearchSelection={handlePastSearchSelection}
+                    searches={searches} handlePastSearchSelection={handlePastSearchSelection} setOpenUserManagement={setOpenUserManagement}
                 />
             </div>
     
             {/* Middle SearchResults */}
             <div className="flex-1 sm:mx-12 w-full overflow-auto">
                 {error ? (<p>{error.message}</p>) 
-                : loading ? <Loading /> : 
+                : loading ? <Loading /> : openUserManagement?<>Hi</>:
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
                 <SearchResults 
                     setResults={setResults} 
