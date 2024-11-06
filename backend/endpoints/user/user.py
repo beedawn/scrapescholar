@@ -46,11 +46,12 @@ def create_new_user(user: UserCreate,access_token: Annotated[str | None, Cookie(
 
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists.")
-
-    # Proceed with creating the user
-    new_user = create_user(db=db, user=user)
-    return new_user
-
+    if user_1.role_id==1:
+        # Proceed with creating the user
+        new_user = create_user(db=db, user=user)
+        return new_user
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="")
 
 @router.get("/get/{user_id}", response_model=UserRead)
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):

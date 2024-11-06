@@ -80,7 +80,8 @@ def insert_test_data(db):
     user_data = UserCreate(
         username=test_user,
         password=test_password,
-        email="testuser@example.com"
+        email="testuser@example.com",
+        role_id=1
     )
     user = create_user(db=db, user=user_data)
 
