@@ -397,6 +397,52 @@ const apiCalls = () => {
 
   }
   
+  const putSearchShare = async (shared_with_user: string, search_id: number,
+  
+    // setLoading: (item: boolean) => void
+  ) => {
+    let data: Response;
+    let jsonData;
+    /* responds with 
+    {
+      "user_id": 1,
+      "search_keywords": [
+          "abcdefghijkl,mop",
+          "AND",
+          "123456789"
+      ],
+      "title": "new title new",
+      "search_date": null,
+      "search_id": 17,
+      "status": "active"
+  } 
+      */
+     //maybe different loading?
+    // setLoading(true);
+    try {
+      const url = `http://${host}:8000/search/share?search_id=${search_id}&share_user=${shared_with_user}`
+      data = await fetch(url, {
+        method: "PUT", credentials: "include", headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+
+      if (data.status === 404) {
+        // Handle 404 error specifically by returning false
+        return false;
+      }
+      jsonData = await data.json()
+      return true
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+      return false
+    }
+
+    // setLoading(false)
+  }
+
   const downloadURL= `http://${host}:8000/download?search_id=`
 
   return { getAPIDatabases, postAPILogin, 
@@ -406,7 +452,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL   };
+    deleteComment, downloadURL, putSearchShare   };
 
 }
 

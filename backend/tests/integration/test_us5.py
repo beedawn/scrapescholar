@@ -12,20 +12,22 @@ session = get_cookie()
 #UT-5.2
 
 def test_user_data_slash_update_put():
+    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata = searchdata.json()
+    article_id = searchdata["articles"][0]["article_id"]
+    search_id = searchdata["search_id"]
     data = {
-        "article_id": 1,
+        "article_id": article_id,
         "relevancy_color": "Not Relevant"
     }
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     session.put(f"{base_url}/user_data/update", json=data)
-    searchdata = searchdata.json()
 
-    response = session.get(f"{base_url}/search/user/articles?search_id=1")
+    response = session.get(f"{base_url}/search/user/articles?search_id={search_id}")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
     for item in data:
-        if item["article_id"] == 1:
+        if item["article_id"] == article_id:
             assert item["color"] == "Not Relevant"
     search_id = searchdata["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")

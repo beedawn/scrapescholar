@@ -31,7 +31,3 @@ def test_check_response_no_id():
     assert response == 1
 
 
-def test_academic_data():
-    api_query = "test"
-    query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")

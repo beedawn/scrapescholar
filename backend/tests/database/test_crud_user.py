@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from app.crud.user import (
     get_user,
     get_user_by_username,
-    get_user_by_email,
     create_user,
     update_user,
     delete_user,
@@ -47,11 +46,11 @@ def test_create_user(test_db_session: Session):
     """Test creating a new user."""
     user_in = UserCreate(**mock_user_data)
     created_user = create_user(test_db_session, user_in)
-    
+
     # Check that the stored values are encrypted/hashed
     assert created_user.username != mock_user_data["username"]  # Encrypted in DB
     assert created_user.email != mock_user_data["email"]  # Hashed in DB
-    
+
     # Verify decrypted username and hashed password
     fetched_user = get_user(test_db_session, created_user.user_id)
     assert decrypt(fetched_user.username) == mock_user_data["username"]
@@ -110,9 +109,9 @@ def test_get_user_not_found(test_db_session: Session):
 
 def test_get_user_by_username_not_found(test_db_session: Session):
     """Test error handling for non-existent username."""
-    with pytest.raises(HTTPException) as exc_info:
-        get_user_by_username(test_db_session, encrypt_username("nonexistentuser"))
-    assert exc_info.value.status_code == 404
+
+    user= get_user_by_username(test_db_session, encrypt_username("nonexistentuser"))
+    assert user is None
 
 def test_delete_user_not_found(test_db_session: Session):
     """Test error handling when trying to delete a non-existent user."""

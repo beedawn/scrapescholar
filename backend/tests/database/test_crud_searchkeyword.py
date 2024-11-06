@@ -20,7 +20,6 @@ from app.db.session import SessionLocal
 from fastapi.exceptions import HTTPException
 
 # Mock data for User, Search, and Keyword creation
-mock_user_data = {"username": "testuser", "email": "testuser@example.com", "password": "testpassword"}
 mock_search_data = {"title": "Test Search", "search_keywords": ["sample"]}
 mock_keyword_data = {"keyword": "sample_keyword"}
 
@@ -42,11 +41,6 @@ def test_db_session():
     db.rollback()
     db.close()
 
-
-# Mock data for User, Search, and Keyword creation
-mock_user_data = {"username": "testuser", "email": "testuser@example.com", "password": "testpassword"}
-mock_search_data = {"title": "Test Search", "search_keywords": ["sample"]}
-mock_keyword_data = {"keyword": "sample_keyword"}
 
 
 def create_search_test(created_user, test_db_session):

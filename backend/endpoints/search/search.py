@@ -2,12 +2,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
 from app.db.session import get_db
 from app.models.search import Search
+from app.models.searchshare import SearchShare
 from app.models.article import Article
 from app.models.user import User
 from app.models.user_data import UserData
 from fastapi.security import OAuth2PasswordBearer
-from app.crud.search import create_search
-from app.crud.searchshare import create_search_share
+from app.crud.search import create_search, get_search
+from app.crud.searchshare import create_search_share, get_search_share, get_search_share_by_search
 from app.crud.source import get_source_by_name, get_source
 from app.crud.user import decrypt, get_user_by_email, get_user_by_username
 from app.schemas.search import SearchCreate, SearchUpdate
@@ -47,7 +48,12 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
 
     # Query the last 300 searches for the authenticated user
     searches = get_300_search(db=db, current_user=current_user)
+    #TODO
+    #need logic in here somewhere to get shared searches, get associated search info and add to response
+    shared_searches = get_shared_searches(db, current_user)
+    print(shared_searches)
 
+    searches = searches + shared_searches
     #also need to get searches shared with user
     return searches if searches else []
 
@@ -58,24 +64,21 @@ def put_search_share(db: Session = Depends(get_db), access_token: Annotated[str 
                      search_id: int = Query(None, description="ID of the specific search to retrieve"),
                      share_user: str = Query(None, description="Username or Email of the specific user "
                                                                "to share search with")):
-    print(access_token)
     # verifies user has a token and is valid
-    user_id = get_current_user_modular(token=access_token, db=db)
+    user = get_current_user_modular(token=access_token, db=db)
     try:
-        share_user = get_user_by_username(db, share_user)
-        if not share_user:
-            share_user = get_user_by_email(db, share_user)
-        if not share_user:
+        share_user_new = get_user_by_username(db, share_user)
+        if share_user_new is None:
+            share_user_new = get_user_by_email(db, share_user)
+        if not share_user_new:
             raise HTTPException(status_code=404, detail="User not found by either username or email.")
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
-    #searchshare
-    #     search_id: int
-    #     shared_with_user_id: int
-    #     shared_by_user_id: int
 
-    # search_share = SearchShareCreate(search_id=search_id, shared_with_userid=share_user.user_id, shared_by_user_id=user_id)
-    # create_search_share(db, search_share)
+    search_share = SearchShareCreate(search_id=search_id, shared_with_user_id=share_user_new.user_id,
+                                     shared_by_user_id=user.user_id)
+    created_share = create_search_share(db, search_share)
+    return created_share
 
 
 # get single search and associated articles
@@ -86,9 +89,32 @@ def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[s
     Retrieve a single search and associated articles
     """
     #verifies user has a token and is valid
-    get_current_user_modular(token=access_token, db=db)
+    user = get_current_user_modular(token=access_token, db=db)
+    #check if user has permission to the search
+    #get the search with search id, get search share with search_id and see if user id is listed anywhere
+    search = get_search(db, search_id)
+    match_search = None
+    articles = None
 
-    articles = get_full_article_response(db=db, search_id=search_id)
+    if search is None or search.user_id != user.user_id:
+        searchshares = get_search_share_by_search(db, search_id)
+        print("search shares")
+        print(searchshares)
+        if searchshares is None:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+        for searchshare in searchshares:
+            print("Search Share ID")
+            print(searchshare.shared_with_user_id)
+            if (searchshare.shared_with_user_id == user.user_id):
+                match_search = searchshare
+                break
+    print("Search")
+    print(search)
+    print("match search")
+    print(match_search)
+    if (search is not None and search.user_id == user.user_id) or match_search is not None:
+        articles = get_full_article_response(db=db, search_id=search_id)
+
     return articles if articles else []
 
 
@@ -197,12 +223,25 @@ def get_300_search(db, current_user):
 def get_shared_searches(db, current_user):
     #TODO:
     #need to get searches, from search that join/align with user's shared with sharesearch
-    return (
+
+    shared_searches = (
         db.query(Search)
-        .filter(Search.user_id == current_user.user_id)
+        .join(SearchShare, Search.search_id == SearchShare.search_id)
+        .filter(SearchShare.shared_with_user_id == current_user.user_id)
         .order_by(Search.search_date.desc())
         .all()
     )
+
+    # shared_searches = (db.query(SearchShare)
+    #                    .filter(SearchShare.shared_with_user_id == current_user.user_id)
+    #                    .order_by(Search.search_date.desc())
+    #                    .all())
+    # #now need to take shared_searches and get their search ID's
+    # shared_searches_list=[]
+    # for shared_search in shared_searches:
+    #     search_result = (db.query(Search).filter(Search.search_id == shared_search.search_id).first())
+    #     shared_searches_list.append(search_result)
+    return shared_searches
 
 
 def check_if_user_exceeded_search_amount(db: Session, current_user: User):
@@ -266,9 +305,6 @@ def get_full_article_response(db, search_id):
     articles = find_search_articles(db, search_id)
     response = []
     for article in articles:
-        print("ARTICLE ID")
-        print(article.article_id)
-
         user_data = get_user_data(db=db, article_id=article.article_id)
 
         source_name = get_source(db, article.source_id)

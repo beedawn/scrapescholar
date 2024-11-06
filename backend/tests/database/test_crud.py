@@ -15,11 +15,7 @@ from fastapi.exceptions import HTTPException
 
 
 # Mock data for user
-mock_user_data = {
-    "username": "testuser",
-    "email": "testuser@example.com",
-    "password": "testpassword"
-}
+
 
 # Mock data for search (required for foreign key reference)
 mock_search_data = {
