@@ -124,19 +124,21 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setInputs(newInputs);
     }
 
+    const clearPages = () =>{
+        setOpenUserManagement(false)
+        setLoading(false);
+    }
     const handlePastSearchSelection = async (event:any)=>{
         const selectedSearchId = event.target.value;
         setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
      if(selectedSearchId){
-            setCurrentSearchId(selectedSearchId)
-            setLoading(true);
+            clearPages();
             setError(null);
             await getAPIPastSearchResults( setResults, setError, selectedSearchId );
             await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
-            setOpenUserManagement(false)
-            setLoading(false);
+            clearPages();
         }
         else{
         setError({"message":"No search found"});

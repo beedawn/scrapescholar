@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import apiCalls from '@/app/api/apiCalls';
 
 interface SettingsAccordionProps {
-    addToUserDatabaseList: (item: string) => void;
-    removeFromUserDatabaseList: (item: string) => void;
+
     setOpenUserManagement:(item:boolean)=>void;
 }
 
-const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ addToUserDatabaseList, removeFromUserDatabaseList, setOpenUserManagement }) => {
+const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement }) => {
     const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
     const [databases, setDatabases] = useState([])
     useEffect(() => {
