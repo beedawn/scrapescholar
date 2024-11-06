@@ -378,6 +378,25 @@ const apiCalls = () => {
   }
 
 
+  const isAdmin= async ()=>{
+    let data;
+    let textData
+
+    try {
+      const url = `http://${host}:8000/auth/is_admin`
+      data = await fetch(url, { method: "GET", credentials: "include" })
+      textData = await data.text()
+      console.log(textData)
+      return textData;
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+      return {detail:"Admin request failed"};
+    }
+
+  }
+
   const deleteCookie= async ()=>{
     let data;
     let jsonData
@@ -452,7 +471,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare   };
+    deleteComment, downloadURL, putSearchShare, isAdmin   };
 
 }
 

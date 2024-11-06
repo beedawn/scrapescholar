@@ -6,8 +6,27 @@ interface SettingsAccordionProps {
     setOpenUserManagement:(item:boolean)=>void;
 }
 
+
 const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement }) => {
-    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
+ 
+
+
+    const [isAdminUser, setIsAdminUser]= useState<boolean>(false);
+    const { getAPIDatabases, postAPILogin, getAPIResults, isAdmin } = apiCalls();
+    useEffect(()=>{
+    
+        const findAdmin= async()=>{
+    
+            const result = await isAdmin()
+            if (result === "true"){
+                setIsAdminUser(true)
+            }
+
+        }
+        findAdmin();
+    },[])
+
+
     const [databases, setDatabases] = useState([])
 
     const [hoveredClasses, setHoveredClasses]=useState<any>({1:"text-blue-400 underline",2:"text-blue-400 underline"});
@@ -31,6 +50,12 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
         setOpenIndex(openIndex === index ? null : index);
     };
 
+    const allowedOpenUserManagement = () =>{
+        //is user admin?
+
+        //if so open 
+        setOpenUserManagement(true)
+    }
 
     const index = 1;
     return (
@@ -57,12 +82,12 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                 <div className={openIndex === index ? '' : 'hidden'} id={`accordion-color-body-${index + 1}`}
                     aria-labelledby={`accordion-color-heading-${index + 1}`}>
                     <div className="pl-5 dark:border-gray-700">
-                        
-                            <div key="1"  >
+                            {isAdminUser?  <div key="1"  >
                              
-                                  <a href="#" onClick={()=>{setOpenUserManagement(true)}} onMouseEnter={()=>{updateHovered(1)}}  onMouseLeave={()=>{removeHovered(1)}} className={hoveredClasses[1]}>User Management</a>
-                        
-                            </div>
+                             <a href="#" onClick={()=>{allowedOpenUserManagement()}} onMouseEnter={()=>{updateHovered(1)}}  onMouseLeave={()=>{removeHovered(1)}} className={hoveredClasses[1]}>User Management</a>
+                   
+                       </div>:<></>}
+                          
                             <div key="2" onClick={()=>alert("api keys")}  >
                                
                                    <a href="#" onMouseEnter={()=>{updateHovered(2)}}  onMouseLeave={()=>{removeHovered(2)}} className={hoveredClasses[2]}>API Keys</a>

@@ -9,6 +9,7 @@ import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
 import CommentsSidebar from '../components/SearchView/CommentsSidebar'; 
 import Loading from '../components/Loading';
+import UserManagement from '../components/UserManagement/UserManagement';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -153,6 +154,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         
     }
 
+
     const handleArticleClick = async (articleId: number) => {
         setSelectedArticleId(articleId);
         setIsSidebarOpen(true);
@@ -234,7 +236,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             {/* Middle SearchResults */}
             <div className="flex-1 sm:mx-12 w-full overflow-auto">
                 {error ? (<p>{error.message}</p>) 
-                : loading ? <Loading /> : openUserManagement?<>Hi</>:
+                : loading ? <Loading /> : openUserManagement?<><UserManagement/></>:
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
                 <SearchResults 
                     setResults={setResults} 
