@@ -83,7 +83,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
                 newRole=Role.Student;
                 break;
             default:
-                newRole=Role.None;
+                newRole=Role.Role;
 
         }
         updateUserState("role_id",newRole)
@@ -160,7 +160,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 
                                 <div>
-                                    {newUser.password.length>0 && newUser.password.length<8?<div className="text-black">Password must be 8 characters</div>:<></>}
+                                    {newUser.password.length>0 && newUser.password.length<8?<div className="text-black">Password must be at least 8 characters long</div>:<></>}
                                 </div>
                             </div>
 
