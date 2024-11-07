@@ -147,7 +147,11 @@ async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: S
 
 @router.get("/is_admin")
 async def is_admin_endpoint(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    return is_admin(access_token, db)
+
+    if is_admin(access_token, db):
+        return True
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="")
 
 
 @router.get("/remove_cookie")

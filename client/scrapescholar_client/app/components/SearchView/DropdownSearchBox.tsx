@@ -6,12 +6,14 @@ interface DropdownSearchBoxProps {
   onDropdownChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   className?: string;
   valueArray: any[];
+  defaultValue?:string;
 }
 const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
   ({ value,
     onDropdownChange,
     className = '',
-    valueArray
+    valueArray,
+    defaultValue=null
   }) => {
 
     return (
@@ -19,8 +21,8 @@ const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
         value={value}
         onChange={onDropdownChange}
         className={`text-black p-2 ${className}`}
-      >{valueArray[0] !== undefined && valueArray[0].search_id !== undefined ? <><option key={0} >
-        Past Searches
+      >{defaultValue !== null  ? <><option key={0} >
+        {defaultValue}
       </option></> : <></>}
         {valueArray.map((option, index) => (
           option.search_id !== undefined ?

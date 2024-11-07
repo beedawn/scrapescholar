@@ -52,7 +52,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                 <DropdownSearchBox value="past search dropdown"
                     onDropdownChange={(selectedTitle) => 
                         handlePastSearchSelection(selectedTitle)} valueArray={searches}
-                    className="w-full" />
+                    className="w-full"  defaultValue='Past Searches'/>
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">
                         +

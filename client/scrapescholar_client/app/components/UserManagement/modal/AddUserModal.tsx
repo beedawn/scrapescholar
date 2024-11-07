@@ -175,7 +175,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
 
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
-                                    <DropdownSearchBox value={Role[newUser.role_id]} valueArray={["Student","GradStudent","Professor"]} onDropdownChange={dropdownChange}/>
+                                    <DropdownSearchBox value={"Role"} valueArray={["Student","GradStudent","Professor"]} onDropdownChange={dropdownChange} defaultValue="Role"/>
                                 </div>
                             </div>
                           
