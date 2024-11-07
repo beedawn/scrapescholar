@@ -21,19 +21,9 @@ describe('SearchView US-17 Component', () => {
     const mockSetLoggedIn = jest.fn();
     const testInput = "test input"
 
-//UT-25.1
-    // test('US-5 UT-5.1 check relevancy column contains %', () => {
-    //     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
-    //     submitSearch(testInput)
 
-    //     waitFor(() => {
-    //         const rows = screen.getAllByTestId('row')
-    //         expect(rows[0].children[9].textContent).toContain(/92/i);
-    //         expect(rows[0].children[9].textContent).toContain(/%/i);
-    //     }, { timeout: 5000 })
-    // });
     //UT-17.2
-    test('US-17 Settings Accordion Expands and shows API Keys', async () => {
+    test('US-17 Settings Accordion Expands and shows API Keys, and not User management text for non-admin', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         const settingsAccordian = screen.getByText('Settings');
         fireEvent.click(settingsAccordian);
