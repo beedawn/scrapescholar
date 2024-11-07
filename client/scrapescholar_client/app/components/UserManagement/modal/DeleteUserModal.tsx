@@ -22,7 +22,7 @@ enum Role{
 
 }
 
-const { addUser } = apiCalls();
+const { deleteUserAPI } = apiCalls();
 //need to get search id
 const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalActive,deleteUser }) => {
     const clearModal = () => {
@@ -39,9 +39,9 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalAct
         e.preventDefault();
    
     
-            // await addUser()
+             await deleteUserAPI(deleteUser.user_id)
     
-            clearModal()
+            // clearModal()
         
         
     }

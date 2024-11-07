@@ -518,6 +518,29 @@ const apiCalls = () => {
   }
 
 
+  const deleteUserAPI = async (user_id: number) => {
+    let data: Response;
+    let jsonData;
+    try {
+      const url = `http://${host}:8000/users/delete/${user_id}`
+      data = await fetch(url, {
+        method: "DELETE", credentials: "include"
+      })
+      jsonData = await data.json()
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+    }
+    if (jsonData !== undefined) {
+      // console.log("Search deleted")
+    }
+    else {
+      // console.log(jsonData)
+      console.log("failure to delete search")
+    }
+  }
+
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
@@ -525,7 +548,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers   };
+    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers, deleteUserAPI   };
 
 }
 

@@ -102,11 +102,11 @@ def update_existing_user(user_id: int, user: UserUpdate, db: Session = Depends(g
 
 
 @router.delete("/delete/{user_id}", response_model=UserRead)
-def delete_existing_user(user_id: int, db: Session = Depends(get_db)):
+def delete_existing_user(user_id: int, access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
     """
     API endpoint to delete a user by their ID.
     """
     #probably want to verify user has valid token
-
+    get_current_user_modular(access_token, db)
     deleted_user = delete_user(db=db, user_id=user_id)
     return deleted_user

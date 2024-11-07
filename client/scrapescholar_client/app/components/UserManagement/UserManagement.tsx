@@ -27,7 +27,9 @@ const UserManagement: React.FC<UserManagementProps> =
         
             getUsersAPI()
 
-        },[addUserModalActive])
+        },[addUserModalActive, deleteUserModalActive])
+
+
 
         const [users,setUsers]=useState<any[]>([]);
         // const handleSelectChange = (event: any) => {
@@ -60,23 +62,23 @@ const UserManagement: React.FC<UserManagementProps> =
                 </p>
                 <div className={"flex flex-wrap-reverse"}>
                     <div className={"m-5 float-left flex-none bg-white rounded text-black w-full"}>
-               {users.map((user)=>(<div className="p-2 flex" key={user.user_id}>
+               {users.map((user)=>(<div className="p-2 flex w-full" key={user.user_id}>
             
-               <div className="p-2">{user.username}</div>
-               <div>
+               <div className="p-2 w-1/4">{user.username}</div>
+               <div className="w-1/4">
                                     <DropdownSearchBox value={Role[user.role_id]} valueArray={["Student","GradStudent","Professor"]} onDropdownChange={()=>{}} defaultValue="Role"/>
                                 </div>
 
 
 
-                                <div className="p-2">     
+                                <div className="p-2 w-1/4">     
                 <button className="bg-red-600 text-2xl p-1 rounded text-white" 
                 onClick={()=>{setDeleteUserModalActive(true); setDeleteUser(user)}}>
                     ␡
                     </button>
                </div>
 
-               <div className="p-2">     
+               <div className="p-2 w-1/4">     
                 <Button className="" 
                 onClick={()=>{setDeleteUserModalActive(true); setDeleteUser(user)}}>
                     Reset Password
