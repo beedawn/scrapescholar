@@ -1,7 +1,7 @@
 # backend/app/init_db.py
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from app.models import Base
 from app.models import User, Article, Source, Role, Search
 from app.dependencies import get_db_uri
@@ -26,6 +26,13 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 # Create a session maker
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+def create_default_roles(db: Session):
+    role_names = ["Professor/Principal Investigator", "Graduate Student", "Undergraduate Student"]
+    for name in role_names:
+        existing_role = db.query(Role).filter_by(role_name=name).first()
+        if not existing_role:
+            db.add(Role(role_name=name))
+    db.commit()
 
 def init_db():
     """
@@ -54,6 +61,10 @@ def init_db():
     # Check if we are in the test environment
     db: SessionLocal = SessionLocal()
     try:
+        # Ensure default roles are created
+        create_default_roles(db)
+
+        # Check if we are in the test environment
         db_name = os.getenv("POSTGRES_DB")
         if "scrapescholartestdb" in db_name:
             print("Test environment detected, inserting test data...")
