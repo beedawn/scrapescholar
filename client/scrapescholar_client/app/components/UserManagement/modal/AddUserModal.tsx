@@ -48,13 +48,17 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
         }
         else{
             console.log(JSON.stringify(newUser))
-            await addUser(newUser)
+            const response = await addUser(newUser)
             setNewUser({
                username:"",
                password:"",
                email:"",
                role_id:0
             })
+            if(response===null){
+                setError(true)
+                return
+            }
             clearModal()
         }
         

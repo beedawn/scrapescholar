@@ -492,7 +492,7 @@ const apiCalls = () => {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error("Error adding comment:", error);
+        console.error("Error adding User:", error);
         return null;
     }
   }

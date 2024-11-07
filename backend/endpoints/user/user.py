@@ -10,6 +10,7 @@ import os
 from auth_tools.get_user import get_current_user_modular
 from typing import List, Annotated
 from dotenv import load_dotenv
+from auth_tools.is_admin import is_admin
 
 
 load_dotenv()
@@ -35,18 +36,14 @@ def create_new_user(user: UserCreate,access_token: Annotated[str | None, Cookie(
     """
     #probably want to verify user has valid token
     user_1 = get_current_user_modular(access_token, db)
-    # Encrypt the username before checking for existence
-    encrypted_username = encrypt_username(user.username)
-
-    # Check if the username already exists
-    try:
-        existing_user = get_user_by_username(db, encrypted_username)
-    except HTTPException:
-        existing_user = None
-
-    if existing_user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists.")
-    if user_1.role_id==1:
+    admin = is_admin(access_token, db)
+    users = get_all_users(db)
+    # Encrypt the username before checking for existence, probably need to decrypt db instead
+    for useritem in users:
+        if useritem["username"] == user.username:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists.")
+    # Check if the username already exists, needs work
+    if admin:
         # Proceed with creating the user
         new_user = create_user(db=db, user=user)
         return new_user
@@ -91,14 +88,18 @@ def get_user_by_username_api(username: str, db: Session = Depends(get_db)):
 
 
 @router.put("/update/{user_id}", response_model=UserRead)
-def update_existing_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
+def update_existing_user(user_id: int,user: UserUpdate, access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
     """
     API endpoint to update an existing user.
     """
     #probably want to verify user has valid token
-
-    updated_user = update_user(db=db, user_id=user_id, user=user)
-    return updated_user
+    get_current_user_modular(access_token, db)
+    admin = is_admin(access_token, db)
+    if admin:
+        updated_user = update_user(db=db, user_id=user_id, user=user)
+        return updated_user
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="")
 
 
 @router.delete("/delete/{user_id}", response_model=UserRead)
