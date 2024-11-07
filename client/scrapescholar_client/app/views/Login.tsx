@@ -8,8 +8,8 @@ interface LoginProps {
 
 
 
-const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
-const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
+// const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
+// const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
     const { postAPILogin, getCookie } = apiCalls();
 
@@ -24,7 +24,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
         e.preventDefault();
         setError('');
         const tokenResponse = await postAPILogin(username, password);
-        if (tokenResponse && typeof tokenResponse === 'string' || (username === admin_user && password === admin_pass)) {
+        if (tokenResponse && typeof tokenResponse === 'string') {
             console.log(tokenResponse)
             setToken(tokenResponse);
             setLoggedIn(true)
