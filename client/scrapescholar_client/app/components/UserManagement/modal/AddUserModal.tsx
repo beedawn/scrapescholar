@@ -14,7 +14,7 @@ export interface NewUser {
 }
 
 enum Role{
-    None,
+    Role,
     Professor,
     GradStudent,
     Student
@@ -33,7 +33,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
         username: "",
         password: "",
         email: "",
-        role_id: 3
+        role_id: 0
     });
     const [error, setError] = useState<boolean>(false);
    
@@ -46,8 +46,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
     }
     const submitUser = async (e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-        //send put request with user data
-        updateUserState("role_id", 3);
          if (newUser.username.length==0||newUser.password.length==0||newUser.email.length==0||newUser.role_id==0){
             setError(true)
 
@@ -59,8 +57,9 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
                username:"",
                password:"",
                email:"",
-               role_id:3 
+               role_id:0
             })
+            clearModal()
         }
         
     }
@@ -175,7 +174,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
 
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
-                                    <DropdownSearchBox value={"Role"} valueArray={["Student","GradStudent","Professor"]} onDropdownChange={dropdownChange} defaultValue="Role"/>
+                                    <DropdownSearchBox value={Role[newUser.role_id]} valueArray={["Student","GradStudent","Professor"]} onDropdownChange={dropdownChange} defaultValue="Role"/>
                                 </div>
                             </div>
                           
