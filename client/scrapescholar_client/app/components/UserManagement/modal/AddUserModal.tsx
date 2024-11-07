@@ -48,7 +48,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
         e.preventDefault();
         //send put request with user data
         updateUserState("role_id", 3);
-         if (newUser.username.length==0||newUser.password.length==0||newUser.email.length==0||newUser.role==0){
+         if (newUser.username.length==0||newUser.password.length==0||newUser.email.length==0||newUser.role_id==0){
             setError(true)
 
         }
