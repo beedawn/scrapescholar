@@ -62,7 +62,7 @@ def get_cookie_2():
     session.cookies.set('access_token', token_value)
     return session
 
-
+#UT-17.3
 def test_user_put(test_db_session):
     user_in = UserCreate(**mock_user_data)
     created_user = create_user(test_db_session, user_in)
@@ -76,6 +76,25 @@ def test_user_put(test_db_session):
       "registration_date": "2024-11-07T20:39:36.586Z"
     }
     response = nonadmin_session.put(f"{base_url}/users/update/{created_user.user_id}", json=put_request)
+    assert response.status_code == 401
+
+    delete_user(test_db_session, created_user.user_id)
+
+
+
+def test_user_delete(test_db_session):
+    user_in = UserCreate(**mock_user_data)
+    created_user = create_user(test_db_session, user_in)
+    nonadmin_session = get_cookie_2()
+    #have user modify themselves?
+    put_request = {
+      "username": mock_user_data["username"],
+      "email": mock_user_data["email"],
+      "user_id": created_user.user_id,
+      "role_id": 1,
+      "registration_date": "2024-11-07T20:39:36.586Z"
+    }
+    response = nonadmin_session.delete(f"{base_url}/users/delete/{created_user.user_id}")
     assert response.status_code == 401
 
     delete_user(test_db_session, created_user.user_id)

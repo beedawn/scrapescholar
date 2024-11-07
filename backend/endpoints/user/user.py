@@ -109,5 +109,9 @@ def delete_existing_user(user_id: int, access_token: Annotated[str | None, Cooki
     """
     #probably want to verify user has valid token
     get_current_user_modular(access_token, db)
-    deleted_user = delete_user(db=db, user_id=user_id)
-    return deleted_user
+    admin = is_admin(access_token, db)
+    if admin:
+        deleted_user = delete_user(db=db, user_id=user_id)
+        return deleted_user
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="")
