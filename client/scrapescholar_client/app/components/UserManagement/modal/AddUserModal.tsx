@@ -1,45 +1,95 @@
 import React, { useState } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
-
+import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
 interface AddUserModalProps {
     setAddUserModalActive: (item: boolean) => void;
 }
 
-interface NewUser {
+export interface NewUser {
     username: string,
     password: string,
     email: string,
-    role: number
+    role_id: number
 }
 
-const { putSearchShare } = apiCalls();
+enum Role{
+    None,
+    Professor,
+    GradStudent,
+    Student
+
+}
+
+const { addUser } = apiCalls();
 //need to get search id
 const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) => {
     const clearModal = () => {
         setAddUserModalActive(false);
     }
-    // const submitSearchShare = async () =>{
-    //     setResult(await putSearchShare(username,search_id))
-
-
-    // }
+ 
     const [result, setResult] = useState<boolean | null>(null);
     const [newUser, setNewUser] = useState<NewUser>({
         username: "",
         password: "",
         email: "",
-        role: 0
+        role_id: 3
     });
+    const [error, setError] = useState<boolean>(false);
+   
 
-    const updateUserState = (item:any, value:React.ChangeEvent<HTMLInputElement>) => {
-
+    const updateUserState = (item:any, value:any) => {
         setNewUser((prevState) => ({
             ...prevState,
-            [item]: value.target.value
+            [item]: value
         }))
+    }
+    const submitUser = async (e:React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault();
+        //send put request with user data
+        updateUserState("role_id", 3);
+         if (newUser.username.length==0||newUser.password.length==0||newUser.email.length==0||newUser.role==0){
+            setError(true)
 
-        console.log(newUser)
+        }
+        else{
+            console.log(JSON.stringify(newUser))
+            await addUser(newUser)
+            setNewUser({
+               username:"",
+               password:"",
+               email:"",
+               role_id:3 
+            })
+        }
+        
+    }
+
+    const clearErrorSuccessMsg = () =>{
+        setError(false);
+
+    }
+    const dropdownChange = (e:any) => {
+        console.log(e.target.value)
+        const selectedRole = e.target.value;
+        let newRole:Role;
+        switch(selectedRole){
+            case("Professor"):
+                newRole= Role.Professor;
+                break;
+            case("GradStudent"):
+                newRole = Role.GradStudent;
+                break;
+            case("Student"):
+                newRole=Role.Student;
+                break;
+            default:
+                newRole=Role.None;
+
+        }
+        updateUserState("role_id",newRole)
+        console.log(newRole)
+        console.log(Role[newRole])
     }
 
     return (
@@ -55,7 +105,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
     Leaving: "ease-in duration-200"
       From: "opacity-100"
       To: "opacity-0" */}
-      <form onSubmit={(e)=>{e.preventDefault();alert("hi")}}>
+      <form onSubmit={(e)=>{submitUser(e)}}>
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                 <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -93,7 +143,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
 
                                 <div>
                                     <input className="border rounded border-slate-800 text-center p-2"
-                                        placeholder="Username" onClick={() => { setResult(null) }} onChange={(e) => { updateUserState("username",e )}} />
+                                        placeholder="Username" value={newUser.username} onClick={() => { clearErrorSuccessMsg()}} onChange={(e) => { updateUserState("username",e.target.value )}} />
                                 </div>
                             </div>
 
@@ -105,7 +155,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
                                 
                                 <div>
                                     <input className="border rounded border-slate-800 text-center p-2"
-                                        placeholder="Password" onClick={() => { setResult(null) }} onChange={(e) => { updateUserState("password",e )}} />
+                                        placeholder="Password" value={newUser.password} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => { updateUserState("password",e.target.value )}} />
                                 </div>
                             </div>
 
@@ -117,7 +167,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
                                
                                 <div>
                                     <input className="border rounded border-slate-800 text-center p-2"
-                                        placeholder="Email" onClick={() => { setResult(null) }} onChange={(e) => { updateUserState("email",e )}} />
+                                        placeholder="Email" value={newUser.email} onClick={() => {clearErrorSuccessMsg() }} onChange={(e) => { updateUserState("email",e.target.value )}} />
                                 </div>
                             </div>
 
@@ -125,13 +175,13 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
 
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
-                                    <input className="border rounded border-slate-800 text-center p-2"
-                                        placeholder="Username" onClick={() => { setResult(null) }} onChange={(e) => { }} />
+                                    <DropdownSearchBox value={Role[newUser.role_id]} valueArray={["Student","GradStudent","Professor"]} onDropdownChange={dropdownChange}/>
                                 </div>
                             </div>
+                          
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
-                                <div>
-                                    {result == null ? <></> : result ? <div className="text-green-600">Success</div> : <div className="text-red-600">Failure</div>}
+                                <div className="text-black">
+                                    {error? <div className="text-red-600">Error, please try again.</div>:<></>}
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">

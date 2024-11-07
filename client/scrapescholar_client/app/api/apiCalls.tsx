@@ -1,4 +1,4 @@
-
+import { NewUser } from "../components/UserManagement/modal/AddUserModal";
 const apiCalls = () => {
 
   const host = process.env.NEXT_PUBLIC_HOST_IP;
@@ -464,6 +464,40 @@ const apiCalls = () => {
 
   const downloadURL= `http://${host}:8000/download?search_id=`
 
+
+
+
+
+
+
+  // Add a new comment
+  const addUser = async ( userBody: NewUser) => {
+    try {
+        const url = `http://${host}:8000/users/create`;
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                userBody
+            ),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error adding user: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error adding comment:", error);
+        return null;
+    }
+  }
+
+
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
@@ -471,7 +505,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare, isAdmin   };
+    deleteComment, downloadURL, putSearchShare, isAdmin, addUser   };
 
 }
 
