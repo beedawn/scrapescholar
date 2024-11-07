@@ -46,7 +46,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
     }
     const submitUser = async (e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-         if (newUser.username.length==0||newUser.password.length==0||newUser.email.length==0||newUser.role_id==0){
+         if (newUser.username.length==0||newUser.password.length==0||newUser.email.length==0||newUser.role_id==0 || newUser.password.length<8){
             setError(true)
 
         }
@@ -153,11 +153,16 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 
                                 <div>
-                                    <input className="border rounded border-slate-800 text-center p-2"
+                                    <input type="password" className="border rounded border-slate-800 text-center p-2"
                                         placeholder="Password" value={newUser.password} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => { updateUserState("password",e.target.value )}} />
                                 </div>
                             </div>
-
+                            <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
+                                
+                                <div>
+                                    {newUser.password.length>0 && newUser.password.length<8?<div className="text-black">Password must be 8 characters</div>:<></>}
+                                </div>
+                            </div>
 
                             <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                 <div>Email</div>
