@@ -497,6 +497,26 @@ const apiCalls = () => {
     }
   }
 
+  const getUsers = async () => {
+    const url = `http://${host}:8000/users/get`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      return [];
+    }
+  }
+
 
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
@@ -505,7 +525,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare, isAdmin, addUser   };
+    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers   };
 
 }
 

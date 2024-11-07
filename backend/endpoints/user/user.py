@@ -64,11 +64,12 @@ def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/get")
-def get_users( db: Session = Depends(get_db)):
+def get_users(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
     """
     API endpoint to get a user by their ID.
     """
     #probably want to verify user has valid token
+    get_current_user_modular(access_token, db)
     users = get_all_users(db)
     return users
 
