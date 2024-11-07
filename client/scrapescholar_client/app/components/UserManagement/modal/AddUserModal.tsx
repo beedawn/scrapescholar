@@ -62,10 +62,9 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
 
     const clearErrorSuccessMsg = () =>{
         setError(false);
-
     }
+
     const dropdownChange = (e:any) => {
-        console.log(e.target.value)
         const selectedRole = e.target.value;
         let newRole:Role;
         switch(selectedRole){
@@ -80,11 +79,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
                 break;
             default:
                 newRole=Role.Role;
-
         }
         updateUserState("role_id",newRole)
-        console.log(newRole)
-        console.log(Role[newRole])
     }
 
     return (

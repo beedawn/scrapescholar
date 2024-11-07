@@ -15,8 +15,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id 
     }
     const submitSearchShare = async () => {
         setResult(await putSearchShare(username, search_id))
-
-
     }
     const [result, setResult] = useState<boolean | null>(null);
     const [username, setUsername] = useState('');
