@@ -7,6 +7,7 @@ import submitSearch from '../helperFunctions/submitSearch';
 import itemsJson from '../mockData/ItemsTestJson';
 import fetchMock, { setSimulateInsufficientStorage, setDeleteSearch } from '../helperFunctions/apiMock';
 import UserManagement from '@/app/components/UserManagement/UserManagement';
+import DeleteUserModal from '@/app/components/UserManagement/modal/DeleteUserModal';
 beforeEach(() => {
     global.fetch = fetchMock;
 });
@@ -31,7 +32,7 @@ describe('SearchView US-17 Component', () => {
     //         expect(rows[0].children[9].textContent).toContain(/%/i);
     //     }, { timeout: 5000 })
     // });
-
+    //UT-17.2
     test('US-17 Settings Accordion Expands and shows API Keys', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         const settingsAccordian = screen.getByText('Settings');
@@ -39,6 +40,9 @@ describe('SearchView US-17 Component', () => {
         await waitFor(() => {
             const apiKeyLink = screen.getByText('API Keys');
             expect(apiKeyLink).toBeInTheDocument();
+            const userManagamentLink = screen.queryByText('User Management');
+            expect(apiKeyLink).toBeInTheDocument();
+            expect(userManagamentLink).not.toBeInTheDocument();
         }, { timeout: 5000 });
 
     })
@@ -159,6 +163,28 @@ describe('SearchView US-17 Component', () => {
             fireEvent.change(dropdown, { target: { value: 'GradStudent' } });
             expect(dropdown).toBeInTheDocument();
             expect(dropdown.value).toBe('GradStudent');
+
+
+        },{timeout:5000})
+
+    })
+
+
+
+    test('US-17 Make sure DeleteModal has elements', async () => {
+        render(<DeleteUserModal setDeleteUserModalActive={jest.fn()} deleteUser={{"user_id":"1", "username":"test"}} />);
+        const deleteHeader = screen.getByText('Delete User');
+        expect(deleteHeader).toBeInTheDocument()
+        
+        const deleteButton = screen.getByText('Delete');
+        expect(deleteButton).toBeInTheDocument();
+        fireEvent.click(deleteButton);
+
+        waitFor(()=>{
+            const deleteHeader = screen.getByText('Delete User');
+            const deleteButton = screen.getByText('Delete');
+            expect(deleteHeader).not.toBeInTheDocument();
+            expect(deleteButton).not.toBeInTheDocument();
 
 
         },{timeout:5000})
