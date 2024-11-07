@@ -80,7 +80,7 @@ const UserManagement: React.FC<UserManagementProps> =
 
                <div className="p-2 w-1/4">     
                 <Button className="" 
-                onClick={()=>{setDeleteUserModalActive(true); setDeleteUser(user)}}>
+                onClick={()=>{}}>
                     Reset Password
                     </Button>
                </div>
