@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
 import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
+
+import Role from '@/app/types/Role';
 interface AddUserModalProps {
     setAddUserModalActive: (item: boolean) => void;
 }
@@ -13,13 +15,7 @@ export interface NewUser {
     role_id: number
 }
 
-enum Role{
-    Role,
-    Professor,
-    GradStudent,
-    Student
 
-}
 
 const { addUser } = apiCalls();
 //need to get search id

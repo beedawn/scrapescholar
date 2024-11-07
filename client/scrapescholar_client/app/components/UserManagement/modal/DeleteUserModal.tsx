@@ -4,6 +4,7 @@ import apiCalls from '@/app/api/apiCalls';
 import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
 interface DeleteUserModalProps {
     setDeleteUserModalActive: (item: boolean) => void;
+    deleteUser:any;
 }
 
 export interface NewUser {
@@ -23,7 +24,7 @@ enum Role{
 
 const { addUser } = apiCalls();
 //need to get search id
-const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalActive }) => {
+const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalActive,deleteUser }) => {
     const clearModal = () => {
         setDeleteUserModalActive(false);
     }
@@ -98,6 +99,9 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalAct
                             <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                 <div>Deleting this user is permanent.</div>
                             </div>
+                            <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
+                                <div>User: {deleteUser.username}</div>
+                            </div>
                             
                             <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                 <div> Please confirm to delete</div>
@@ -110,7 +114,7 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalAct
                             </div>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
-                                    <Button type="submit" className="bg-red-600" onClick={() => { }}>Delete</Button>   <Button className="bg-stone-500 border" onClick={() => { }}>Cancel</Button>
+                                    <Button type="submit" className="bg-red-600" onClick={() => { }}>Delete</Button>   <Button className="bg-stone-500 border" onClick={() => { clearModal()}}>Cancel</Button>
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
