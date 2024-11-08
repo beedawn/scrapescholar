@@ -1,4 +1,4 @@
-
+import { NewUser } from "../components/UserManagement/modal/AddUserModal";
 const apiCalls = () => {
 
   const host = process.env.NEXT_PUBLIC_HOST_IP;
@@ -378,6 +378,25 @@ const apiCalls = () => {
   }
 
 
+  const isAdmin= async ()=>{
+    let data;
+    let textData
+
+    try {
+      const url = `http://${host}:8000/auth/is_admin`
+      data = await fetch(url, { method: "GET", credentials: "include" })
+      textData = await data.text()
+      console.log(textData)
+      return textData;
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+      return {detail:"Admin request failed"};
+    }
+
+  }
+
   const deleteCookie= async ()=>{
     let data;
     let jsonData
@@ -445,6 +464,83 @@ const apiCalls = () => {
 
   const downloadURL= `http://${host}:8000/download?search_id=`
 
+
+
+
+
+
+
+  // Add a new comment
+  const addUser = async ( userBody: NewUser) => {
+    try {
+        const url = `http://${host}:8000/users/create`;
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                userBody
+            ),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error adding user: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        // console.error("Error adding User:", error);
+        return null;
+    }
+  }
+
+  const getUsers = async () => {
+    const url = `http://${host}:8000/users/get`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      return [];
+    }
+  }
+
+
+  const deleteUserAPI = async (user_id: number) => {
+    let data: Response;
+    let jsonData;
+    try {
+      const url = `http://${host}:8000/users/delete/${user_id}`
+      data = await fetch(url, {
+        method: "DELETE", credentials: "include"
+      })
+      jsonData = await data.json()
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+    }
+    if (jsonData !== undefined) {
+      // console.log("Search deleted")
+    }
+    else {
+      // console.log(jsonData)
+      console.log("failure to delete search")
+    }
+  }
+
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
@@ -452,7 +548,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare   };
+    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers, deleteUserAPI   };
 
 }
 

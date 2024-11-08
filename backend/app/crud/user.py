@@ -48,6 +48,21 @@ def get_user(db: Session, user_id: int):
     return user
 
 
+def get_all_users(db: Session):
+    users = db.query(User).all()
+    if not users:
+        raise HTTPException(status_code=404, detail="Users not found")
+    decrypted_usernames = []
+    for user in users:
+        decrypt_username = decrypt(user.username)
+        decrypted_user = {"username": decrypt_username,
+                          "user_id": user.user_id,
+                          "role_id": user.role_id,
+                          }
+        decrypted_usernames.append(decrypted_user)
+    return decrypted_usernames
+
+
 def get_user_by_username(db: Session, username: str):
     #i dont think this works
     encrypted_username = encrypt(username)
@@ -66,12 +81,9 @@ def get_user_by_username(db: Session, username: str):
     return None
 
 
-
 def get_user_by_email(db: Session, email: str):
     hashed_emails = db.query(User).all()
     for hashed_email in hashed_emails:
-        print("ASHED EMAIL")
-        print(hashed_email.email)
         if verify_hash(email, hashed_email.email):
             return hashed_email
     return False

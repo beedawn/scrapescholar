@@ -9,6 +9,7 @@ import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
 import CommentsSidebar from '../components/SearchView/CommentsSidebar'; 
 import Loading from '../components/Loading';
+import UserManagement from '../components/UserManagement/UserManagement';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -46,7 +47,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [comments, setComments] = useState<any[]>([]);  // To store the comments of the selected article
     const [commentsLoading, setCommentsLoading] = useState<boolean>(false);  // To manage the loading state for comments
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-
+    const [openUserManagement, setOpenUserManagement]=useState<boolean>(false);
       useEffect(() => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabases();
@@ -124,19 +125,21 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setInputs(newInputs);
     }
 
+    const clearPages = () =>{
+        setOpenUserManagement(false)
+        setLoading(false);
+    }
     const handlePastSearchSelection = async (event:any)=>{
         const selectedSearchId = event.target.value;
         setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
      if(selectedSearchId){
-            setCurrentSearchId(selectedSearchId)
-            setLoading(true);
+            clearPages();
             setError(null);
             await getAPIPastSearchResults( setResults, setError, selectedSearchId );
             await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
-            
-            setLoading(false);
+            clearPages();
         }
         else{
         setError({"message":"No search found"});
@@ -148,7 +151,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         const newDropdown = [...dropdown];
         newDropdown[index] = option;
         setDropdown(newDropdown);
+        
     }
+
 
     const handleArticleClick = async (articleId: number) => {
         setSelectedArticleId(articleId);
@@ -171,6 +176,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setLoading(true);
         setError(null);
         setDataFull(false);
+        setOpenUserManagement(false);
         setIsSidebarOpen(false);
         //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
@@ -223,14 +229,14 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
                     addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} 
-                    searches={searches} handlePastSearchSelection={handlePastSearchSelection}
+                    searches={searches} handlePastSearchSelection={handlePastSearchSelection} setOpenUserManagement={setOpenUserManagement}
                 />
             </div>
     
             {/* Middle SearchResults */}
             <div className="flex-1 sm:mx-12 w-full overflow-auto">
                 {error ? (<p>{error.message}</p>) 
-                : loading ? <Loading /> : 
+                : loading ? <Loading /> : openUserManagement?<><UserManagement/></>:
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
                 <SearchResults 
                     setResults={setResults} 

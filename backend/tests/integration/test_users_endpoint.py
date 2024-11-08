@@ -69,7 +69,7 @@ def test_create_user(db_session):
     """
     # Prepare the user data
     user_data = {
-        "username": "testuser",
+        "username": "testuser2",
         "password": "testpassword",
         "email": "testuser@example.com"
     }

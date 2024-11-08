@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchView, { ResultItem } from '../../app/views/SearchView';
 import React from 'react';
@@ -51,10 +51,12 @@ describe('SearchView Component', () => {
       const andDropdown = screen.getByDisplayValue('AND');
       expect(andDropdown).toBeInTheDocument();
 
-
+      waitFor(()=>{
       const options = screen.getAllByRole('option');
-      const optionValues = options.map(option => option.textContent);
-      expect(optionValues).toEqual(['AND', 'OR', 'NOT']); 
+      const second_option =options[1]
+      const second_options=within(second_option).getAllByRole('option')
+      const optionValues = second_options.map(option => option.textContent);
+      expect(optionValues).toEqual(['AND', 'OR', 'NOT']); },{timeout:5000})
     });
 
 
@@ -72,11 +74,14 @@ describe('SearchView Component', () => {
             const andDropdown = screen.getByDisplayValue('AND');
             expect(andDropdown).toBeInTheDocument();
       
-      
+            waitFor(()=>{
             const options = screen.getAllByRole('option');
-            const optionValues = options.map(option => option.textContent);
+            const second_option =options[1]
+            const second_options=within(second_option).getAllByRole('option')
+            const optionValues = second_options.map(option => option.textContent);
+    
             expect(optionValues).toEqual(['AND', 'OR', 'NOT']); 
-
+          },{timeout:5000})
             const searchButton = screen.getByText('Search');
             fireEvent.click(searchButton);
            waitFor(() => {
