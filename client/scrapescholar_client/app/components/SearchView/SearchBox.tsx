@@ -21,7 +21,7 @@ const SearchBox: React.FC<SearchBoxProps> =
         value={value}
         disabled={disabled}
         placeholder={placeholder}
-        data-test-id="search_input"
+        data-testid="search_input"
       >
       </input>
     );

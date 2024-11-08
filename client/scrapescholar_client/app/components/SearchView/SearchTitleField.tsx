@@ -49,7 +49,7 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
                     </>)
                     :
                     (<>
-                        <span data-test-id="search-title-span">{searchName}</span>
+                        <span data-testid="search-title-span">{searchName}</span>
                         <button style={{ display: "inline" }} onClick={handleClick}>
                             ✎
                         </button>

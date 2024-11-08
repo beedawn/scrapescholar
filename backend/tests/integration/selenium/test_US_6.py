@@ -61,20 +61,20 @@ def test_find_graph():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                           "[data-test-id='search_input']")))
+                                                                                           "[data-testid='search_input']")))
 
         search_input.send_keys("test")
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                                 "[data-test-id='search_button']")))
+                                                                                                 "[data-testid='search_button']")))
         search_button.click()
 
         bubble_plot = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                        "[data-test-id='bubble_plot']")))
+                                                                                        "[data-testid='bubble_plot']")))
 
 
         assert bubble_plot is not None
         search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                       "[data-test-id='search-title-span']")))
+                                                                                       "[data-testid='search-title-span']")))
         clean_up(search_title)
 
     except Exception as e:
@@ -116,21 +116,21 @@ def test_graph_loads_zero():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                           "[data-test-id='search_input']")))
+                                                                                           "[data-testid='search_input']")))
 
         search_input.send_keys("test")
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                                 "[data-test-id='search_button']")))
+                                                                                                 "[data-testid='search_button']")))
         search_button.click()
 
         bubble_plot = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, "//*[@data-test-id='bubble_plot' and .//text()[contains(., 'Relevant 0')]]"))
+                (By.XPATH, "//*[@data-testid='bubble_plot' and .//text()[contains(., 'Relevant 0')]]"))
         )
 
         assert bubble_plot is not None
         search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                       "[data-test-id='search-title-span']")))
+                                                                                       "[data-testid='search-title-span']")))
         clean_up(search_title)
 
     except Exception as e:
@@ -170,19 +170,16 @@ def test_graph_accuracy_after_change():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                           "[data-test-id='search_input']")))
+                                                                                           "[data-testid='search_input']")))
 
         search_input.send_keys("test")
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                                 "[data-test-id='search_button']")))
+                                                                                                 "[data-testid='search_button']")))
         search_button.click()
-
-        search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                               "[data-test-id='search-title-span']")))
 
 
         relevancy = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                        "[data-test-id='relevancy-column-default']")))
+                                                                                        "[data-testid='relevancy-column-default']")))
         relevancy.click()
 
         relevant_div = WebDriverWait(driver, 10).until(
@@ -193,10 +190,12 @@ def test_graph_accuracy_after_change():
 
         bubble_plot = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, "//*[@data-test-id='bubble_plot' and .//text()[contains(., 'Relevant 1')]]"))
+                (By.XPATH, "//*[@data-testid='bubble_plot' and .//text()[contains(., 'Relevant 1')]]"))
         )
 
         assert bubble_plot is not None
+        search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
+                                                                                       "[data-testid='search-title-span']")))
 
         clean_up(search_title)
 

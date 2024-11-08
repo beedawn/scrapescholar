@@ -64,7 +64,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                         onClick={() => toggleAccordion(index)}
                         aria-expanded={openIndex === index}
                         aria-controls={`accordion-color-body-${index + 1}`}
-                        data-test-id="user_settings"
+                        data-testid="user_settings"
                     >
                         <svg className={`w-3 h-3 ${openIndex === index ? 'rotate-180' : 'rotate-90'}`}
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">

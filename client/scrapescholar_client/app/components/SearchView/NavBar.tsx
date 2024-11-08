@@ -57,7 +57,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     <Button onClick={addInput} className="m-5">
                         +
                     </Button>
-                    <span data-test-id="search_button">
+                    <span data-testid="search_button">
                     <Button type="submit">
                         Search
                     </Button>
