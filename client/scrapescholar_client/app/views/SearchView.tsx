@@ -11,6 +11,7 @@ import CommentsSidebar from '../components/SearchView/CommentsSidebar';
 import Loading from '../components/Loading';
 import UserManagement from '../components/UserManagement/UserManagement';
 import Relevance from '../types/Relevance';
+import { init } from 'next/dist/compiled/webpack/webpack';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -52,13 +53,14 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [selectedSearchIdState, setSelectedSearchIdState]=useState<number>();
     const sumResults = (results:ResultItem[], comparison:string) =>{
         let sum = 0
+        if (results!==undefined){
         for (let result of results){
 
             if (result.color == comparison){
                 sum++;
 
             }
-        }
+        }}
         return sum
     }  
     
@@ -96,11 +98,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [dataFull, setDataFull]= useState<boolean>(false);
     //inputs gets user inputs, update everytime user enters character
 
-    useEffect(()=>{
-        const getResults = async ()=>{
-            if(selectedSearchIdState){
-                const fetchResults =  await getAPIPastSearchResults( setResults, setError, selectedSearchIdState );
-                
+    const initBubblePlotData = (fetchResults:ResultItem[]) =>{
 
         const possible_types = Object.keys(Relevance).filter((key) => isNaN(Number(key)));
         let data_array = []
@@ -121,17 +119,25 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             //all circles are on same y axis
             y: 50,
             //same radius
-            radius: (sumResults(fetchResults, "Relevant")/fetchResults.length)* 50,
+            radius: (sumResults(fetchResults, "Relevant")/50)* 50,
             //same color
             color: "green",
             //label is set to keyword
             label: `${keyword}${sumResults(fetchResults, "Relevant")}`
         }));
-        console.log(sumResults(fetchResults, "Relevant"))
-        console.log(relevanceChanged)
+        return newBubbleInputs;
+    }
+
+    useEffect(()=>{
+        const getResults = async ()=>{
+            if(selectedSearchIdState){
+                const fetchResults =  await getAPIPastSearchResults( setResults, setError, selectedSearchIdState );
+                
+
+        const newBubbleInputs = initBubblePlotData(fetchResults);
+
        //update state with our new array
         setBubbleInputs(newBubbleInputs);
-            
             
             
             }
@@ -205,7 +211,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
             clearPages();
-            //empties bubble graphs for new search with no data, maybe need to put something here?
+            //empties bubble graphs for new search with no data, maybe need to put something here? yes we do
             setBubbleInputs([]);
         }
         else{
@@ -289,6 +295,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //initialize data variable to fill up with api response
         // setSelectedSearchIdState(selectedSearchId)
         const responseResult = await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs, setDataFull, setCurrentSearchId);
+        
+        const bubblePlot = initBubblePlotData(responseResult.articles)
+        setBubbleInputs(bubblePlot)
         setSelectedSearchIdState(responseResult.search_id)
         //need something here to load search name
         setLoading(false);
