@@ -223,12 +223,13 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
      if(selectedSearchId){
             clearPages();
             setError(null);
-            await getAPIPastSearchResults( setResults, setError, selectedSearchId );
+            const search_results = await getAPIPastSearchResults( setResults, setError, selectedSearchId );
             await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
             clearPages();
             //empties bubble graphs for new search with no data, maybe need to put something here? yes we do
-            setBubbleInputs([]);
+            const bubble_data = initBubblePlotData(search_results)
+            setBubbleInputs(bubble_data);
         }
         else{
         setError({"message":"No search found"});
