@@ -9,7 +9,7 @@ from auth_tools.get_user import get_current_user_modular # Adjust based on your 
 
 def is_professor(db: Session = Depends(get_db), current_user: User = Depends(get_current_user_modular)):
     user_role = db.query(Role).filter(Role.role_id == current_user.role_id).first()
-    if user_role.role_name != "Professor/Principal Investigator":
+    if user_role.role_name != "Professor":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You do not have permission to perform this action."

@@ -27,7 +27,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def create_default_roles(db: Session):
-    role_names = ["Professor/Principal Investigator", "Graduate Student", "Undergraduate Student"]
+    role_names = ["Professor", "GradStudent", "Student"]
     for name in role_names:
         existing_role = db.query(Role).filter_by(role_name=name).first()
         if not existing_role:
