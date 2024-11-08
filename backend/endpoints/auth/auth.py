@@ -13,6 +13,8 @@ from fastapi.responses import JSONResponse
 from typing import Annotated
 from datetime import timedelta
 
+from auth_tools.is_admin import is_admin
+
 from auth_tools.get_user import get_current_user_modular
 
 load_dotenv()
@@ -143,10 +145,20 @@ async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: S
     return JSONResponse(content={"cookieValue": access_token})
 
 
+@router.get("/is_admin")
+async def is_admin_endpoint(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+
+    if is_admin(access_token, db):
+        return True
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="")
+
+
 @router.get("/remove_cookie")
 def remove_cookie(response: Response):
     response.delete_cookie("access_token")
     return {"message": "Cookie deleted"}
+
 
 #Protected route example
 @router.get("/protected_route")

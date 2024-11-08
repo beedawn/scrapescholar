@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
 
@@ -7,24 +7,24 @@ interface ShareModalProps {
     search_id: number;
 }
 
-const {putSearchShare}=apiCalls();
+const { putSearchShare } = apiCalls();
 //need to get search id
 const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id }) => {
     const clearModal = () => {
         setShareModalActive(false);
     }
-    const submitSearchShare = async () =>{
-        setResult(await putSearchShare(username,search_id))
-   
-        
+    const submitSearchShare = async () => {
+        setResult(await putSearchShare(username, search_id))
     }
-    const [result, setResult]=useState<boolean | null>(null);
-    const [username, setUsername] = useState(''); 
+    const [result, setResult] = useState<boolean | null>(null);
+    const [username, setUsername] = useState('');
 
     return (
         <div>
 
             <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <form onSubmit={(e) => {e.preventDefault(); submitSearchShare()}}>
+                           
                 {/* 
     Background backdrop, show/hide based on modal state.
 
@@ -48,7 +48,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id 
    */}
                         <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl 
                         transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                         <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                 <div className="flex items-start justify-between">
                                     <h3 className="text-base font-semibold text-gray-900" id="modal-title">Share Search</h3>
                                     <div className="text-right">
@@ -71,27 +71,30 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id 
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
                                     <input className="border rounded border-slate-800 text-center p-2"
-                                        placeholder="Username" onClick={()=>{setResult(null)}} onChange={(e)=>{setUsername(e.target.value)}}/>
+                                        placeholder="Username" onClick={() => { setResult(null) }} onChange={(e) => { setUsername(e.target.value) }} />
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
-                                    {result==null?<></>:result?<div className="text-green-600">Success</div>:<div className="text-red-600">Failure</div>}
+                                    {result == null ? <></> : result ? <div className="text-green-600">Success</div> : <div className="text-red-600">Failure</div>}
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                 <div>
-                                    <Button onClick={() => submitSearchShare()}>Submit</Button>
+                                    <Button type="submit" >Submit</Button>
                                 </div>
                             </div>
-                        </div>
+                        
                     </div>
+
                 </div>
             </div>
+            </form>
+
+        </div>
 
 
-
-
+     
 
         </div>
     )
