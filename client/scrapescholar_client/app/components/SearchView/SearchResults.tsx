@@ -20,13 +20,15 @@ interface SearchResultsProps {
     setDisplayInputs: (item: string[]) => void;
     setLoading: (item: boolean) => void;
     onArticleClick: (articleId: number) => Promise<void>;
-}
+    setRelevanceChanged: (item: boolean) => void;
+    relevanceChanged:boolean;
+}   
 
 const SearchResults: React.FC<SearchResultsProps> = ({
     results, displayInputs, className, emptyString,
     disableD3 = false, bubbleInputs, setResults,
     setSearchName, searchName, currentSearchId, setDisplayInputs,
-    setLoading, onArticleClick }) => {
+    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged }) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
     const { getAPIPastSearchTitle, getCommentsByArticle, downloadURL } = apiCalls();
 
@@ -65,7 +67,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             selectedArticle={selectedArticle}
                             setSelectedArticle={setSelectedArticle} 
                             setLoading={setLoading} 
-                            onArticleClick={onArticleClick} />
+                            onArticleClick={onArticleClick} 
+                            setRelevanceChanged={setRelevanceChanged}
+                            relevanceChanged={relevanceChanged}/>
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''

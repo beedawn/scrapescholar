@@ -13,6 +13,7 @@ export interface EditableCell {
     completeness: boolean;
     transparency: boolean;
     [key: string]: any;
+    
 }
 
 interface ResultsTableProps {
@@ -22,6 +23,8 @@ interface ResultsTableProps {
     setSelectedArticle: (index: number | null) => void;  // Allow null
     setLoading:(state:boolean)=> void;
     onArticleClick: (articleId: number) => void;
+    setRelevanceChanged: (item: boolean) => void;
+    relevanceChanged:boolean;
 }
 
 
@@ -51,7 +54,8 @@ export const sortResults = (array: ResultItem[],
 };
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
-    results, selectedArticle, setSelectedArticle, setResults, setLoading, onArticleClick
+    results, selectedArticle, setSelectedArticle, setResults, 
+    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged
 }) => {
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
@@ -233,7 +237,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
                             </td>
                             <td className="border border-gray-300" >
-                                <ColorDropdown article_id={result.article_id} colorValue={result.color}/>
+                                <ColorDropdown article_id={result.article_id} colorValue={result.color} setRelevanceChanged={setRelevanceChanged} relevanceChanged={relevanceChanged}/>
                             </td>
                             <td className="border border-gray-300" >{result.relevance_score}%</td>
                             <td className="border border-gray-300" >

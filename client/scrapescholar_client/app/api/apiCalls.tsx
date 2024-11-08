@@ -79,11 +79,13 @@ const apiCalls = () => {
 
       setResults(jsonData.articles)
       setCurrentSearchId(jsonData.search_id)
+      return jsonData
     }
     else {
       //set better error message
       // setError(data)
       setResults([]);
+      return []
     }
   }
 
@@ -126,12 +128,13 @@ const apiCalls = () => {
     }
     if (jsonData !== undefined && jsonData.length > 0) {
       setResults(jsonData)
-
+      return jsonData
     }
     else {
       //set better error message
       // setError(data)
       setResults([]);
+      return []
     }
   }
 
