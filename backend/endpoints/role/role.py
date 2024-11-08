@@ -6,7 +6,7 @@ from app.schemas.role import RoleCreate, RoleUpdate, RoleRead
 from app.crud.role import get_role, get_roles, create_role, update_role, delete_role
 from app.db.session import get_db
 from auth_tools.get_user import get_current_user_modular
-from auth_tools.permission import is_admin  # Use is_admin for role-based access
+from auth_tools.is_admin import is_admin
 from typing import Annotated
 
 router = APIRouter()
