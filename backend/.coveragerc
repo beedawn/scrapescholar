@@ -1,7 +1,6 @@
 [run]
 # Omit certain files or directories
 omit =
-    tests/*
     */__init__.py
     */migrations/*
     */venv/*
