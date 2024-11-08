@@ -541,6 +541,27 @@ const apiCalls = () => {
     }
   }
 
+  const updateUserRole = async (userId: number, newRole: string) => {
+    const url = `http://${host}:8000/users/update-role/${userId}`;
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role_name: newRole }),  // Send role_name in the request body
+      });
+      if (!response.ok) {
+        throw new Error(`Error updating user role: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      return null;
+    }
+  };
+
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
@@ -548,7 +569,7 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers, deleteUserAPI   };
+    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole   };
 
 }
 

@@ -12,7 +12,7 @@ interface UserManagementProps {
 const UserManagement: React.FC<UserManagementProps> =
     ({  }) => {
         const [selectedValue, setSelectedValue] = useState<any[]>([]);
-        const { deleteSearch, getUsers } = apiCalls();
+        const { deleteSearch, getUsers, updateUserRole } = apiCalls();
         const [addUserModalActive, setAddUserModalActive]=useState(false);
         const [deleteUser, setDeleteUser]=useState();
         const [deleteUserModalActive, setDeleteUserModalActive]=useState(false);
@@ -29,7 +29,11 @@ const UserManagement: React.FC<UserManagementProps> =
 
         },[addUserModalActive, deleteUserModalActive])
 
-
+        // Handle role change
+        const handleRoleChange = async (userId: number, newRole: string) => {
+            await updateUserRole(userId, newRole);
+            getUsersAPI(); // Refresh user list after update
+        };
 
         const [users,setUsers]=useState<any[]>([]);
         // const handleSelectChange = (event: any) => {
@@ -66,7 +70,12 @@ const UserManagement: React.FC<UserManagementProps> =
             
                <div className="p-2 w-1/4">{user.username}</div>
                <div className="w-1/4">
-                                    <DropdownSearchBox value={Role[user.role_id]} valueArray={["Student","GradStudent","Professor"]} onDropdownChange={()=>{}} defaultValue="Role"/>
+               <DropdownSearchBox
+                                            value={Role[user.role_id]}
+                                            valueArray={["Student", "GradStudent", "Professor"]}
+                                            onDropdownChange={(e) => handleRoleChange(user.user_id, e.target.value)}  // Call handleRoleChange
+                                            defaultValue="Role"
+                                        />
                                 </div>
 
 
