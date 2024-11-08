@@ -102,28 +102,44 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
         const possible_types = Object.keys(Relevance).filter((key) => isNaN(Number(key)));
         let data_array = []
+        let color  = {
+            "Relevant":"green",
+            "SemiRelevant":"yellow",
+            "Not Relevant":"red"
+        }
         for (let type of possible_types){
+            if(type =="NotRelevant"){
+                type = "Not Relevant"
+            }
             data_array.push({
+                "name":type,
                 "sum":sumResults(fetchResults, type),
+                "color":color[type as keyof typeof color]
 
             })
 
         }
-        const relevant = sumResults(fetchResults,"Relevant")
-        const semirelevant = sumResults(fetchResults,"SemiRelevant")
-        const notrelevant = sumResults(fetchResults,"NotRelevant")
+        let divider;
+        if(fetchResults!==undefined){
+            divider=fetchResults.length
+        }
+        else{
+            divider = 25
+        }
+
+        console.log(divider)
         //something goofy here, need to get the keywords instead
-        const newBubbleInputs = possible_types.map((keyword, i) => ({
+        const newBubbleInputs = data_array.map((keyword, i) => ({
             //set x value as the index, because i dont know a better way to lay these out yet
             x: i,
             //all circles are on same y axis
             y: 50,
             //same radius
-            radius: (sumResults(fetchResults, "Relevant")/50)* 50,
+            radius: (keyword.sum/divider)* 50,
             //same color
-            color: "green",
+            color: keyword.color,
             //label is set to keyword
-            label: `${keyword}${sumResults(fetchResults, "Relevant")}`
+            label: `${keyword.name} ${keyword.sum}`
         }));
         return newBubbleInputs;
     }
