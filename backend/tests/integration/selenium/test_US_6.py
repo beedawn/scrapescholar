@@ -104,18 +104,6 @@ def test_graph_loads_zero():
                                                                                                  "[data-test-id='search_button']")))
         search_button.click()
 
-
-
-        relevancy = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                        "[data-test-id='relevancy-column-default']")))
-        relevancy.click()
-
-        relevant_div = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[contains(@class, 'bg-green-600') and contains(@class, 'p-2') and text()='Relevant']"))
-        )
-        relevant_div.click()
-
         bubble_plot = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH, "//*[@data-test-id='bubble_plot' and .//text()[contains(., 'Relevant 0')]]"))
