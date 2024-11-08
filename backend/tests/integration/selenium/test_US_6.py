@@ -9,15 +9,32 @@ from selenium.webdriver.support.ui import WebDriverWait
 import pytest
 import os
 from dotenv import load_dotenv
-
+import json
+from tests.integration.tools.get_cookie import get_cookie
+from tests.integration.tools.base_url import base_url
 # Load environment variables from .env file
+from app.crud.search import get_search_by_title, delete_search
+from app.crud.user_data import delete_user_data_by_article
+from app.crud.article import get_article_by_search_id, delete_article
+from app.db.session import get_db, SessionLocal
 load_dotenv()
 
 testuser = os.getenv('TEST_USER')
 testpass = os.getenv('TEST_PASSWORD')
 host_ip = os.getenv('HOST_IP')
 
+session = get_cookie()
+def test_db_session():
+    """Fixture to provide a database session with rollback for testing."""
+    db = SessionLocal()
+    db.begin_nested()
 
+    yield db
+
+    db.rollback()
+    db.close()
+
+db = SessionLocal()
 # UT-6.1
 def test_find_graph():
     try:
@@ -56,7 +73,9 @@ def test_find_graph():
 
 
         assert bubble_plot is not None
-
+        search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
+                                                                                       "[data-test-id='search-title-span']")))
+        clean_up(search_title)
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
@@ -110,7 +129,9 @@ def test_graph_loads_zero():
         )
 
         assert bubble_plot is not None
-
+        search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
+                                                                                       "[data-test-id='search-title-span']")))
+        clean_up(search_title)
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
@@ -156,6 +177,8 @@ def test_graph_accuracy_after_change():
                                                                                                  "[data-test-id='search_button']")))
         search_button.click()
 
+        search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
+                                                                                               "[data-test-id='search-title-span']")))
 
 
         relevancy = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
@@ -175,6 +198,7 @@ def test_graph_accuracy_after_change():
 
         assert bubble_plot is not None
 
+        clean_up(search_title)
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
@@ -186,3 +210,10 @@ def test_graph_accuracy_after_change():
         # print(driver.current_url)
         driver.quit()
 
+def clean_up(search_title):
+    found_search = get_search_by_title(db, search_title.text)
+    articles = get_article_by_search_id(db, found_search.search_id)
+    for article in articles:
+        delete_user_data_by_article(db, article.article_id)
+        delete_article(db, article.article_id)
+    delete_search(db, found_search.search_id)
