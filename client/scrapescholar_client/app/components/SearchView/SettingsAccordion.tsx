@@ -79,7 +79,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                     <div className="pl-5 dark:border-gray-700">
                             {isAdminUser?  <div key="1"  >
                              
-                             <a href="#" onClick={()=>{setOpenUserManagement(true)}} onMouseEnter={()=>{updateHovered(1)}}  onMouseLeave={()=>{removeHovered(1)}} className={hoveredClasses[1]} data-test-id="settings_user_management">User Management</a>
+                             <a href="#" onClick={()=>{setOpenUserManagement(true)}} onMouseEnter={()=>{updateHovered(1)}}  onMouseLeave={()=>{removeHovered(1)}} className={hoveredClasses[1]} data-testid="settings_user_management">User Management</a>
                    
                        </div>:<></>}
                           
