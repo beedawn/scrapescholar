@@ -56,9 +56,19 @@ def test_role_based_access_control(setup_grad_student):
 
         # Helper function to login
         def login(username, password):
-            username_field = driver.find_element(By.NAME, 'username_input')
-            password_field = driver.find_element(By.NAME, 'password_input')
-            login_button = driver.find_element(By.NAME, 'login_button')
+
+            username_field = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.NAME, 'username_input'))
+            )
+
+            password_field = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.NAME, 'password_input'))
+            )
+
+            login_button =  WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.NAME, 'login_button'))
+            )
+
             username_field.send_keys(username)
             password_field.send_keys(password)
             login_button.click()
