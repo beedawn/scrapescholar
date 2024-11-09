@@ -64,7 +64,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                         onClick={() => toggleAccordion(index)}
                         aria-expanded={openIndex === index}
                         aria-controls={`accordion-color-body-${index + 1}`}
-                        data-test-id="user_settings"
+                        data-testid="user_settings"
                     >
                         <svg className={`w-3 h-3 ${openIndex === index ? 'rotate-180' : 'rotate-90'}`}
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -79,7 +79,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                     <div className="pl-5 dark:border-gray-700">
                             {isAdminUser?  <div key="1"  >
                              
-                             <a href="#" onClick={()=>{setOpenUserManagement(true)}} onMouseEnter={()=>{updateHovered(1)}}  onMouseLeave={()=>{removeHovered(1)}} className={hoveredClasses[1]} data-test-id="settings_user_management">User Management</a>
+                             <a href="#" onClick={()=>{setOpenUserManagement(true)}} onMouseEnter={()=>{updateHovered(1)}}  onMouseLeave={()=>{removeHovered(1)}} className={hoveredClasses[1]} data-testid="settings_user_management">User Management</a>
                    
                        </div>:<></>}
                           

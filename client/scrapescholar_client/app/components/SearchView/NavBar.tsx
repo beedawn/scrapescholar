@@ -57,9 +57,11 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     <Button onClick={addInput} className="m-5">
                         +
                     </Button>
+                    <span data-testid="search_button">
                     <Button type="submit">
                         Search
                     </Button>
+                    </span>
                     {inputs.map((input: string, index: number) => {
                         return (<div key={index}>
                             <SearchBox value={input} onChange={(e) => 
