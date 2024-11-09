@@ -70,7 +70,7 @@ interface EvaluationCriteriaDropdownProps {
                 <div className={`p-2 flex items-center ${selected.css}`}>
                     {selected.value}
                     <svg
-                        className={`m-1 w-2 h-2 ${isOpen ? 'rotate-180' : ''}`}
+                        className={`m-1 w-2 h-2 rotate-180`}
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 10 6"
