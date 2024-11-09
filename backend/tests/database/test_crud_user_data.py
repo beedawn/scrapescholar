@@ -11,7 +11,10 @@ from app.schemas.article import ArticleCreate
 from app.schemas.search import SearchCreate
 from app.db.session import SessionLocal
 from app.crud.user import create_user, get_user_by_username
+from tests.integration.tools.get_cookie import get_cookie
 
+
+session = get_cookie()
 @pytest.fixture
 def test_db_session():
     """Fixture to provide a database session with rollback for testing."""
@@ -93,9 +96,9 @@ async def test_update_user_data(test_db_session: Session):
         transparency=4,
         completeness=5
     )
-    
+    access_token = session.cookies.get('access_token')
     # Pass user_role to the update_user_data function
-    updated_user_data = await update_user_data(test_db_session, update_data, user_role)
+    updated_user_data = await update_user_data(test_db_session, update_data, user_role, access_token)
 
     # Verify the updated fields
     assert updated_user_data.relevancy_color == "blue"
@@ -120,10 +123,10 @@ async def test_update_user_data_not_found(test_db_session: Session):
         transparency=4,
         completeness=5
     )
-    
+    access_token = session.cookies.get('access_token')
     # Pass user_role to the update_user_data function
     with pytest.raises(HTTPException) as exc_info:
-        await update_user_data(test_db_session, update_data, user_role)
+        await update_user_data(test_db_session, update_data, user_role, access_token)
     
     assert exc_info.value.status_code == 404
     assert exc_info.value.detail == "Userdata not found in put, user not valid in db"
