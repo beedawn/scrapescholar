@@ -104,7 +104,7 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
   }, [data]);
 
   return (
-    <div id="bubbleplot">
+    <div id="bubbleplot" data-testid="bubble_plot">
     </div>
   );
 };

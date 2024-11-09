@@ -11,6 +11,13 @@ def get_article(db: Session, article_id: int):
         raise HTTPException(status_code=404, detail="Article not found")
     return article
 
+
+def get_article_by_search_id(db: Session, search_id: int):
+    articles = db.query(Article).filter(Article.search_id == search_id).all()
+    if not articles:
+        raise HTTPException(status_code=404, detail="Article not found")
+    return articles
+
 # app/crud/article.py
 def get_articles(db: Session, skip: int = 0, limit: int = 10):
     # Ordering by `article_id` to ensure consistent results

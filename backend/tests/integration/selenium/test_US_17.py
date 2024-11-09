@@ -45,10 +45,10 @@ def test_find_usermanagement_link_us_17():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         settings_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                           "[data-test-id='user_settings']")))
+                                                                                           "[data-testid='user_settings']")))
         settings_element.click()
         usermanagement_element= WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                                "[data-test-id='settings_user_management']")))
+                                                                                                "[data-testid='settings_user_management']")))
         assert driver.get_cookie("access_token") is not None
 
         assert initial_page is not None

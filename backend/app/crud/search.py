@@ -12,6 +12,13 @@ def get_search(db: Session, search_id: int):
     return search
 
 
+def get_search_by_title(db: Session, title: str):
+    search = db.query(Search).filter(Search.title == title).first()
+    if not search:
+        raise HTTPException(status_code=404, detail="Search not found")
+    return search
+
+
 def get_searches(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Search).offset(skip).limit(limit).all()
 

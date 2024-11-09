@@ -10,7 +10,8 @@ import DataFull from '../components/SearchView/DataFull';
 import CommentsSidebar from '../components/SearchView/CommentsSidebar'; 
 import Loading from '../components/Loading';
 import UserManagement from '../components/UserManagement/UserManagement';
-
+import Relevance from '../types/Relevance';
+import { init } from 'next/dist/compiled/webpack/webpack';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -48,7 +49,22 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [commentsLoading, setCommentsLoading] = useState<boolean>(false);  // To manage the loading state for comments
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
     const [openUserManagement, setOpenUserManagement]=useState<boolean>(false);
-      useEffect(() => {
+    const [relevanceChanged, setRelevanceChanged]=useState<boolean>(false);
+    const [selectedSearchIdState, setSelectedSearchIdState]=useState<number>();
+    const sumResults = (results:ResultItem[], comparison:string) =>{
+        let sum = 0
+        if (results!==undefined){
+        for (let result of results){
+
+            if (result.color == comparison){
+                sum++;
+
+            }
+        }}
+        return sum
+    }  
+    
+    useEffect(() => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabases();
             setUserDatabaseList(db_list);  
@@ -71,15 +87,85 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             setDataFull(false)
         }
         fetchDatabases();  
-   
+  
     }, [loading]); 
 
+
+ 
 
     //gets data from api and stores in results
     const [results, setResults] = useState<ResultItem[]>([]);
     const [dataFull, setDataFull]= useState<boolean>(false);
     //inputs gets user inputs, update everytime user enters character
 
+    const initBubblePlotData = (fetchResults:ResultItem[]) =>{
+
+        const possible_types = Object.keys(Relevance).filter((key) => isNaN(Number(key)));
+        let data_array = []
+        let color  = {
+            "Relevant":"green",
+            "SemiRelevant":"#FF8C00",
+            "Not Relevant":"red"
+        }
+        for (let type of possible_types){
+            if(type =="NotRelevant"){
+                type = "Not Relevant"
+            }
+            data_array.push({
+                "name":type,
+                "sum":sumResults(fetchResults, type),
+                "color":color[type as keyof typeof color]
+
+            })
+
+        }
+        let divider;
+        if(fetchResults!==undefined){
+            divider=fetchResults.length
+        }
+        else{
+            divider = 25
+        }
+
+        console.log(divider)
+        //something goofy here, need to get the keywords instead
+        const newBubbleInputs = data_array.map((keyword, i) => ({
+            //set x value as the index, because i dont know a better way to lay these out yet
+            x: i,
+            //all circles are on same y axis
+            y: 50,
+            //same radius
+            radius: (keyword.sum/divider)* 50,
+            //same color
+            color: keyword.color,
+            //label is set to keyword
+            label: `${keyword.name} ${keyword.sum}`
+        }));
+        return newBubbleInputs;
+    }
+
+    useEffect(()=>{
+        const getResults = async ()=>{
+            if(selectedSearchIdState){
+                const fetchResults =  await getAPIPastSearchResults( setResults, setError, selectedSearchIdState );
+                
+
+        const newBubbleInputs = initBubblePlotData(fetchResults);
+
+       //update state with our new array
+        setBubbleInputs(newBubbleInputs);
+            
+            
+            }
+                else{
+                console.log("No search Id in graph refresh!")}
+        }
+    
+        getResults()
+        //has -1 searchID, need to figure out way to persist that?
+     
+
+    },[relevanceChanged])
     //bubble inputs is passed to bubble plot, pure inputs that update when Search is pressed only
     const [bubbleInputs, setBubbleInputs] = useState<{
         x: number,
@@ -131,15 +217,19 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     const handlePastSearchSelection = async (event:any)=>{
         const selectedSearchId = event.target.value;
+        setSelectedSearchIdState(selectedSearchId)
         setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
      if(selectedSearchId){
             clearPages();
             setError(null);
-            await getAPIPastSearchResults( setResults, setError, selectedSearchId );
+            const search_results = await getAPIPastSearchResults( setResults, setError, selectedSearchId );
             await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
             clearPages();
+            //empties bubble graphs for new search with no data, maybe need to put something here? yes we do
+            const bubble_data = initBubblePlotData(search_results)
+            setBubbleInputs(bubble_data);
         }
         else{
         setError({"message":"No search found"});
@@ -158,7 +248,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const handleArticleClick = async (articleId: number) => {
         setSelectedArticleId(articleId);
         setIsSidebarOpen(true);
-        console.log(articleId)
+
         setCommentsLoading(true);
 
         const data = await getCommentsByArticle(articleId);
@@ -169,7 +259,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     //runs when search is pressed
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
-       // console.log(userDatabaseList);
+ 
         //prevents default form submit which causes page to reload
         event.preventDefault();
         //sets loading to true which triggers "Loading" to show in UI
@@ -181,6 +271,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
         //declare empty array to combien user inputs and values from drop downs
+
         let inputsAndLogicalOperators: string[] = [];
         //iterate through valid non blank inputs and append them and associated logical operator
         for (let i = 0; i < filterBlankInputs.length; i++) {
@@ -198,26 +289,33 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             }
         }
         const inputsAndLogicalOperatorsString = inputsAndLogicalOperators.join(' ')
-        console.log(inputsAndLogicalOperatorsString)
-        setJoinedInputsString([inputsAndLogicalOperatorsString]);
-        //can probably move this to bubbleplot
-        const newBubbleInputs = filterBlankInputs.map((keyword, i) => ({
-            //set x value as the index, because i dont know a better way to lay these out yet
-            x: i,
-            //all circles are on same y axis
-            y: 50,
-            //same radius
-            radius: 50,
-            //same color
-            color: "green",
-            //label is set to keyword
-            label: keyword
-        }));
-        //update state with our new array
-        setBubbleInputs(newBubbleInputs);
-        //initialize data variable to fill up with api response
 
-        await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs, setDataFull, setCurrentSearchId);
+        setJoinedInputsString([inputsAndLogicalOperatorsString]);
+      
+
+    
+
+        // const newBubbleInputs = filterBlankInputs.map((keyword, i) => ({
+        //     //set x value as the index, because i dont know a better way to lay these out yet
+        //     x: i,
+        //     //all circles are on same y axis
+        //     y: 50,
+        //     //same radius
+        //     radius: 50,
+        //     //same color
+        //     color: "green",
+        //     //label is set to keyword
+        //     label: keyword
+        // }));
+       //update state with our new array
+        // setBubbleInputs(newBubbleInputs);
+        //initialize data variable to fill up with api response
+        // setSelectedSearchIdState(selectedSearchId)
+        const responseResult = await getAPIResults( userDatabaseList, inputsAndLogicalOperators, emptyString, setInputs, setResults, setError, filterBlankInputs, inputs, setDataFull, setCurrentSearchId);
+        
+        const bubblePlot = initBubblePlotData(responseResult.articles)
+        setBubbleInputs(bubblePlot)
+        setSelectedSearchIdState(responseResult.search_id)
         //need something here to load search name
         setLoading(false);
     }
@@ -250,7 +348,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     setSearchName={setSearchName} 
                     currentSearchId={currentSearchId} 
                     setDisplayInputs={setJoinedInputsString}
-                    onArticleClick={handleArticleClick} />}
+                    onArticleClick={handleArticleClick}
+                    setRelevanceChanged={setRelevanceChanged} 
+                    relevanceChanged={relevanceChanged}/>}
             </div>
     
             {/* Render the CommentsSidebar conditionally */}
