@@ -8,7 +8,7 @@ from app.db.session import get_db, SessionLocal
 from app.models.role import Role
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
-from endpoints.auth.auth import login_manager  # Import login_manager to access create_access_token
+from endpoints.auth.auth import login_manager 
 
 client = TestClient(app)
 session = get_cookie()
@@ -67,7 +67,7 @@ def get_role_id_by_name(role_name):
     finally:
         db.close()
 
-def test_role_update_permission(ensure_roles_exist, cleanup_users):
+def test_role_based_access_control(ensure_roles_exist, cleanup_users):
     create_user = cleanup_users
 
     # Create unique users with different roles
@@ -110,7 +110,12 @@ def test_role_update_permission(ensure_roles_exist, cleanup_users):
     # Fetch the role IDs to validate
     grad_student_role_id = get_role_id_by_name("GradStudent")
 
-    # Step 1: Professor attempts to update the role of target user (should succeed)
+    # Role assignment verification
+    response = session.get(f"{base_url}/users/get/{target_user_id}")
+    assert response.status_code == 200
+    initial_role_name = "Student"
+
+    # Step 1: Professor assigns "GradStudent" role to target user (should succeed)
     response = session.put(
         f"{base_url}/users/update-role/{target_user_id}",
         json={"role_name": "GradStudent"},
@@ -134,3 +139,12 @@ def test_role_update_permission(ensure_roles_exist, cleanup_users):
         cookies={"access_token": student_token}  # Use Student's token
     )
     assert response.status_code == 403  # Forbidden
+
+    # Step 4: Professor changes target user back to initial role (should succeed)
+    response = session.put(
+        f"{base_url}/users/update-role/{target_user_id}",
+        json={"role_name": initial_role_name},
+        cookies={"access_token": prof_token}
+    )
+    assert response.status_code == 200
+    assert response.json()["role_id"] == get_role_id_by_name(initial_role_name)
