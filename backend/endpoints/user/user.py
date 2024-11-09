@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Bo
 from sqlalchemy.orm import Session
 from app.schemas.user import UserCreate, UserUpdate, UserRead
 from app.crud.user import create_user, get_user, get_user_by_username, update_user, delete_user, get_all_users, get_user_by_email
+from app.models.role import Role
 from app.db.session import get_db
 from cryptography.fernet import Fernet
 import os
@@ -11,6 +12,7 @@ from auth_tools.get_user import get_current_user_modular
 from typing import List, Annotated
 from dotenv import load_dotenv
 from auth_tools.is_admin import is_admin
+from pydantic import BaseModel
 
 
 load_dotenv()
@@ -27,6 +29,35 @@ router = APIRouter()
 # Encrypt username helper function
 def encrypt_username(username: str) -> str:
     return fernet.encrypt(username.encode()).decode()
+
+# Define a schema for the request body
+class RoleUpdateRequest(BaseModel):
+    role_name: str
+
+@router.put("/update-role/{user_id}", response_model=UserRead)
+def update_user_role(
+    user_id: int,
+    role_request: RoleUpdateRequest,  # Use RoleUpdateRequest as the request body
+    access_token: Annotated[str | None, Cookie()] = None,
+    db: Session = Depends(get_db)
+):
+    current_user = get_current_user_modular(access_token, db)
+    if not is_admin(access_token, db):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permission denied")
+
+    user = get_user(db=db, user_id=user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
+
+    # Fetch the role by role_name from the request body
+    role = db.query(Role).filter(Role.role_name == role_request.role_name).first()
+    if not role:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Role not found.")
+
+    user.role_id = role.role_id
+    db.commit()
+    db.refresh(user)
+    return user
 
 
 @router.post("/create", response_model=UserRead, status_code=status.HTTP_201_CREATED)

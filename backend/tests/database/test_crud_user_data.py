@@ -11,7 +11,10 @@ from app.schemas.article import ArticleCreate
 from app.schemas.search import SearchCreate
 from app.db.session import SessionLocal
 from app.crud.user import create_user, get_user_by_username
+from tests.integration.tools.get_cookie import get_cookie
 
+
+session = get_cookie()
 @pytest.fixture
 def test_db_session():
     """Fixture to provide a database session with rollback for testing."""
@@ -81,6 +84,9 @@ async def test_update_user_data(test_db_session: Session):
     """Test updating an existing user data entry."""
     created_article, created_user_data, created_search = setup(test_db_session)
 
+    # Define the role you want to test with, e.g., "Professor"
+    user_role = "Professor"  # Adjust based on the role requirements
+
     # Update the user data entry with integer values
     update_data = UserDataUpdate(
         article_id=created_user_data.article_id,
@@ -90,7 +96,9 @@ async def test_update_user_data(test_db_session: Session):
         transparency=4,
         completeness=5
     )
-    updated_user_data = await update_user_data(test_db_session, update_data)
+    access_token = session.cookies.get('access_token')
+    # Pass user_role to the update_user_data function
+    updated_user_data = await update_user_data(test_db_session, update_data, user_role, access_token)
 
     # Verify the updated fields
     assert updated_user_data.relevancy_color == "blue"
@@ -98,21 +106,27 @@ async def test_update_user_data(test_db_session: Session):
     assert updated_user_data.clarity == 5
     assert updated_user_data.transparency == 4
     assert updated_user_data.completeness == 5
+
     teardown(test_db_session, created_article, created_user_data, created_search)
 
 
 @pytest.mark.asyncio
 async def test_update_user_data_not_found(test_db_session: Session):
     """Test updating a non-existent user data entry."""
+    user_role = "Professor"  # Define the role you want to test with
+
     update_data = UserDataUpdate(
         article_id=9999,  # Non-existent article_id
         relevancy_color="blue",
-        methodology="4",
-        clarity="5",
-        transparency="4",
-        completeness="5"
+        methodology=4,
+        clarity=5,
+        transparency=4,
+        completeness=5
     )
+    access_token = session.cookies.get('access_token')
+    # Pass user_role to the update_user_data function
     with pytest.raises(HTTPException) as exc_info:
-        await update_user_data(test_db_session, update_data)
+        await update_user_data(test_db_session, update_data, user_role, access_token)
+    
     assert exc_info.value.status_code == 404
     assert exc_info.value.detail == "Userdata not found in put, user not valid in db"

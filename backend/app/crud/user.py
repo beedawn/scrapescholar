@@ -7,6 +7,7 @@ from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 import os
 from dotenv import load_dotenv
+from app.crud.article import delete_article_by_user_id
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -143,8 +144,11 @@ def update_user(db: Session, user_id: int, user: UserUpdate):
     db.refresh(db_user)
     return db_user
 
-
 def delete_user(db: Session, user_id: int):
+    # Cleanup any related data with NOT NULL constraints before deleting the user
+    delete_article_by_user_id(db, user_id)  # Custom function to delete articles by user
+
+    # Proceed to delete the user
     db_user = db.query(User).filter(User.user_id == user_id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")

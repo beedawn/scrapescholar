@@ -17,6 +17,7 @@ from app.crud.search import get_search_by_title, delete_search
 from app.crud.user_data import delete_user_data_by_article
 from app.crud.article import get_article_by_search_id, delete_article
 from app.db.session import get_db, SessionLocal
+
 load_dotenv()
 
 testuser = os.getenv('TEST_USER')
@@ -24,17 +25,13 @@ testpass = os.getenv('TEST_PASSWORD')
 host_ip = os.getenv('HOST_IP')
 
 session = get_cookie()
-def test_db_session():
-    """Fixture to provide a database session with rollback for testing."""
-    db = SessionLocal()
-    db.begin_nested()
 
-    yield db
 
-    db.rollback()
-    db.close()
+
 
 db = SessionLocal()
+
+
 # UT-6.1
 def test_find_graph():
     try:
@@ -61,15 +58,14 @@ def test_find_graph():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                           "[data-testid='search_input']")))
+                                                                                       "[data-testid='search_input']")))
 
         search_input.send_keys("test")
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                                 "[data-testid='search_button']")))
+                                                                                        "[data-testid='search_button']")))
         search_button.click()
         time.sleep(5)
         bubble_plot = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "bubbleplot")))
-
 
         assert bubble_plot is not None
         search_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
@@ -85,8 +81,6 @@ def test_find_graph():
         # print(driver.title)
         # print(driver.current_url)
         driver.quit()
-
-
 
 
 # UT-6.2
@@ -115,11 +109,11 @@ def test_graph_loads_zero():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                           "[data-testid='search_input']")))
+                                                                                       "[data-testid='search_input']")))
 
         search_input.send_keys("test")
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                                 "[data-testid='search_button']")))
+                                                                                        "[data-testid='search_button']")))
         search_button.click()
         time.sleep(5)
         bubble_plot = WebDriverWait(driver, 10).until(
@@ -169,16 +163,16 @@ def test_graph_accuracy_after_change():
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                           "[data-testid='search_input']")))
+                                                                                       "[data-testid='search_input']")))
 
         search_input.send_keys("test")
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                                 "[data-testid='search_button']")))
+                                                                                        "[data-testid='search_button']")))
         search_button.click()
 
         time.sleep(5)
         relevancy = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                                                        "[data-testid='relevancy-column-default']")))
+                                                                                    "[data-testid='relevancy-column-default']")))
         relevancy.click()
 
         relevant_div = WebDriverWait(driver, 10).until(
@@ -207,6 +201,7 @@ def test_graph_accuracy_after_change():
         # print(driver.title)
         # print(driver.current_url)
         driver.quit()
+
 
 def clean_up(search_title):
     found_search = get_search_by_title(db, search_title.text)
