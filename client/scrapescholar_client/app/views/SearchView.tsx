@@ -104,7 +104,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         let data_array = []
         let color  = {
             "Relevant":"green",
-            "SemiRelevant":"yellow",
+            "SemiRelevant":"#FF8C00",
             "Not Relevant":"red"
         }
         for (let type of possible_types){
