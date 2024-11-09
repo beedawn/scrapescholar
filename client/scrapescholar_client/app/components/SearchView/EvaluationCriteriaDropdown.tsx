@@ -65,6 +65,7 @@ interface EvaluationCriteriaDropdownProps {
         <div
             onClick={() => !disabled && setIsOpen(!isOpen)} // Only toggle if not disabled
             className={disabled ? "cursor-not-allowed opacity-50" : ""}
+            data-testid={`evaluation-dropdown-${article_id}`}
         >
             {!isOpen && (
                 <div className={`p-2 flex items-center ${selected.css}`}>

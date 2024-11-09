@@ -64,3 +64,9 @@ def delete_user_data_by_article(db: Session, article_id: int):
     db.delete(db_userdata)
     db.commit()
     return db_userdata
+
+def delete_user_data_by_article_id(db: Session, article_id: int):
+    user_data_entries = db.query(UserData).filter(UserData.article_id == article_id).all()
+    for entry in user_data_entries:
+        db.delete(entry)
+    db.commit()
