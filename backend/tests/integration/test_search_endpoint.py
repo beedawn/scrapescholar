@@ -34,7 +34,7 @@ def db_session():
     finally:
         # Try to truncate the search table, but ignore errors if the table doesn't exist
         try:
-            # db.execute(text("TRUNCATE TABLE \"Search\" RESTART IDENTITY CASCADE;"))
+            db.execute(text("TRUNCATE TABLE \"Search\" RESTART IDENTITY CASCADE;"))
             db.commit()
         except ProgrammingError as e:
             if "UndefinedTable" in str(e):
