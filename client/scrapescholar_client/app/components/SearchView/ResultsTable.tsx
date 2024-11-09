@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResultItem } from '../../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
@@ -59,6 +59,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 }) => {
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
+    const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);
@@ -81,29 +82,40 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
             transparency: false
         })));
 
-    const handleCellClick = (article_id: number, field: keyof EditableCell) => {
-        const updatedCells: EditableCell[] = [...editableCells];
-
-
-        const targetCell = updatedCells.find(cell => cell.article_id === article_id);
-
-        if (targetCell) {
-            console.log("field of cell", targetCell[field as keyof EditableCell]);
+        const handleCellClick = (article_id: number, field: keyof EditableCell) => {
+            const updatedCells: EditableCell[] = [...editableCells];
         
-            // Toggle the field value
-            targetCell[field as keyof EditableCell] = !targetCell[field as keyof EditableCell];
-            
-            // Update the state
-            setEditableCells(updatedCells);
-        } else {
-            console.error(`No editable cell found with article_id ${article_id}`);
-        }
-
-
-        // updatedCells[index][field as keyof EditableCell] =
-        //     !updatedCells[index][field as keyof EditableCell];
-        // setEditableCells(updatedCells)
-    }
+            const targetCell = updatedCells.find(cell => cell.article_id === article_id);
+        
+            if (targetCell) {
+                // Allow edit toggling only if the user is a Professor
+                if (!isAdmin) {
+                    console.warn("Only Professors can edit fields.");
+                    return;
+                }
+        
+                // Toggle the field's editable state
+                targetCell[field as keyof EditableCell] = !targetCell[field as keyof EditableCell];
+        
+                // Update the state with the modified cells array
+                setEditableCells(updatedCells);
+            } else {
+                console.error(`No editable cell found with article_id ${article_id}`);
+            }
+        };
+    
+    useEffect(() => {
+        const findAdmin = async () => {
+            try {
+                const result = await isAdmin();
+                console.log("Admin status:", result); // Log admin status
+                setIsAdminUser(result === "true");
+            } catch (error) {
+                console.error("Failed to check admin status:", error);
+            }
+        };
+        findAdmin();
+    }, []);   
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
         const updatedResults = editableResults.map(result =>
             result.article_id === id ? { ...result, [field]: value } : result
@@ -111,7 +123,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
         setEditableResults(updatedResults);
     }
-    const {putUserData}=apiCalls();
+    const {putUserData, isAdmin}=apiCalls();
     const handleFieldConfirm = async () => {
         setResults(editableResults);
         console.log("editable results")
@@ -231,7 +243,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                             <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>
                             <td className="border border-gray-300" >
-                            <EvaluationCriteriaDropdown article_id={result.article_id} evaluationValue={result.evaluation_criteria}/>
+                            <EvaluationCriteriaDropdown article_id={result.article_id} evaluationValue={result.evaluation_criteria} disabled={!isAdminUser} />
 
 
 

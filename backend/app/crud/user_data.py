@@ -1,6 +1,7 @@
 # app/crud/user_data.py
 from sqlalchemy.orm import Session
 from app.models.user_data import UserData
+from app.models.role import Role
 from app.schemas.user_data import UserDataCreate, UserDataUpdate
 from fastapi import HTTPException
 import os
@@ -27,13 +28,19 @@ def create_user_data(db: Session, user_id, article_id):
     return db_user_data
 
 
-async def update_user_data(db: Session, user_data: UserDataUpdate):
+async def update_user_data(db: Session, user_data: UserDataUpdate, user_role: str):
     db_user_data = db.query(UserData).filter(UserData.article_id == user_data.article_id).first()
 
     if not db_user_data:
         raise HTTPException(status_code=404, detail="Userdata not found in put, user not valid in db")
+
+    # Restrict editing of evaluation_criteria based on role
+    if user_role != "Professor" and "evaluation_criteria" in user_data.dict(exclude_unset=True):
+        raise HTTPException(status_code=403, detail="Only professors can edit evaluation criteria")
+
     for key, value in user_data.dict(exclude_unset=True).items():
         setattr(db_user_data, key, value)
+    
     db.commit()
     db.refresh(db_user_data)
     return db_user_data
