@@ -50,7 +50,7 @@ const UserManagement: React.FC<UserManagementProps> =
         //     setLoading(false)
         // }
         return (
-            <div className={"p-10"}>
+            <div className={"p-10"} data-testid="user_management">
             {deleteUserModalActive?<DeleteUserModal setDeleteUserModalActive={setDeleteUserModalActive} deleteUser={deleteUser}/>:<></>}
                 {addUserModalActive?<>
                   
@@ -60,36 +60,37 @@ const UserManagement: React.FC<UserManagementProps> =
                 </>:<>
                 
                 <p>UserManagement</p>
-                <p>
-                    <Button onClick={()=>{setAddUserModalActive(true)}}>New User</Button>
-             
-                </p>
+                <p><Button onClick={()=>{setAddUserModalActive(true)}} data-testid="new_user_button">New User</Button></p>
                 <div className={"flex flex-wrap-reverse"}>
                     <div className={"m-5 float-left flex-none bg-white rounded text-black w-full"}>
-               {users.map((user)=>(<div className="p-2 flex w-full" key={user.user_id}>
+               {users.map((user)=>(<div className="p-2 flex w-full" key={user.user_id} data-testid="user_row">
             
-               <div className="p-2 w-1/4">{user.username}</div>
-               <div className="w-1/4">
+               <div className="p-2 w-1/4" data-testid="user_username">{user.username}</div>
+               <div className="w-1/4" data-testid="user_role">
+               <span data-testid="user_role_text">{Role[user.role_id]}</span>
                <DropdownSearchBox
                                             value={Role[user.role_id]}
                                             valueArray={["Student", "GradStudent", "Professor"]}
                                             onDropdownChange={(e) => handleRoleChange(user.user_id, e.target.value)}  // Call handleRoleChange
                                             defaultValue="Role"
+                                            data-testid="role_dropdown"
                                         />
                                 </div>
 
 
 
-                                <div className="p-2 w-1/4">     
-                <button className="bg-red-600 text-2xl p-1 rounded text-white" 
-                onClick={()=>{setDeleteUserModalActive(true); setDeleteUser(user)}}>
-                    ␡
-                    </button>
+                <div className="p-2 w-1/4" data-testid="user_permissions">
+                    <span data-testid="user_permissions_text">Permission details go here</span>  
+                    <button className="bg-red-600 text-2xl p-1 rounded text-white" 
+                    onClick={()=>{setDeleteUserModalActive(true); setDeleteUser(user)}} data-testid="delete_user_button">
+                        ␡
+                        </button>
                </div>
 
                <div className="p-2 w-1/4">     
                 <Button className="" 
-                onClick={()=>{}}>
+                onClick={()=>{}}
+                data-testid="reset_password_button">
                     Reset Password
                     </Button>
                </div>
