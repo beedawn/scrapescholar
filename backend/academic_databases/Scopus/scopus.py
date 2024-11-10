@@ -10,29 +10,54 @@ from typing import List
 from algorithm.algorithm_interface import algorithm_interface
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
-    encoded_keywords = quote(keywords)
-    subject = quote(subject)
-    min_year = quote(min_year)
-    #Other Parameters
-    http_accept = "application/json"
-    view = "COMPLETE"               #Note: COMPLETE view is needed to view abstract
-    today = datetime.date.today()
-    current_year = today.year
-    date_range = min_year + "-" + str(current_year)
-    count = "25"
-    sort = "relevancy"
-    insttoken = scopus_inst_token
+    if scopus_inst_token is not None:
+        print("SCOPUS INST TOKEN")
+        encoded_keywords = quote(keywords)
+        subject = quote(subject)
+        min_year = quote(min_year)
+        # Other Parameters
+        http_accept = "application/json"
+        view = "COMPLETE"  # Note: COMPLETE view is needed to view abstract
+        today = datetime.date.today()
+        current_year = today.year
+        date_range = min_year + "-" + str(current_year)
+        count = "25"
+        sort = "relevancy"
+        insttoken = scopus_inst_token
 
-    built_query = "https://api.elsevier.com/content/search/scopus?" \
-                  + "apiKey=" + key \
-                  + "&query=" + encoded_keywords \
-                  + "&httpAccept=" + http_accept \
-                  + "&view=" + view \
-                  + "&date=" + date_range \
-                  + "&count=" + count \
-                  + "&sort=" + sort \
-                  + "&subj=" + subject \
-                  + "&insttoken=" + insttoken
+        built_query = "https://api.elsevier.com/content/search/scopus?" \
+                      + "apiKey=" + key \
+                      + "&query=" + encoded_keywords \
+                      + "&httpAccept=" + http_accept \
+                      + "&view=" + view \
+                      + "&date=" + date_range \
+                      + "&count=" + count \
+                      + "&sort=" + sort \
+                      + "&subj=" + subject \
+                      + "&insttoken=" + insttoken
+    else:
+        encoded_keywords = quote(keywords)
+        subject = quote(subject)
+        min_year = quote(min_year)
+        # Other Parameters
+        http_accept = "application/json"
+        view = "STANDARD"  # Note: COMPLETE view is inaccessible with a standard token
+        today = datetime.date.today()
+        current_year = today.year
+        date_range = min_year + "-" + str(current_year)
+        count = "25"
+        sort = "relevancy"
+        print("Scopus inst token not found")
+        built_query = "https://api.elsevier.com/content/search/scopus?" \
+                      + "apiKey=" + key \
+                      + "&query=" + encoded_keywords \
+                      + "&httpAccept=" + http_accept \
+                      + "&view=" + view \
+                      + "&date=" + date_range \
+                      + "&count=" + count \
+                      + "&sort=" + sort \
+                      + "&subj=" + subject
+
     response = requests.get(built_query)
     articles = parse_data_scopus(response)
     #return entries to scopus endpoint response
