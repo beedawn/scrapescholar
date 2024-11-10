@@ -20,7 +20,7 @@ load_dotenv()
 professor_user = os.getenv('TEST_USER')
 professor_pass = os.getenv('TEST_PASSWORD')
 grad_student_user = "t2_student"
-grad_student_cred = "gradstudent3489"
+grad_student_cred = "testpass"
 grad_student_email = "t2_student@example.com"
 host_ip = os.getenv('HOST_IP')
 
