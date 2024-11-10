@@ -11,7 +11,7 @@ from api_tools.api_tools import scopus_inst_token
 
 session = get_cookie()
 
-def test_user_data_slash_relevant_results_casing():
+def test_abstract_is_in_response():
 
     if scopus_inst_token is not None:
         searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
