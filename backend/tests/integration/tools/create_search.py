@@ -11,7 +11,6 @@ def create_search():
     # create a new search to query
 
     search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
-    print(search_request)
     search_request_data = search_request.json()
     search_id = search_request_data["search_id"]
     return search_id
