@@ -6,7 +6,7 @@ from app.main import app
 from app.main import check_response
 from tests.integration.tools.get_cookie import get_cookie
 from typing import List
-
+import time
 client = TestClient(app)
 session = get_cookie()
 from tests.integration.tools.base_url import base_url
@@ -52,6 +52,10 @@ def test_academic_data_NOT():
         if keyword_one in item["title"]:
             keyword_one_found = True
         if keyword_two in item["title"]:
+            keyword_two_found = True
+        if keyword_one in item["abstract"]:
+            keyword_one_found = True
+        if keyword_two in item["abstract"]:
             keyword_two_found = True
     assert keyword_one_found == True
     assert keyword_two_found == False

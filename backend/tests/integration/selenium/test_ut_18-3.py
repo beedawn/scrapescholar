@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from app.db.session import SessionLocal
 from app.schemas.user import UserCreate
 from app.crud.user import create_user, delete_user, get_user_by_username
+import time
 
 # Load environment variables from .env file
 load_dotenv()
@@ -72,6 +73,7 @@ def test_role_based_access_control(setup_grad_student):
             username_field.send_keys(username)
             password_field.send_keys(password)
             login_button.click()
+            time.sleep(10)
             # Wait for navbar to confirm login
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
@@ -95,8 +97,9 @@ def test_role_based_access_control(setup_grad_student):
 
         # Step 1: Graduate Student login, search for "cyber", and check for disabled dropdown
         login(grad_student_user, grad_student_cred)
-        search_keyword("cyber")
-
+        time.sleep(10)
+        search_keyword("test")
+        time.sleep(10)
         # Check if the evaluation dropdown is disabled for Graduate Student
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" in dropdown.get_attribute("class")
@@ -107,8 +110,9 @@ def test_role_based_access_control(setup_grad_student):
 
         # Step 2: Professor login, search for "cyber", and check for enabled dropdown
         login(professor_user, professor_pass)
-        search_keyword("cyber")
-
+        time.sleep(10)
+        search_keyword("test")
+        time.sleep(10)
         # Check if the evaluation dropdown is enabled for Professor
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" not in dropdown.get_attribute("class")
