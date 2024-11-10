@@ -5,6 +5,7 @@ interface Comment {
     comment_id: number;
     user_id: number;
     comment_text: string;
+    username:string;
 }
 
 interface CommentsSidebarProps {
@@ -93,7 +94,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
                     {comments.map((comment, index) => (
                         <li key={comment?.comment_id || index} className="mb-4">
                             <div>
-                                <strong>User {comment?.user_id || "Unknown"}</strong>: 
+                                <strong>{comment?.username || "Unknown"}</strong>:&nbsp; 
                                 {editingCommentId === comment.comment_id ? (
                                     // Editable text area for editing comment
                                     <textarea

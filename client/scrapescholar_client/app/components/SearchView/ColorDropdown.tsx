@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import apiCalls from '@/app/api/apiCalls';
 
-enum Relevance {
-  Relevant,
-  SemiRelevant,
-  NotRelevant,
-}
+import Relevance from '@/app/types/Relevance';
 interface ColorDropdownProps {
-    // value: string;
-    // onDropdownChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    // className?: string;
-    // valueArray: any[];
+   //need some kind of state here to trigger graph updates
     colorValue:string;
     article_id:number;
+    setRelevanceChanged: (item: boolean) => void;
+    relevanceChanged:boolean;
   }
-  const ColorDropdown: React.FC<ColorDropdownProps> = ({article_id,colorValue}) => {
+  const ColorDropdown: React.FC<ColorDropdownProps> = ({article_id,colorValue, setRelevanceChanged, relevanceChanged}) => {
     const [selected, setSelected] = useState({value:"Relevancy",css:"bg-white-600"});
     const [isOpen, setIsOpen]=useState(false);
     useEffect(()=>{
@@ -56,14 +51,15 @@ interface ColorDropdownProps {
     "relevancy_color":selectedValue
 
   }
+  setRelevanceChanged(!relevanceChanged)
   await putUserData(putRequest)
 
   }
 
 return(<>
-  <div onClick={()=>{setIsOpen(!isOpen)}}  >
+  <div onClick={()=>{setIsOpen(!isOpen)}} data-testid="relevancy-column-default" >
       
-      {!isOpen&&(<div className={`p-2 flex items-center ${selected.css}`} data-testid="relevancy-column-default">{selected.value} <svg className={`m-1 w-2 h-2 rotate-180`}
+      {!isOpen&&(<div className={`p-2 flex items-center ${selected.css}`} >{selected.value} <svg className={`m-1 w-2 h-2 rotate-180`}
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                 strokeWidth="2" d="M9 5 5 1 1 5" />

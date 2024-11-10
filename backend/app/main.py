@@ -25,10 +25,12 @@ from endpoints.search.search import post_search_no_route, check_if_user_exceeded
 from app.db.session import SessionLocal
 from sqlalchemy.orm import Session
 from auth_tools.get_user import get_current_user_modular
-
+import dotenv
+import os
 app = FastAPI()
-
-origins = ["http://0.0.0.0:3000", "http://localhost:3000"]
+dotenv.load_dotenv()
+host_ip = os.getenv('HOST_IP')
+origins = [f"http://{host_ip}:3000", "http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,

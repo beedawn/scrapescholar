@@ -2,14 +2,17 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 import os
+from dotenv import load_dotenv
+from app.crud.article import delete_article_by_user_id
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+load_dotenv()
 # Encryption key
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")  # Store this securely!
 fernet = Fernet(ENCRYPTION_KEY)
@@ -18,6 +21,10 @@ fernet = Fernet(ENCRYPTION_KEY)
 # Helper function to hash fields
 def hash(text: str) -> str:
     return pwd_context.hash(text)
+
+
+def verify_hash(text: str, hashed_text: str) -> bool:
+    return pwd_context.verify(text, hashed_text)
 
 
 # Helper function to encrypt fields
@@ -42,35 +49,77 @@ def get_user(db: Session, user_id: int):
     return user
 
 
+def get_all_users(db: Session):
+    users = db.query(User).all()
+    if not users:
+        raise HTTPException(status_code=404, detail="Users not found")
+    decrypted_usernames = []
+    for user in users:
+        decrypt_username = decrypt(user.username)
+        decrypted_user = {"username": decrypt_username,
+                          "user_id": user.user_id,
+                          "role_id": user.role_id,
+                          }
+        decrypted_usernames.append(decrypted_user)
+    return decrypted_usernames
+
+
 def get_user_by_username(db: Session, username: str):
+    #i dont think this works
     encrypted_username = encrypt(username)
+    print("ENCRYPTED USERNAME")
+    print(encrypted_username)
+    #should we get all users, decrypt them, then compare? hmm
+
+    users = db.query(User).all()
+    for user in users:
+        plaintext_user = decrypt(user.username)
+        print(plaintext_user)
+        if plaintext_user == username:
+            return user
     user = db.query(User).filter(User.username == encrypted_username).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+
+    return None
 
 
 def get_user_by_email(db: Session, email: str):
-    hashed_email = hash(email)
-    return db.query(User).filter(User.email == hashed_email).first()
+    hashed_emails = db.query(User).all()
+    for hashed_email in hashed_emails:
+        if verify_hash(email, hashed_email.email):
+            return hashed_email
+    return False
 
 
 def create_user(db: Session, user: UserCreate):
     # Hash the user's password and email, and encrypt the username before storing them
     hashed_password = hash(user.password)
-    hashed_email = hash(user.email)
     encrypted_username = encrypt(user.username)
+    # not sure if these actually work might need to decrypt
+    if db.query(User).filter(User.username == encrypted_username).first():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
 
-    db_user = User(
-        username=encrypted_username,
-        email=hashed_email,
-        password=hashed_password,
-        role_id=user.role_id
-    )
+    if user.email is not None:
+        hashed_email = hash(user.email)
+        if db.query(User).filter(User.email == hashed_email).first():
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+        db_user = User(
+            username=encrypted_username,
+            email=hashed_email,
+            password=hashed_password,
+            role_id=user.role_id
+        )
+
+    else:
+        db_user = User(
+            username=encrypted_username,
+            password=hashed_password,
+            role_id=user.role_id
+        )
 
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    # i think we need to get the actual user from the db so it has an associated ID
     return db_user
 
 
@@ -95,8 +144,11 @@ def update_user(db: Session, user_id: int, user: UserUpdate):
     db.refresh(db_user)
     return db_user
 
-
 def delete_user(db: Session, user_id: int):
+    # Cleanup any related data with NOT NULL constraints before deleting the user
+    delete_article_by_user_id(db, user_id)  # Custom function to delete articles by user
+
+    # Proceed to delete the user
     db_user = db.query(User).filter(User.user_id == user_id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")

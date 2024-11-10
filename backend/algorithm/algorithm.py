@@ -127,8 +127,8 @@ def algorithm(text, keywords):
 
     return score
 
-#
-# if __name__ == '__main__':
-#     keyword_input = input("What is the keywords?")
-#     text_input = input("What is the text?")
-#     algorithm(text_input, keyword_input)
+
+if __name__ == '__main__':
+    keyword_input = input("What is the keywords?")
+    text_input = input("What is the text?")
+    print(algorithm(text_input, keyword_input))

@@ -3,6 +3,8 @@ import sourcesJson from "../mockData/DatabaseSourcesJson";
 import pastSearchesTitle from "../mockData/pastSearchesTitle";
 import pastSearchesArticles from "../mockData/pastSearchesArticles";
 
+const host_ip = process.env.NEXT_PUBLIC_HOST_IP;
+
 let simulateInsufficientStorage = false;
 let deleteSearch = false;
 const fetchMock = jest.fn((url) => {

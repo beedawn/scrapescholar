@@ -13,12 +13,15 @@ from fastapi.responses import JSONResponse
 from typing import Annotated
 from datetime import timedelta
 
+from auth_tools.is_admin import is_admin
+
 from auth_tools.get_user import get_current_user_modular
 
 load_dotenv()
 
 SECRET = os.getenv("SECRET_KEY")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+host_ip = os.getenv("HOST_IP")
 fernet = Fernet(ENCRYPTION_KEY)
 
 DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE"
@@ -114,7 +117,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         httponly=True,
         secure=False,
         path="/",
-        domain="0.0.0.0",
+        domain=f"{host_ip}",
         samesite="Lax",
         max_age=28800
     )
@@ -142,10 +145,20 @@ async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: S
     return JSONResponse(content={"cookieValue": access_token})
 
 
+@router.get("/is_admin")
+async def is_admin_endpoint(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+
+    if is_admin(access_token, db):
+        return True
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="")
+
+
 @router.get("/remove_cookie")
 def remove_cookie(response: Response):
     response.delete_cookie("access_token")
     return {"message": "Cookie deleted"}
+
 
 #Protected route example
 @router.get("/protected_route")

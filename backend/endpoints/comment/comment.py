@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 # Add a comment to an article
-@router.post("/article/{article_id}", response_model=Comment, status_code=201)
+@router.post("/article/{article_id}", status_code=201)
 async def create_new_comment(
         article_id: int,
         comment: CommentCreate,
@@ -82,7 +82,7 @@ async def remove_comment(
 
 
 # Get all comments for an article
-@router.get("/article/{article_id}/comments", response_model=List[Comment], status_code=200)
+@router.get("/article/{article_id}/comments", status_code=200)
 def get_comments(article_id: int, db: Session = Depends(get_db)):
     comments = get_comments_by_article(db, article_id=article_id)
     if comments:

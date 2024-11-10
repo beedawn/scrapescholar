@@ -6,6 +6,7 @@ import Dropdown from '../../types/DropdownType';
 import SourcesAccordian from './SourcesAccordian';
 
 import apiCalls from '@/app/api/apiCalls';
+import SettingsAccordian from './SettingsAccordion';
 interface NavBarProps {
     handleResults: (event: React.FormEvent<HTMLFormElement>) => void;
     addInput: () => void;
@@ -21,13 +22,14 @@ interface NavBarProps {
     searches: any[];
     handlePastSearchSelection:
     (event: React.ChangeEvent<HTMLSelectElement>) => void;
+    setOpenUserManagement: (item:boolean)=>void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
     addInput, inputs, handleSearchChange, removeInput,
     setLoggedIn, dropdown, handleDropdownChange,
     addToUserDatabaseList, removeFromUserDatabaseList,
-    searches, handlePastSearchSelection }) => {
+    searches, handlePastSearchSelection, setOpenUserManagement }) => {
 
         const {deleteCookie}=apiCalls();
     const handleLogout = async () => {
@@ -46,17 +48,20 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
                 <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
+                    <SettingsAccordian setOpenUserManagement={setOpenUserManagement}/>
                 <DropdownSearchBox value="past search dropdown"
                     onDropdownChange={(selectedTitle) => 
                         handlePastSearchSelection(selectedTitle)} valueArray={searches}
-                    className="w-full" />
+                    className="w-full"  defaultValue='Past Searches'/>
                 <form onSubmit={handleResults}>
                     <Button onClick={addInput} className="m-5">
                         +
                     </Button>
+                    <span data-testid="search_button">
                     <Button type="submit">
                         Search
                     </Button>
+                    </span>
                     {inputs.map((input: string, index: number) => {
                         return (<div key={index}>
                             <SearchBox value={input} onChange={(e) => 

@@ -8,7 +8,7 @@ class ArticleBase(BaseModel):
     source_id: int
     title: str
     # author: Optional[str] = None
-    date: Optional[date]
+    date: date
     link: Optional[HttpUrl] = None
     relevance_score: Optional[float] = None
 

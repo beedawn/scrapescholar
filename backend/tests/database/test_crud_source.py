@@ -42,7 +42,7 @@ def test_create_source(test_db_session: Session):
     assert created_source.name == mock_source_data["name"]
     assert created_source.api_endpoint == mock_source_data["api_endpoint"]
     assert created_source.scrape_source_url == mock_source_data["scrape_source_url"]
-
+    delete_source(test_db_session, created_source.source_id)
 def test_get_source(test_db_session: Session):
     """Test retrieving a source by ID."""
     # First, create the source to retrieve
@@ -52,17 +52,17 @@ def test_get_source(test_db_session: Session):
     # Retrieve the source
     fetched_source = get_source(test_db_session, created_source.source_id)
     assert fetched_source.source_id == created_source.source_id
-
+    delete_source(test_db_session, created_source.source_id)
 def test_get_source_by_name(test_db_session: Session):
     """Test retrieving a source by name."""
     # First, create the source to retrieve
     source_in = SourceCreate(**mock_source_data)
-    create_source(test_db_session, source_in)
+    created_source = create_source(test_db_session, source_in)
 
     # Retrieve the source by name
     fetched_source = get_source_by_name(test_db_session, mock_source_data["name"])
     assert fetched_source.name == mock_source_data["name"]
-
+    delete_source(test_db_session, created_source.source_id)
 def test_get_sources(test_db_session: Session):
     """Test retrieving a list of sources with pagination."""
     # Create a few sources for pagination test
@@ -71,14 +71,17 @@ def test_get_sources(test_db_session: Session):
         {"name": "Source 2", "api_endpoint": "http://api.source2.com", "scrape_source_url": "http://source2.com"},
         {"name": "Source 3", "api_endpoint": "http://api.source3.com", "scrape_source_url": "http://source3.com"}
     ]
-
+    new_sources = []
     for data in sources_data:
         source_in = SourceCreate(**data)
-        create_source(test_db_session, source_in)
+        new_source = create_source(test_db_session, source_in)
+        new_sources.append(new_source)
 
     # Retrieve paginated sources
     sources = get_sources(test_db_session, skip=0, limit=2)
     assert len(sources) == 2  # Should return only 2 as per limit
+    for source in new_sources:
+        delete_source(test_db_session, source.source_id)
 
 def test_update_source(test_db_session: Session):
     """Test updating a source."""
@@ -93,6 +96,7 @@ def test_update_source(test_db_session: Session):
     # Verify the updated fields
     assert updated_source.name == "Updated Source"
     assert updated_source.api_endpoint == "http://updatedapi.com"
+    delete_source(test_db_session, created_source.source_id)
 
 def test_delete_source(test_db_session: Session):
     """Test deleting a source."""
