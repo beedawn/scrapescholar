@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from fastapi.testclient import TestClient
-
+from api_tools.api_tools import scopus_api_key, scopus_inst_token, parse_data_scopus
 from app.main import app
 from app.main import check_response
 from tests.integration.tools.get_cookie import get_cookie
@@ -53,10 +53,11 @@ def test_academic_data_NOT():
             keyword_one_found = True
         if keyword_two in item["title"]:
             keyword_two_found = True
-        if keyword_one in item["abstract"]:
-            keyword_one_found = True
-        if keyword_two in item["abstract"]:
-            keyword_two_found = True
+        if item["abstract"] and int(item["abstract"]) != 0 is not None:
+            if keyword_one in item["abstract"]:
+                keyword_one_found = True
+            if keyword_two in item["abstract"]:
+                keyword_two_found = True
     assert keyword_one_found == True
     assert keyword_two_found == False
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
