@@ -53,7 +53,7 @@ def test_academic_data_NOT():
             keyword_one_found = True
         if keyword_two in item["title"]:
             keyword_two_found = True
-        if item["abstract"] and int(item["abstract"]) != 0 is not None:
+        if item["abstract"] and scopus_inst_token is not None:
             if keyword_one in item["abstract"]:
                 keyword_one_found = True
             if keyword_two in item["abstract"]:
