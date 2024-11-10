@@ -73,11 +73,13 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
             article_title = article.get('dc:title')
             article_abstract = article.get('dc:description')
             algorithm_score = 0
-            if article_abstract is not None:
-                algorithm_score = algorithm_interface(article_abstract, article_abstract)
+
+            # could be turned on to scan abstract, makes response super slow
+            # if article_abstract is not None:
+            #     algorithm_score = algorithm_interface(article_abstract, article_abstract)
 
             relevance_score = algorithm_interface(keywords, article_title)
-
+            # useless without lines 78-79 uncommented, but response is EXTREMELY SLOW
             if algorithm_score > 0:
                 relevance_score = (relevance_score + algorithm_score) / 2
             # end refactoring
