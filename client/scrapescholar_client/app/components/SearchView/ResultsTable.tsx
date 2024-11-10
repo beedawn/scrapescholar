@@ -149,7 +149,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
     return (
         <>
-        {(abstractText.length>0)?(<AbstractModal setAbstractText={setAbstractText} text={abstractText}/>):
+        {(abstractText.length>0)?(<AbstractModal setAbstractText={setAbstractText} text={abstractText}/>):<></>}
         <div className="overflow-x-auto">
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
                 <thead>
@@ -300,7 +300,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                     ))}
                 </tbody>
             </table>
-        </div>}
+        </div>
         </>
     );
 };
