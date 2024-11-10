@@ -11,7 +11,6 @@ from algorithm.algorithm_interface import algorithm_interface
 
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
-
     if scopus_inst_token is not None:
         encoded_keywords = quote(keywords)
         subject = quote(subject)
@@ -36,7 +35,6 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                       + "&sort=" + sort \
                       + "&subj=" + subject \
                       + "&insttoken=" + insttoken
-        algorithm_interface(keywords, article_title)
     else:
         encoded_keywords = quote(keywords)
         subject = quote(subject)
@@ -72,18 +70,16 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                 link = links[2].get('@href')
             else:
                 link = ""
-
-                # could be refactored into its ownfunction
             article_title = article.get('dc:title')
             article_abstract = article.get('dc:description')
-            algorithm_score =0
+            algorithm_score = 0
             if article_abstract is not None:
                 algorithm_score = algorithm_interface(article_abstract, article_abstract)
 
             relevance_score = algorithm_interface(keywords, article_title)
 
-            if algorithm_score >0 :
-                relevance_score = (relevance_score +algorithm_score)/2
+            if algorithm_score > 0:
+                relevance_score = (relevance_score + algorithm_score) / 2
             # end refactoring
             return_articles.append(SearchResult(
                 article_id=article_id,
