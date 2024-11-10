@@ -151,7 +151,7 @@ def test_graph_accuracy_after_change():
         username_field = driver.find_element(By.NAME, 'username_input')
         password_field = driver.find_element(By.NAME, 'password_input')
         login_button = driver.find_element(By.NAME, 'login_button')
-        time.sleep(10)
+
 
         # Enter login credentials and submit the form
         username_field.send_keys(testuser)

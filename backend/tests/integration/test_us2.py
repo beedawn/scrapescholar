@@ -36,7 +36,7 @@ def test_academic_data_and():
 
 
 def test_academic_data_NOT():
-    keyword_one="fish"
+    keyword_one="lemon"
     keyword_two="pizza"
     api_query = f"{keyword_one}%20AND%20NOT%20{keyword_two}"
     query_string = "&academic_database=Scopus"
