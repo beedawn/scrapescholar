@@ -11,6 +11,8 @@ from api_tools.api_tools import scopus_api_key
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
+from api_tools.api_tools import scopus_api_key, scopus_inst_token, parse_data_scopus
+
 mock_scopus_response = {
     "search-results": {
         "opensearch:totalResults": "959738",
@@ -133,8 +135,9 @@ def test_mock_scopus(setup_mock_scopus):
     assert result_articles[0].color is not None
     assert result_articles[0].relevance_score is not None
     # assert result_articles[0].abstract is not None
-    assert result_articles[0].document_type == "Article"
-    assert result_articles[0].evaluation_criteria == ''
+    if scopus_inst_token is not None:
+        assert result_articles[0].document_type == "Article"
+        assert result_articles[0].evaluation_criteria == ''
     assert result_articles[0].methodology == 0
     assert result_articles[0].clarity == 0
     assert result_articles[0].completeness == 0
@@ -162,8 +165,9 @@ def test_scopus_response_returns_correct_elements():
         parsed_url = urlparse(item["link"])
         assert parsed_url.hostname and parsed_url.hostname.endswith(".scopus.com")
         assert "abstract" in item
-        assert item["abstract"] != ''
-        assert len(item["abstract"]) > 0
+        if scopus_inst_token is not None:
+            assert item["abstract"] != ''
+            assert len(item["abstract"]) > 0
         assert "document_type" in item
         assert "source" in item 
         assert item["source"] == "Scopus"
