@@ -11,7 +11,6 @@ from algorithm.algorithm_interface import algorithm_interface
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
     if scopus_inst_token is not None:
-        print("SCOPUS INST TOKEN")
         encoded_keywords = quote(keywords)
         subject = quote(subject)
         min_year = quote(min_year)
@@ -47,7 +46,6 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
         date_range = min_year + "-" + str(current_year)
         count = "25"
         sort = "relevancy"
-        print("Scopus inst token not found")
         built_query = "https://api.elsevier.com/content/search/scopus?" \
                       + "apiKey=" + key \
                       + "&query=" + encoded_keywords \
@@ -86,7 +84,7 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                 citedby=article.get('citedby-count'),
                 source="Scopus",
                 color='red',
-                relevance_score=random.randint(1, 100),
+                relevance_score=relevance_score,
                 abstract=article.get('dc:description'),
                 document_type=article.get('subtypeDescription'),
                 evaluation_criteria='',
