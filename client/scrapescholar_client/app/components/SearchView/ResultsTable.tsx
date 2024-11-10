@@ -247,7 +247,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                 </a>
                             </td>
                             <td className="border border-gray-300">
-  {result.abstract.length > 0 ? (
+  {result.abstract != null  && result.abstract.length > 0 ? (
     <>
       {result.abstract.slice(0, 200)}...
       <div>
