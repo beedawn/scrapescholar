@@ -7,6 +7,7 @@ import string
 
 dotenv.load_dotenv()
 thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
+dictionary_api_key = os.getenv('DICTIONARY_APIKEY')
 # file_path = os.path.join(os.path.dirname(__file__), 'words_dictionary.json')
 # print("File Path")
 # print(file_path)
@@ -15,7 +16,7 @@ thesaurus_api_key = os.getenv('THESAURUS_APIKEY')
 #     data = json.load(f)
 
 def check_limit(word, set_of_words):
-    if len(word) > 3 and word not in set_of_words:                  ##### do you even need this loop?
+    if len(word) >= 3 and word not in set_of_words:                  ##### do you even need this loop?
         set_of_words.add(word)
         print("Set of Words")
         print(set_of_words)
@@ -23,7 +24,7 @@ def check_limit(word, set_of_words):
 
 def break_word_into_possible_words(word, set_of_words):
     for i in range(len(word)):
-        if i+3 < len(word):
+        if i+3 < len(word)+1:                                             ##### i + 3 saves running the first two iterations of the loop
             #adds to right side by adding characters to end of word
             print("Break word into poss keywords loop:" + str(i))
             new_word = word[:i+3]                                       ###### i + 1 saves one loop
@@ -31,8 +32,8 @@ def break_word_into_possible_words(word, set_of_words):
             check_limit(new_word, set_of_words)
 
         # trims from left side, by moving inward
-        # new_word = word[i:]
-        # check_limit(new_word, set_of_words)
+        new_word = word[i:]
+        check_limit(new_word, set_of_words)
 
         # for j in range(i + 1, len(word) + 1):
         #     substring = word[i:j]
@@ -54,28 +55,6 @@ def calc_score(score, text_list):
         return round(score / weighted_sum * 100, 2)
     else:
         return round(score / len(text_list) * 100, 2)
-
-
-#add new function or modify this one to just break down each word and return a list of the substrings
-def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
-    score = 0
-    #need a way to calculate weight based off total words in text for each score incrementation
-    for keyword in keyword_list:
-        if word == keyword:
-            score += 1
-
-    for keyword in keywords_sliced_list:
-        if word == keyword:
-            score += 0.75
-
-    for synonym in synonyms_list:
-        if word == synonym:
-            score += 0.5
-
-        elif word in synonym:
-            score += 0.25
-
-    return score
 
 
 def api_request(keyword):
@@ -107,17 +86,19 @@ def flatten_list(word_list):
     flat_list = list(itertools.chain.from_iterable(word_list))
     return flat_list
 
+
 def remove_punctuation(text):
     translator = str.maketrans('', '', string.punctuation)
     return text.translate(translator)
+
 
 def algorithm(text, keywords):
     score = 0
     keyword_list = keywords.split()
     print("Keyword List")
     print(keyword_list)
-    no_punctuation_text_list = remove_punctuation(text)
-    text_list = no_punctuation_text_list.split()
+    no_punctuation_text = remove_punctuation(text)
+    text_list = no_punctuation_text.split()
     print("Text List")
     print(text_list)
     synonyms_list = set()
@@ -149,6 +130,69 @@ def algorithm(text, keywords):
     score = calc_score(score, text_list)
 
     return score
+
+
+def clean(text):
+    text_list = set()   
+    no_punctuation_text = remove_punctuation(text)
+    text_list_no_punct = no_punctuation_text.split()
+    for text_item in text_list_no_punct:
+        if len(text_item) > 3:
+            text_list.add(text_item.lower())
+    print("Text List")
+    print(text_list)
+    return(text_list)
+
+
+def compare(text, keywords):
+    num_similar = 0
+    for item in text:
+        if item in keywords:
+            num_similar += 1
+    return([num_similar, len(text)])
+
+def get_stems(keywords):
+    score = 0
+    
+    keyword_stems = set()
+
+    keyword_list = keywords.split()
+    for each_item in keyword_list:
+        keyword_stems.add(each_item)
+    print("Keyword List")
+    print(keyword_stems)
+
+
+    # keywords_list = set()
+    # similar_list = set()
+    
+    # keyword_definition = set()
+
+    for word in keyword_list:
+        print("word = " + word)
+        response = requests.get("https://www.dictionaryapi.com/api/v3/references/thesaurus/json/"+word+"?key="+thesaurus_api_key)
+        responseJSON = response.json()
+        # print(responseJSON)
+        for item in responseJSON:
+            if 'meta' in item and 'stems' in item['meta']:
+                for metaStem in item['meta']['stems']:
+                    if len(metaStem) > 3:
+                        keyword_stems.add(metaStem)
+            else:
+                if len(item) > 3:
+                    keyword_stems.add(item)
+        # definition = str(responseJSON[0]['shortdef']).split()
+        #for word in definition:
+        #    if len(word) > 3:
+        #       keyword_definition.add(word)
+    print("Keyword Stems:")
+    print(keyword_stems)
+    return(keyword_stems)
+    # print("Keyword Definition:")
+    # print(keyword_definition)
+
+def score_word():
+    return
 
 #
 # if __name__ == '__main__':
