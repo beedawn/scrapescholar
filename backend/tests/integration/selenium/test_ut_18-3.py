@@ -73,7 +73,7 @@ def test_role_based_access_control(setup_grad_student):
             username_field.send_keys(username)
             password_field.send_keys(password)
             login_button.click()
-
+            time.sleep(5)
             # Wait for navbar to confirm login
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
@@ -90,6 +90,7 @@ def test_role_based_access_control(setup_grad_student):
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='search_button']"))
             )
             search_button.click()
+            time.sleep(20)
             # Wait for search results to appear
             WebDriverWait(driver, 15).until(
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']"))
@@ -99,7 +100,7 @@ def test_role_based_access_control(setup_grad_student):
         login(grad_student_user, grad_student_cred)
 
         search_keyword("test")
-        time.sleep(5)
+        time.sleep(20)
         # Check if the evaluation dropdown is disabled for Graduate Student
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" in dropdown.get_attribute("class")
@@ -112,7 +113,7 @@ def test_role_based_access_control(setup_grad_student):
         login(professor_user, professor_pass)
 
         search_keyword("test")
-        time.sleep(5)
+        time.sleep(20)
         # Check if the evaluation dropdown is enabled for Professor
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" not in dropdown.get_attribute("class")

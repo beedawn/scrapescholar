@@ -25,9 +25,6 @@ afterEach(() => {
 
 describe('SearchView Component', () => {
   const mockSetLoggedIn = jest.fn();
-  const testInput = "test input"
-  
-
   // UT-3.1
   test('20+ inputs denies more inputs and displays error message', async () => {
     render(<SearchView setLoggedIn={mockSetLoggedIn} />);
@@ -39,11 +36,8 @@ describe('SearchView Component', () => {
     const inputs = screen.getAllByRole('textbox');
     expect(inputs.length).toBeLessThanOrEqual(20);
     const error_msg=/Maximum 20 keywords allowed./i;
-
     await waitFor(async () => {
         expect(await screen.findByText(error_msg)).toBeInTheDocument();
   });
-
-
 });
 });
