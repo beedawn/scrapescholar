@@ -1,4 +1,3 @@
-#http://0.0.0.0:8000/academic_data?keywords=a%20AND%20b%20AND%20c%20AND%20d%20AND%20e%20AND%20f%20AND%20e%20AND%20f%20AND%20g%20AND%20h%20AND%20i%20AND%20j%20AND%20k%20AND%20l%20AND%20m%20AND%20n%20AND%20o%20AND%20p%20AND%20q%20AND%20q%20AND%20q&academic_database=Scopus&academic_database=ScienceDirect
 
 from fastapi.testclient import TestClient
 from app.main import app
