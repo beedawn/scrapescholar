@@ -38,6 +38,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     };
     const dropdown_values = Object.values(Dropdown);
     console.log(inputs)
+
+    const max_inputs = 20
     return (
         <>
        
@@ -57,7 +59,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     className="w-full"  defaultValue='Past Searches'/>
                 <form onSubmit={handleResults}>
                
-                    <Button onClick={()=>{if(inputs.length<21){addInput()}}} className="m-5">
+                    <Button onClick={()=>{if(inputs.length<max_inputs){addInput()}}} className="m-5">
                         +
                     </Button>
                     <span data-testid="search_button">
@@ -65,7 +67,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                         Search
                     </Button>
                     </span><div>
-                    {inputs.length>20?<>Maximum 20 keywords allowed.</>:<></>}
+                    {inputs.length>max_inputs-1?<>Maximum 20 keywords allowed.</>:<></>}
                     </div>
                     {inputs.map((input: string, index: number) => {
                         return (<div key={index}>
