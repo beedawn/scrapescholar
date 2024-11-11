@@ -23,7 +23,7 @@ afterEach(() => {
 
 
 
-describe('SearchView Component', () => {
+describe('SearchView Component US-3', () => {
   const mockSetLoggedIn = jest.fn();
   // UT-3.1
   test('20+ inputs denies more inputs and displays error message', async () => {
