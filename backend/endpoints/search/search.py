@@ -48,8 +48,6 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
 
     # Query the last 300 searches for the authenticated user
     searches = get_300_search(db=db, current_user=current_user)
-    #TODO
-    #need logic in here somewhere to get shared searches, get associated search info and add to response
     shared_searches = get_shared_searches(db, current_user)
     print(shared_searches)
 

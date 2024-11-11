@@ -1,4 +1,6 @@
 # app/main.py
+from http.client import HTTPException
+
 from fastapi import FastAPI, Query,Cookie, Depends
 from fastapi.responses import JSONResponse
 
@@ -118,6 +120,7 @@ async def multiple_apis(keywords: str,
 
     if search_valid and search_id:
         return {"search_id": search_id, "articles": articles}
+
     else:
         return JSONResponse(
             status_code=404,
