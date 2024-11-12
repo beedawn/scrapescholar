@@ -12,6 +12,7 @@ import Loading from '../components/Loading';
 import UserManagement from '../components/UserManagement/UserManagement';
 import Relevance from '../types/Relevance';
 import { init } from 'next/dist/compiled/webpack/webpack';
+import ArticleModal from '../components/SearchView/modal/ArticleModal';
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -51,6 +52,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [openUserManagement, setOpenUserManagement]=useState<boolean>(false);
     const [relevanceChanged, setRelevanceChanged]=useState<boolean>(false);
     const [selectedSearchIdState, setSelectedSearchIdState]=useState<number>();
+
+    const [addArticleOpen, setAddArticleOpen]=useState<boolean>(false);
     const sumResults = (results:ResultItem[], comparison:string) =>{
         let sum = 0
         if (results!==undefined){
@@ -245,7 +248,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         
     }
 
+    const addArticleView = () =>{
+        setAddArticleOpen(!addArticleOpen)
 
+    }
     const handleArticleClick = async (articleId: number) => {
         setSelectedArticleId(articleId);
         setIsSidebarOpen(true);
@@ -338,6 +344,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 {error ? (<p>{error.message}</p>) 
                 : loading ? <Loading /> : openUserManagement?<><UserManagement/></>:
                 dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
+                addArticleOpen? <ArticleModal addArticleView={addArticleView} />:
                 <SearchResults 
                     setResults={setResults} 
                     displayInputs={joinedInputsString} 
@@ -352,7 +359,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     setDisplayInputs={setJoinedInputsString}
                     onArticleClick={handleArticleClick}
                     setRelevanceChanged={setRelevanceChanged} 
-                    relevanceChanged={relevanceChanged}/>}
+                    relevanceChanged={relevanceChanged}
+                    addArticleView={addArticleView}/>}
             </div>
     
             {/* Render the CommentsSidebar conditionally */}
