@@ -4,7 +4,8 @@ import { ResultItem } from '../../views/SearchView';
 import SearchHeader from './SearchHeader';
 import ResultsTable from './ResultsTable';
 import apiCalls from '@/app/api/apiCalls';
-import CommentsSidebar from './CommentsSidebar'; // Import the CommentsSidebar component
+import CommentsSidebar from './CommentsSidebar'; 
+import Button from '../Button';
 
 interface SearchResultsProps {
     displayInputs: string[];
@@ -62,7 +63,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             {disableD3 ? (<></>) : (<>
                                 <BubblePlot data={bubbleInputs} /></>)}
                         </div>
-                        <div className="">New Article</div>
+                        <div className="w-full text-right"><Button>Add Article</Button></div>
                         <ResultsTable setResults={setResults}
                             results={results}
                             selectedArticle={selectedArticle}
