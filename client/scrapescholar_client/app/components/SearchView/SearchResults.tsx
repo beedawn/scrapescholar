@@ -63,7 +63,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             {disableD3 ? (<></>) : (<>
                                 <BubblePlot data={bubbleInputs} /></>)}
                         </div>
-                        <div className="w-full text-right"><Button>Add Article</Button></div>
+                        <div className="w-full text-right"><Button>Add Publication</Button></div>
                         <ResultsTable setResults={setResults}
                             results={results}
                             selectedArticle={selectedArticle}
