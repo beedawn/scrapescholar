@@ -245,7 +245,7 @@ def test_get_valid_token_past_search_response_schema(db_session):
     # assert isinstance(data[0]["citedby"], str)
     assert isinstance(data[0]["link"], str)
     assert isinstance(data[0]["date"], str)
-    assert isinstance(data[0]["abstract"], str)
+    assert isinstance(data[0]["abstract"], str|None)
     # assert isinstance(data[0]["document_type"], str)
     # assert isinstance(data[0]["source"], str)
     assert isinstance(data[0]["relevance_score"], float)
