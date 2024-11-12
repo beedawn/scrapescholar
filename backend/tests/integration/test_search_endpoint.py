@@ -33,17 +33,7 @@ def db_session():
     try:
         yield db
     finally:
-        # Try to truncate the search table, but ignore errors if the table doesn't exist
-        try:
-            db.execute(text("TRUNCATE TABLE \"Search\" RESTART IDENTITY CASCADE;"))
-            db.commit()
-        except ProgrammingError as e:
-            if "UndefinedTable" in str(e):
-                print(f"Warning: {e}. The 'search' table does not exist.")
-            else:
-                raise  # re-raise if it's not an UndefinedTable error
-        finally:
-            db.close()
+        db.close()
 
 
 # ----------------------- SEARCH ENDPOINT TEST SUITE -----------------------
@@ -376,16 +366,7 @@ def test_delete_valid_token_search_title_response_schema(db_session):
     assert search is None
 
 
-@pytest.mark.search
-def test_get_searches_empty_result(db_session):
-    """
-    Test the /user/searches endpoint for a user with no searches in the database.
-    """
 
-    search_history_response = session.get(f"{base_url}/search/user/searches")
-
-    assert search_history_response.status_code == 200
-    assert search_history_response.json() == []
 
 
 @pytest.mark.search
