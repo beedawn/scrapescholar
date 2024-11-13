@@ -115,7 +115,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
                 newDocument= DocumentType.Book;
                 break;
             default:
-                newDocument = DocumentType.None;
+                newDocument = DocumentType.Document;
         }
 
         console.log(newArticle);
@@ -124,7 +124,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
     const dropdownSourceChange = (e: any) => {
         const selectedRole = e.target.value;
-        let newSource: Source;
+    
 
         for (let item of databases){
             if (item.name == selectedRole){
