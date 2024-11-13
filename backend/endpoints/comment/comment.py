@@ -19,7 +19,7 @@ async def create_new_comment(
         db: Session = Depends(get_db),
         access_token: str = Cookie(None)
 ):
-    current_user = await get_current_user_modular(db=db, token=access_token)
+    current_user = get_current_user_modular(db=db, token=access_token)
 
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
@@ -42,7 +42,7 @@ async def update_existing_comment(
         access_token: str = Cookie(None)
 
 ):
-    current_user = await get_current_user_modular(db=db, token=access_token)
+    current_user = get_current_user_modular(db=db, token=access_token)
 
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
@@ -65,7 +65,7 @@ async def remove_comment(
         access_token: str = Cookie(None),
         authorization: str = Header(None)
 ):
-    current_user = await get_current_user_modular(db=db, token=access_token)
+    current_user = get_current_user_modular(db=db, token=access_token)
 
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
