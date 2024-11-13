@@ -4,8 +4,6 @@ from sqlalchemy.orm import Session
 from app.crud.article import create_article, get_article, delete_article, update_article
 from app.schemas.article import ArticleCreate, ArticleUpdate, Article
 from app.db.session import get_db
-from utils.auth import get_current_user
-from app.models.user import User
 from typing import Annotated
 from auth_tools.get_user import get_current_user_modular
 
