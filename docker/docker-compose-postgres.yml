@@ -20,7 +20,8 @@ services:
   init_db:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: postgres/Dockerfile
+    image: scrpaecholarDB:latest
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
