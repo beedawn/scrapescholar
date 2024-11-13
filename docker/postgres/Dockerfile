@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ../../backend /app/backend
 
 # Copy the init_db script to the Docker image
-COPY init_db.sh /app/init_db.sh
+COPY docker/postgres/init_db.sh /app/init_db.sh
 
 # Install dependencies
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt

@@ -19,8 +19,8 @@ services:
 
   init_db:
     build:
-      context: .
-      dockerfile: postgres/Dockerfile
+      context: ..
+      dockerfile: docker/postgres/Dockerfile
     image: scrapescholardb:latest
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
