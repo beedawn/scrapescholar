@@ -45,5 +45,6 @@ jobs:
       - name: Build and Test with Docker Compose
         run: |
           docker-compose -f docker/docker-compose-postgres.yml --env-file .env up -d --build
-      - name: Tear down Docker Compose
-        run: docker-compose down
+
+      - name: Stop and remove containers
+        run: docker-compose -f docker/docker-compose-postgres.yml down
