@@ -36,6 +36,12 @@ jobs:
           echo "TEST_USER=${{ secrets.TEST_USER}}" >> .env
           echo "TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}" >> .env
 
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.tag_name')/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+        shell: bash          
+
       - name: Build and Test with Docker Compose
         run: |
           docker-compose --env-file .env up -d --build
