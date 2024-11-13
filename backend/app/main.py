@@ -11,6 +11,8 @@ from api_tools.api_tools import scopus_api_key
 #end of globals stuff
 from app.db.session import get_db
 
+from app.crud.source import get_source_by_name
+
 from fastapi.middleware.cors import CORSMiddleware
 from endpoints.role import role
 from endpoints.user import user
@@ -53,7 +55,7 @@ def get_db():
 async def health_check():
     return {"message": "Hello World"}
 
-
+db = get_db()
 # Include the auth routes in the main app
 app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
@@ -129,6 +131,12 @@ async def multiple_apis(keywords: str,
 
 
 @app.get("/academic_sources")
-async def multiple_apis():
+async def academic_sources(db: Session = Depends(get_db)):
     database_list = await get_database_list('academic_databases/')
-    return database_list
+    list_of_sources = []
+    for item in database_list:
+        source=get_source_by_name(db, item)
+        list_of_sources.append({"name":source.name, "source_id":source.source_id}
+        )
+
+    return list_of_sources

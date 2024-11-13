@@ -6,13 +6,22 @@ interface SourcesAccordianProps {
     removeFromUserDatabaseList: (item: string) => void;
 }
 
+interface DatabaseItem {
+    name: string;
+    source_id:number;
+}
+
 const SourcesAccordian: React.FC<SourcesAccordianProps> = ({ addToUserDatabaseList, removeFromUserDatabaseList }) => {
     const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
-    const [databases, setDatabases] = useState([])
+    const [databases, setDatabases] = useState<string[]>([""])
     useEffect(() => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabases();
-            setDatabases(db_list);
+            let name_list = []
+            for (let item of db_list){
+                name_list.push(item.name)
+            }
+            setDatabases(name_list);
             // Initialize checkboxes with default checked state
             const initialCheckboxes = db_list.reduce(
                 (accumulator: any[], db_source: any) => ({ ...accumulator, [db_source]: true }), {});
