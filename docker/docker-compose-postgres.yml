@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: postgres/Dockerfile
-    image: scrpaecholarDB:latest
+    image: scrapescholardb:latest
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
