@@ -12,7 +12,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
 
 
     const [isAdminUser, setIsAdminUser]= useState<boolean>(false);
-    const { getAPIDatabases, postAPILogin, getAPIResults, isAdmin } = apiCalls();
+    const {  isAdmin } = apiCalls();
     useEffect(()=>{
     
         const findAdmin= async()=>{
@@ -26,8 +26,6 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
         findAdmin();
     },[])
 
-
-    const [databases, setDatabases] = useState([])
 
     const [hoveredClasses, setHoveredClasses]=useState<any>({1:"text-blue-400 underline",2:"text-blue-400 underline"});
     const updateHovered = (key:number) => {

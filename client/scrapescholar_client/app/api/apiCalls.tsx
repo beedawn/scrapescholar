@@ -17,6 +17,20 @@ const apiCalls = () => {
     }
   }
 
+  const getAPIDatabasesAndIDs = async () => {
+    const url = `http://${host}:8000/academic_sources_id`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      return [];
+    }
+  }
+
   const postAPILogin = async (username: string, password: string) => {
     const url = `http://${host}:8000/auth/login`;
     const formData = new URLSearchParams();
@@ -573,7 +587,9 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole   };
+    deleteComment, downloadURL, putSearchShare, 
+    isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole,
+    getAPIDatabasesAndIDs  };
 
 }
 

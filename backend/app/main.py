@@ -133,17 +133,12 @@ async def multiple_apis(keywords: str,
 @app.get("/academic_sources")
 async def academic_sources(db: Session = Depends(get_db)):
     database_list = await get_database_list('academic_databases/')
-    list_of_sources = []
-    for item in database_list:
-        source=get_source_by_name(db, item)
-        list_of_sources.append({"name":source.name, "source_id":source.source_id}
-        )
-
     return database_list
 
 
 @app.get("/academic_sources_id")
 async def academic_sources(db: Session = Depends(get_db)):
+    # get list from DB instead
     database_list = await get_database_list('academic_databases/')
     list_of_sources = []
     for item in database_list:

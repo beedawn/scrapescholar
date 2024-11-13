@@ -7,7 +7,7 @@ interface ShareModalProps {
     text: string;
 }
 
-const { putSearchShare } = apiCalls();
+
 //need to get search id
 const AbstractModal: React.FC<ShareModalProps> = ({ setAbstractText, text }) => {
     const clearModal = () => {

@@ -31,22 +31,28 @@ export interface NewArticle {
     documenttype: string
 }
 
+interface DatabaseItem{
+    name:string;
+    source_id:number;
+}
+
 
 // need to get list of sources either from navbar or just request again from backend for add article dropdown
 
 
 
-const { getAPIDatabases } = apiCalls();
+const { getAPIDatabasesAndIDs } = apiCalls();
 //need to get search id
 const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     const clearModal = () => {
         addArticleView();
     }
-    const [databases, setDatabases] = useState([])
+    const [databases, setDatabases] = useState<DatabaseItem[]>([])
+    
 
     useEffect(() => {
         const fetchDatabases = async () => {
-            const db_list = await getAPIDatabases();
+            const db_list = await getAPIDatabasesAndIDs();
             setDatabases(db_list);
             console.log(db_list)
         };
@@ -75,7 +81,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0 || newArticle.role_id == 0 ) {
+        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0  ) {
             setError(true);
         } else {
             // const response = await addArticle(newArticle);
@@ -119,18 +125,17 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     const dropdownSourceChange = (e: any) => {
         const selectedRole = e.target.value;
         let newSource: Source;
-        switch (selectedRole) {
-            case ("ScienceDirect"):
-                newSource = Source.ScienceDirect;
-                break;
-            case ("Scopus"):
-                newSource = Source.Scopus;
-                break;
-    
-            default:
-                newSource = Source.None;
+
+        for (let item of databases){
+            if (item.name == selectedRole){
+                updateArticleState("source_id", item.source_id)
+            }
+            else{
+                updateArticleState("source_id",0)
+            }
+
         }
-        updateArticleState("source_id", newSource)
+       
     }
 
     return (
@@ -249,7 +254,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <DropdownSearchBox value={Source[newArticle.source_id]} valueArray={databases} onDropdownChange={dropdownSourceChange} defaultValue="Source"
+                                        <DropdownSearchBox value={Source[newArticle.source_id]} valueArray={databases.map((db)=>db.name)} onDropdownChange={dropdownSourceChange} defaultValue="Source"
                                             data-testid="new_user_role" />
                                     </div>
                                 </div>
