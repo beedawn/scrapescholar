@@ -65,20 +65,20 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
     const submitUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (newArticle.title.length == 0 || newArticle.password.length == 0 || newArticle.citedby.length == 0 || newArticle.role_id == 0 || newArticle.password.length < 8) {
+        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0 || newArticle.role_id == 0 ) {
             setError(true);
         } else {
-            const response = await addArticle(newArticle);
+            // const response = await addArticle(newArticle);
             setNewArticle({
                 title: "",
                 year: "",
                 citedby: "",
                 role_id: 0
             })
-            if (response === null) {
-                setError(true)
-                return
-            }
+            // if (response === null) {
+            //     setError(true)
+            //     return
+            // }
             clearModal()
         }
     }
