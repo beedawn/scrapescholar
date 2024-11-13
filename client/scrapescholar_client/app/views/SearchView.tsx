@@ -217,6 +217,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     const handlePastSearchSelection = async (event:any)=>{
         const selectedSearchId = event.target.value;
+        setCurrentSearchId(selectedSearchId)
         setSelectedSearchIdState(selectedSearchId)
         setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
@@ -328,6 +329,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange} 
                     addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList} 
                     searches={searches} handlePastSearchSelection={handlePastSearchSelection} setOpenUserManagement={setOpenUserManagement}
+                    
                 />
             </div>
     

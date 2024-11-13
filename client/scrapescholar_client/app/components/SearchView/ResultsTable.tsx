@@ -5,6 +5,8 @@ import DynamicUserField from './DynamicUserField';
 import ColorDropdown from './ColorDropdown';
 import EvaluationCriteriaDropdown from './EvaluationCriteriaDropdown';
 import apiCalls from '@/app/api/apiCalls';
+import Button from '../Button';
+import AbstractModal from './modal/AbstractModal';
 
 export interface EditableCell {
     relevance: boolean;
@@ -60,6 +62,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
     const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
+    const [abstractText,setAbstractText]=useState<string>("");
     const handleSort = (field: keyof ResultItem, sortDirection: string) => {
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);
@@ -142,7 +145,11 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         }
         //send request to backend to update value?
     }
+
+
     return (
+        <>
+        {(abstractText.length>0)?(<AbstractModal setAbstractText={setAbstractText} text={abstractText}/>):<></>}
         <div className="overflow-x-auto">
             <table className=" min-w-full table-auto border-collapse border border-gray-300">
                 <thead>
@@ -239,7 +246,18 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                     {result.link}
                                 </a>
                             </td>
-                            <td className="border border-gray-300" >{result.abstract}</td>
+                            <td className="border border-gray-300">
+  {result.abstract != null  && result.abstract.length > 0 ? (
+    <>
+      {result.abstract.slice(0, 200)}...
+      <div>
+        <Button onClick={()=>{setAbstractText(result.abstract)}}>Expand</Button>
+      </div>
+    </>
+  ) : (
+    <></>
+  )}
+</td>
                             <td className="border border-gray-300" >{result.document_type}</td>
                             <td className="border border-gray-300" >{result.source}</td>
                             <td className="border border-gray-300" >
@@ -283,6 +301,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                 </tbody>
             </table>
         </div>
+        </>
     );
 };
 

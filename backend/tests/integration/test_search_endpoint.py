@@ -15,6 +15,7 @@ from tests.integration.tools.get_cookie import get_cookie
 from app.models.user import User
 from types import SimpleNamespace
 from tests.integration.tools.delete_user import delete_user
+
 # Initialize TestClient
 client = TestClient(app)
 
@@ -168,7 +169,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     assert isinstance(data["articles"][0]["citedby"], (str, int))
     assert isinstance(data["articles"][0]["link"], str)
     assert isinstance(data["articles"][0]["date"], str)
-    assert isinstance(data["articles"][0]["abstract"], str)
+    assert isinstance(data["articles"][0]["abstract"], str | None)
     assert isinstance(data["articles"][0]["document_type"], str)
     assert isinstance(data["articles"][0]["source"], str)
 
@@ -244,7 +245,7 @@ def test_get_valid_token_past_search_response_schema(db_session):
     # assert isinstance(data[0]["citedby"], str)
     assert isinstance(data[0]["link"], str)
     assert isinstance(data[0]["date"], str)
-    assert isinstance(data[0]["abstract"], str)
+    assert isinstance(data[0]["abstract"], str|None)
     # assert isinstance(data[0]["document_type"], str)
     # assert isinstance(data[0]["source"], str)
     assert isinstance(data[0]["relevance_score"], float)

@@ -3,34 +3,60 @@ import datetime
 import csv
 from urllib.parse import quote
 import random
-from api_tools.api_tools import scopus_api_key, parse_data_scopus
+from api_tools.api_tools import scopus_api_key, scopus_inst_token, parse_data_scopus
 from academic_databases.SearchResult import SearchResult
 
 from typing import List
 from algorithm.algorithm_interface import algorithm_interface
 
-def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
-    encoded_keywords = quote(keywords)
-    subject = quote(subject)
-    min_year = quote(min_year)
-    #Other Parameters
-    http_accept = "application/json"
-    view = "STANDARD"  #Note: COMPLETE view is inaccessible with a standard token
-    today = datetime.date.today()
-    current_year = today.year
-    date_range = min_year + "-" + str(current_year)
-    count = "25"
-    sort = "relevancy"
 
-    built_query = "https://api.elsevier.com/content/search/scopus?" \
-                  + "apiKey=" + key \
-                  + "&query=" + encoded_keywords \
-                  + "&httpAccept=" + http_accept \
-                  + "&view=" + view \
-                  + "&date=" + date_range \
-                  + "&count=" + count \
-                  + "&sort=" + sort \
-                  + "&subj=" + subject
+def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
+    if scopus_inst_token is not None:
+        encoded_keywords = quote(keywords)
+        subject = quote(subject)
+        min_year = quote(min_year)
+        # Other Parameters
+        http_accept = "application/json"
+        view = "COMPLETE"  # Note: COMPLETE view is needed to view abstract
+        today = datetime.date.today()
+        current_year = today.year
+        date_range = min_year + "-" + str(current_year)
+        count = "25"
+        sort = "relevancy"
+        insttoken = scopus_inst_token
+
+        built_query = "https://api.elsevier.com/content/search/scopus?" \
+                      + "apiKey=" + key \
+                      + "&query=" + encoded_keywords \
+                      + "&httpAccept=" + http_accept \
+                      + "&view=" + view \
+                      + "&date=" + date_range \
+                      + "&count=" + count \
+                      + "&sort=" + sort \
+                      + "&subj=" + subject \
+                      + "&insttoken=" + insttoken
+    else:
+        encoded_keywords = quote(keywords)
+        subject = quote(subject)
+        min_year = quote(min_year)
+        # Other Parameters
+        http_accept = "application/json"
+        view = "STANDARD"  # Note: COMPLETE view is inaccessible with a standard token
+        today = datetime.date.today()
+        current_year = today.year
+        date_range = min_year + "-" + str(current_year)
+        count = "25"
+        sort = "relevancy"
+        built_query = "https://api.elsevier.com/content/search/scopus?" \
+                      + "apiKey=" + key \
+                      + "&query=" + encoded_keywords \
+                      + "&httpAccept=" + http_accept \
+                      + "&view=" + view \
+                      + "&date=" + date_range \
+                      + "&count=" + count \
+                      + "&sort=" + sort \
+                      + "&subj=" + subject
+
     response = requests.get(built_query)
     articles = parse_data_scopus(response)
     #return entries to scopus endpoint response
@@ -44,12 +70,18 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                 link = links[2].get('@href')
             else:
                 link = ""
-
-                # could be refactored into its ownfunction
             article_title = article.get('dc:title')
+            article_abstract = article.get('dc:description')
+            algorithm_score = 0
+
+            # could be turned on to scan abstract, makes response super slow
+            # if article_abstract is not None:
+            #     algorithm_score = algorithm_interface(article_abstract, article_abstract)
 
             relevance_score = algorithm_interface(keywords, article_title)
-
+            # useless without lines 78-79 uncommented, but response is EXTREMELY SLOW
+            if algorithm_score > 0:
+                relevance_score = (relevance_score + algorithm_score) / 2
             # end refactoring
             return_articles.append(SearchResult(
                 article_id=article_id,
@@ -60,8 +92,8 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                 source="Scopus",
                 color='red',
                 relevance_score=relevance_score,
-                abstract='',
-                document_type=article.get("subtypeDescription"),
+                abstract=article.get('dc:description'),
+                document_type=article.get('subtypeDescription'),
                 evaluation_criteria='',
                 methodology=0,
                 clarity=0,

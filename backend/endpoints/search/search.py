@@ -48,8 +48,6 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
 
     # Query the last 300 searches for the authenticated user
     searches = get_300_search(db=db, current_user=current_user)
-    #TODO
-    #need logic in here somewhere to get shared searches, get associated search info and add to response
     shared_searches = get_shared_searches(db, current_user)
     print(shared_searches)
 
@@ -131,6 +129,7 @@ def get_search_title(db: Session = Depends(get_db), access_token: Annotated[str 
 
     # Find the search
     search = find_search(db=db, current_user=current_user, search_id=search_id)
+
     return {'title': search.title, 'keywords': search.search_keywords} if search else []
 
 
@@ -203,6 +202,15 @@ def find_search(db, current_user, search_id):
             .filter(Search.user_id == current_user.user_id, Search.search_id == search_id)
             .first()
         )
+        if search is None:
+            search = (
+                db.query(Search)
+                .join(SearchShare, Search.search_id == SearchShare.search_id)
+                .filter(SearchShare.shared_with_user_id == current_user.user_id)
+                .filter(Search.search_id == search_id)
+                .order_by(Search.search_date.desc())
+                .first()
+            )
         return search
     except Exception as e:
         if DEBUG_SCRAPESCHOLAR:

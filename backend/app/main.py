@@ -1,4 +1,6 @@
 # app/main.py
+from http.client import HTTPException
+
 from fastapi import FastAPI, Query,Cookie, Depends
 from fastapi.responses import JSONResponse
 
@@ -91,7 +93,17 @@ async def multiple_apis(keywords: str,
             content={"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}
         )
     keywords_list = keywords.split()
-
+    keyword_limit = 20
+    count_keyword = 0
+    for word in keywords_list:
+        if word !="AND" and word != "OR" and word != "NOT":
+            count_keyword += 1
+            print(word)
+    if count_keyword > keyword_limit:
+        return JSONResponse(
+            status_code=413,
+            content={"message": "Too many keywords"}
+        )
     response = []
     id = 0
     database_list = await get_database_list('academic_databases/')
@@ -108,6 +120,7 @@ async def multiple_apis(keywords: str,
 
     if search_valid and search_id:
         return {"search_id": search_id, "articles": articles}
+
     else:
         return JSONResponse(
             status_code=404,

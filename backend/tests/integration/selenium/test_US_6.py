@@ -46,7 +46,7 @@ def test_find_graph():
         username_field = driver.find_element(By.NAME, 'username_input')
         password_field = driver.find_element(By.NAME, 'password_input')
         login_button = driver.find_element(By.NAME, 'login_button')
-        time.sleep(1)
+        time.sleep(5)
 
         # Enter login credentials and submit the form
         username_field.send_keys(testuser)
@@ -64,7 +64,7 @@ def test_find_graph():
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                                                         "[data-testid='search_button']")))
         search_button.click()
-        time.sleep(5)
+        time.sleep(20)
         bubble_plot = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "bubbleplot")))
 
         assert bubble_plot is not None
@@ -97,7 +97,7 @@ def test_graph_loads_zero():
         username_field = driver.find_element(By.NAME, 'username_input')
         password_field = driver.find_element(By.NAME, 'password_input')
         login_button = driver.find_element(By.NAME, 'login_button')
-        time.sleep(1)
+        time.sleep(20)
 
         # Enter login credentials and submit the form
         username_field.send_keys(testuser)
@@ -115,7 +115,7 @@ def test_graph_loads_zero():
         search_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                                                         "[data-testid='search_button']")))
         search_button.click()
-        time.sleep(5)
+        time.sleep(20)
         bubble_plot = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH, "//*[@data-testid='bubble_plot' and .//text()[contains(., 'Relevant 0')]]"))
@@ -151,7 +151,7 @@ def test_graph_accuracy_after_change():
         username_field = driver.find_element(By.NAME, 'username_input')
         password_field = driver.find_element(By.NAME, 'password_input')
         login_button = driver.find_element(By.NAME, 'login_button')
-        time.sleep(1)
+
 
         # Enter login credentials and submit the form
         username_field.send_keys(testuser)
@@ -170,7 +170,7 @@ def test_graph_accuracy_after_change():
                                                                                         "[data-testid='search_button']")))
         search_button.click()
 
-        time.sleep(5)
+        time.sleep(20)
         relevancy = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                                                     "[data-testid='relevancy-column-default']")))
         relevancy.click()

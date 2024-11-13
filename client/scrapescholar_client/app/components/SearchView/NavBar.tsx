@@ -37,8 +37,12 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
         setLoggedIn(false);
     };
     const dropdown_values = Object.values(Dropdown);
+    console.log(inputs)
+
+    const max_inputs = 20
     return (
         <>
+       
             <div className="p-5 max-w-sm mr-auto float-left">
                 <div className="float-right pb-6" data-testid="logout-button">
                     <Button onClick={handleLogout} className="" >
@@ -54,14 +58,17 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                         handlePastSearchSelection(selectedTitle)} valueArray={searches}
                     className="w-full"  defaultValue='Past Searches'/>
                 <form onSubmit={handleResults}>
-                    <Button onClick={addInput} className="m-5">
+               
+                    <Button onClick={()=>{if(inputs.length<max_inputs){addInput()}}} className="m-5">
                         +
                     </Button>
                     <span data-testid="search_button">
                     <Button type="submit">
                         Search
                     </Button>
-                    </span>
+                    </span><div>
+                    {inputs.length>max_inputs-1?<>Maximum 20 keywords allowed.</>:<></>}
+                    </div>
                     {inputs.map((input: string, index: number) => {
                         return (<div key={index}>
                             <SearchBox value={input} onChange={(e) => 

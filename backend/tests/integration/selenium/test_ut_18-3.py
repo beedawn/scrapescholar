@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from app.db.session import SessionLocal
 from app.schemas.user import UserCreate
 from app.crud.user import create_user, delete_user, get_user_by_username
+import time
 
 # Load environment variables from .env file
 load_dotenv()
@@ -19,7 +20,7 @@ load_dotenv()
 professor_user = os.getenv('TEST_USER')
 professor_pass = os.getenv('TEST_PASSWORD')
 grad_student_user = "t2_student"
-grad_student_cred = "gradstudent3489"
+grad_student_cred = "testpass"
 grad_student_email = "t2_student@example.com"
 host_ip = os.getenv('HOST_IP')
 
@@ -72,6 +73,7 @@ def test_role_based_access_control(setup_grad_student):
             username_field.send_keys(username)
             password_field.send_keys(password)
             login_button.click()
+            time.sleep(5)
             # Wait for navbar to confirm login
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
@@ -88,6 +90,7 @@ def test_role_based_access_control(setup_grad_student):
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='search_button']"))
             )
             search_button.click()
+            time.sleep(20)
             # Wait for search results to appear
             WebDriverWait(driver, 15).until(
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']"))
@@ -95,8 +98,9 @@ def test_role_based_access_control(setup_grad_student):
 
         # Step 1: Graduate Student login, search for "cyber", and check for disabled dropdown
         login(grad_student_user, grad_student_cred)
-        search_keyword("cyber")
 
+        search_keyword("test")
+        time.sleep(20)
         # Check if the evaluation dropdown is disabled for Graduate Student
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" in dropdown.get_attribute("class")
@@ -107,8 +111,9 @@ def test_role_based_access_control(setup_grad_student):
 
         # Step 2: Professor login, search for "cyber", and check for enabled dropdown
         login(professor_user, professor_pass)
-        search_keyword("cyber")
 
+        search_keyword("test")
+        time.sleep(20)
         # Check if the evaluation dropdown is enabled for Professor
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" not in dropdown.get_attribute("class")

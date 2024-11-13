@@ -217,6 +217,7 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
+      console.log("delete search called!")
       const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
       data = await fetch(url, {
         method: "DELETE", credentials: "include"
