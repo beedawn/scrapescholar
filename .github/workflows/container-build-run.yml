@@ -1,0 +1,45 @@
+name: Build and Test with Docker Compose
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - '*'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Create .env file
+        run: |
+          echo "SCIENCEDIRECT_APIKEY=${{secrets.SCIENCEDIRECT_APIKEY}}" >> .env
+          echo "SCOPUS_APIKEY=${{secrets.SCOPUS_APIKEY}}" >> .env
+          echo "DATABASE_URL=${{secrets.DATABASE_URL}}" >> .env
+          echo "PYTHONPATH=./backend" >> .env
+          echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> .env
+          echo "POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> .env
+          echo "POSTGRES_DB=${{secrets.POSTGRES_DB}}" >> .env
+          echo "POSTGRES_SERVER=${{secrets.POSTGRES_SERVER}}" >> .env
+          echo "POSTGRES_PORT=${{secrets.POSTGRES_PORT}}" >> .env
+          echo "SECRET_KEY=${{secrets.SECRET_KEY}}" >> .env
+          echo "ENCRYPTION_KEY=${{secrets.ENCRYPTION_KEY}}" >> .env
+          echo "HOST_IP=${{secrets.HOST_IP}}" >> .env
+          echo "TEST_USER=${{ secrets.TEST_USER}}" >> .env
+          echo "TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}" >> .env
+
+      - name: Build and Test with Docker Compose
+        run: |
+          docker-compose --env-file .env up -d --build
+          # Run your tests here, or add specific commands for testing
+
+      - name: Tear down Docker Compose
+        run: docker-compose down
