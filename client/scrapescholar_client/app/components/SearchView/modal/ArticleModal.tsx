@@ -21,6 +21,7 @@ export interface NewArticle {
     title: string,
     year: string,
     citedby: string,
+    
     role_id: number
 }
 
@@ -49,7 +50,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     const [newArticle, setNewArticle] = useState<NewArticle>({
         title: "",
         year: "",
-        email: "",
+        citedby: "",
         role_id: 0
     });
     const [error, setError] = useState<boolean>(false);
@@ -64,14 +65,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
     const submitUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (newArticle.title.length == 0 || newArticle.password.length == 0 || newArticle.email.length == 0 || newArticle.role_id == 0 || newArticle.password.length < 8) {
+        if (newArticle.title.length == 0 || newArticle.password.length == 0 || newArticle.citedby.length == 0 || newArticle.role_id == 0 || newArticle.password.length < 8) {
             setError(true);
         } else {
             const response = await addArticle(newArticle);
             setNewArticle({
                 title: "",
                 year: "",
-                email: "",
+                citedby: "",
                 role_id: 0
             })
             if (response === null) {
