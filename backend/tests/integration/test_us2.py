@@ -13,7 +13,7 @@ from tests.integration.tools.base_url import base_url
 
 #UT-2.3
 def test_academic_data_and():
-    keyword_one="cheese"
+    keyword_one="yogurt"
     keyword_two="milk"
     api_query = f"{keyword_one}%20AND%20{keyword_two}"
     query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
