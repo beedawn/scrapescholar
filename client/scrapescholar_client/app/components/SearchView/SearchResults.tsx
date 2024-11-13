@@ -24,7 +24,6 @@ interface SearchResultsProps {
     onArticleClick: (articleId: number) => Promise<void>;
     setRelevanceChanged: (item: boolean) => void;
     relevanceChanged:boolean;
-
 }   
 
 const SearchResults: React.FC<SearchResultsProps> = ({
@@ -34,7 +33,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     setLoading, onArticleClick, setRelevanceChanged, relevanceChanged}) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
     const { getAPIPastSearchTitle, getCommentsByArticle, downloadURL } = apiCalls();
-
     const [comments, setComments] = useState<any[]>([]); // Comments state
     const [commentsLoading, setCommentsLoading] = useState<boolean>(false);     
     const [addArticleOpen, setAddArticleOpen]=useState<boolean>(false);
@@ -50,7 +48,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     
     const addArticleView = () =>{
         setAddArticleOpen(!addArticleOpen)
-
     }
 
     return (
@@ -71,7 +68,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             {disableD3 ? (<></>) : (<>
                                 <BubblePlot data={bubbleInputs} /></>)}
                         </div>
-                        <div className="w-full text-right"><Button onClick={()=>{addArticleView()}}>Add Document</Button></div>
+                        <div className="w-full text-right p-5"><Button onClick={()=>{addArticleView()}}>Add Document</Button></div>
                         
                         <ResultsTable setResults={setResults}
                             results={results}

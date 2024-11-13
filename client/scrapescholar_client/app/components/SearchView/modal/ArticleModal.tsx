@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
 import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
 
 import Role from '@/app/types/Role';
 
-enum DocumentType{
+enum DocumentType {
     Article,
     Document,
     Journal,
@@ -17,10 +17,10 @@ interface AddUserModalProps {
     addArticleView: () => void;
 }
 
-export interface NewUser {
-    username: string,
-    password: string,
-    email: string,
+export interface NewArticle {
+    title: string,
+    year: string,
+    citedby: string,
     role_id: number
 }
 
@@ -29,43 +29,52 @@ export interface NewUser {
 
 
 
-const { addUser } = apiCalls();
+const { getAPIDatabases } = apiCalls();
 //need to get search id
-const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView  }) => {
+const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     const clearModal = () => {
         addArticleView();
     }
+    const [databases, setDatabases] = useState([])
 
-    const [result, setResult] = useState<boolean | null>(null);
-    const [newUser, setNewUser] = useState<NewUser>({
-        username: "",
-        password: "",
+    useEffect(() => {
+        const fetchDatabases = async () => {
+            const db_list = await getAPIDatabases();
+            setDatabases(db_list);
+        };
+        fetchDatabases();
+    }, []);
+
+
+    const [newArticle, setNewArticle] = useState<NewArticle>({
+        title: "",
+        year: "",
         email: "",
         role_id: 0
     });
     const [error, setError] = useState<boolean>(false);
 
 
-    const updateUserState = (item:any, value:any) => {
-        setNewUser((prevState) => ({
+    const updateArticleState = (item: any, value: any) => {
+        setNewArticle((prevState) => ({
             ...prevState,
             [item]: value
         }))
     }
 
-    const submitUser = async (e: React.FormEvent<HTMLFormElement>)=>{
+    const submitUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (newUser.username.length==0||newUser.password.length==0||newUser.email.length==0||newUser.role_id==0 || newUser.password.length<8){
+        if (newArticle.title.length == 0 || newArticle.password.length == 0 || newArticle.email.length == 0 || newArticle.role_id == 0 || newArticle.password.length < 8) {
             setError(true);
         } else {
-            const response = await addUser(newUser);
-            setNewUser({
-                username:"",
-                password:"",
-                email:"",
-                role_id:0
+            const response = await addArticle(newArticle);
+            setNewArticle({
+                title: "",
+                year: "",
+                email: "",
+                role_id: 0
             })
-            if(response===null){
+            if (response === null) {
                 setError(true)
                 return
             }
@@ -73,27 +82,27 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView  }) => {
         }
     }
 
-    const clearErrorSuccessMsg = () =>{
+    const clearErrorSuccessMsg = () => {
         setError(false);
     }
 
-    const dropdownChange = (e:any) => {
+    const dropdownChange = (e: any) => {
         const selectedRole = e.target.value;
-        let newRole:Role;
-        switch(selectedRole){
-            case("Professor"):
-                newRole= Role.Professor;
+        let newRole: Role;
+        switch (selectedRole) {
+            case ("Professor"):
+                newRole = Role.Professor;
                 break;
-            case("GradStudent"):
+            case ("GradStudent"):
                 newRole = Role.GradStudent;
                 break;
-            case("Student"):
-                newRole=Role.Student;
+            case ("Student"):
+                newRole = Role.Student;
                 break;
             default:
-                newRole=Role.Role;
+                newRole = Role.Role;
         }
-        updateUserState("role_id",newRole)
+        updateArticleState("role_id", newRole)
     }
 
     return (
@@ -109,11 +118,11 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView  }) => {
     Leaving: "ease-in duration-200"
       From: "opacity-100"
       To: "opacity-0" */}
-      <form onSubmit={(e)=>{submitUser(e)}}>
+                <form onSubmit={(e) => { submitUser(e) }}>
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        {/* Modal panel, show/hide based on modal state.
+                            {/* Modal panel, show/hide based on modal state.
 
         Entering: "ease-out duration-300"
           From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -133,7 +142,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView  }) => {
                                             rounded-md bg-white px-3 py-2 text-sm 
                                             font-semibold text-gray-900 shadow-sm ring-1 
                                             ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                                            data-testid="close_modal_button">
+                                                data-testid="close_modal_button">
                                                 Close
                                             </button>
                                         </div>
@@ -141,57 +150,79 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView  }) => {
                                 </div>
 
 
-                            <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
+                                <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                     <div>Title</div>
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
                                         <input className="border rounded border-slate-800 text-center p-2"
-                                            placeholder="Username" value={newUser.username} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => { updateUserState("username", e.target.value) }}
-                                            data-testid="new_user_username" />
+                                            placeholder="Title" value={newArticle.title} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => {
+                                                updateArticleState("title", e.target.value)
+                                            }}
+                                            data-testid="new_article_title" />
+                                    </div>
+                                </div>
+                                <div className="flex gap-4 justify-center items-center text-center">
+                                    <div className="flex flex-col items-center bg-gray-50 p-2">
+                                        <label className="text-black mb-1">Year</label>
+                                        <input
+                                            type="password"
+                                            className="border rounded border-slate-800 text-center p-2"
+                                            placeholder="Year"
+                                            value={newArticle.year}
+                                            onClick={() => { clearErrorSuccessMsg() }}
+                                            onChange={(e) => { updateArticleState("year", e.target.value) }}
+                                            data-testid="new_article_year"
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col items-center bg-gray-50 p-2">
+                                        <label className="text-black mb-1">Cited By</label>
+                                        <input
+                                            className="border rounded border-slate-800 text-center p-2"
+                                            placeholder="Cited By"
+                                            value={newArticle.citedby}
+                                            onClick={() => { clearErrorSuccessMsg() }}
+                                            onChange={(e) => { updateArticleState("citedby", e.target.value) }}
+                                            data-testid="new_article_citedby"
+                                        />
                                     </div>
                                 </div>
 
-                                <div className="bg-gray-50 px-2 py-1 flex justify-center items-center text-black">
-                                    <div>Year</div>
+                                <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
+                                    <div>Abstract</div>
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <input type="password" className="border rounded border-slate-800 text-center p-2"
-                                            placeholder="Password" value={newUser.password} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => { updateUserState("password", e.target.value) }}
-                                            data-testid="new_user_password" />
-                                    </div>
-                                </div>
-
-                                <div className="bg-gray-50 px-2 py-1 flex justify-center items-center text-black">
-                                    <div>Cited By</div>
-                                </div>
-                                <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
-                                    <div>
-                                        <input className="border rounded border-slate-800 text-center p-2"
-                                            placeholder="Email" value={newUser.email} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => { updateUserState("email", e.target.value) }}
-                                            data-testid="new_user_email" />
+                                        <textarea
+                                            className="border rounded border-slate-800 text-center text-black p-2 h-36  w-full resize-none"
+                                            placeholder="Title"
+                                            value={newArticle.title}
+                                            onClick={() => { clearErrorSuccessMsg() }}
+                                            onChange={(e) => { updateArticleState("title", e.target.value) }}
+                                            data-testid="new_article_title"
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <DropdownSearchBox 
-                                        value={DocumentType[0]} 
-                                        valueArray={Object.keys(DocumentType)
-                                            .filter((item) => {
-                                                return isNaN(Number(item));
-                                            })} 
-                                        onDropdownChange={dropdownChange} 
-                                        defaultValue="Document Type"
-                                        data-testid="new_user_role" />
+                                        <DropdownSearchBox
+                                            value={DocumentType[0]}
+                                            valueArray={Object.keys(DocumentType)
+                                                .filter((item) => {
+                                                    return isNaN(Number(item));
+                                                })}
+                                            onDropdownChange={dropdownChange}
+                                            defaultValue="Document Type"
+                                            data-testid="new_article_document_type" />
                                     </div>
                                 </div>
 
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <DropdownSearchBox value={Role[newUser.role_id]} valueArray={["Student", "GradStudent", "Professor"]} onDropdownChange={dropdownChange} defaultValue="Role"
-                                        data-testid="new_user_role" />
+                                        <DropdownSearchBox value={Role[newArticle.role_id]} valueArray={["Student", "GradStudent", "Professor"]} onDropdownChange={dropdownChange} defaultValue="Role"
+                                            data-testid="new_user_role" />
                                     </div>
                                 </div>
 
