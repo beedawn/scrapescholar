@@ -54,9 +54,7 @@ def get_comments_by_article(db: Session, article_id: int):
             "created_at": comment.created_at,
             "user_id": comment.user_id
         })
-        print(f"hello {decrypted_username}")
-        for item in return_array:
-            print(item["username"])
+
     return return_array
 
 
