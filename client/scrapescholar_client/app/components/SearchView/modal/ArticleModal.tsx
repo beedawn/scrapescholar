@@ -13,6 +13,12 @@ enum DocumentType {
 
 }
 
+enum Source {
+    None,
+    ScienceDirect,
+    Scopus
+}
+
 interface AddUserModalProps {
     addArticleView: () => void;
 }
@@ -21,8 +27,8 @@ export interface NewArticle {
     title: string,
     year: string,
     citedby: string,
-    
-    role_id: number
+    source_id: number,
+    documenttype: string
 }
 
 
@@ -42,17 +48,21 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabases();
             setDatabases(db_list);
+            console.log(db_list)
         };
         fetchDatabases();
     }, []);
+    
 
-
-    const [newArticle, setNewArticle] = useState<NewArticle>({
+    const blankArticle = {
         title: "",
         year: "",
         citedby: "",
-        role_id: 0
-    });
+        documenttype:"",
+        source_id:0
+    }
+
+    const [newArticle, setNewArticle] = useState<NewArticle>(blankArticle);
     const [error, setError] = useState<boolean>(false);
 
 
@@ -63,18 +73,13 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
         }))
     }
 
-    const submitUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0 || newArticle.role_id == 0 ) {
             setError(true);
         } else {
             // const response = await addArticle(newArticle);
-            setNewArticle({
-                title: "",
-                year: "",
-                citedby: "",
-                role_id: 0
-            })
+            setNewArticle(blankArticle)
             // if (response === null) {
             //     setError(true)
             //     return
@@ -87,23 +92,45 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
         setError(false);
     }
 
-    const dropdownChange = (e: any) => {
+    const dropdownDocumentChange = (e: any) => {
         const selectedRole = e.target.value;
-        let newRole: Role;
+        let newDocument: DocumentType;
         switch (selectedRole) {
-            case ("Professor"):
-                newRole = Role.Professor;
+            case ("Article"):
+                newDocument = DocumentType.Article;
                 break;
-            case ("GradStudent"):
-                newRole = Role.GradStudent;
+            case ("Journal"):
+                newDocument = DocumentType.Journal;
                 break;
-            case ("Student"):
-                newRole = Role.Student;
+            case ("Document"):
+                newDocument= DocumentType.Document;
+                break;
+            case ("Book"):
+                newDocument= DocumentType.Book;
                 break;
             default:
-                newRole = Role.Role;
+                newDocument = DocumentType.None;
         }
-        updateArticleState("role_id", newRole)
+
+        console.log(newArticle);
+        updateArticleState("documenttype", DocumentType[newDocument])
+    }
+
+    const dropdownSourceChange = (e: any) => {
+        const selectedRole = e.target.value;
+        let newSource: Source;
+        switch (selectedRole) {
+            case ("ScienceDirect"):
+                newSource = Source.ScienceDirect;
+                break;
+            case ("Scopus"):
+                newSource = Source.Scopus;
+                break;
+    
+            default:
+                newSource = Source.None;
+        }
+        updateArticleState("source_id", newSource)
     }
 
     return (
@@ -119,7 +146,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     Leaving: "ease-in duration-200"
       From: "opacity-100"
       To: "opacity-0" */}
-                <form onSubmit={(e) => { submitUser(e) }}>
+                <form onSubmit={(e) => { submitArticle(e) }}>
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -209,12 +236,12 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
                                         <DropdownSearchBox
-                                            value={DocumentType[0]}
+                                            value={newArticle.documenttype}
                                             valueArray={Object.keys(DocumentType)
                                                 .filter((item) => {
                                                     return isNaN(Number(item));
                                                 })}
-                                            onDropdownChange={dropdownChange}
+                                            onDropdownChange={dropdownDocumentChange}
                                             defaultValue="Document Type"
                                             data-testid="new_article_document_type" />
                                     </div>
@@ -222,7 +249,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <DropdownSearchBox value={Role[newArticle.role_id]} valueArray={["Student", "GradStudent", "Professor"]} onDropdownChange={dropdownChange} defaultValue="Role"
+                                        <DropdownSearchBox value={Source[newArticle.source_id]} valueArray={databases} onDropdownChange={dropdownSourceChange} defaultValue="Source"
                                             data-testid="new_user_role" />
                                     </div>
                                 </div>
