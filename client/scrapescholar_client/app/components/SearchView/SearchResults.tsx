@@ -23,13 +23,15 @@ interface SearchResultsProps {
     onArticleClick: (articleId: number) => Promise<void>;
     setRelevanceChanged: (item: boolean) => void;
     relevanceChanged: boolean;
+    handlePastSearchSelection:
+    (event: any) => void;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({
     results, displayInputs, className, emptyString,
     disableD3 = false, bubbleInputs, setResults,
     setSearchName, searchName, currentSearchId, setDisplayInputs,
-    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged }) => {
+    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged, handlePastSearchSelection }) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
     const { getAPIPastSearchTitle, getCommentsByArticle, downloadURL } = apiCalls();
     const [comments, setComments] = useState<any[]>([]); // Comments state
@@ -51,7 +53,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
     return (
         <div className={className}>
-            {addArticleOpen ? <ArticleModal addArticleView={addArticleView} search_id={currentSearchId}/> : <></>}
+            {addArticleOpen ? <ArticleModal addArticleView={addArticleView} search_id={currentSearchId} handlePastSearchSelection={handlePastSearchSelection}/> : <></>}
             <div className="float-left p-12 max-w-md 
             sm:max-w-screen-xs md:max-w-screen-sm 
             lg:max-w-screen-md xl:max-w-screen-lg">

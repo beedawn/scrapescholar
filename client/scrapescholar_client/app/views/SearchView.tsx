@@ -303,6 +303,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                                 onArticleClick={handleArticleClick}
                                 setRelevanceChanged={setRelevanceChanged}
                                 relevanceChanged={relevanceChanged}
+                                handlePastSearchSelection={handlePastSearchSelection}
                             />}
             </div>
             {isSidebarOpen && selectedArticleId !== null && (

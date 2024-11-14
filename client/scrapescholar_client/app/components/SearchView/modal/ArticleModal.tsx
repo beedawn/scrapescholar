@@ -22,6 +22,8 @@ enum Source {
 interface AddArticleModalProps {
     addArticleView: () => void;
     search_id:number;
+    handlePastSearchSelection:
+    (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export interface NewArticle {
@@ -43,7 +45,7 @@ interface DatabaseItem {
 
 const { getAPIDatabasesAndIDs, addArticle } = apiCalls();
 
-const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, search_id }) => {
+const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, search_id, handlePastSearchSelection }) => {
     const clearModal = () => {
         addArticleView();
     }
@@ -84,13 +86,17 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
 
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(newArticle)
+       
         if (newArticle.title.length == 0 || newArticle.date.length == 0 || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.documenttype.length == 0) {
             setError(true);
-            console.log(newArticle)
+           
            
         } else {
-            const response = await addArticle(newArticle);
+            const dateArticle = {...newArticle, "date":new Date(parseInt(newArticle.date), 0, 1).toISOString().slice(0, 10), "citedby": parseInt(newArticle.citedby)}
+            console.log(dateArticle)
+            const response = await addArticle(dateArticle);
+            // have articles reload?
+            handlePastSearchSelection(search_id)
             setNewArticle(blankArticle)
          
             if (response === null) {
@@ -194,6 +200,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
                                         <label className="text-black mb-1">Year</label>
                                         <input
+                                        type="number"
                                             className="border rounded border-slate-800 text-center p-2"
                                             placeholder="Year"
                                             value={newArticle.date}
@@ -206,6 +213,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
                                         <label className="text-black mb-1">Cited By</label>
                                         <input
+                                        type="number"
                                             className="border rounded border-slate-800 text-center p-2"
                                             placeholder="Cited By"
                                             value={newArticle.citedby}

@@ -2,10 +2,11 @@
 from fastapi import APIRouter, HTTPException, Depends, Cookie
 from sqlalchemy.orm import Session
 from app.crud.article import create_article, get_article, delete_article, update_article
-from app.schemas.article import ArticleCreate, ArticleUpdate, Article
+from app.schemas.article import ArticleCreate, ArticleUpdate, Article, ArticleRead
 from app.db.session import get_db
 from typing import Annotated
 from auth_tools.get_user import get_current_user_modular
+from app.crud.user_data import create_user_data, delete_user_data, get_user_data, update_user_data
 
 router = APIRouter()
 
@@ -22,14 +23,19 @@ async def read_article(article_id: int, access_token: Annotated[str | None, Cook
 
 
 # Add a new article (authentication via token or cookie)
-@router.post("/", response_model=Article, status_code=201)
+@router.post("/",response_model=ArticleRead, status_code=201)
 async def create_new_article(
         article: ArticleCreate,
         access_token: Annotated[str | None, Cookie()] = None,
         db: Session = Depends(get_db)
 ):
+    print("ARTICLE")
+    print(article)
+
     current_user = get_current_user_modular(access_token, db)
+
     created_article = create_article(db, article, user_id=current_user.user_id)
+    create_user_data(db, current_user.user_id, created_article.article_id)
     return created_article
 
 
@@ -64,8 +70,13 @@ async def remove_article(
     article = get_article(db, article_id=article_id)
     if article is None:
         raise HTTPException(status_code=404, detail="Article not found")
+
+    # do we need this?
     if article.user_id != current_user.user_id:
         raise HTTPException(status_code=403, detail="You are not authorized to delete this article")
 
+
+    user_data = get_user_data(db, article.article_id)
+    delete_user_data(db, user_data.userdata_id)
     delete_article(db, article_id=article_id)
     return None

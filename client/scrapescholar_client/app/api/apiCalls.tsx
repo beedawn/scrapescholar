@@ -1,8 +1,19 @@
 import { NewUser } from "../components/UserManagement/modal/AddUserModal";
-import { NewArticle } from "../components/SearchView/modal/ArticleModal";
+
 const apiCalls = () => {
 
   const host = process.env.NEXT_PUBLIC_HOST_IP;
+
+   interface NewArticle {
+    search_id:number,
+    title: string,
+    date: string,
+    citedby: number,
+    source_id: number,
+    documenttype: string,
+    abstract: string,
+    url: string
+}
 
   const getAPIDatabases = async () => {
     const url = `http://${host}:8000/academic_sources`;
@@ -567,7 +578,7 @@ const apiCalls = () => {
   };
 
 
-  const addArticle = async ( articleBody: NewArticle) => {
+  const addArticle = async ( articleBody:NewArticle) => {
     try {
         const url = `http://${host}:8000/article`;
         const response = await fetch(url, {
