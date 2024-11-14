@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
 import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
-
+import DOMPurify from 'dompurify';
 import Role from '@/app/types/Role';
 
 enum DocumentType {
@@ -30,7 +30,8 @@ export interface NewArticle {
     citedby: string,
     source_id: number,
     documenttype: string,
-    abstract: string
+    abstract: string,
+    url: string
 }
 
 interface DatabaseItem {
@@ -63,7 +64,8 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView }) => 
         citedby: "",
         documenttype: "",
         source_id: 0,
-        abstract:""
+        abstract:"",
+        url:""
     }
 
     const [newArticle, setNewArticle] = useState<NewArticle>(blankArticle);
@@ -71,9 +73,10 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView }) => 
 
 
     const updateArticleState = (item: any, value: any) => {
+        const sanitizedValue =  DOMPurify.sanitize(value);
         setNewArticle((prevState) => ({
             ...prevState,
-            [item]: value
+            [item]: sanitizedValue
         }))
     }
 
@@ -170,6 +173,19 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView }) => 
                                                 updateArticleState("title", e.target.value)
                                             }}
                                             data-testid="new_article_title" />
+                                    </div>
+                                </div>
+
+                                <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
+                                    <div>URL</div>
+                                </div>
+                                <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
+                                    <div>
+                                        <input className="border rounded border-slate-800 text-center p-2"
+                                            placeholder="Link" value={newArticle.url} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => {
+                                                updateArticleState("url", e.target.value)
+                                            }}
+                                            data-testid="new_article_url" />
                                     </div>
                                 </div>
                                 <div className="flex gap-4 justify-center items-center text-center">

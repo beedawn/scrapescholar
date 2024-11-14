@@ -7,6 +7,7 @@ import EvaluationCriteriaDropdown from './EvaluationCriteriaDropdown';
 import apiCalls from '@/app/api/apiCalls';
 import Button from '../Button';
 import AbstractModal from './modal/AbstractModal';
+import DOMPurify from 'dompurify';
 
 export interface EditableCell {
     relevance: boolean;
@@ -118,8 +119,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         findAdmin();
     }, []);
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
+
+        const sanitizedValue =  DOMPurify.sanitize(value);
         const updatedResults = editableResults.map(result =>
-            result.article_id === id ? { ...result, [field]: value } : result
+            result.article_id === id ? { ...result, [field]: sanitizedValue } : result
         );
 
         setEditableResults(updatedResults);

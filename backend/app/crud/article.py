@@ -27,7 +27,6 @@ def get_articles(db: Session, skip: int = 0, limit: int = 10):
 
 
 def create_article(db: Session, article: ArticleCreate, user_id: int):
-    #db_article = Article(**article.dict())
     db_article = Article(
         source_id=article.source_id,
         search_id=article.search_id,
