@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, Dispatch, SetStateAction} from 'react';
 import apiCalls from '../api/apiCalls';
+import DOMPurify from 'dompurify';
 interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     setToken: (item: string) => void;
@@ -14,7 +15,10 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
-        const tokenResponse = await postAPILogin(username, password);
+
+        const sanitizedUsername =  DOMPurify.sanitize(username);
+        const sanitizedPassword =  DOMPurify.sanitize(password);
+        const tokenResponse = await postAPILogin(sanitizedUsername, sanitizedPassword);
         if (tokenResponse && typeof tokenResponse === 'string') {
             setToken(tokenResponse);
             setLoggedIn(true)
