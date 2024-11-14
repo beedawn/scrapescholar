@@ -17,7 +17,6 @@ export default function Home() {
       try{
     const cookie = await getCookie();
     if(cookie.detail=="Cookie not found" || cookie.detail=="Invalid token"){
-        console.log("no cookie")
         setLoggedIn(false);
     }else{
         setToken(cookie.detail)

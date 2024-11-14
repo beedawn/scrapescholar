@@ -111,7 +111,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         const findAdmin = async () => {
             try {
                 const result = await isAdmin();
-                console.log("Admin status:", result); // Log admin status
                 setIsAdminUser(result === "true");
             } catch (error) {
                 console.error("Failed to check admin status:", error);
@@ -129,8 +128,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     const {putUserData, isAdmin}=apiCalls();
     const handleFieldConfirm = async () => {
         setResults(editableResults);
-        console.log("editable results")
-        console.log(editableResults)
         for (let item of editableResults){
             const putrequest={
                 "article_id":item.article_id,

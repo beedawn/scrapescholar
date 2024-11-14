@@ -20,7 +20,6 @@ const UserManagement: React.FC<UserManagementProps> =
 
             const user_list = await getUsers();
             setUsers(user_list)
-            console.log(user_list)
 
         }
         useEffect(()=>{

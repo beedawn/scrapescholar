@@ -37,8 +37,6 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
         setLoggedIn(false);
     };
     const dropdown_values = Object.values(Dropdown);
-    console.log(inputs)
-
     const max_inputs = 20
     return (
         <>

@@ -130,7 +130,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             divider = 25
         }
 
-        console.log(divider)
         //something goofy here, need to get the keywords instead
         const newBubbleInputs = data_array.map((keyword, i) => ({
             //set x value as the index, because i dont know a better way to lay these out yet
@@ -161,7 +160,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             
             }
                 else{
-                console.log("No search Id in graph refresh!")}
+                // console.log("No search Id in graph refresh!")
+            }
         }
     
         getResults()

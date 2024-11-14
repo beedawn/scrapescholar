@@ -14,17 +14,12 @@ const DataFull: React.FC<DataFullProps> =
         const handleSelectChange = (event: any) => {
             const selectedOptions = Array.from(event.target.selectedOptions, option => (option as HTMLOptionElement).value);
             setSelectedValue(selectedOptions);
-            console.log("option selected")
-            console.log(selectedOptions)
         };
         const handleDeleteClick = async () => {
             setLoading(true)
-            console.log("delete click")
             for (let item of selectedValue) {
                 const numItem = Number(item)
-                console.log(`deleting ${item}`)
                 await deleteSearch(numItem)
-                console.log("deleted item")
             }
             setLoading(false)
         }

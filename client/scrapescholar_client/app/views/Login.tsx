@@ -25,7 +25,6 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
         setError('');
         const tokenResponse = await postAPILogin(username, password);
         if (tokenResponse && typeof tokenResponse === 'string') {
-            console.log(tokenResponse)
             setToken(tokenResponse);
             setLoggedIn(true)
         } else if (tokenResponse.error) {

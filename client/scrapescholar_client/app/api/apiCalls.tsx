@@ -231,7 +231,6 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
-      console.log("delete search called!")
       const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
       data = await fetch(url, {
         method: "DELETE", credentials: "include"
@@ -247,7 +246,7 @@ const apiCalls = () => {
     }
     else {
       // console.log(jsonData)
-      console.log("failure to delete search")
+      //console.log("failure to delete search")
     }
   }
 
@@ -384,7 +383,6 @@ const apiCalls = () => {
       const url = `http://${host}:8000/auth/get_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
-      console.log(jsonData)
       return jsonData;
     }
     catch (error: any) {
@@ -423,7 +421,6 @@ const apiCalls = () => {
       const url = `http://${host}:8000/auth/remove_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
-      console.log(jsonData)
       return jsonData;
     }
     catch (error: any) {
@@ -550,13 +547,7 @@ const apiCalls = () => {
       // jsonData = [{ "title": error.message, link: '' }]
       // setError(error);
     }
-    if (jsonData !== undefined) {
-      // console.log("Search deleted")
-    }
-    else {
-      // console.log(jsonData)
-      console.log("failure to delete search")
-    }
+
   }
 
   const updateUserRole = async (userId: number, newRole: string) => {

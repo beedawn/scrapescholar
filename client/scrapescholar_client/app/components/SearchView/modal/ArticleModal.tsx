@@ -54,7 +54,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabasesAndIDs();
             setDatabases(db_list);
-            console.log(db_list)
         };
         fetchDatabases();
     }, []);
@@ -117,8 +116,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
             default:
                 newDocument = DocumentType.Document;
         }
-
-        console.log(newArticle);
         updateArticleState("documenttype", DocumentType[newDocument])
     }
 
