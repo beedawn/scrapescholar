@@ -46,5 +46,19 @@ jobs:
         run: |
           docker-compose -f docker/docker-compose-postgres.yml --env-file .env up -d --build
 
+      - name: Verify Database and Table Setup
+        run: |
+          # Wait until PostgreSQL is ready
+          until docker exec container_scrapescholardb pg_isready -U $POSTGRES_USER; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 5
+          done
+          # Check for tables in the database
+          docker exec container_scrapescholardb psql -U $POSTGRES_USER -d $POSTGRES_DB -c "\dt"
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        shell: bash          
+
       - name: Stop and remove containers
         run: docker-compose -f docker/docker-compose-postgres.yml down
