@@ -3,7 +3,6 @@ import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
 import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
 import DOMPurify from 'dompurify';
-import Role from '@/app/types/Role';
 
 enum DocumentType {
     Article,
@@ -22,9 +21,11 @@ enum Source {
 
 interface AddArticleModalProps {
     addArticleView: () => void;
+    search_id:number;
 }
 
 export interface NewArticle {
+    search_id:number,
     title: string,
     year: string,
     citedby: string,
@@ -42,7 +43,7 @@ interface DatabaseItem {
 
 const { getAPIDatabasesAndIDs } = apiCalls();
 
-const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView }) => {
+const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, search_id }) => {
     const clearModal = () => {
         addArticleView();
     }
@@ -59,6 +60,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView }) => 
 
 
     const blankArticle:NewArticle = {
+        search_id:search_id,
         title: "",
         year: "",
         citedby: "",

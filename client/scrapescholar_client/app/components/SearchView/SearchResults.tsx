@@ -51,7 +51,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
     return (
         <div className={className}>
-            {addArticleOpen ? <ArticleModal addArticleView={addArticleView} /> : <></>}
+            {addArticleOpen ? <ArticleModal addArticleView={addArticleView} search_id={currentSearchId}/> : <></>}
             <div className="float-left p-12 max-w-md 
             sm:max-w-screen-xs md:max-w-screen-sm 
             lg:max-w-screen-md xl:max-w-screen-lg">
