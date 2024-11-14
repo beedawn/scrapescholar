@@ -1,8 +1,12 @@
 # app/main.py
 from http.client import HTTPException
 
-from fastapi import FastAPI, Query,Cookie, Depends
+from fastapi import FastAPI, Query,Cookie, Depends, Request
 from fastapi.responses import JSONResponse
+
+#for oauth
+from authlib.integrations.starlette_client import OAuth
+from starlette.middleware.sessions import SessionMiddleware
 
 #needs these for globals call
 import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
@@ -132,3 +136,39 @@ async def multiple_apis(keywords: str,
 async def multiple_apis():
     database_list = await get_database_list('academic_databases/')
     return database_list
+
+
+#Oauth
+oauth = OAuth()
+oauth.register(
+    name='azure',
+    client_id=os.getenv('OAUTH_CLIENT_ID'),
+    client_secret=os.getenv('OAUTH_CLIENT_SECRET'),
+    authorize_url=os.getenv('OAUTH_AUTHORIZATION_URL'),
+    authorize_params=None,
+    access_token_url=os.getenv('AUTH_TOKEN_URL'),
+    access_token_params=None,
+    userinfo_endpoint=os.getenv("OAUTH_USER_INFO_URL"),
+    client_kwargs={'scope': 'openid profile email'},
+)
+
+app.add_middleware(SessionMiddleware, secret_key="your-session-secret")
+
+@app.get("/login")
+async def login(request: Request):
+    redirect_uri = os.getenv("OAUTH_REDIRECT_URI")
+    return await oauth.azure.authorize_redirect(request, redirect_uri)
+
+@app.get("/auth/callback")
+async def auth_callback(request: Request):
+    token = await oauth.azure.authorize_access_token(request)
+    user_info = await oauth.azure.parse_id_token(request, token)
+    return {"user": user_info}
+
+@app.get("/protected")
+async def protected(request: Request):
+    user_info = request.session.get("user_info")  # Or however you store session data
+    if user_info:
+        return {"message": "You are authenticated", "user": user_info}
+    return {"message": "Not authenticated"}
+
