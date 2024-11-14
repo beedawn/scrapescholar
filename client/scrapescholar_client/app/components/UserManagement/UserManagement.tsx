@@ -67,7 +67,6 @@ const UserManagement: React.FC<UserManagementProps> =
             
                <div className="p-2 w-1/4" data-testid="user_username">{user.username}</div>
                <div className="w-1/4" data-testid="user_role">
-               <span data-testid="user_role_text">{Role[user.role_id]}</span>
                <DropdownSearchBox
                                             value={Role[user.role_id]}
                                             valueArray={["Student", "GradStudent", "Professor"]}
