@@ -14,11 +14,13 @@ enum DocumentType {
 
 enum Source {
     None,
-    ScienceDirect,
-    Scopus
+
+    Scopus=1,
+    ScienceDirect=2,
+    Other=3
 }
 
-interface AddUserModalProps {
+interface AddArticleModalProps {
     addArticleView: () => void;
 }
 
@@ -27,7 +29,8 @@ export interface NewArticle {
     year: string,
     citedby: string,
     source_id: number,
-    documenttype: string
+    documenttype: string,
+    abstract: string
 }
 
 interface DatabaseItem {
@@ -38,7 +41,7 @@ interface DatabaseItem {
 
 const { getAPIDatabasesAndIDs } = apiCalls();
 
-const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
+const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView }) => {
     const clearModal = () => {
         addArticleView();
     }
@@ -54,12 +57,13 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     }, []);
 
 
-    const blankArticle = {
+    const blankArticle:NewArticle = {
         title: "",
         year: "",
         citedby: "",
         documenttype: "",
-        source_id: 0
+        source_id: 0,
+        abstract:""
     }
 
     const [newArticle, setNewArticle] = useState<NewArticle>(blankArticle);
@@ -75,11 +79,15 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0) {
+        console.log(newArticle)
+        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.documenttype.length == 0) {
             setError(true);
+            console.log(newArticle)
+             // const response = await addArticle(newArticle);
         } else {
-            // const response = await addArticle(newArticle);
+           
             setNewArticle(blankArticle)
+         
             // if (response === null) {
             //     setError(true)
             //     return
@@ -119,9 +127,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
         for (let item of databases) {
             if (item.name == selectedRole) {
                 updateArticleState("source_id", item.source_id)
+                break;
             }
             else {
-                updateArticleState("source_id", 0)
+                updateArticleState("source_id", 3)
             }
         }
     }
@@ -167,7 +176,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
                                         <label className="text-black mb-1">Year</label>
                                         <input
-                                            type="password"
                                             className="border rounded border-slate-800 text-center p-2"
                                             placeholder="Year"
                                             value={newArticle.year}
@@ -198,10 +206,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
                                         <textarea
                                             className="border rounded border-slate-800 text-center text-black p-2 h-36  w-full resize-none"
                                             placeholder="Title"
-                                            value={newArticle.title}
+                                            value={newArticle.abstract}
                                             onClick={() => { clearErrorSuccessMsg() }}
-                                            onChange={(e) => { updateArticleState("title", e.target.value) }}
-                                            data-testid="new_article_title"
+                                            onChange={(e) => { updateArticleState("abstract", e.target.value) }}
+                                            data-testid="new_article_abstract"
                                         />
                                     </div>
                                 </div>
@@ -234,7 +242,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <Button type="submit" onClick={() => { }} data-testid="add_user_submit">Submit</Button>
+                                        <Button type="submit" onClick={() => {submitArticle }} data-testid="add_article_submit">Submit</Button>
                                     </div>
                                 </div>
                             </div>
@@ -246,4 +254,4 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     )
 };
 
-export default AddUserModal;
+export default AddArticleModal;
