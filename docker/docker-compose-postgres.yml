@@ -20,7 +20,7 @@ services:
     build:
       context: ..
       dockerfile: docker/postgres/Dockerfile
-    image: scrapescholardb:latest
+    container_name: init_db_container
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -32,6 +32,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    entrypoint: /app/init_db.sh
 
 volumes:
   db_data:
