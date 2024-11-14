@@ -1,18 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-import pytest
 import os
 from dotenv import load_dotenv
-import json
 from tests.integration.tools.get_cookie import get_cookie
-from tests.integration.tools.base_url import base_url
-# Load environment variables from .env file
 from app.crud.search import get_search_by_title, delete_search
 from app.crud.user_data import delete_user_data_by_article
 from app.crud.article import get_article_by_search_id, delete_article
@@ -25,36 +20,25 @@ testpass = os.getenv('TEST_PASSWORD')
 host_ip = os.getenv('HOST_IP')
 
 session = get_cookie()
-
-
-
-
 db = SessionLocal()
-
 
 # UT-6.1
 def test_find_graph():
     try:
-        # Initialize the WebDriver
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
-        # Navigate to the login page
         driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
 
-        # Locate and interact with the login elements
         username_field = driver.find_element(By.NAME, 'username_input')
         password_field = driver.find_element(By.NAME, 'password_input')
         login_button = driver.find_element(By.NAME, 'login_button')
         time.sleep(5)
 
-        # Enter login credentials and submit the form
         username_field.send_keys(testuser)
         password_field.send_keys(testpass)
         login_button.click()
 
-        # await navbar to populate
-        initial_page = WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
@@ -76,36 +60,27 @@ def test_find_graph():
         print(f"An error occurred: {str(e)}")
         raise e
     finally:
-        # Close the WebDriver
         time.sleep(1)
-        # print(driver.title)
-        # print(driver.current_url)
         driver.quit()
 
 
 # UT-6.2
 def test_graph_loads_zero():
     try:
-        # Initialize the WebDriver
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
-        # Navigate to the login page
         driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
 
-        # Locate and interact with the login elements
         username_field = driver.find_element(By.NAME, 'username_input')
         password_field = driver.find_element(By.NAME, 'password_input')
         login_button = driver.find_element(By.NAME, 'login_button')
         time.sleep(20)
 
-        # Enter login credentials and submit the form
         username_field.send_keys(testuser)
         password_field.send_keys(testpass)
         login_button.click()
 
-        # await navbar to populate
-        initial_page = WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
@@ -130,36 +105,26 @@ def test_graph_loads_zero():
         print(f"An error occurred: {str(e)}")
         raise e
     finally:
-        # Close the WebDriver
         time.sleep(1)
-        # print(driver.title)
-        # print(driver.current_url)
         driver.quit()
 
 
 #UT-6.3
 def test_graph_accuracy_after_change():
     try:
-        # Initialize the WebDriver
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
-        # Navigate to the login page
         driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
 
-        # Locate and interact with the login elements
         username_field = driver.find_element(By.NAME, 'username_input')
         password_field = driver.find_element(By.NAME, 'password_input')
         login_button = driver.find_element(By.NAME, 'login_button')
 
-
-        # Enter login credentials and submit the form
         username_field.send_keys(testuser)
         password_field.send_keys(testpass)
         login_button.click()
 
-        # await navbar to populate
-        initial_page = WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
         )
         search_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,
@@ -196,10 +161,7 @@ def test_graph_accuracy_after_change():
         print(f"An error occurred: {str(e)}")
         raise e
     finally:
-        # Close the WebDriver
         time.sleep(1)
-        # print(driver.title)
-        # print(driver.current_url)
         driver.quit()
 
 
