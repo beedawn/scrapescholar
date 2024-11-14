@@ -12,6 +12,7 @@ import Loading from '../components/Loading';
 import UserManagement from '../components/UserManagement/UserManagement';
 import Relevance from '../types/Relevance';
 import { init } from 'next/dist/compiled/webpack/webpack';
+import DOMPurify from 'dompurify';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -182,8 +183,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     //updates inputs when input field is edited
     const handleSearchChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+
+        const sanitizedValue =  DOMPurify.sanitize(e.target.value);
         const newInputs = [...inputs];
-        newInputs[index] = e.target.value;
+        newInputs[index] = sanitizedValue;
         setInputs(newInputs);
     }
 
