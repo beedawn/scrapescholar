@@ -269,16 +269,21 @@ def test_get_valid_token_search_title_response_schema(db_session):
     ]
 }
     """
-    search_id = 1
+
     apiQuery = "test"
     queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
-    title = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
+    search_request_data = search_request.json()
+    print("Search ID")
+    print(search_request_data["search_id"])
+    title = session.get(f"{base_url}/search/user/search/title?search_id={search_request_data['search_id']}")
 
     assert search_request.status_code == 200
     assert title.status_code == 200
     data = title.json()
+    print("data")
+    print(data)
     assert isinstance(data["title"], str)
     assert isinstance(data["keywords"], list)
     search_request = search_request.json()
@@ -303,12 +308,14 @@ def test_put_valid_token_search_title_response_schema(db_session):
     "title": "new one"
 }
     """
-    search_id = 1
+
     body = {"title": "new test title"}
     apiQuery = "test"
     queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
     #create a new search to query
     search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    search_request_data = search_request.json()
+    search_id = search_request_data['search_id']
     new_title = session.put(f"{base_url}/search/user/search/title?search_id={search_id}", json=body)
 
     assert search_request.status_code == 200
@@ -324,8 +331,6 @@ def test_put_valid_token_search_title_response_schema(db_session):
     title = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
     data = title.json()
     assert data["title"] == "new test title"
-    search_request = search_request.json()
-    search_id = search_request["search_id"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 
 

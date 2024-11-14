@@ -11,7 +11,7 @@ from api_tools.api_tools import scopus_api_key
 #end of globals stuff
 from app.db.session import get_db
 
-from app.crud.source import get_source_by_name
+from app.crud.source import get_source_by_name, get_sources
 
 from fastapi.middleware.cors import CORSMiddleware
 from endpoints.role import role
@@ -139,11 +139,10 @@ async def academic_sources(db: Session = Depends(get_db)):
 @app.get("/academic_sources_id")
 async def academic_sources(db: Session = Depends(get_db)):
     # get list from DB instead
-    database_list = await get_database_list('academic_databases/')
+    database_list = get_sources(db)
     list_of_sources = []
     for item in database_list:
-        source=get_source_by_name(db, item)
-        list_of_sources.append({"name":source.name, "source_id":source.source_id}
+        list_of_sources.append({"name":item.name, "source_id":item.source_id}
         )
 
     return list_of_sources
