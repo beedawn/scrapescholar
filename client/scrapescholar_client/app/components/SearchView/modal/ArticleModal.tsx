@@ -27,7 +27,7 @@ interface AddArticleModalProps {
 export interface NewArticle {
     search_id:number,
     title: string,
-    year: string,
+    date: string,
     citedby: string,
     source_id: number,
     documenttype: string,
@@ -41,7 +41,7 @@ interface DatabaseItem {
 }
 
 
-const { getAPIDatabasesAndIDs } = apiCalls();
+const { getAPIDatabasesAndIDs, addArticle } = apiCalls();
 
 const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, search_id }) => {
     const clearModal = () => {
@@ -62,7 +62,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
     const blankArticle:NewArticle = {
         search_id:search_id,
         title: "",
-        year: "",
+        date: "",
         citedby: "",
         documenttype: "",
         source_id: 0,
@@ -85,18 +85,18 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(newArticle)
-        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.documenttype.length == 0) {
+        if (newArticle.title.length == 0 || newArticle.date.length == 0 || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.documenttype.length == 0) {
             setError(true);
             console.log(newArticle)
-             // const response = await addArticle(newArticle);
-        } else {
            
+        } else {
+            const response = await addArticle(newArticle);
             setNewArticle(blankArticle)
          
-            // if (response === null) {
-            //     setError(true)
-            //     return
-            // }
+            if (response === null) {
+                setError(true)
+                return
+            }
             clearModal()
         }
     }
@@ -196,10 +196,10 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                         <input
                                             className="border rounded border-slate-800 text-center p-2"
                                             placeholder="Year"
-                                            value={newArticle.year}
+                                            value={newArticle.date}
                                             onClick={() => { clearErrorSuccessMsg() }}
-                                            onChange={(e) => { updateArticleState("year", e.target.value) }}
-                                            data-testid="new_article_year"
+                                            onChange={(e) => { updateArticleState("date", e.target.value) }}
+                                            data-testid="new_article_date"
                                         />
                                     </div>
 

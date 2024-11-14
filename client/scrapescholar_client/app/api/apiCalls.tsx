@@ -602,7 +602,7 @@ const apiCalls = () => {
     editComment,
     deleteComment, downloadURL, putSearchShare, 
     isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole,
-    getAPIDatabasesAndIDs  };
+    getAPIDatabasesAndIDs, addArticle  };
 
 }
 
