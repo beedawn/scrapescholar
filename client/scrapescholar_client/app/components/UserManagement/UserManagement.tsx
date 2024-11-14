@@ -35,19 +35,6 @@ const UserManagement: React.FC<UserManagementProps> =
         };
 
         const [users,setUsers]=useState<any[]>([]);
-        // const handleSelectChange = (event: any) => {
-        //     const selectedOptions = Array.from(event.target.selectedOptions, option => (option as HTMLOptionElement).value);
-        //     setSelectedValue(selectedOptions);
-        //     console.log(selectedOptions)
-        // };
-        // const handleDeleteClick = async () => {
-        //     setLoading(true)
-        //     for (let item of selectedValue) {
-        //         const numItem = Number(item)
-        //         await deleteSearch(numItem)
-        //     }
-        //     setLoading(false)
-        // }
         return (
             <div className={"p-10"} data-testid="user_management">
             {deleteUserModalActive?<DeleteUserModal setDeleteUserModalActive={setDeleteUserModalActive} deleteUser={deleteUser}/>:<></>}
@@ -69,7 +56,7 @@ const UserManagement: React.FC<UserManagementProps> =
                <DropdownSearchBox
                                             value={Role[user.role_id]}
                                             valueArray={["Student", "GradStudent", "Professor"]}
-                                            onDropdownChange={(e) => handleRoleChange(user.user_id, e.target.value)}  // Call handleRoleChange
+                                            onDropdownChange={(e) => handleRoleChange(user.user_id, e.target.value)}  
                                             defaultValue="Role"
                                             data-testid="role_dropdown"
                                         />

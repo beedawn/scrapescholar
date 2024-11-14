@@ -55,7 +55,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
             clearModal()
         }
     }
-
     const clearErrorSuccessMsg = () => {
         setError(false);
     }

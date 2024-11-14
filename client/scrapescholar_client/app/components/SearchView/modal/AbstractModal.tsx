@@ -5,7 +5,6 @@ interface AbstractModalProps {
     text: string;
 }
 
-
 const AbstractModal: React.FC<AbstractModalProps> = ({ setAbstractText, text }) => {
     const clearModal = () => {
         setAbstractText('');

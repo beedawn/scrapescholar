@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.models.article import Article
 from app.schemas.article import ArticleCreate, ArticleUpdate
 from fastapi import HTTPException
-from app.crud.user_data import delete_user_data_by_article_id 
+from app.crud.user_data import delete_user_data_by_article_id
 
 
 def get_article(db: Session, article_id: int):
@@ -19,10 +19,12 @@ def get_article_by_search_id(db: Session, search_id: int):
         raise HTTPException(status_code=404, detail="Article not found")
     return articles
 
+
 # app/crud/article.py
 def get_articles(db: Session, skip: int = 0, limit: int = 10):
     # Ordering by `article_id` to ensure consistent results
     return db.query(Article).order_by(Article.article_id).offset(skip).limit(limit).all()
+
 
 def create_article(db: Session, article: ArticleCreate, user_id: int):
     #db_article = Article(**article.dict())
@@ -39,7 +41,6 @@ def create_article(db: Session, article: ArticleCreate, user_id: int):
         doi=article.doi,
         user_id=user_id
     )
-
     db.add(db_article)
     db.commit()
     db.refresh(db_article)
@@ -64,6 +65,7 @@ def delete_article(db: Session, article_id: int):
     db.delete(db_article)
     db.commit()
     return db_article
+
 
 def delete_article_by_user_id(db: Session, user_id: int):
     articles = db.query(Article).filter(Article.user_id == user_id).all()

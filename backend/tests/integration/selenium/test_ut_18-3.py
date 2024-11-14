@@ -55,7 +55,6 @@ def test_role_based_access_control(setup_grad_student):
         driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
 
-        # Helper function to login
         def login(username, password):
 
             username_field = WebDriverWait(driver, 10).until(
@@ -79,7 +78,7 @@ def test_role_based_access_control(setup_grad_student):
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
             )
 
-        # Helper function to search for a keyword
+
         def search_keyword(keyword):
             search_input = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='search_input']"))

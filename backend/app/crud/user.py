@@ -9,16 +9,12 @@ import os
 from dotenv import load_dotenv
 from app.crud.article import delete_article_by_user_id
 
-# Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 load_dotenv()
-# Encryption key
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")  # Store this securely!
 fernet = Fernet(ENCRYPTION_KEY)
 
 
-# Helper function to hash fields
 def hash(text: str) -> str:
     return pwd_context.hash(text)
 
@@ -65,12 +61,7 @@ def get_all_users(db: Session):
 
 
 def get_user_by_username(db: Session, username: str):
-    #i dont think this works
     encrypted_username = encrypt(username)
-    print("ENCRYPTED USERNAME")
-    print(encrypted_username)
-    #should we get all users, decrypt them, then compare? hmm
-
     users = db.query(User).all()
     for user in users:
         plaintext_user = decrypt(user.username)
@@ -78,7 +69,6 @@ def get_user_by_username(db: Session, username: str):
         if plaintext_user == username:
             return user
     user = db.query(User).filter(User.username == encrypted_username).first()
-
     return None
 
 
@@ -91,10 +81,8 @@ def get_user_by_email(db: Session, email: str):
 
 
 def create_user(db: Session, user: UserCreate):
-    # Hash the user's password and email, and encrypt the username before storing them
     hashed_password = hash(user.password)
     encrypted_username = encrypt(user.username)
-    # not sure if these actually work might need to decrypt
     if db.query(User).filter(User.username == encrypted_username).first():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
 
@@ -108,7 +96,6 @@ def create_user(db: Session, user: UserCreate):
             password=hashed_password,
             role_id=user.role_id
         )
-
     else:
         db_user = User(
             username=encrypted_username,
@@ -119,7 +106,6 @@ def create_user(db: Session, user: UserCreate):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    # i think we need to get the actual user from the db so it has an associated ID
     return db_user
 
 
@@ -127,32 +113,24 @@ def update_user(db: Session, user_id: int, user: UserUpdate):
     db_user = db.query(User).filter(User.user_id == user_id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
-
     if user.password:
         user.password = hash(user.password)
-
     if user.username:
         user.username = encrypt(user.username)
-
     if user.email:
         user.email = hash(user.email)
-
     for key, value in user.dict(exclude_unset=True).items():
         setattr(db_user, key, value)
-
     db.commit()
     db.refresh(db_user)
     return db_user
 
-def delete_user(db: Session, user_id: int):
-    # Cleanup any related data with NOT NULL constraints before deleting the user
-    delete_article_by_user_id(db, user_id)  # Custom function to delete articles by user
 
-    # Proceed to delete the user
+def delete_user(db: Session, user_id: int):
+    delete_article_by_user_id(db, user_id)
     db_user = db.query(User).filter(User.user_id == user_id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
-
     db.delete(db_user)
     db.commit()
     return db_user
