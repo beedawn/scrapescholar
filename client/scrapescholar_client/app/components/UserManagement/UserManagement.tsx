@@ -80,7 +80,7 @@ const UserManagement: React.FC<UserManagementProps> =
 
 
                 <div className="p-2 w-1/4" data-testid="user_permissions">
-                    <span data-testid="user_permissions_text">Permission details go here</span>  
+                    <span data-testid="user_permissions_text"></span>  
                     <button className="bg-red-600 text-2xl p-1 rounded text-white" 
                     onClick={()=>{setDeleteUserModalActive(true); setDeleteUser(user)}} data-testid="delete_user_button">
                         ␡
