@@ -21,19 +21,17 @@ interface DynamicUserFieldProps {
 const DynamicUserField: React.FC<DynamicUserFieldProps> =
     ({ field, handleCellClick, result, editableCells,
         handleFieldChange, handleFieldConfirm, editableResults, index }) => {
-        const [currentCell, setCurrentCell]=useState<EditableCell>();
-        useEffect(()=>{
-        const currentFoundCell = editableCells.find((cell) => {
+        const [currentCell, setCurrentCell] = useState<EditableCell>();
+        useEffect(() => {
+            const currentFoundCell = editableCells.find((cell) => {
+                return cell.article_id == result.article_id
+            })
+            setCurrentCell(currentFoundCell)
+        }, [editableCells])
+        const currentResult = editableResults.find((cell) => {
             return cell.article_id == result.article_id
         })
 
-        setCurrentCell(currentFoundCell)
-
-    },[editableCells])
-    const currentResult = editableResults.find((cell) => {
-        return cell.article_id == result.article_id
-    })
-        
         return (
             <>
                 {currentCell?.[field] ?

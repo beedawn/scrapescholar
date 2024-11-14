@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
-import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
-import Role from '@/app/types/Role';
+
 interface DeleteUserModalProps {
     setDeleteUserModalActive: (item: boolean) => void;
     deleteUser: any;

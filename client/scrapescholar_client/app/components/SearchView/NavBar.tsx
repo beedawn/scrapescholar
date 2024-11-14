@@ -4,7 +4,6 @@ import SearchBox from './SearchBox';
 import DropdownSearchBox from './DropdownSearchBox';
 import Dropdown from '../../types/DropdownType';
 import SourcesAccordian from './SourcesAccordian';
-
 import apiCalls from '@/app/api/apiCalls';
 import SettingsAccordian from './SettingsAccordion';
 interface NavBarProps {
@@ -40,7 +39,6 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     const max_inputs = 20
     return (
         <>
-       
             <div className="p-5 max-w-sm mr-auto float-left">
                 <div className="float-right pb-6" data-testid="logout-button">
                     <Button onClick={handleLogout} className="" >

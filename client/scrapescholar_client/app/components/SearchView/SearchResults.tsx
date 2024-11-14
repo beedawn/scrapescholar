@@ -4,7 +4,6 @@ import { ResultItem } from '../../views/SearchView';
 import SearchHeader from './SearchHeader';
 import ResultsTable from './ResultsTable';
 import apiCalls from '@/app/api/apiCalls';
-import CommentsSidebar from './CommentsSidebar'; 
 import ArticleModal from '../../components/SearchView/modal/ArticleModal';
 import Button from '../Button';
 
@@ -23,19 +22,19 @@ interface SearchResultsProps {
     setLoading: (item: boolean) => void;
     onArticleClick: (articleId: number) => Promise<void>;
     setRelevanceChanged: (item: boolean) => void;
-    relevanceChanged:boolean;
-}   
+    relevanceChanged: boolean;
+}
 
 const SearchResults: React.FC<SearchResultsProps> = ({
     results, displayInputs, className, emptyString,
     disableD3 = false, bubbleInputs, setResults,
     setSearchName, searchName, currentSearchId, setDisplayInputs,
-    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged}) => {
+    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged }) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
     const { getAPIPastSearchTitle, getCommentsByArticle, downloadURL } = apiCalls();
     const [comments, setComments] = useState<any[]>([]); // Comments state
-    const [commentsLoading, setCommentsLoading] = useState<boolean>(false);     
-    const [addArticleOpen, setAddArticleOpen]=useState<boolean>(false);
+    const [commentsLoading, setCommentsLoading] = useState<boolean>(false);
+    const [addArticleOpen, setAddArticleOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchSearchName = async () => {
@@ -45,14 +44,14 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         }
         fetchSearchName();
     }, [])
-    
-    const addArticleView = () =>{
+
+    const addArticleView = () => {
         setAddArticleOpen(!addArticleOpen)
     }
 
     return (
         <div className={className}>
-            { addArticleOpen? <ArticleModal addArticleView={addArticleView} />:<></>}
+            {addArticleOpen ? <ArticleModal addArticleView={addArticleView} /> : <></>}
             <div className="float-left p-12 max-w-md 
             sm:max-w-screen-xs md:max-w-screen-sm 
             lg:max-w-screen-md xl:max-w-screen-lg">
@@ -68,16 +67,19 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             {disableD3 ? (<></>) : (<>
                                 <BubblePlot data={bubbleInputs} /></>)}
                         </div>
-                        <div className="w-full text-right p-5"><Button onClick={()=>{addArticleView()}}>Add Document</Button></div>
-                        
+                        <div className="w-full text-right p-5">
+                            <Button onClick={() => { addArticleView() }}>
+                                Add Document
+                            </Button>
+                        </div>
                         <ResultsTable setResults={setResults}
                             results={results}
                             selectedArticle={selectedArticle}
-                            setSelectedArticle={setSelectedArticle} 
-                            setLoading={setLoading} 
-                            onArticleClick={onArticleClick} 
+                            setSelectedArticle={setSelectedArticle}
+                            setLoading={setLoading}
+                            onArticleClick={onArticleClick}
                             setRelevanceChanged={setRelevanceChanged}
-                            relevanceChanged={relevanceChanged}/>
+                            relevanceChanged={relevanceChanged} />
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''

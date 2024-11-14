@@ -8,7 +8,7 @@ interface SourcesAccordianProps {
 
 
 const SourcesAccordian: React.FC<SourcesAccordianProps> = ({ addToUserDatabaseList, removeFromUserDatabaseList }) => {
-    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
+    const { getAPIDatabases } = apiCalls();
     const [databases, setDatabases] = useState<string[]>([])
     useEffect(() => {
         const fetchDatabases = async () => {

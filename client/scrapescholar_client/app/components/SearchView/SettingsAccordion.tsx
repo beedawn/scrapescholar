@@ -2,53 +2,41 @@ import React, { useState, useEffect } from 'react';
 import apiCalls from '@/app/api/apiCalls';
 
 interface SettingsAccordionProps {
-
-    setOpenUserManagement:(item:boolean)=>void;
+    setOpenUserManagement: (item: boolean) => void;
 }
 
-
 const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement }) => {
- 
-
-
-    const [isAdminUser, setIsAdminUser]= useState<boolean>(false);
-    const {  isAdmin } = apiCalls();
-    useEffect(()=>{
-    
-        const findAdmin= async()=>{
-    
+    const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
+    const { isAdmin } = apiCalls();
+    useEffect(() => {
+        const findAdmin = async () => {
             const result = await isAdmin()
-            if (result === "true"){
+            if (result === "true") {
                 setIsAdminUser(true)
             }
-
         }
         findAdmin();
-    },[])
+    }, [])
 
-
-    const [hoveredClasses, setHoveredClasses]=useState<any>({1:"text-blue-400 underline",2:"text-blue-400 underline"});
-    const updateHovered = (key:number) => {
-        setHoveredClasses((prevState:any) => ({
+    const [hoveredClasses, setHoveredClasses] = useState<any>({ 1: "text-blue-400 underline", 2: "text-blue-400 underline" });
+    const updateHovered = (key: number) => {
+        setHoveredClasses((prevState: any) => ({
             ...prevState,
             [key]: "text-blue-200 underline",
-          }));  
-      }
-     
-     const removeHovered = (key:number) => {
-        setHoveredClasses((prevState:any) => ({
+        }));
+    }
+
+    const removeHovered = (key: number) => {
+        setHoveredClasses((prevState: any) => ({
             ...prevState,
             [key]: "text-blue-400 underline",
-          }));
-     }
+        }));
+    }
 
     const [openIndex, setOpenIndex] = useState(null);
-
     const toggleAccordion = (index: any) => {
         setOpenIndex(openIndex === index ? null : index);
     };
-
-
     const index = 1;
     return (
         <div id="accordion-color">
@@ -75,17 +63,22 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                 <div className={openIndex === index ? '' : 'hidden'} id={`accordion-color-body-${index + 1}`}
                     aria-labelledby={`accordion-color-heading-${index + 1}`}>
                     <div className="pl-5 dark:border-gray-700">
-                            {isAdminUser?  <div key="1"  >
-                             
-                             <a href="#" onClick={()=>{setOpenUserManagement(true)}} onMouseEnter={()=>{updateHovered(1)}}  onMouseLeave={()=>{removeHovered(1)}} className={hoveredClasses[1]} data-testid="settings_user_management">User Management</a>
-                   
-                       </div>:<></>}
-                          
-                            <div key="2" onClick={()=>alert("api keys")}  >
-                               
-                                   <a href="#" onMouseEnter={()=>{updateHovered(2)}}  onMouseLeave={()=>{removeHovered(2)}} className={hoveredClasses[2]}>API Keys</a>
-                         
-                            </div>
+                        {isAdminUser ? <div key="1"  >
+                            <a href="#" onClick={() => { setOpenUserManagement(true) }}
+                                onMouseEnter={() => { updateHovered(1) }}
+                                onMouseLeave={() => { removeHovered(1) }}
+                                className={hoveredClasses[1]}
+                                data-testid="settings_user_management">
+                                User Management
+                            </a>
+                        </div> : <></>}
+                        <div key="2" onClick={() => alert("api keys")}  >
+                            <a href="#" onMouseEnter={() => { updateHovered(2) }}
+                                onMouseLeave={() => { removeHovered(2) }}
+                                className={hoveredClasses[2]}>
+                                API Keys
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

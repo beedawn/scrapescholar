@@ -10,7 +10,6 @@ enum DocumentType {
     Document,
     Journal,
     Book
-
 }
 
 enum Source {
@@ -31,24 +30,20 @@ export interface NewArticle {
     documenttype: string
 }
 
-interface DatabaseItem{
-    name:string;
-    source_id:number;
+interface DatabaseItem {
+    name: string;
+    source_id: number;
 }
 
 
-// need to get list of sources either from navbar or just request again from backend for add article dropdown
-
-
-
 const { getAPIDatabasesAndIDs } = apiCalls();
-//need to get search id
+
 const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
     const clearModal = () => {
         addArticleView();
     }
     const [databases, setDatabases] = useState<DatabaseItem[]>([])
-    
+
 
     useEffect(() => {
         const fetchDatabases = async () => {
@@ -57,14 +52,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
         };
         fetchDatabases();
     }, []);
-    
+
 
     const blankArticle = {
         title: "",
         year: "",
         citedby: "",
-        documenttype:"",
-        source_id:0
+        documenttype: "",
+        source_id: 0
     }
 
     const [newArticle, setNewArticle] = useState<NewArticle>(blankArticle);
@@ -80,7 +75,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0  ) {
+        if (newArticle.title.length == 0 || newArticle.year.length == 0 || newArticle.citedby.length == 0) {
             setError(true);
         } else {
             // const response = await addArticle(newArticle);
@@ -108,10 +103,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
                 newDocument = DocumentType.Journal;
                 break;
             case ("Document"):
-                newDocument= DocumentType.Document;
+                newDocument = DocumentType.Document;
                 break;
             case ("Book"):
-                newDocument= DocumentType.Book;
+                newDocument = DocumentType.Book;
                 break;
             default:
                 newDocument = DocumentType.Document;
@@ -121,46 +116,24 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
     const dropdownSourceChange = (e: any) => {
         const selectedRole = e.target.value;
-    
-
-        for (let item of databases){
-            if (item.name == selectedRole){
+        for (let item of databases) {
+            if (item.name == selectedRole) {
                 updateArticleState("source_id", item.source_id)
             }
-            else{
-                updateArticleState("source_id",0)
+            else {
+                updateArticleState("source_id", 0)
             }
-
         }
-       
     }
 
     return (
         <div>
 
             <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                {/* 
-    Background backdrop, show/hide based on modal state.
-
-    Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0" */}
                 <form onSubmit={(e) => { submitArticle(e) }}>
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                     <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                            {/* Modal panel, show/hide based on modal state.
-
-        Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-        Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-   */}
                             <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl 
                             transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
@@ -178,8 +151,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                     <div>Title</div>
                                 </div>
@@ -251,7 +222,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ addArticleView }) => {
 
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <DropdownSearchBox value={Source[newArticle.source_id]} valueArray={databases.map((db)=>db.name)} onDropdownChange={dropdownSourceChange} defaultValue="Source"
+                                        <DropdownSearchBox value={Source[newArticle.source_id]} valueArray={databases.map((db) => db.name)} onDropdownChange={dropdownSourceChange} defaultValue="Source"
                                             data-testid="new_user_role" />
                                     </div>
                                 </div>
