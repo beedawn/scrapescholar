@@ -6,7 +6,7 @@ const apiCalls = () => {
   const getAPIDatabases = async () => {
     const url = `http://${host}:8000/academic_sources`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { method: "GET", credentials: "include" });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
@@ -20,7 +20,7 @@ const apiCalls = () => {
   const getAPIDatabasesAndIDs = async () => {
     const url = `http://${host}:8000/academic_sources_id`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { method: "GET", credentials: "include" });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
