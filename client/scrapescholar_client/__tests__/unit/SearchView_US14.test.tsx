@@ -18,7 +18,7 @@ afterEach(() => {
 describe('SearchView US-14 Component', () => {
     const mockSetLoggedIn = jest.fn();
     const testInput = "test input"
- 
+    //UT-14.1
     test('US-14 article delete button should be in the document', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);
@@ -27,7 +27,7 @@ describe('SearchView US-14 Component', () => {
             expect(deleteArticleButton).toBeInTheDocument();
         }, { timeout: 5000 });
     })
-
+    //UT-14.2
     test('US-14 Add Document button should be in the document', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);
@@ -36,7 +36,7 @@ describe('SearchView US-14 Component', () => {
             expect(addDocumentButton).toBeInTheDocument()
         }, { timeout: 5000 });
     })
-
+    //UT-14.3
     test('US-14 article delete button should be in the document, and prompt user before deletion', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);
