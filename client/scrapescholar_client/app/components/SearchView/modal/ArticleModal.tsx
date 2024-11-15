@@ -3,8 +3,9 @@ import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
 import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
 import DOMPurify from 'dompurify';
-import { link } from 'fs';
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
 enum DocumentType {
     Article,
     Document,
@@ -30,7 +31,7 @@ interface AddArticleModalProps {
 export interface NewArticle {
     search_id:number,
     title: string,
-    date: string,
+    date: Date,
     citedby: string,
     source_id: number,
     document_type: string,
@@ -51,7 +52,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
         addArticleView();
     }
     const [databases, setDatabases] = useState<DatabaseItem[]>([])
-
+    const [startDate, setStartDate] = useState<Date| null>(new Date());
 
     useEffect(() => {
         const fetchDatabases = async () => {
@@ -65,7 +66,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
     const blankArticle:NewArticle = {
         search_id:search_id,
         title: "",
-        date: "",
+        date: new Date(),
         citedby: "",
         document_type: "",
         source_id: 0,
@@ -87,13 +88,15 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
 
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-       
-        if (newArticle.title.length == 0 || newArticle.date.length == 0 || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.document_type.length == 0) {
+        console.log("new article")
+       console.log(newArticle)
+       console.log(new Date(newArticle.date).toISOString().slice(0, 10))
+        if (newArticle.title.length == 0 || newArticle.date == null || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.document_type.length == 0) {
             setError(true);
            
            
         } else {
-            const dateArticle = {...newArticle, "date":new Date(parseInt(newArticle.date), 0, 1).toISOString().slice(0, 10), "citedby": parseInt(newArticle.citedby)}
+            const dateArticle = {...newArticle, "date":new Date(newArticle.date).toISOString().slice(0, 10), "citedby": parseInt(newArticle.citedby)}
             console.log(dateArticle)
             const response = await addArticle(dateArticle);
             // have articles reload?
@@ -213,7 +216,8 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                 <div className="flex gap-4 justify-center items-center text-center">
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
                                         <label className="text-black mb-1">Year</label>
-                                        <input
+                                        <DatePicker selected={startDate} onChange={(date) => {setStartDate(date); updateArticleState("date", date)}} />
+                                        {/* <input
                                         type="number"
                                             className="border rounded border-slate-800 text-center p-2"
                                             placeholder="Year"
@@ -221,7 +225,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                             onClick={() => { clearErrorSuccessMsg() }}
                                             onChange={(e) => { updateArticleState("date", e.target.value) }}
                                             data-testid="new_article_date"
-                                        />
+                                        /> */}
                                     </div>
 
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
