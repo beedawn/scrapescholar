@@ -50,7 +50,7 @@ console.log(currentSearchID)
                                     </div>
                                 </div>
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
-                                    <div>Deleting this article is permanent.</div>
+                                    <div data-testid="delete_article_prompt">Deleting this article is permanent.</div>
                                 </div>
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                     <div>Article Title: {articleToDelete.title}</div>
