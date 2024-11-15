@@ -166,7 +166,7 @@ describe('SearchView US-4 Component', () => {
         submitSearch(testInput);
    
         await waitFor(async () => {
-             const dataMessage = /SearchData is Full\!/i
+             const dataMessage = /Please select some searches to delete to perform additional searches\:/i
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
          
@@ -183,7 +183,7 @@ describe('SearchView US-4 Component', () => {
         submitSearch(testInput);
    
         await waitFor(async () => {
-             const dataMessage = /SearchData is Full\!/i
+             const dataMessage = /Please select some searches to delete to perform additional searches\:/i
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
            
@@ -200,7 +200,7 @@ describe('SearchView US-4 Component', () => {
         submitSearch(testInput);
    
         await waitFor(async () => {
-             const dataMessage = /SearchData is Full\!/i
+             const dataMessage = /Please select some searches to delete to perform additional searches\:/i
              const dataMsg = await screen.findByText(dataMessage)
             expect(dataMsg).toBeInTheDocument();
            
@@ -210,7 +210,7 @@ describe('SearchView US-4 Component', () => {
 
 
         await waitFor(async () => {
-            const dataMessage = /SearchData is Full\!/i
+            const dataMessage = /Please select some searches to delete to perform additional searches\:/i
             const dataMsg = screen.queryByText(dataMessage)
             expect(dataMsg).toBeNull()
          

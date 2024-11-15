@@ -85,7 +85,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                             <a href="#" onMouseEnter={() => { updateHovered(3) }}
                                 onMouseLeave={() => { removeHovered(3) }}
                                 className={hoveredClasses[3]}>
-                                Article Management
+                                Search Management
                             </a>
                         </div>
                     </div>

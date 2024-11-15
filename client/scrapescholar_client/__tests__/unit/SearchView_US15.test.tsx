@@ -395,8 +395,8 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[3].textContent).toContain("link x");
-            expect(rows[1].children[3].textContent).toContain("link a");
+            expect(rows[0].children[4].textContent).toContain("link x");
+            expect(rows[1].children[4].textContent).toContain("link a");
         }
         else
             fail('no sort button')
@@ -413,8 +413,8 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[3].textContent).toContain("link a");
-            expect(rows[1].children[3].textContent).toContain("link x");
+            expect(rows[0].children[4].textContent).toContain("link a");
+            expect(rows[1].children[4].textContent).toContain("link x");
         } else
             fail('no sort button found')
     })
@@ -453,8 +453,8 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[4].textContent).toContain("b");
-            expect(rows[1].children[4].textContent).toContain("a");
+            expect(rows[0].children[5].textContent).toContain("b");
+            expect(rows[1].children[5].textContent).toContain("a");
         }
         else
             fail('no sort button')
@@ -471,8 +471,8 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[4].textContent).toContain("a");
-            expect(rows[1].children[4].textContent).toContain("b");
+            expect(rows[0].children[5].textContent).toContain("a");
+            expect(rows[1].children[5].textContent).toContain("b");
         } else
             fail('no sort button found')
     })
@@ -511,8 +511,8 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[5].textContent).toContain("journal");
-            expect(rows[1].children[5].textContent).toContain("article");
+            expect(rows[0].children[6].textContent).toContain("journal");
+            expect(rows[1].children[6].textContent).toContain("article");
         }
         else
             fail('no sort button')
@@ -529,8 +529,8 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[5].textContent).toContain("article");
-            expect(rows[1].children[5].textContent).toContain("journal");
+            expect(rows[0].children[6].textContent).toContain("article");
+            expect(rows[1].children[6].textContent).toContain("journal");
         } else
             fail('no sort button found')
     })
@@ -569,8 +569,8 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[7].textContent).toContain("Reject");
-            expect(rows[1].children[7].textContent).toContain("Accept");
+            expect(rows[0].children[8].textContent).toContain("Reject");
+            expect(rows[1].children[8].textContent).toContain("Accept");
         }
         else
             fail('no sort button')
@@ -587,8 +587,8 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[7].textContent).toContain("Accept");
-            expect(rows[1].children[7].textContent).toContain("Reject");
+            expect(rows[0].children[8].textContent).toContain("Accept");
+            expect(rows[1].children[8].textContent).toContain("Reject");
         } else
             fail('no sort button found')
     })
@@ -627,8 +627,8 @@ describe('SearchView US-15 Component', () => {
             fireEvent.click(sortButton);
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[10].textContent).toContain("1");
-            expect(rows[1].children[10].textContent).toContain("0");
+            expect(rows[0].children[11].textContent).toContain("1");
+            expect(rows[1].children[11].textContent).toContain("0");
         }
         else
             fail('no sort button')
@@ -645,8 +645,8 @@ describe('SearchView US-15 Component', () => {
         if (sortButton) {
             fireEvent.click(sortButton);
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[10].textContent).toContain("0");
-            expect(rows[1].children[10].textContent).toContain("1");
+            expect(rows[0].children[11].textContent).toContain("0");
+            expect(rows[1].children[11].textContent).toContain("1");
         } else
             fail('no sort button found')
     })
