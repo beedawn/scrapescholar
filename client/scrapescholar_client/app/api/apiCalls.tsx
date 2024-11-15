@@ -604,6 +604,24 @@ const apiCalls = () => {
     }
   }
 
+
+  const deleteArticleAPI = async (article_id: number) => {
+    let data: Response;
+    let jsonData;
+    try {
+      const url = `http://${host}:8000/article/${article_id}`
+      data = await fetch(url, {
+        method: "DELETE", credentials: "include"
+      })
+      jsonData = await data.json()
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+    }
+
+  }
+
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
@@ -613,7 +631,7 @@ const apiCalls = () => {
     editComment,
     deleteComment, downloadURL, putSearchShare, 
     isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole,
-    getAPIDatabasesAndIDs, addArticle  };
+    getAPIDatabasesAndIDs, addArticle,deleteArticleAPI  };
 
 }
 

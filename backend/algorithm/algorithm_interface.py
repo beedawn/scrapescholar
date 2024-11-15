@@ -11,7 +11,6 @@ def algorithm_interface(keywords, article_title, article_abstract=None):
         if skip_next:
             skip_next = False
             continue
-
         elif keyword == "NOT":
             skip_next = True
             continue

@@ -81,7 +81,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             setLoading={setLoading}
                             onArticleClick={onArticleClick}
                             setRelevanceChanged={setRelevanceChanged}
-                            relevanceChanged={relevanceChanged} />
+                            relevanceChanged={relevanceChanged} 
+                            handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}
+                            currentSearchID={currentSearchId}/>
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''

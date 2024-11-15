@@ -8,6 +8,7 @@ import apiCalls from '@/app/api/apiCalls';
 import Button from '../Button';
 import AbstractModal from './modal/AbstractModal';
 import DOMPurify from 'dompurify';
+import DeleteArticleModal from './modal/DeleteArticle';
 
 export interface EditableCell {
     relevance: boolean;
@@ -28,6 +29,9 @@ interface ResultsTableProps {
     onArticleClick: (articleId: number) => void;
     setRelevanceChanged: (item: boolean) => void;
     relevanceChanged: boolean;
+    handlePastSearchSelectionSearchID:
+    (search_id:number) => void;
+    currentSearchID:number;
 }
 
 export const sortResults = (array: ResultItem[],
@@ -57,7 +61,7 @@ export const sortResults = (array: ResultItem[],
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
     results, selectedArticle, setSelectedArticle, setResults,
-    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged
+    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged, handlePastSearchSelectionSearchID, currentSearchID
 }) => {
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
@@ -141,14 +145,26 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
             await putUserData(putrequest)
         }
     }
+    const [deleteArticleModalActive, setDeleteArticleModalActive]=useState<boolean>(false)
+    const [articleToDelete, setArticleToDelete]=useState<ResultItem>();
+    const openDeleteArticleModal = (article:ResultItem) =>{
+        setDeleteArticleModalActive(true);
+        setArticleToDelete(article)
+
+
+    }
 
     return (
         <>
+        {deleteArticleModalActive && articleToDelete !== undefined?<DeleteArticleModal handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID} setDeleteArticleModalActive={setDeleteArticleModalActive} currentSearchID={currentSearchID} articleToDelete={articleToDelete}/>:<></>}
             {(abstractText.length > 0) ? (<AbstractModal setAbstractText={setAbstractText} text={abstractText} />) : <></>}
             <div className="overflow-x-auto">
                 <table className=" min-w-full table-auto border-collapse border border-gray-300">
                     <thead>
                         <tr>
+                        <th className="border border-gray-300">
+    {/* delete */}
+                            </th>
                             <th className="border border-gray-300">
                                 Title
                                 <SortToggleButton handleSort={handleSort}
@@ -229,6 +245,16 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                     setSelectedArticle(result.article_id);
                                     onArticleClick(result.article_id); // Call onArticleClick when an article is clicked
                                 }} data-testid='row'>
+                                      <td className="border border-gray-300" >
+                                   
+                                    <button className="bg-red-600 text-2xl p-1 m-2 rounded text-white" 
+                    onClick={()=>{
+                        openDeleteArticleModal(result)
+                        }} data-testid="delete_article_button">
+                        ␡
+                        </button>
+                                    
+                                </td>
                                 <td className="border border-gray-300" >
                                     <a href={result.link}>
                                         {result.title}
