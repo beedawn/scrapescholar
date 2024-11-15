@@ -12,7 +12,7 @@ const apiCalls = () => {
     source_id: number,
     document_type: string,
     abstract: string,
-    url: string
+    link: string
 }
 
   const getAPIDatabases = async () => {

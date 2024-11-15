@@ -25,7 +25,6 @@ const DataFull: React.FC<DataFullProps> =
         }
         return (
             <div className={"p-10"}>
-                <p>SearchData is Full!</p>
                 <p>
                     Please select some searches to
                     delete to perform additional searches:
