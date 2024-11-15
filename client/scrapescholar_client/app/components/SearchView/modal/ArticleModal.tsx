@@ -32,7 +32,7 @@ export interface NewArticle {
     date: string,
     citedby: string,
     source_id: number,
-    documenttype: string,
+    document_type: string,
     abstract: string,
     url: string
 }
@@ -66,7 +66,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
         title: "",
         date: "",
         citedby: "",
-        documenttype: "",
+        document_type: "",
         source_id: 0,
         abstract:"",
         url:""
@@ -87,7 +87,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
        
-        if (newArticle.title.length == 0 || newArticle.date.length == 0 || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.documenttype.length == 0) {
+        if (newArticle.title.length == 0 || newArticle.date.length == 0 || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.document_type.length == 0) {
             setError(true);
            
            
@@ -130,7 +130,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
             default:
                 newDocument = DocumentType.Document;
         }
-        updateArticleState("documenttype", DocumentType[newDocument])
+        updateArticleState("document_type", DocumentType[newDocument])
     }
 
     const dropdownSourceChange = (e: any) => {
@@ -243,7 +243,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
                                         <DropdownSearchBox
-                                            value={newArticle.documenttype}
+                                            value={newArticle.document_type}
                                             valueArray={Object.keys(DocumentType)
                                                 .filter((item) => {
                                                     return isNaN(Number(item));
