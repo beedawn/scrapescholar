@@ -171,7 +171,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                     field="title" pressedSort={pressedSort} />
                             </th>
                             <th className="border border-gray-300">
-                                Year
+                                Date
                                 <SortToggleButton handleSort={handleSort}
                                     field="date" pressedSort={pressedSort} />
                             </th>

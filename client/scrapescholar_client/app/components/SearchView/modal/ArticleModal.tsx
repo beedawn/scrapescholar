@@ -215,7 +215,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                             </div>
                                 <div className="flex gap-4 justify-center items-center text-center">
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
-                                        <label className="text-black mb-1">Year</label>
+                                        <label className="text-black mb-1">Date</label>
                                         <DatePicker selected={startDate} onChange={(date) => {setStartDate(date); updateArticleState("date", date)}} />
                                         {/* <input
                                         type="number"

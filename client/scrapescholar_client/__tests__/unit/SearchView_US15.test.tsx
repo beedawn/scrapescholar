@@ -81,7 +81,7 @@ describe('SearchView US-15 Component', () => {
         submitSearch(testInput);
         let sortButton;
         await waitFor(() => {
-            const yearScoreHeader = screen.getByText('Year');
+            const yearScoreHeader = screen.getByText('Date');
             sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
         }, { timeout: 5000 });
         if (sortButton) {
@@ -100,7 +100,7 @@ describe('SearchView US-15 Component', () => {
         submitSearch(testInput);
         let sortButton;
         await waitFor(() => {
-            const yearScoreHeader = screen.getByText('Year');
+            const yearScoreHeader = screen.getByText('Date');
             sortButton = within(yearScoreHeader.closest('th')).getByRole('button');
         }, { timeout: 5000 });
         if (sortButton) {
@@ -116,7 +116,7 @@ describe('SearchView US-15 Component', () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);
         await waitFor(() => {
-            const yearHeader = screen.getByText('Year');
+            const yearHeader = screen.getByText('Date');
             const sortButton = within(yearHeader.closest('th')).getByRole('button');
             expect(sortButton).toHaveClass('bg-gray-400');
         }, { timeout: 5000 });
@@ -126,7 +126,7 @@ describe('SearchView US-15 Component', () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
         submitSearch(testInput);
         await waitFor(() => {
-            const yearHeader = screen.getByText('Year');
+            const yearHeader = screen.getByText('Date');
             const sortButton = within(yearHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
@@ -854,7 +854,7 @@ describe('SearchView US-15 Component', () => {
             const sortButton = within(titleHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton);
             expect(sortButton).toHaveClass('bg-gray-600');
-            const yearHeader = screen.getByText('Year');
+            const yearHeader = screen.getByText('Date');
             const sortButton2 = within(yearHeader.closest('th')).getByRole('button')
             fireEvent.click(sortButton2);
             expect(sortButton2).toHaveClass('bg-gray-600');
