@@ -3,9 +3,11 @@ import apiCalls from '@/app/api/apiCalls';
 
 interface SettingsAccordionProps {
     setOpenUserManagement: (item: boolean) => void;
+    setDataFull: (item: boolean) => void;
+    clearPages:()=>void;
 }
 
-const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement }) => {
+const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull,clearPages }) => {
     const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
     const { isAdmin } = apiCalls();
     useEffect(() => {
@@ -18,7 +20,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
         findAdmin();
     }, [])
 
-    const [hoveredClasses, setHoveredClasses] = useState<any>({ 1: "text-blue-400 underline", 2: "text-blue-400 underline" });
+    const [hoveredClasses, setHoveredClasses] = useState<any>({ 1: "text-blue-400 underline", 2: "text-blue-400 underline" , 3:"text-blue-400 underline" });
     const updateHovered = (key: number) => {
         setHoveredClasses((prevState: any) => ({
             ...prevState,
@@ -64,7 +66,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                     aria-labelledby={`accordion-color-heading-${index + 1}`}>
                     <div className="pl-5 dark:border-gray-700">
                         {isAdminUser ? <div key="1"  >
-                            <a href="#" onClick={() => { setOpenUserManagement(true) }}
+                            <a href="#" onClick={() => { clearPages();setOpenUserManagement(true); }}
                                 onMouseEnter={() => { updateHovered(1) }}
                                 onMouseLeave={() => { removeHovered(1) }}
                                 className={hoveredClasses[1]}
@@ -77,6 +79,13 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                                 onMouseLeave={() => { removeHovered(2) }}
                                 className={hoveredClasses[2]}>
                                 API Keys
+                            </a>
+                        </div>
+                        <div key="3" onClick={() => {clearPages();setDataFull(true)}}  >
+                            <a href="#" onMouseEnter={() => { updateHovered(3) }}
+                                onMouseLeave={() => { removeHovered(3) }}
+                                className={hoveredClasses[3]}>
+                                Article Management
                             </a>
                         </div>
                     </div>

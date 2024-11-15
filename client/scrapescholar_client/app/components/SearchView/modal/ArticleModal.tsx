@@ -158,7 +158,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                             transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                     <div className="flex items-start justify-between">
-                                        <h3 className="text-base font-semibold text-gray-900" id="modal-title">New User</h3>
+                                        <h3 className="text-base font-semibold text-gray-900" id="modal-title">New Article</h3>
                                         <div className="text-right">
                                             <button type="button" onClick={() => clearModal()} className="mt-3 
                                             inline-flex w-full justify-center 

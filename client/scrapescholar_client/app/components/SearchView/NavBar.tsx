@@ -22,13 +22,15 @@ interface NavBarProps {
     handlePastSearchSelection:
     (event: React.ChangeEvent<HTMLSelectElement>) => void;
     setOpenUserManagement: (item:boolean)=>void;
+    setDataFull: (item:boolean)=>void;
+    clearPages:()=>void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
     addInput, inputs, handleSearchChange, removeInput,
     setLoggedIn, dropdown, handleDropdownChange,
     addToUserDatabaseList, removeFromUserDatabaseList,
-    searches, handlePastSearchSelection, setOpenUserManagement }) => {
+    searches, handlePastSearchSelection, setOpenUserManagement, setDataFull,clearPages }) => {
 
         const {deleteCookie}=apiCalls();
     const handleLogout = async () => {
@@ -48,7 +50,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
                 <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
-                    <SettingsAccordian setOpenUserManagement={setOpenUserManagement}/>
+                    <SettingsAccordian setOpenUserManagement={setOpenUserManagement} setDataFull={setDataFull} clearPages={clearPages}/>
                 <DropdownSearchBox value="past search dropdown"
                     onDropdownChange={(selectedTitle) => 
                         handlePastSearchSelection(selectedTitle)} valueArray={searches}

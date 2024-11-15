@@ -13,6 +13,7 @@ import UserManagement from '../components/UserManagement/UserManagement';
 import Relevance from '../types/Relevance';
 import { init } from 'next/dist/compiled/webpack/webpack';
 import DOMPurify from 'dompurify';
+import { clear } from 'console';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -192,6 +193,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     const clearPages = () => {
         setOpenUserManagement(false)
+        setDataFull(false)
         setLoading(false);
     }
     const handlePastSearchSelection = async (event: any) => {
@@ -286,14 +288,14 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}
                     addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}
                     searches={searches} handlePastSearchSelection={handlePastSearchSelection} setOpenUserManagement={setOpenUserManagement}
-
+                    setDataFull={setDataFull} clearPages={clearPages}
                 />
             </div>
 
             <div className="flex-1 sm:mx-12 w-full overflow-auto">
                 {error ? (<p>{error.message}</p>)
                     : loading ? <Loading /> : openUserManagement ? <><UserManagement /></> :
-                        dataFull ? <p> <DataFull searches={searches} setLoading={setLoading} /></p> :
+                        dataFull ? <> <DataFull searches={searches} setLoading={setLoading} /></> :
                             <SearchResults
                                 setResults={setResults}
                                 displayInputs={joinedInputsString}
