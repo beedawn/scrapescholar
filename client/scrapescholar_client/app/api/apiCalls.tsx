@@ -10,7 +10,7 @@ const apiCalls = () => {
     date: string,
     citedby: number,
     source_id: number,
-    documenttype: string,
+    document_type: string,
     abstract: string,
     url: string
 }
