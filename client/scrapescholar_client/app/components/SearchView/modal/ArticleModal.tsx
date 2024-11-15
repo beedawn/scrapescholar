@@ -194,7 +194,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                     <div>
                                         <input className="border rounded border-slate-800 text-center p-2"
                                             placeholder="Link" value={newArticle.link} onClick={() => {clearErrorSuccessMsg() }} onChange={(e) => {
-                                                if(!e.target.value.startsWith("http://")|| !e.target.value.startsWith("https://")){
+                                                if(!e.target.value.startsWith("http://")&& !e.target.value.startsWith("https://")){
                                                     setLinkValidationError("Link must begin with http:// or https://")
                                                 }
                                                 else{

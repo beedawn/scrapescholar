@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
 import DropdownSearchBox from '../../SearchView/DropdownSearchBox';
-
+import DOMPurify from 'dompurify';
 import Role from '@/app/types/Role';
 interface AddUserModalProps {
     setAddUserModalActive: (item: boolean) => void;
@@ -30,9 +30,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ setAddUserModalActive }) =>
     });
     const [error, setError] = useState<boolean>(false);
     const updateUserState = (item: any, value: any) => {
+        const sanitizedValue = DOMPurify.sanitize(value)
         setNewUser((prevState) => ({
             ...prevState,
-            [item]: value
+            [item]: sanitizedValue
         }))
     }
 
