@@ -22,8 +22,8 @@ enum Source {
 interface AddArticleModalProps {
     addArticleView: () => void;
     search_id:number;
-    handlePastSearchSelection:
-    (event: React.ChangeEvent<HTMLSelectElement>) => void;
+    handlePastSearchSelectionSearchID:
+    (search_id:number) => void;
 }
 
 export interface NewArticle {
@@ -45,7 +45,7 @@ interface DatabaseItem {
 
 const { getAPIDatabasesAndIDs, addArticle } = apiCalls();
 
-const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, search_id, handlePastSearchSelection }) => {
+const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, search_id, handlePastSearchSelectionSearchID }) => {
     const clearModal = () => {
         addArticleView();
     }
@@ -96,7 +96,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
             console.log(dateArticle)
             const response = await addArticle(dateArticle);
             // have articles reload?
-            handlePastSearchSelection(search_id)
+            handlePastSearchSelectionSearchID(search_id)
             setNewArticle(blankArticle)
          
             if (response === null) {

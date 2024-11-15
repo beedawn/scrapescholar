@@ -2,7 +2,7 @@
 from algorithm.algorithm import algorithm
 
 
-def algorithm_interface(keywords, article_title, article_abstract=None, authorkeywords=None):
+def algorithm_interface(keywords, article_title, article_abstract=None):
     title_score = algorithm(article_title, keywords)
     relevance_score = 0
     if article_title is not None and article_abstract is not None:

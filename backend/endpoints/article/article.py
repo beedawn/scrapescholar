@@ -7,6 +7,8 @@ from app.db.session import get_db
 from typing import Annotated
 from auth_tools.get_user import get_current_user_modular
 from app.crud.user_data import create_user_data, delete_user_data, get_user_data, update_user_data
+from app.crud.search import get_search
+from algorithm.algorithm_interface import algorithm_interface
 
 router = APIRouter()
 
@@ -29,12 +31,19 @@ async def create_new_article(
         access_token: Annotated[str | None, Cookie()] = None,
         db: Session = Depends(get_db)
 ):
-    print("ARTICLE")
-    print(article)
 
+    print(article.search_id)
+    search= get_search(db, article.search_id)
+    relevance_score=algorithm_interface(" ".join(search.search_keywords),article.title,article.abstract)
+
+    print("ARTICLE DICT")
+    print(article.__dict__)
+    article_data = article.__dict__.copy()
+    article_data.pop("relevance_score", None)
+    article_with_relevance_score = ArticleCreate(**article_data,relevance_score=relevance_score)
     current_user = get_current_user_modular(access_token, db)
 
-    created_article = create_article(db, article, user_id=current_user.user_id)
+    created_article = create_article(db, article_with_relevance_score, user_id=current_user.user_id)
     create_user_data(db, current_user.user_id, created_article.article_id)
     return created_article
 

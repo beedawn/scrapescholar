@@ -196,15 +196,20 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
     const handlePastSearchSelection = async (event: any) => {
         const selectedSearchId = event.target.value;
-        setCurrentSearchId(selectedSearchId)
-        setSelectedSearchIdState(selectedSearchId)
+        await handlePastSearchSelectionSearchID(selectedSearchId)
+    }
+
+    const handlePastSearchSelectionSearchID = async (search_id:number)=>{
+
+        setCurrentSearchId(search_id)
+        setSelectedSearchIdState(search_id)
         setDataFull(false)
         //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
-        if (selectedSearchId) {
+        if (search_id) {
             clearPages();
             setError(null);
-            const search_results = await getAPIPastSearchResults(setResults, setError, selectedSearchId);
-            await getAPIPastSearchTitle(selectedSearchId, setSearchName, setJoinedInputsString)
+            const search_results = await getAPIPastSearchResults(setResults, setError, search_id);
+            await getAPIPastSearchTitle(search_id, setSearchName, setJoinedInputsString)
             //need to add something here to update the searchname to the new name
             clearPages();
             //empties bubble graphs for new search with no data, maybe need to put something here? yes we do
@@ -214,6 +219,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         else {
             setError({ "message": "No search found" });
         }
+
     }
     //updates data in dropdown array when and/or/not is selected
     const handleDropdownChange = (index: number, option: Dropdown) => {
@@ -303,7 +309,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                                 onArticleClick={handleArticleClick}
                                 setRelevanceChanged={setRelevanceChanged}
                                 relevanceChanged={relevanceChanged}
-                                handlePastSearchSelection={handlePastSearchSelection}
+                                handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}
                             />}
             </div>
             {isSidebarOpen && selectedArticleId !== null && (
