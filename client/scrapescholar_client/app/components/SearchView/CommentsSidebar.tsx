@@ -63,7 +63,6 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
     const handleSaveEdit = async (comment_id: number) => {
         try {
             const updatedComment = await editComment(comment_id, editedText);
-            console.log(updatedComment)
             setComments(comments.map(comment => comment.comment_id === comment_id ? updatedComment : comment));
             setEditingCommentId(null); // Exit edit mode after saving
         } catch (err) {
