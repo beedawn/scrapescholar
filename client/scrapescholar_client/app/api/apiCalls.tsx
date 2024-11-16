@@ -1,12 +1,38 @@
 import { NewUser } from "../components/UserManagement/modal/AddUserModal";
+
 const apiCalls = () => {
 
   const host = process.env.NEXT_PUBLIC_HOST_IP;
 
+   interface NewArticle {
+    search_id:number,
+    title: string,
+    date: string,
+    citedby: number,
+    source_id: number,
+    document_type: string,
+    abstract: string,
+    link: string
+}
+
   const getAPIDatabases = async () => {
     const url = `http://${host}:8000/academic_sources`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { method: "GET", credentials: "include" });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  const getAPIDatabasesAndIDs = async () => {
+    const url = `http://${host}:8000/academic_sources_id`;
+    try {
+      const response = await fetch(url, { method: "GET", credentials: "include" });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
@@ -217,7 +243,6 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
-      console.log("delete search called!")
       const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
       data = await fetch(url, {
         method: "DELETE", credentials: "include"
@@ -233,7 +258,7 @@ const apiCalls = () => {
     }
     else {
       // console.log(jsonData)
-      console.log("failure to delete search")
+      //console.log("failure to delete search")
     }
   }
 
@@ -370,7 +395,6 @@ const apiCalls = () => {
       const url = `http://${host}:8000/auth/get_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
-      console.log(jsonData)
       return jsonData;
     }
     catch (error: any) {
@@ -409,7 +433,6 @@ const apiCalls = () => {
       const url = `http://${host}:8000/auth/remove_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
-      console.log(jsonData)
       return jsonData;
     }
     catch (error: any) {
@@ -469,12 +492,6 @@ const apiCalls = () => {
   const downloadURL= `http://${host}:8000/download?search_id=`
 
 
-
-
-
-
-
-  // Add a new comment
   const addUser = async ( userBody: NewUser) => {
     try {
         const url = `http://${host}:8000/users/create`;
@@ -536,13 +553,7 @@ const apiCalls = () => {
       // jsonData = [{ "title": error.message, link: '' }]
       // setError(error);
     }
-    if (jsonData !== undefined) {
-      // console.log("Search deleted")
-    }
-    else {
-      // console.log(jsonData)
-      console.log("failure to delete search")
-    }
+
   }
 
   const updateUserRole = async (userId: number, newRole: string) => {
@@ -566,6 +577,51 @@ const apiCalls = () => {
     }
   };
 
+
+  const addArticle = async ( articleBody:NewArticle) => {
+    try {
+        const url = `http://${host}:8000/article`;
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                articleBody
+            ),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error adding user: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        // console.error("Error adding User:", error);
+        return null;
+    }
+  }
+
+
+  const deleteArticleAPI = async (article_id: number) => {
+    let data: Response;
+    let jsonData;
+    try {
+      const url = `http://${host}:8000/article/${article_id}`
+      data = await fetch(url, {
+        method: "DELETE", credentials: "include"
+      })
+      jsonData = await data.json()
+    }
+    catch (error: any) {
+      // jsonData = [{ "title": error.message, link: '' }]
+      // setError(error);
+    }
+
+  }
+
   return { getAPIDatabases, postAPILogin, 
     getAPIResults, getAPISearches, getAPIPastSearchResults, 
     getAPIPastSearchTitle, putSearchTitle, 
@@ -573,7 +629,9 @@ const apiCalls = () => {
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare, isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole   };
+    deleteComment, downloadURL, putSearchShare, 
+    isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole,
+    getAPIDatabasesAndIDs, addArticle,deleteArticleAPI  };
 
 }
 

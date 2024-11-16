@@ -1,31 +1,25 @@
 "use client";
 import React, { useState, Dispatch, SetStateAction} from 'react';
 import apiCalls from '../api/apiCalls';
+import DOMPurify from 'dompurify';
 interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     setToken: (item: string) => void;
 }
-
-
-
-// const admin_user = process.env.NEXT_PUBLIC_ADMIN_USER;
-// const admin_pass = process.env.NEXT_PUBLIC_ADMIN_PASS;
 const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
-    const { postAPILogin, getCookie } = apiCalls();
+    const { postAPILogin } = apiCalls();
 
-
-
-   
-    // const [token, setToken] = useState();
     const [username, setUserName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
-        const tokenResponse = await postAPILogin(username, password);
+
+        const sanitizedUsername =  DOMPurify.sanitize(username);
+        const sanitizedPassword =  DOMPurify.sanitize(password);
+        const tokenResponse = await postAPILogin(sanitizedUsername, sanitizedPassword);
         if (tokenResponse && typeof tokenResponse === 'string') {
-            console.log(tokenResponse)
             setToken(tokenResponse);
             setLoggedIn(true)
         } else if (tokenResponse.error) {
@@ -33,8 +27,6 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
         }
         setError('Invalid Login');
     }
-
-
     return (
         <div className="flex flex-col mt-40 sm:flex-row sm:mx-12 justify-center items-center">
             <div className="flex-1 sm:mx-12 w-full flex justify-center">

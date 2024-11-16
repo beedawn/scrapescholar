@@ -19,8 +19,8 @@ def get_source_by_name(db: Session, source: str):
     return source
 
 
-def get_sources(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Source).offset(skip).limit(limit).all()
+def get_sources(db: Session):
+    return db.query(Source).all()
 
 
 def create_source(db: Session, source: SourceCreate):

@@ -5,8 +5,8 @@ from typing import List
 from app.crud.comment import create_comment, update_comment, delete_comment, get_comments_by_article, get_comment
 from app.schemas.comment import CommentCreate, CommentUpdate, Comment
 from app.db.session import get_db
-from utils.auth import get_current_user  # Now using the get_current_user method
-from app.models.user import User
+
+from auth_tools.get_user import get_current_user_modular
 
 router = APIRouter()
 
@@ -17,10 +17,9 @@ async def create_new_comment(
         article_id: int,
         comment: CommentCreate,
         db: Session = Depends(get_db),
-        access_token: str = Cookie(None),
-        authorization: str = Header(None)
+        access_token: str = Cookie(None)
 ):
-    current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
+    current_user = get_current_user_modular(db=db, token=access_token)
 
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
@@ -40,10 +39,10 @@ async def update_existing_comment(
         comment_id: int,
         comment: CommentUpdate,
         db: Session = Depends(get_db),
-        access_token: str = Cookie(None),
-        authorization: str = Header(None)
+        access_token: str = Cookie(None)
+
 ):
-    current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
+    current_user = get_current_user_modular(db=db, token=access_token)
 
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")
@@ -66,7 +65,7 @@ async def remove_comment(
         access_token: str = Cookie(None),
         authorization: str = Header(None)
 ):
-    current_user = await get_current_user(db=db, access_token=access_token, authorization=authorization)
+    current_user = get_current_user_modular(db=db, token=access_token)
 
     if not current_user:
         raise HTTPException(status_code=401, detail="User not authenticated")

@@ -99,7 +99,7 @@ def test_article_creation_with_existing_user_and_source(db: Session):
     assert user is not None
 
     # Get the test source from the database
-    source = db.query(Source).filter_by(name="Sample Source").first()
+    source = db.query(Source).filter_by(name="Other").first()
     assert source is not None
 
     # Create a new search associated with the test user

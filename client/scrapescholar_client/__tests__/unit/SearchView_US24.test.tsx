@@ -25,8 +25,8 @@ describe('SearchView US-24 Component', () => {
         submitSearch(testInput);})
         await waitFor(() => {
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[4].textContent).toContain("a");
-            expect(rows[1].children[4].textContent).toContain("b");
+            expect(rows[0].children[5].textContent).toContain("a");
+            expect(rows[1].children[5].textContent).toContain("b");
         }, { timeout: 5000 });
         
     })
@@ -40,8 +40,8 @@ describe('SearchView US-24 Component', () => {
         submitSearch(testInput);})
         await waitFor(() => {
             const rows = screen.getAllByTestId('row')
-            const expandButton = within(rows[0].children[4] as HTMLElement).getByRole('button', { name: /expand/i });
-            const expandButton2 = within(rows[1].children[4] as HTMLElement).getByRole('button', { name: /expand/i });
+            const expandButton = within(rows[0].children[5] as HTMLElement).getByRole('button', { name: /expand/i });
+            const expandButton2 = within(rows[1].children[5] as HTMLElement).getByRole('button', { name: /expand/i });
             expect(expandButton).toBeInTheDocument()
             expect(expandButton2).toBeInTheDocument()
         }, { timeout: 5000 });

@@ -5,7 +5,7 @@ interface Comment {
     comment_id: number;
     user_id: number;
     comment_text: string;
-    username:string;
+    username: string;
 }
 
 interface CommentsSidebarProps {
@@ -34,7 +34,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
                 setLoading(false);
             }
         };
-    
+
         fetchComments();
     }, [articleId]);
 
@@ -42,7 +42,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
         if (comments.length >= 100) {
             setError('Cannot add more than 100 comments for this article.');
             return;
-        }    
+        }
         try {
             const addedComment = await addComment(articleId, newComment);
             setComments([...comments, addedComment]);
@@ -51,7 +51,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
         } catch (err) {
             setError('Failed to add comment');
         }
-    };    
+    };
 
     const handleEditClick = (comment: Comment) => {
         setEditingCommentId(comment.comment_id);
@@ -79,12 +79,12 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
 
     return (
         <div className="p-4 text-black">
-            <button 
-                onClick={onClose} 
+            <button
+                onClick={onClose}
                 className="absolute top-0 right-12 mt-2 mr-2 text-red-500 hover:text-red-700"
             >
                 ✕
-            </button>            
+            </button>
             <h2 className="font-bold text-xl mb-4">Comments for Article {articleId}</h2>
 
             {loading && <p>Loading comments...</p>}
@@ -94,7 +94,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
                     {comments.map((comment, index) => (
                         <li key={comment?.comment_id || index} className="mb-4">
                             <div>
-                                <strong>{comment?.username || "Unknown"}</strong>:&nbsp; 
+                                <strong>{comment?.username || "Unknown"}</strong>:&nbsp;
                                 {editingCommentId === comment.comment_id ? (
                                     // Editable text area for editing comment
                                     <textarea
@@ -119,15 +119,15 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
                     ))}
                 </ul>
             ) : !loading && <p>No comments available.</p>}
-            
+
             <div className="mt-4">
-                <textarea 
+                <textarea
                     value={newComment}
                     onChange={e => setNewComment(e.target.value)}
                     placeholder="Add a comment"
                     className="w-full p-2 border border-gray-300 rounded mb-2"
                 />
-            <button onClick={handleAddComment} className={`bg-blue-500 text-white p-2 rounded ${newComment.trim() === '' ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={newComment.trim() === ''}>Add Comment</button>
+                <button onClick={handleAddComment} className={`bg-blue-500 text-white p-2 rounded ${newComment.trim() === '' ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={newComment.trim() === ''}>Add Comment</button>
             </div>
         </div>
     );

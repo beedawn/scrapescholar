@@ -4,7 +4,6 @@ import SearchBox from './SearchBox';
 import DropdownSearchBox from './DropdownSearchBox';
 import Dropdown from '../../types/DropdownType';
 import SourcesAccordian from './SourcesAccordian';
-
 import apiCalls from '@/app/api/apiCalls';
 import SettingsAccordian from './SettingsAccordion';
 interface NavBarProps {
@@ -23,13 +22,15 @@ interface NavBarProps {
     handlePastSearchSelection:
     (event: React.ChangeEvent<HTMLSelectElement>) => void;
     setOpenUserManagement: (item:boolean)=>void;
+    setDataFull: (item:boolean)=>void;
+    clearPages:()=>void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
     addInput, inputs, handleSearchChange, removeInput,
     setLoggedIn, dropdown, handleDropdownChange,
     addToUserDatabaseList, removeFromUserDatabaseList,
-    searches, handlePastSearchSelection, setOpenUserManagement }) => {
+    searches, handlePastSearchSelection, setOpenUserManagement, setDataFull,clearPages }) => {
 
         const {deleteCookie}=apiCalls();
     const handleLogout = async () => {
@@ -37,12 +38,9 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
         setLoggedIn(false);
     };
     const dropdown_values = Object.values(Dropdown);
-    console.log(inputs)
-
     const max_inputs = 20
     return (
         <>
-       
             <div className="p-5 max-w-sm mr-auto float-left">
                 <div className="float-right pb-6" data-testid="logout-button">
                     <Button onClick={handleLogout} className="" >
@@ -52,7 +50,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                 <h1 className="text-4xl font-bold">ScrapeScholar</h1>
                 <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
-                    <SettingsAccordian setOpenUserManagement={setOpenUserManagement}/>
+                    <SettingsAccordian setOpenUserManagement={setOpenUserManagement} setDataFull={setDataFull} clearPages={clearPages}/>
                 <DropdownSearchBox value="past search dropdown"
                     onDropdownChange={(selectedTitle) => 
                         handlePastSearchSelection(selectedTitle)} valueArray={searches}

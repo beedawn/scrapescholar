@@ -4,18 +4,14 @@ enum Evaluation {
     Accept,
     Pending,
     Reject,
-  }
+}
 
 interface EvaluationCriteriaDropdownProps {
-    // value: string;
-    // onDropdownChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    // className?: string;
-    // valueArray: any[];
-    article_id:number;
-    evaluationValue:string;
+    article_id: number;
+    evaluationValue: string;
     disabled?: boolean;
-  }
-  const EvaluationCriteriaDropdown: React.FC<EvaluationCriteriaDropdownProps> = ({
+}
+const EvaluationCriteriaDropdown: React.FC<EvaluationCriteriaDropdownProps> = ({
     article_id,
     evaluationValue,
     disabled = false,
@@ -25,33 +21,33 @@ interface EvaluationCriteriaDropdownProps {
     const { putUserData } = apiCalls();
 
     useEffect(() => {
-        if(evaluationValue=="Accept")handleChange(Evaluation.Accept, true);
-        if(evaluationValue=="Pending")handleChange(Evaluation.Pending, true);
-        if(evaluationValue=="Reject")handleChange(Evaluation.Reject, true);
+        if (evaluationValue == "Accept") handleChange(Evaluation.Accept, true);
+        if (evaluationValue == "Pending") handleChange(Evaluation.Pending, true);
+        if (evaluationValue == "Reject") handleChange(Evaluation.Reject, true);
     }, [evaluationValue]);
 
     const handleChange = async (input: Evaluation, init = false) => {
-        let selectedValue='';
-        let cssStyling='';
-        
-        switch(input){
+        let selectedValue = '';
+        let cssStyling = '';
+
+        switch (input) {
             case Evaluation.Reject:
-                selectedValue="Reject";
-                cssStyling="bg-red-600";
+                selectedValue = "Reject";
+                cssStyling = "bg-red-600";
                 break;
-          case(Evaluation.Pending):
-            selectedValue="Pending";
-            cssStyling="bg-yellow-600";
+            case (Evaluation.Pending):
+                selectedValue = "Pending";
+                cssStyling = "bg-yellow-600";
                 break;
-          case(Evaluation.Accept):
-            selectedValue="Accept";
-            cssStyling="bg-green-600";
+            case (Evaluation.Accept):
+                selectedValue = "Accept";
+                cssStyling = "bg-green-600";
                 break;
             default:
                 break;
-    
+
         }
-        setSelected({value:selectedValue,css: cssStyling});
+        setSelected({ value: selectedValue, css: cssStyling });
         if (!init) {
             const putRequest = {
                 article_id,
