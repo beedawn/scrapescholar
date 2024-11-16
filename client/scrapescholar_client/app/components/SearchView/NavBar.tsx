@@ -54,7 +54,9 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
         <>
         {isMobile && !openMenu?<>
         <div className="flex"><div className="p-3" onClick={()=>{setOpenMenu(true)}}>
+            <a href="#">
             <HamburgerIcon />
+            </a>
             </div>
             <ScrapeScholarHeader />
             </div>
