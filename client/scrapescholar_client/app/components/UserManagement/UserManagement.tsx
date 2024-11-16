@@ -45,7 +45,7 @@ const UserManagement: React.FC<UserManagementProps> =
                 
                 </>:<>
                 
-                <p>UserManagement</p>
+              
                 <p><Button onClick={()=>{setAddUserModalActive(true)}} data-testid="new_user_button">New User</Button></p>
                 <div className={"flex flex-wrap"}>
                     <div className={"m-2 bg-white rounded text-black w-full"}>
