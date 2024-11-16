@@ -100,10 +100,13 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
             {comments.length > 0 ? (
                 <ul>
                     {comments.map((comment, index) => {
+                        let readableTime="";
+                        if (comment!==null){
+
                          const createdAtDate = new Date(comment.created_at);
     
                         
-                         const readableTime = createdAtDate.toLocaleString('en-US', {
+                        readableTime = createdAtDate.toLocaleString('en-US', {
                              year: 'numeric',
                              month: 'numeric',
                              day: 'numeric',
@@ -111,33 +114,35 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
                              minute: '2-digit',
                              second: '2-digit',
                              hour12: false
-                         });
+                         });}
                         return(
                             <div key={comment?.comment_id || index} className="bg-white rounded m-2 px-2 pt-2">
                                 
                         <li  className="mb-4">
                             
                             <div >
-                                <strong>{comment?.username || "Unknown"}</strong><span className="text-slate-500"> @ {readableTime}</span>:&nbsp;
+                                <strong>{comment?.username || "Unknown"}</strong><span className="text-slate-500"> @ {readableTime!==undefined?readableTime:""}</span>:&nbsp;
                            
                              
                                    
                                
                             </div>
                             <div className="">
-                                {editingCommentId === comment.comment_id ? (
+                                { editingCommentId === comment.comment_id ? (
                                     // Save button after editing
-
+                                    <>
                                     <form onSubmit={(e)=>{e.preventDefault(); handleSaveEdit(comment.comment_id);}}>
                                          <input
                                         value={editedText}
                                         onChange={e => setEditedText(e.target.value)}
                                         className="w-full p-2 border border-gray-300 rounded mb-2"
-                                    /><div className="space-x-2">
+                                    />
                                     <button type="submit" className="text-green-500">Save</button>
-                                    <button onClick={() => handleDeleteComment(comment.comment_id)} className="text-red-500">Delete</button>
-                                    </div>
                                     </form>
+                                    <button onClick={() => handleDeleteComment(comment.comment_id)} className="text-red-500">Delete</button>
+                                   
+                                   
+                                    </>
                                 ) : (
                                     <>
                                     <div>{comment?.comment_text || "No comment text available"}</div>

@@ -78,10 +78,14 @@ describe('CommentsSidebar Component - UT-9.3 and UT-9.4', () => {
         await waitFor(() => expect(mockEditComment).toHaveBeenCalledWith(initialComment.comment_id, 'Edited Comment'));
         expect(screen.getByText('Edited Comment')).toBeInTheDocument();
 
-        // Delete the comment
-        const deleteButton = screen.getByText('Delete');
-        fireEvent.click(deleteButton);
+        await waitFor(() =>{ const editButton2 = screen.getByText('Edit');
+        fireEvent.click(editButton2);
+        },{timeout:5000});
 
+        // Delete the comment
+        await waitFor(() =>{ const deleteButton = screen.getByText('Delete');
+        fireEvent.click(deleteButton);
+    },{timeout:5000});
         await waitFor(() => expect(mockDeleteComment).toHaveBeenCalledWith(initialComment.comment_id));
         expect(screen.queryByText('Edited Comment')).not.toBeInTheDocument();
     });
