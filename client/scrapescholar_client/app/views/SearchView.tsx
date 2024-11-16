@@ -13,7 +13,7 @@ import UserManagement from '../components/UserManagement/UserManagement';
 import Relevance from '../types/Relevance';
 import { init } from 'next/dist/compiled/webpack/webpack';
 import DOMPurify from 'dompurify';
-import { clear } from 'console';
+import windowWidth from '../components/responsive/windowWidth';
 
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -53,7 +53,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [openUserManagement, setOpenUserManagement] = useState<boolean>(false);
     const [relevanceChanged, setRelevanceChanged] = useState<boolean>(false);
     const [selectedSearchIdState, setSelectedSearchIdState] = useState<number>();
-
+    const [width, setWidth]=useState<number>(window.innerWidth);
+    const [isMobile, setIsMobile]=useState<boolean>(false)
     const sumResults = (results: ResultItem[], comparison: string) => {
         let sum = 0
         if (results !== undefined) {
@@ -65,6 +66,18 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
         return sum
     }
+
+  useEffect(() => {
+    windowWidth(setWidth)
+    console.log(width)
+    if (width <768){
+        setIsMobile(true)
+    }else{
+        setIsMobile(false)
+    }
+    console.log(isMobile)
+  }, [width]);
+    
 
     useEffect(() => {
         const fetchDatabases = async () => {
@@ -281,18 +294,18 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
 
     return (
-        <div className="flex flex-row sm:mx-12 h-screen">
-            <div className="w-full sm:w-1/3 lg:w-1/4 xl:w-1/5" data-testid="navbar">
+        <div className="flex md:flex-row flex-col  h-screen">
+            <div className=" xs:w-full  md: w-1/4 lg:w-1/4 xl:w-1/5 p-5" data-testid="navbar">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}
                     addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}
                     searches={searches} handlePastSearchSelection={handlePastSearchSelection} setOpenUserManagement={setOpenUserManagement}
-                    setDataFull={setDataFull} clearPages={clearPages}
+                    setDataFull={setDataFull} clearPages={clearPages} isMobile={isMobile}
                 />
             </div>
 
-            <div className="flex-1 sm:mx-12 w-full overflow-auto">
+            <div className="flex-1 p-5 m-5 overflow-auto">
                 {error ? (<p>{error.message}</p>)
                     : loading ? <Loading /> : openUserManagement ? <><UserManagement /></> :
                         dataFull ? <> <DataFull searches={searches} setLoading={setLoading} /></> :
