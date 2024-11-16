@@ -51,7 +51,7 @@ const UserManagement: React.FC<UserManagementProps> =
                     <div className={"m-2 bg-white rounded text-black w-full"}>
                {users.map((user)=>(
                 
-                <div>
+                <div key={user.user_id}>
                 <div className="p-2 flex flex-wrap" key={user.user_id} data-testid="user_row">
             
                <div className="p-2" data-testid="user_username">{user.username}</div>
