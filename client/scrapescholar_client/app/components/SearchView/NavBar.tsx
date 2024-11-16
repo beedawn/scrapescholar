@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import Button from './../Button';
 import SearchBox from './SearchBox';
 import DropdownSearchBox from './DropdownSearchBox';
@@ -44,6 +44,10 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     const dropdown_values = Object.values(Dropdown);
     const max_inputs = 20
 
+    useEffect(()=>{
+
+        setOpenMenu(false)
+    },[isMobile])
 
 
     return (
@@ -75,15 +79,17 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                         handlePastSearchSelection(selectedTitle);setOpenMenu(false)}} valueArray={searches}
                     className="w-52"  defaultValue='Past Searches'/>
                 <form onSubmit={(e)=>{handleResults(e);setOpenMenu(false)}}>
-               
+               <div className="flex">
                     <Button onClick={()=>{if(inputs.length<max_inputs){addInput()}}} className="m-5">
                         +
                     </Button>
                     <span data-testid="search_button">
-                    <Button type="submit">
+                    <Button type="submit"className="mt-5">
                         Search
                     </Button>
-                    </span><div>
+                    
+                    </span>
+                    </div><div>
                     {inputs.length>max_inputs-1?<>Maximum 20 keywords allowed.</>:<></>}
                     </div>
                     {inputs.map((input: string, index: number) => {
