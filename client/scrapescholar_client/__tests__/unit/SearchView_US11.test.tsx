@@ -44,8 +44,11 @@ describe('SearchView US-11 Component', () => {
 
     test('US-11 shows link in response after search press', async () => {
         render(<SearchView setLoggedIn={mockSetLoggedIn} disableD3={true} />);
-        const sourcesAccordian = screen.getByText('Sources');
-        fireEvent.click(sourcesAccordian);
+        await waitFor(()=>{
+            const sourcesAccordian = screen.getByText('Sources');
+            fireEvent.click(sourcesAccordian);
+        },{timeout:5000})
+    
         await waitFor(() => {
             const scienceDirectChecklist = screen.getByText('ScienceDirect');
             const scopusChecklist = screen.getByText('Scopus');

@@ -24,8 +24,8 @@ describe('SearchView AR-4 Component', () => {
         submitSearch(testInput);})
         await waitFor(() => {
             const rows = screen.getAllByTestId('row')
-            expect(rows[0].children[10].textContent).toContain("✎");
-            expect(rows[1].children[10].textContent).toContain("✎");
+            expect(rows[0].children[11].textContent).toContain("✎");
+            expect(rows[1].children[11].textContent).toContain("✎");
         }, { timeout: 5000 });
         
     })
@@ -38,7 +38,7 @@ describe('SearchView AR-4 Component', () => {
             const pencilIcons = screen.getAllByText("✎");
             fireEvent.click(pencilIcons[1]);
             const rows = screen.getAllByTestId('row');
-            const methodologyField = rows[0].children[10];
+            const methodologyField = rows[0].children[11];
             const input = methodologyField.querySelector('input');
             expect(input).toBeInTheDocument();
         }, { timeout: 5000 });
@@ -54,7 +54,7 @@ describe('SearchView AR-4 Component', () => {
             const closeIcons = screen.getAllByText("×");
             fireEvent.click(closeIcons[0]);
             const rows = screen.getAllByTestId('row');
-            const methodologyField = rows[0].children[10];
+            const methodologyField = rows[0].children[11];
             expect(methodologyField.textContent).toContain("0");
         }, { timeout: 5000 });
     })
@@ -72,8 +72,8 @@ describe('SearchView AR-4 Component', () => {
             fireEvent.click(pencilIcons[1]);
             fireEvent.click(pencilIcons[5]);
             const rows = screen.getAllByTestId('row');
-            methodologyField = rows[0].children[10];
-            methodologyField2 = rows[1].children[10];
+            methodologyField = rows[0].children[11];
+            methodologyField2 = rows[1].children[11];
             const input = methodologyField.querySelector('input');
             const input2 = methodologyField2.querySelector('input');
             if (input && input2) {
@@ -91,12 +91,12 @@ describe('SearchView AR-4 Component', () => {
         }, { timeout: 5000 });
         waitFor(()=>{
         const rows = screen.getAllByTestId('row');
-        methodologyField = rows[0].children[10];
-        methodologyField2 = rows[1].children[10];
+        methodologyField = rows[0].children[11];
+        methodologyField2 = rows[1].children[11];
         if (methodologyField && methodologyField2) {
             const rows = screen.getAllByTestId('row');
-            expect(rows[0].children[10].textContent).toContain("1");
-            expect(rows[1].children[10].textContent).toContain("2");
+            expect(rows[0].children[11].textContent).toContain("1");
+            expect(rows[1].children[11].textContent).toContain("2");
         }
         else {
             fail('no input found after clicking pencil')
@@ -123,8 +123,8 @@ describe('SearchView AR-4 Component', () => {
             fireEvent.click(pencilIcons[1]);
             fireEvent.click(pencilIcons[5]);
             const rows = screen.getAllByTestId('row');
-            methodologyField = rows[0].children[10];
-            methodologyField2 = rows[1].children[10];
+            methodologyField = rows[0].children[11];
+            methodologyField2 = rows[1].children[11];
             const input = methodologyField.querySelector('input');
             const input2 = methodologyField2.querySelector('input');
             if (input && input2) {
@@ -142,12 +142,12 @@ describe('SearchView AR-4 Component', () => {
         }, { timeout: 5000 });
         waitFor(()=>{
         const rows = screen.getAllByTestId('row');
-        methodologyField = rows[0].children[10];
-        methodologyField2 = rows[1].children[10];
+        methodologyField = rows[0].children[11];
+        methodologyField2 = rows[1].children[11];
         if (methodologyField && methodologyField2) {
             const rows = screen.getAllByTestId('row');
-            expect(rows[0].children[10].textContent).toContain("1");
-            expect(rows[1].children[10].textContent).toContain("2");
+            expect(rows[0].children[11].textContent).toContain("1");
+            expect(rows[1].children[11].textContent).toContain("2");
         }
         else {
             fail('no input found after clicking pencil')

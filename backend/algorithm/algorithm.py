@@ -114,7 +114,7 @@ def algorithm(text, keywords):
         break_word_into_possible_words(synonym, synonyms_sliced_list)
 
     for text in text_list:
-        break_word_into_possible_words(text, text_sliced_list)
+        break_word_into_possible_words(text.lower(), text_sliced_list)
 
     for keyword in keywords_sliced_list:
         for synonym in synonyms_sliced_list:

@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
 import Button from '../../Button';
 import apiCalls from '@/app/api/apiCalls';
+import { ResultItem } from '@/app/views/SearchView';
 
-interface DeleteUserModalProps {
-    setDeleteUserModalActive: (item: boolean) => void;
-    deleteUser: any;
+interface DeleteArticleModalProps {
+    setDeleteArticleModalActive: (item: boolean) => void;
+    articleToDelete: ResultItem;
+    handlePastSearchSelectionSearchID:
+    (search_id:number) => void;
+    currentSearchID:number;
 }
 
-const { deleteUserAPI } = apiCalls();
+const { deleteArticleAPI } = apiCalls();
 
-const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalActive, deleteUser }) => {
+const DeleteArticleModal: React.FC<DeleteArticleModalProps> = ({ setDeleteArticleModalActive, articleToDelete, handlePastSearchSelectionSearchID, currentSearchID }) => {
     const clearModal = () => {
-        setDeleteUserModalActive(false);
+        setDeleteArticleModalActive(false);
     }
 
     const submitDelete = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await deleteUserAPI(deleteUser.user_id)
+        await deleteArticleAPI(articleToDelete.article_id)
+        handlePastSearchSelectionSearchID(currentSearchID)
+        // refresh results?
         clearModal()
     }
-
+console.log(currentSearchID)
     return (
         <div>
             <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -31,7 +37,7 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalAct
                         transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                     <div className="flex items-start justify-between">
-                                        <h3 className="text-base font-semibold text-gray-900" id="modal-title">Delete User</h3>
+                                        <h3 className="text-base font-semibold text-gray-900" id="modal-title">Delete Article</h3>
                                         <div className="text-right">
                                             <button type="button" onClick={() => clearModal()} className="mt-3 
                                         inline-flex w-full justify-center 
@@ -44,10 +50,10 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalAct
                                     </div>
                                 </div>
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
-                                    <div>Deleting this user is permanent.</div>
+                                    <div data-testid="delete_article_prompt">Deleting this article is permanent.</div>
                                 </div>
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
-                                    <div>User: {deleteUser.username}</div>
+                                    <div>Article Title: {articleToDelete.title}</div>
                                 </div>
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                     <div> Please confirm to delete</div>
@@ -66,7 +72,7 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ setDeleteUserModalAct
     )
 };
 
-export default DeleteUserModal;
+export default DeleteArticleModal;
 
 
 

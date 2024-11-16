@@ -23,8 +23,8 @@ describe('SearchView US-10 Component', () => {
     submitSearch(testInput);
     await waitFor(() => {
       const rows = screen.getAllByTestId('row')
-      expect(rows[0].children[6].textContent).toContain("Science Direct");
-      expect(rows[1].children[6].textContent).toContain("Scopus");
+      expect(rows[0].children[7].textContent).toContain("Science Direct");
+      expect(rows[1].children[7].textContent).toContain("Scopus");
     }, { timeout: 5000 });
   })
 });

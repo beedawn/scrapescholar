@@ -7,7 +7,6 @@ from datetime import date
 class ArticleBase(BaseModel):
     source_id: int
     title: str
-    # author: Optional[str] = None
     date: date
     link: Optional[HttpUrl] = None
     relevance_score: Optional[float] = None
@@ -24,7 +23,6 @@ class ArticleCreate(ArticleBase):
 
 class ArticleUpdate(BaseModel):
     title: Optional[str] = None
-    # author: Optional[str] = None
     publication_date: Optional[date] = None
     journal: Optional[str] = None
     url: Optional[HttpUrl] = None
@@ -42,5 +40,5 @@ class ArticleRead(ArticleBase):
     class Config:
         orm_mode = True
 
-class Article(ArticleRead):  # This will serve as the main schema used for Article
+class Article(ArticleRead):
     pass

@@ -45,18 +45,18 @@ def test_academic_data_NOT():
     search_request_data = search_request.json()
     search_id = search_request_data["search_id"]
     assert isinstance(search_request_data["search_id"],int)
-    assert isinstance(search_request_data["articles"],List)
+    assert isinstance(search_request_data["articles"], List)
     keyword_one_found = False
     keyword_two_found = False
     for item in search_request_data["articles"]:
-        if keyword_one in item["title"]:
+        if keyword_one in item["title"].lower():
             keyword_one_found = True
-        if keyword_two in item["title"]:
+        if keyword_two in item["title"].lower():
             keyword_two_found = True
         if item["abstract"] and scopus_inst_token is not None:
-            if keyword_one in item["abstract"]:
+            if keyword_one in item["abstract"].lower():
                 keyword_one_found = True
-            if keyword_two in item["abstract"]:
+            if keyword_two in item["abstract"].lower():
                 keyword_two_found = True
     assert keyword_one_found == True
     assert keyword_two_found == False

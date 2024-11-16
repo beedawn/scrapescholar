@@ -11,6 +11,8 @@ from api_tools.api_tools import scopus_api_key
 #end of globals stuff
 from app.db.session import get_db
 
+from app.crud.source import get_source_by_name, get_sources
+
 from fastapi.middleware.cors import CORSMiddleware
 from endpoints.role import role
 from endpoints.user import user
@@ -53,7 +55,7 @@ def get_db():
 async def health_check():
     return {"message": "Hello World"}
 
-
+db = get_db()
 # Include the auth routes in the main app
 app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users", tags=["Users"])
@@ -129,6 +131,20 @@ async def multiple_apis(keywords: str,
 
 
 @app.get("/academic_sources")
-async def multiple_apis():
+async def academic_sources(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+    current_user = get_current_user_modular(token=access_token, db=db)
     database_list = await get_database_list('academic_databases/')
     return database_list
+
+
+@app.get("/academic_sources_id")
+async def academic_sources(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
+
+    current_user = get_current_user_modular(token=access_token, db=db)
+    database_list = get_sources(db)
+    list_of_sources = []
+    for item in database_list:
+        list_of_sources.append({"name":item.name, "source_id":item.source_id})
+
+    return list_of_sources
+
