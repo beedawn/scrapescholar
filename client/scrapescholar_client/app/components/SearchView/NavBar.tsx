@@ -71,8 +71,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
                     <SettingsAccordian setOpenUserManagement={setOpenUserManagement} setDataFull={setDataFull} clearPages={clearPages} setOpenMenu={setOpenMenu}/>
                 <DropdownSearchBox value="past search dropdown"
-                    onDropdownChange={(selectedTitle) => 
-                        handlePastSearchSelection(selectedTitle)} valueArray={searches}
+                    onDropdownChange={(selectedTitle) => {
+                        handlePastSearchSelection(selectedTitle);setOpenMenu(false)}} valueArray={searches}
                     className="w-52"  defaultValue='Past Searches'/>
                 <form onSubmit={(e)=>{handleResults(e);setOpenMenu(false)}}>
                
