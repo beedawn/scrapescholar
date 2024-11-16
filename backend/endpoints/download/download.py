@@ -71,7 +71,7 @@ def add_user_comments_to_list(row, db):
     article_comment = get_comments(db=db, article_id=row.article_id)
     row_data = vars(row)
     for i, comment_builder in enumerate(article_comment, start=1):
-        user = get_user(db, comment_builder.user_id)
+        user = get_user(db, comment_builder["user_id"])
         row_data[f"Username Comment {i}"] = decrypt(user.username)
-        row_data[f"Comment {i}"] = comment_builder.comment_text
+        row_data[f"Comment {i}"] = comment_builder["comment_text"]
     return row_data
