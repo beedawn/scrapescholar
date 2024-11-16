@@ -69,13 +69,13 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
   useEffect(() => {
     windowWidth(setWidth)
-    console.log(width)
+ 
     if (width <768){
         setIsMobile(true)
     }else{
         setIsMobile(false)
     }
-    console.log(isMobile)
+
   }, [width]);
     
 

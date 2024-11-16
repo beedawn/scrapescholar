@@ -88,16 +88,12 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
 
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("new article")
-       console.log(newArticle)
-       console.log(new Date(newArticle.date).toISOString().slice(0, 10))
         if (newArticle.title.length == 0 || newArticle.date == null || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.document_type.length == 0) {
             setError(true);
            
            
         } else {
             const dateArticle = {...newArticle, "date":new Date(newArticle.date).toISOString().slice(0, 10), "citedby": parseInt(newArticle.citedby)}
-            console.log(dateArticle)
             const response = await addArticle(dateArticle);
             // have articles reload?
             handlePastSearchSelectionSearchID(search_id)

@@ -414,7 +414,6 @@ const apiCalls = () => {
       const url = `http://${host}:8000/auth/is_admin`
       data = await fetch(url, { method: "GET", credentials: "include" })
       textData = await data.text()
-      console.log(textData)
       return textData;
     }
     catch (error: any) {
