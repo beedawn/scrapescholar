@@ -6,14 +6,16 @@ interface Comment {
     user_id: number;
     comment_text: string;
     username: string;
+    created_at:string;
 }
 
 interface CommentsSidebarProps {
     articleId: number;
     onClose: () => void;
+    isMobile:boolean;
 }
 
-const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose }) => {
+const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, isMobile }) => {
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
@@ -61,6 +63,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
     const handleSaveEdit = async (comment_id: number) => {
         try {
             const updatedComment = await editComment(comment_id, editedText);
+            console.log(updatedComment)
             setComments(comments.map(comment => comment.comment_id === comment_id ? updatedComment : comment));
             setEditingCommentId(null); // Exit edit mode after saving
         } catch (err) {
@@ -78,58 +81,95 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose })
     };
 
     return (
-        <div className="p-4 text-black">
+        <>{isMobile?<></>:<></>}
+        <div className="p-2 text-black">
+       
+            <div className="justify-end w-full flex">
             <button
                 onClick={onClose}
-                className="absolute top-0 right-12 mt-2 mr-2 text-red-500 hover:text-red-700"
+                className="text-red-500 hover:text-red-700"
             >
                 ✕
             </button>
-            <h2 className="font-bold text-xl mb-4">Comments for Article {articleId}</h2>
+            </div>
+
+            <h2 className="font-bold text-xl mb-4 w-full">Comments for Article {articleId}</h2>
 
             {loading && <p>Loading comments...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {comments.length > 0 ? (
                 <ul>
-                    {comments.map((comment, index) => (
-                        <li key={comment?.comment_id || index} className="mb-4">
-                            <div>
-                                <strong>{comment?.username || "Unknown"}</strong>:&nbsp;
+                    {comments.map((comment, index) => {
+                         const createdAtDate = new Date(comment.created_at);
+    
+                        
+                         const readableTime = createdAtDate.toLocaleString('en-US', {
+                             year: 'numeric',
+                             month: 'numeric',
+                             day: 'numeric',
+                             hour: '2-digit',
+                             minute: '2-digit',
+                             second: '2-digit',
+                             hour12: false
+                         });
+                        return(
+                            <div key={comment?.comment_id || index} className="bg-white rounded m-2 px-2 pt-2">
+                                
+                        <li  className="mb-4">
+                            
+                            <div >
+                                <strong>{comment?.username || "Unknown"}</strong><span className="text-slate-500"> @ {readableTime}</span>:&nbsp;
+                           
+                             
+                                   
+                               
+                            </div>
+                            <div className="">
                                 {editingCommentId === comment.comment_id ? (
-                                    // Editable text area for editing comment
-                                    <textarea
+                                    // Save button after editing
+
+                                    <form onSubmit={(e)=>{e.preventDefault(); handleSaveEdit(comment.comment_id);}}>
+                                         <input
                                         value={editedText}
                                         onChange={e => setEditedText(e.target.value)}
                                         className="w-full p-2 border border-gray-300 rounded mb-2"
-                                    />
+                                    /><div className="space-x-2">
+                                    <button type="submit" className="text-green-500">Save</button>
+                                    <button onClick={() => handleDeleteComment(comment.comment_id)} className="text-red-500">Delete</button>
+                                    </div>
+                                    </form>
                                 ) : (
-                                    <span>{comment?.comment_text || "No comment text available"}</span>
-                                )}
-                            </div>
-                            <div className="flex space-x-2">
-                                {editingCommentId === comment.comment_id ? (
-                                    // Save button after editing
-                                    <button onClick={() => handleSaveEdit(comment.comment_id)} className="text-green-500">Save</button>
-                                ) : (
+                                    <>
+                                    <div>{comment?.comment_text || "No comment text available"}</div>
+
                                     <button onClick={() => handleEditClick(comment)} className="text-blue-500">Edit</button>
+                                    </>
                                 )}
-                                <button onClick={() => handleDeleteComment(comment.comment_id)} className="text-red-500">Delete</button>
+                                
                             </div>
+                            
                         </li>
-                    ))}
+                        
+                        </div>
+                        )
+                        })}
                 </ul>
             ) : !loading && <p>No comments available.</p>}
 
             <div className="mt-4">
-                <textarea
+            <form onSubmit={(e)=>{e.preventDefault();handleAddComment()}}>
+                <input
                     value={newComment}
                     onChange={e => setNewComment(e.target.value)}
                     placeholder="Add a comment"
-                    className="w-full p-2 border border-gray-300 rounded mb-2"
+                    className="h-16 w-full p-2 border border-gray-300 rounded mb-2"
                 />
-                <button onClick={handleAddComment} className={`bg-blue-500 text-white p-2 rounded ${newComment.trim() === '' ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={newComment.trim() === ''}>Add Comment</button>
+                <button type="submit" className={`bg-blue-500 text-white p-2 rounded ${newComment.trim() === '' ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={newComment.trim() === ''}>Add Comment</button>
+                </form>
             </div>
+        
         </div>
+        </>
     );
 };
 

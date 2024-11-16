@@ -305,7 +305,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 />
             </div>
 
-            <div className="flex-1 p-5 m-5 overflow-auto">
+            {isMobile && isSidebarOpen && selectedArticleId !== null?<></>: <div className="flex-1 p-5 m-5 overflow-auto">
                 {error ? (<p>{error.message}</p>)
                     : loading ? <Loading /> : openUserManagement ? <><UserManagement /></> :
                         dataFull ? <> <DataFull searches={searches} setLoading={setLoading} /></> :
@@ -326,10 +326,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                                 relevanceChanged={relevanceChanged}
                                 handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}
                             />}
-            </div>
+            </div>}
             {isSidebarOpen && selectedArticleId !== null && (
-                <div className="w-1/4 bg-gray-100 overflow-y-auto flex-shrink-0">
-                    <CommentsSidebar articleId={selectedArticleId} onClose={() => setIsSidebarOpen(false)} />
+                <div className="w-full md:w-1/4 bg-gray-300 overflow-y-auto flex-shrink-0 h-screen">
+                    <CommentsSidebar articleId={selectedArticleId} onClose={() => setIsSidebarOpen(false)} isMobile={isMobile} />
                 </div>
             )}
         </div>
