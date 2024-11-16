@@ -36,7 +36,7 @@ const UserManagement: React.FC<UserManagementProps> =
 
         const [users,setUsers]=useState<any[]>([]);
         return (
-            <div className={"p-3"} data-testid="user_management">
+            <div className={"p-10"} data-testid="user_management">
             {deleteUserModalActive?<DeleteUserModal setDeleteUserModalActive={setDeleteUserModalActive} deleteUser={deleteUser}/>:<></>}
                 {addUserModalActive?<>
                   
