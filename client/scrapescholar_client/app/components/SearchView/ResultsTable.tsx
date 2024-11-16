@@ -159,78 +159,78 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         {deleteArticleModalActive && articleToDelete !== undefined?<DeleteArticleModal handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID} setDeleteArticleModalActive={setDeleteArticleModalActive} currentSearchID={currentSearchID} articleToDelete={articleToDelete}/>:<></>}
             {(abstractText.length > 0) ? (<AbstractModal setAbstractText={setAbstractText} text={abstractText} />) : <></>}
             <div className="overflow-x-auto">
-                <table className=" min-w-full table-auto border-collapse border border-gray-300">
+                <table className=" min-w-full table-auto border-collapse border border-gray-500">
                     <thead>
                         <tr>
-                        <th className="border border-gray-300">
+                        <th className="border border-gray-500">
     {/* delete */}
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Title
                                 <SortToggleButton handleSort={handleSort}
                                     field="title" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Date
                                 <SortToggleButton handleSort={handleSort}
                                     field="date" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Cited By
                                 <SortToggleButton handleSort={handleSort}
                                     field="citedby" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 URL
                                 <SortToggleButton handleSort={handleSort}
                                     field="link" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Abstract
                                 <SortToggleButton handleSort={handleSort}
                                     field="abstract" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Document Type
                                 <SortToggleButton handleSort={handleSort}
                                     field="document_type" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Source
                                 <SortToggleButton handleSort={handleSort}
                                     field="source" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Evaluation Criteria
                                 <SortToggleButton handleSort={handleSort}
                                     field="evaluation_criteria" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Assessment
                                 <SortToggleButton handleSort={handleSort}
                                     field="color" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Relevance Score
                                 <SortToggleButton handleSort={handleSort}
                                     field="relevance_score" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Methodology
                                 <SortToggleButton handleSort={handleSort}
                                     field="methodology" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Clarity
                                 <SortToggleButton handleSort={handleSort}
                                     field="clarity" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Completeness
                                 <SortToggleButton handleSort={handleSort}
                                     field="completeness" pressedSort={pressedSort} />
                             </th>
-                            <th className="border border-gray-300">
+                            <th className="border border-gray-500">
                                 Transparency
                                 <SortToggleButton handleSort={handleSort}
                                     field="transparency" pressedSort={pressedSort} />
@@ -240,12 +240,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                     <tbody>
                         {results.map((result, index) => (
                             <tr key={result.article_id} className=
-                                {` ${selectedArticle === result.article_id ? 'bg-blue-500' : 'hover:bg-gray-500'}`}
+                                {` ${selectedArticle === result.article_id ? 'bg-blue-500' : 'hover:bg-gray-400'}`}
                                 onClick={() => {
                                     setSelectedArticle(result.article_id);
                                     onArticleClick(result.article_id); // Call onArticleClick when an article is clicked
                                 }} data-testid='row'>
-                                      <td className="border border-gray-300" >
+                                      <td className="border border-gray-500" >
                                    
                                     <button className="bg-red-600 text-2xl p-1 m-2 rounded text-white" 
                     onClick={()=>{
@@ -255,19 +255,19 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                         </button>
                                     
                                 </td>
-                                <td className="border border-gray-300" >
+                                <td className="border border-gray-500" >
                                     <a href={result.link}>
                                         {result.title}
                                     </a>
                                 </td>
-                                <td className="border border-gray-300" >{result.date}</td>
-                                <td className="border border-gray-300" >{result.citedby}</td>
-                                <td className="border border-gray-300" >
+                                <td className="border border-gray-500" >{result.date}</td>
+                                <td className="border border-gray-500" >{result.citedby}</td>
+                                <td className="border border-gray-500" >
                                     <a href={result.link}>
                                         {result.link}
                                     </a>
                                 </td>
-                                <td className="border border-gray-300">
+                                <td className="border border-gray-500">
                                     {result.abstract != null && result.abstract.length > 0 ? (
                                         <>
                                             {result.abstract.slice(0, 200)}...
@@ -279,39 +279,39 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                         <></>
                                     )}
                                 </td>
-                                <td className="border border-gray-300" >{result.document_type}</td>
-                                <td className="border border-gray-300" >{result.source}</td>
-                                <td className="border border-gray-300" >
+                                <td className="border border-gray-500" >{result.document_type}</td>
+                                <td className="border border-gray-500" >{result.source}</td>
+                                <td className="border border-gray-500" >
                                     <EvaluationCriteriaDropdown article_id={result.article_id}
                                         evaluationValue={result.evaluation_criteria}
                                         disabled={!isAdminUser} />
                                 </td>
-                                <td className="border border-gray-300" >
+                                <td className="border border-gray-500" >
                                     <ColorDropdown article_id={result.article_id}
                                         colorValue={result.color}
                                         setRelevanceChanged={setRelevanceChanged}
                                         relevanceChanged={relevanceChanged} />
                                 </td>
-                                <td className="border border-gray-300" >{result.relevance_score}%</td>
-                                <td className="border border-gray-300" >
+                                <td className="border border-gray-500" >{result.relevance_score}%</td>
+                                <td className="border border-gray-500" >
                                     <DynamicUserField editableResults={editableResults}
                                         field="methodology" handleFieldConfirm={handleFieldConfirm}
                                         handleCellClick={handleCellClick} result={result} editableCells={editableCells}
                                         handleFieldChange={handleFieldChange} index={index} />
                                 </td>
-                                <td className="border border-gray-300" >
+                                <td className="border border-gray-500" >
                                     <DynamicUserField editableResults={editableResults}
                                         field="clarity" handleFieldConfirm={handleFieldConfirm}
                                         handleCellClick={handleCellClick} result={result}
                                         editableCells={editableCells} handleFieldChange={handleFieldChange} index={index} />
                                 </td>
-                                <td className="border border-gray-300">
+                                <td className="border border-gray-500">
                                     <DynamicUserField editableResults={editableResults}
                                         field="completeness" handleFieldConfirm={handleFieldConfirm}
                                         handleCellClick={handleCellClick} result={result}
                                         editableCells={editableCells} handleFieldChange={handleFieldChange} index={index} />
                                 </td>
-                                <td className="border border-gray-300" >
+                                <td className="border border-gray-500" >
                                     <DynamicUserField editableResults={editableResults}
                                         field="transparency" handleFieldConfirm={handleFieldConfirm}
                                         handleCellClick={handleCellClick} result={result}

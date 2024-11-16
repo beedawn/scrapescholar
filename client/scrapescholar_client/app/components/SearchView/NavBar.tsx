@@ -63,15 +63,16 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
             </>
             :
             <>
-            {isMobile?<div onClick={()=>{setOpenMenu(false)}}>close</div>:<></>}
+            {isMobile?<div className="justify-items-end w-full pb-7" onClick={()=>{setOpenMenu(false)}}><Button className="bg-slate-600 "> Close </Button></div>:<></>}
             <div className=" h-screen">
                 <div className="flex">
+                <ScrapeScholarHeader />
                 <div className="float-right pb-6 p-2" data-testid="logout-button">
                     <Button onClick={handleLogout} className="" >
                         Logout
                     </Button>
                 </div>
-                <ScrapeScholarHeader />
+                
                 </div>
                 <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                     removeFromUserDatabaseList={removeFromUserDatabaseList} />
