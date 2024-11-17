@@ -296,7 +296,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
 
     return (
         <div className="flex md:flex-row flex-col pb-10 h-screen ">
-            <div className=" xs:w-full  md: w-1/4 lg:w-1/4 xl:w-1/5 p-5" data-testid="navbar">
+            <div className=" xs:w-full  md: w-1/4 lg:w-1/4 xl:w-1/5 p-5">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}

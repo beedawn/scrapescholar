@@ -53,7 +53,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
     return (
         <>
         {isMobile && !openMenu?<>
-        <div className="flex"><div className="p-3" onClick={()=>{setOpenMenu(true)}}>
+        <div className="flex"  data-testid="menu_bar"><div className="p-3" onClick={()=>{setOpenMenu(true)}}>
             <a href="#">
             <HamburgerIcon />
             </a>
@@ -63,8 +63,8 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
             </>
             :
             <>
-            {isMobile?<div className="justify-items-end w-full pb-7" onClick={()=>{setOpenMenu(false)}}><Button className="bg-slate-600 "> Close </Button></div>:<></>}
-            <div className=" h-screen">
+            {isMobile?<div className="justify-items-end w-full pb-7" data-testid="nav_close_button" onClick={()=>{setOpenMenu(false)}}><Button className="bg-slate-600" > Close </Button></div>:<></>}
+            <div className=" h-screen" data-testid="navbar">
                 <div className="flex">
                 <ScrapeScholarHeader />
                 <div className="float-right pb-6 p-2" data-testid="logout-button">

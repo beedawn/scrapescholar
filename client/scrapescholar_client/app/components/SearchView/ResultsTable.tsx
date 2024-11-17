@@ -189,10 +189,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                 :
                 <></>}
             {(abstractText.length > 0) ? (<AbstractModal setAbstractText={setAbstractText} text={abstractText} />) : <></>}
-            <button className="absolute bottom-1 bg-emerald-500 text-black px-5 py-1" onClick={scrollLeft}>
+            <button className="absolute bottom-1 bg-emerald-500 text-black px-5 py-1" onClick={scrollLeft} data-testid="scroll_left">
                 ˂
             </button>
-            <button className="absolute bottom-1 right-10 bg-emerald-500 text-black px-5 py-1" onClick={scrollRight}>
+            <button className="absolute bottom-1 right-10 bg-emerald-500 text-black px-5 py-1" onClick={scrollRight} data-testid="scroll_right">
                 ˃
             </button>
             <div className="overflow-x-auto" ref={containerRef}>
