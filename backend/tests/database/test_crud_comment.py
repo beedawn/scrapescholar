@@ -104,7 +104,7 @@ def test_update_comment(test_db_session: Session):
     update_data = CommentUpdate(comment_text="updated_comment")
     updated_comment = update_comment(test_db_session, created_comment["comment_id"], update_data)
 
-    assert updated_comment.comment_text == "updated_comment"
+    assert updated_comment["comment_text"] == "updated_comment"
     cleanup(test_db_session, created_comment, article, search)
 
 

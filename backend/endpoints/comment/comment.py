@@ -34,7 +34,7 @@ async def create_new_comment(
 
 
 # Edit a comment
-@router.put("/{comment_id}", response_model=Comment)
+@router.put("/{comment_id}")
 async def update_existing_comment(
         comment_id: int,
         comment: CommentUpdate,

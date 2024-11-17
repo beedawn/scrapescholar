@@ -8,6 +8,20 @@ from datetime import datetime
 from app.crud.user import decrypt
 
 
+def parse_comment(new_comment: Comment, db:Session):
+    found_username = db.query(User).filter(new_comment.user_id == User.user_id).first()
+    decrypted_username = decrypt(found_username.username)
+
+    new_comment_with_username = {
+        "username": decrypted_username,
+        "article_id": new_comment.article_id,
+        "comment_id": new_comment.comment_id,
+        "comment_text": new_comment.comment_text,
+        "created_at": new_comment.created_at,
+        "user_id": new_comment.user_id
+    }
+    return new_comment_with_username
+
 def get_comment(db: Session, comment_id: int):
     comment = db.query(Comment).filter(Comment.comment_id == comment_id).first()
     if not comment:
@@ -27,7 +41,9 @@ def update_comment(db: Session, comment_id: int, comment: CommentUpdate):
         setattr(db_comment, key, value)
     db.commit()
     db.refresh(db_comment)
-    return db_comment
+
+    new_comment_with_username = parse_comment(db_comment, db)
+    return new_comment_with_username
 
 
 def delete_comment(db: Session, comment_id: int):
@@ -66,15 +82,7 @@ def create_comment(db: Session, article_id: int, comment: CommentCreate, user_id
     db.add(new_comment)
     db.commit()
     db.refresh(new_comment)
-    found_username = db.query(User).filter(new_comment.user_id == User.user_id).first()
-    decrypted_username = decrypt(found_username.username)
 
-    new_comment_with_username = {
-        "username": decrypted_username,
-        "article_id": new_comment.article_id,
-        "comment_id": new_comment.comment_id,
-        "comment_text": new_comment.comment_text,
-        "created_at": new_comment.created_at,
-        "user_id": new_comment.user_id
-    }
+    new_comment_with_username = parse_comment(new_comment, db)
+
     return new_comment_with_username
