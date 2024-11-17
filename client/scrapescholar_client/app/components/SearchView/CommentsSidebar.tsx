@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import apiCalls from '@/app/api/apiCalls';
+import Loading from '../Loading';
 
 interface Comment {
     comment_id: number;
@@ -13,16 +14,18 @@ interface CommentsSidebarProps {
     articleId: number;
     onClose: () => void;
     isMobile:boolean;
+    setIsCommentButtonPressed:(item:boolean)=>void;
+    isCommentButtonPressed:boolean;
 }
 
-const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, isMobile }) => {
+const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, isMobile, setIsCommentButtonPressed, isCommentButtonPressed }) => {
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
     const [editedText, setEditedText] = useState<string>('');
-
+    const [openComments, setOpenComments] =useState<boolean>(false);
     const { getCommentsByArticle, addComment, editComment, deleteComment } = apiCalls();
 
     useEffect(() => {
@@ -80,7 +83,9 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
     };
 
     return (
-        <>{isMobile?<></>:<></>}
+        <>
+         {isMobile && !isCommentButtonPressed?<><button onClick={()=>setIsCommentButtonPressed(true)} className="absolute right-0 top-2/4 bg-white text-black rounded p-2 m-0" style={{ transform: 'rotate(270deg)', marginRight: "-25px"}}>Comments</button></>:<>
+        <div className="w-full md:w-1/4 bg-gray-300 overflow-y-auto flex-shrink-0 h-screen">
         <div className="p-2 text-black">
        
             <div className="justify-end w-full flex">
@@ -94,7 +99,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
 
             <h2 className="font-bold text-xl mb-4 w-full">Comments for Article {articleId}</h2>
 
-            {loading && <p>Loading comments...</p>}
+            {loading && <Loading />}
             {error && <p className="text-red-500">{error}</p>}
             {comments.length > 0 ? (
                 <ul>
@@ -173,7 +178,10 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
             </div>
         
         </div>
+        </div>
+         </>}
         </>
+        
     );
 };
 
