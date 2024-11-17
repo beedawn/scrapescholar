@@ -295,7 +295,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     }
 
     return (
-        <div className="flex md:flex-row flex-col  h-screen pb-5">
+        <div className="flex md:flex-row flex-col pb-10 h-screen ">
             <div className=" xs:w-full  md: w-1/4 lg:w-1/4 xl:w-1/5 p-5" data-testid="navbar">
                 <NavBar handleResults={handleSubmit} addInput={addInput} inputs={inputs}
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
@@ -306,7 +306,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 />
             </div>
 
-            <div className={`flex-1 ${!isMobile ? 'm-5, p-5' : 'm-2 p-2'} overflow-auto ${isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ? 'hidden' : ''}`}>
+            <div className={`flex-1 ${!isMobile ? 'm-5, p-5 pl-12' : 'm-2 p-2'} overflow-auto ${isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ? 'hidden' : ''}`}>
                 {error ? (<p>{error.message}</p>)
                     : loading ? <Loading /> : openUserManagement ? <><UserManagement /></> :
                         dataFull ? <> <DataFull searches={searches} setLoading={setLoading} /></> :
