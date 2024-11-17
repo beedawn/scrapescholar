@@ -7,14 +7,22 @@ WORKDIR /app
 # Copy the entire backend folder to the Docker image
 COPY ../../backend /app/backend
 
+# Copy the .env file
+COPY docker/.env /app/.env
+
 # Copy the init_db script to the Docker image
 COPY docker/postgres/init_db.sh /app/init_db.sh
+COPY docker/postgres/wait-for.sh /app/wait-for.sh
 
-# Install dependencies
+# Install PostgreSQL client
+RUN apt-get update && apt-get install -y postgresql-client iputils-ping
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
-# Make init_db.sh executable
+# Make scripts executable
 RUN chmod +x /app/init_db.sh
+RUN chmod +x /app/init_db.sh /app/wait-for.sh
 
 # Entrypoint to initialize the database
 ENTRYPOINT ["/app/init_db.sh"]

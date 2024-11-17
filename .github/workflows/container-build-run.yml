@@ -21,21 +21,24 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "SCIENCEDIRECT_APIKEY=${{secrets.SCIENCEDIRECT_APIKEY}}" >> docker/.env
-          echo "SCOPUS_APIKEY=${{secrets.SCOPUS_APIKEY}}" >> docker/.env
-          echo "DATABASE_URL=${{secrets.DATABASE_URL}}" >> docker/.env
-          echo "PYTHONPATH=./backend" >> docker/.env
-          echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> docker/.env
-          echo "POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> docker/.env
-          echo "POSTGRES_DB=${{secrets.POSTGRES_DB}}" >> docker/.env
-          echo "POSTGRES_SERVER=${{secrets.POSTGRES_SERVER}}" >> docker/.env
-          echo "POSTGRES_PORT=${{secrets.POSTGRES_PORT}}" >> docker/.env
-          echo "SECRET_KEY=${{secrets.SECRET_KEY}}" >> docker/.env
-          echo "ENCRYPTION_KEY=${{secrets.ENCRYPTION_KEY}}" >> docker/.env
-          echo "HOST_IP=${{secrets.HOST_IP}}" >> docker/.env
-          echo "TEST_USER=${{ secrets.TEST_USER}}" >> docker/.env
-          echo "TEST_PASSWORD=${{secrets.TEST_PASSWORD}}" >> docker/.env
+          cd docker/
+          echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> .env
+          echo "POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> .env
+          echo "POSTGRES_DB=${{secrets.POSTGRES_DB}}" >> .env
+          echo "POSTGRES_SERVER=db" >> .env
+          echo "POSTGRES_PORT=5432" >> .env
+          echo "DATABASE_URL=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@db:5432/${{secrets.POSTGRES_DB}}" >> .env
+          echo "SECRET_KEY=${{secrets.SECRET_KEY}}" >> .env
+          echo "ENCRYPTION_KEY=${{secrets.ENCRYPTION_KEY}}" >> .env
+          echo "SCIENCEDIRECT_APIKEY=${{secrets.SCIENCEDIRECT_APIKEY}}" >> .env
+          echo "SCOPUS_APIKEY=${{secrets.SCOPUS_APIKEY}}" >> .env
+          echo "TEST_USER=${{secrets.TEST_USER}}" >> .env
+          echo "TEST_PASSWORD=${{secrets.TEST_PASSWORD}}" >> .env
 
+      - name: Show .env file (for debugging only)
+        run: |
+          cat docker/.env
+        shell: bash
 
       - name: Install Docker Compose
         run: |
@@ -46,7 +49,6 @@ jobs:
       - name: Build and Test with Docker Compose
         run: |
           docker-compose -f docker/docker-compose-postgres.yml --env-file docker/.env up -d --build
-
 
       - name: Verify Database and Table Setup
         run: |

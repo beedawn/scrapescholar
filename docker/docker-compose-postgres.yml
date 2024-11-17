@@ -1,6 +1,10 @@
 services:
   db:
-    image: postgres:latest
+    networks:
+      default:
+        aliases:
+          - db
+    image: postgres:14
     container_name: container_scrapescholardb
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -26,13 +30,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_SERVER: ${POSTGRES_SERVER}
-      POSTGRES_PORT: "5432"
-      TEST_USER: ${TEST_USER}
-      TEST_PASSWORD: ${TEST_PASSWORD}
-    depends_on:
-      db:
-        condition: service_healthy
-    entrypoint: /app/init_db.sh
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      DATABASE_URL: ${DATABASE_URL}
+    entrypoint: ["./wait-for.sh", "db", "/app/init_db.sh"]
+    networks:
+      default:
 
 volumes:
   db_data:
