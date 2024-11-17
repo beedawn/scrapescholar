@@ -53,8 +53,8 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [openUserManagement, setOpenUserManagement] = useState<boolean>(false);
     const [relevanceChanged, setRelevanceChanged] = useState<boolean>(false);
     const [selectedSearchIdState, setSelectedSearchIdState] = useState<number>();
-    const [width, setWidth]=useState<number>(window.innerWidth);
-    const [isMobile, setIsMobile]=useState<boolean>(false)
+    const [width, setWidth] = useState<number>(window.innerWidth);
+    const [isMobile, setIsMobile] = useState<boolean>(false)
     const sumResults = (results: ResultItem[], comparison: string) => {
         let sum = 0
         if (results !== undefined) {
@@ -67,17 +67,17 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         return sum
     }
 
-  useEffect(() => {
-    windowWidth(setWidth)
- 
-    if (width <768){
-        setIsMobile(true)
-    }else{
-        setIsMobile(false)
-    }
+    useEffect(() => {
+        windowWidth(setWidth)
 
-  }, [width]);
-    
+        if (width < 768) {
+            setIsMobile(true)
+        } else {
+            setIsMobile(false)
+        }
+
+    }, [width]);
+
 
     useEffect(() => {
         const fetchDatabases = async () => {
@@ -105,7 +105,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     //gets data from api and stores in results
     const [results, setResults] = useState<ResultItem[]>([]);
     const [dataFull, setDataFull] = useState<boolean>(false);
-    const [isCommentButtonPressed, setIsCommentButtonPressed]=useState(false);
+    const [isCommentButtonPressed, setIsCommentButtonPressed] = useState(false);
     //inputs gets user inputs, update everytime user enters character
 
     const initBubblePlotData = (fetchResults: ResultItem[]) => {
@@ -138,9 +138,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
 
         const newBubbleInputs = data_array.map((keyword, i) => ({
-            x: i<2?i*.5:0,
+            x: i < 2 ? i * .5 : 0,
             //all circles are on same y axis
-            y: i+i*50,
+            y: i + i * 50,
             radius: (keyword.sum / divider) * 50,
             color: keyword.color,
             label: `${keyword.name} ${keyword.sum}`
@@ -199,7 +199,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     //updates inputs when input field is edited
     const handleSearchChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
 
-        const sanitizedValue =  DOMPurify.sanitize(e.target.value);
+        const sanitizedValue = DOMPurify.sanitize(e.target.value);
         const newInputs = [...inputs];
         newInputs[index] = sanitizedValue;
         setInputs(newInputs);
@@ -215,7 +215,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         await handlePastSearchSelectionSearchID(selectedSearchId)
     }
 
-    const handlePastSearchSelectionSearchID = async (search_id:number)=>{
+    const handlePastSearchSelectionSearchID = async (search_id: number) => {
 
         setCurrentSearchId(search_id)
         setSelectedSearchIdState(search_id)
@@ -248,7 +248,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setSelectedArticleId(articleId);
         setIsSidebarOpen(true);
 
-       
+
 
     };
 
@@ -283,10 +283,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
         const inputsAndLogicalOperatorsString = inputsAndLogicalOperators.join(' ')
         setJoinedInputsString([inputsAndLogicalOperatorsString]);
-        const responseResult = await getAPIResults(userDatabaseList, 
-            inputsAndLogicalOperators, emptyString, 
-            setInputs, setResults, setError, 
-            filterBlankInputs, inputs, 
+        const responseResult = await getAPIResults(userDatabaseList,
+            inputsAndLogicalOperators, emptyString,
+            setInputs, setResults, setError,
+            filterBlankInputs, inputs,
             setDataFull, setCurrentSearchId);
         const bubblePlot = initBubblePlotData(responseResult.articles)
         setBubbleInputs(bubblePlot)
@@ -306,7 +306,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 />
             </div>
 
-            {isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ?<></>: <div className="flex-1 p-5 m-5 overflow-auto">
+            {/* {isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ?<></>:  */}
+
+            <div className={`flex-1 p-5 m-5 overflow-auto ${isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ? 'hidden' : ''}`}>
                 {error ? (<p>{error.message}</p>)
                     : loading ? <Loading /> : openUserManagement ? <><UserManagement /></> :
                         dataFull ? <> <DataFull searches={searches} setLoading={setLoading} /></> :
@@ -327,11 +329,21 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                                 relevanceChanged={relevanceChanged}
                                 handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}
                             />}
-            </div>}
+            </div>
+
+            {/* } */}
             {isSidebarOpen && selectedArticleId !== null && (
-                
-                    <CommentsSidebar articleId={selectedArticleId} onClose={() => {setIsSidebarOpen(false);setIsCommentButtonPressed(false)}} isMobile={isMobile} setIsCommentButtonPressed={setIsCommentButtonPressed} isCommentButtonPressed={isCommentButtonPressed} />
-             
+
+                <CommentsSidebar articleId={selectedArticleId} onClose={() => {
+                    if (isMobile) {
+                        setIsCommentButtonPressed(false)
+                    } else {
+                        setIsSidebarOpen(false);
+                    }
+                }} isMobile={isMobile}
+                    setIsCommentButtonPressed={setIsCommentButtonPressed}
+                    isCommentButtonPressed={isCommentButtonPressed} />
+
             )}
         </div>
     );
