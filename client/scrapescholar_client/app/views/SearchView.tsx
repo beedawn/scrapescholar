@@ -138,9 +138,9 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
 
         const newBubbleInputs = data_array.map((keyword, i) => ({
-            x: i,
+            x: i<2?i*.5:0,
             //all circles are on same y axis
-            y: 50,
+            y: i+i*50,
             radius: (keyword.sum / divider) * 50,
             color: keyword.color,
             label: `${keyword.name} ${keyword.sum}`

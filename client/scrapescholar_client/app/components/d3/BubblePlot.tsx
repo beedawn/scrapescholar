@@ -25,7 +25,7 @@ interface BubblePlotProps {
 }
 
 const LinePlot: React.FC<BubblePlotProps> = ({ data,
-  width2 = 640,
+  width2 = 440,
   height2 = 200,
   marginTop = 20,
   marginRight = 20,
@@ -37,7 +37,7 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
   useEffect(() => {
     // set the dimensions and margins of the graph
     const margin = { top: 50, right: 20, bottom: 30, left: 50 },
-      width = 400 - margin.left - margin.right,
+      width = 350 - margin.left - margin.right,
       height = 300 - margin.top - margin.bottom;
 
     const svg = d3.select("#bubbleplot")
