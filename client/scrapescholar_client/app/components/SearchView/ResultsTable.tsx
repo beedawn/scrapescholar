@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ResultItem } from '../../views/SearchView';
 import SortToggleButton from './SortToggleButton';
 import DynamicUserField from './DynamicUserField';
@@ -30,8 +30,9 @@ interface ResultsTableProps {
     setRelevanceChanged: (item: boolean) => void;
     relevanceChanged: boolean;
     handlePastSearchSelectionSearchID:
-    (search_id:number) => void;
-    currentSearchID:number;
+    (search_id: number) => void;
+    currentSearchID: number;
+    isMobile: boolean;
 }
 
 export const sortResults = (array: ResultItem[],
@@ -61,8 +62,35 @@ export const sortResults = (array: ResultItem[],
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
     results, selectedArticle, setSelectedArticle, setResults,
-    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged, handlePastSearchSelectionSearchID, currentSearchID
+    setLoading, onArticleClick,
+    setRelevanceChanged, relevanceChanged,
+    handlePastSearchSelectionSearchID, currentSearchID,
+    isMobile
 }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    let scrollBy = 350;
+    if (isMobile) {
+        scrollBy = 200;
+    }
+    const scrollLeft = () => {
+        if (containerRef.current) {
+            containerRef.current.scrollBy({
+                left: scrollBy * -1,
+                behavior: 'smooth',
+            });
+        }
+    };
+
+    const scrollRight = () => {
+        if (containerRef.current) {
+            containerRef.current.scrollBy({
+                left: scrollBy,
+                behavior: 'smooth',
+            });
+        }
+    };
+
     const [editableResults, setEditableResults]
         = useState<ResultItem[]>([...results]);
     const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
@@ -91,9 +119,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
 
     const handleCellClick = (article_id: number, field: keyof EditableCell) => {
         const updatedCells: EditableCell[] = [...editableCells];
-
         const targetCell = updatedCells.find(cell => cell.article_id === article_id);
-
         if (targetCell) {
             // Allow edit toggling only if the user is a Professor
             if (!isAdmin) {
@@ -124,7 +150,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
     }, []);
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
 
-        const sanitizedValue =  DOMPurify.sanitize(value);
+        const sanitizedValue = DOMPurify.sanitize(value);
         const updatedResults = editableResults.map(result =>
             result.article_id === id ? { ...result, [field]: sanitizedValue } : result
         );
@@ -145,25 +171,36 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
             await putUserData(putrequest)
         }
     }
-    const [deleteArticleModalActive, setDeleteArticleModalActive]=useState<boolean>(false)
-    const [articleToDelete, setArticleToDelete]=useState<ResultItem>();
-    const openDeleteArticleModal = (article:ResultItem) =>{
+    const [deleteArticleModalActive, setDeleteArticleModalActive] = useState<boolean>(false)
+    const [articleToDelete, setArticleToDelete] = useState<ResultItem>();
+    const openDeleteArticleModal = (article: ResultItem) => {
         setDeleteArticleModalActive(true);
         setArticleToDelete(article)
-
-
     }
 
     return (
         <>
-        {deleteArticleModalActive && articleToDelete !== undefined?<DeleteArticleModal handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID} setDeleteArticleModalActive={setDeleteArticleModalActive} currentSearchID={currentSearchID} articleToDelete={articleToDelete}/>:<></>}
+            {deleteArticleModalActive && articleToDelete !== undefined ?
+                <DeleteArticleModal
+                    handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}
+                    setDeleteArticleModalActive={setDeleteArticleModalActive}
+                    currentSearchID={currentSearchID}
+                    articleToDelete={articleToDelete} />
+                :
+                <></>}
             {(abstractText.length > 0) ? (<AbstractModal setAbstractText={setAbstractText} text={abstractText} />) : <></>}
-            <div className="overflow-x-auto">
+            <button className="absolute bottom-1 bg-emerald-500 text-black px-5 py-1" onClick={scrollLeft}>
+                ˂
+            </button>
+            <button className="absolute bottom-1 right-10 bg-emerald-500 text-black px-5 py-1" onClick={scrollRight}>
+                ˃
+            </button>
+            <div className="overflow-x-auto" ref={containerRef}>
                 <table className=" min-w-full table-auto border-collapse border border-gray-500">
                     <thead>
                         <tr>
-                        <th className="border border-gray-500">
-    {/* delete */}
+                            <th className="border border-gray-500">
+                                {/* delete */}
                             </th>
                             <th className="border border-gray-500">
                                 Title
@@ -245,15 +282,15 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                     setSelectedArticle(result.article_id);
                                     onArticleClick(result.article_id); // Call onArticleClick when an article is clicked
                                 }} data-testid='row'>
-                                      <td className="border border-gray-500" >
-                                   
-                                    <button className="bg-red-600 text-2xl p-1 m-2 rounded text-white" 
-                    onClick={()=>{
-                        openDeleteArticleModal(result)
-                        }} data-testid="delete_article_button">
-                        ␡
-                        </button>
-                                    
+                                <td className="border border-gray-500" >
+
+                                    <button className="bg-red-600 text-2xl p-1 m-2 rounded text-white"
+                                        onClick={() => {
+                                            openDeleteArticleModal(result)
+                                        }} data-testid="delete_article_button">
+                                        ␡
+                                    </button>
+
                                 </td>
                                 <td className="border border-gray-500" >
                                     <a href={result.link}>

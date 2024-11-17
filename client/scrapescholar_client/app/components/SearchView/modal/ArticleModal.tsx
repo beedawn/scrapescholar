@@ -209,26 +209,17 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                 <div className="text-red-600 text-center">
                                             {linkValidationError.length>0?<>{linkValidationError}</>:<></>}
                                             </div>
-                                <div className="flex gap-4 justify-center items-center text-center">
-                                    <div className="flex flex-col items-center bg-gray-50 p-2">
-                                        <label className="text-black mb-1">Date</label>
-                                        <DatePicker selected={startDate} onChange={(date) => {setStartDate(date); updateArticleState("date", date)}} />
-                                        {/* <input
-                                        type="number"
-                                            className="border rounded border-slate-800 text-center p-2"
-                                            placeholder="Year"
-                                            value={newArticle.date}
-                                            onClick={() => { clearErrorSuccessMsg() }}
-                                            onChange={(e) => { updateArticleState("date", e.target.value) }}
-                                            data-testid="new_article_date"
-                                        /> */}
+                                <div className="flex   w-full justify-center items-center text-center">
+                                    <div className="flex flex-col items-center bg-gray-50 p-2 ">
+                                        <label className="text-black mb-1 ">Date</label>
+                                        <DatePicker className="w-20" selected={startDate} onChange={(date) => {setStartDate(date); updateArticleState("date", date)}} />
                                     </div>
 
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
                                         <label className="text-black mb-1">Cited By</label>
                                         <input
                                         type="number"
-                                            className="border rounded border-slate-800 text-center p-2"
+                                            className="border w-14 rounded border-slate-800 text-center p-2"
                                             placeholder="Cited By"
                                             value={newArticle.citedby}
                                             onClick={() => { clearErrorSuccessMsg() }}

@@ -25,13 +25,14 @@ interface SearchResultsProps {
     relevanceChanged: boolean;
     handlePastSearchSelectionSearchID:
     (search_id:number) => void;
+    isMobile:boolean;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({
     results, displayInputs, className, emptyString,
     disableD3 = false, bubbleInputs, setResults,
     setSearchName, searchName, currentSearchId, setDisplayInputs,
-    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged, handlePastSearchSelectionSearchID }) => {
+    setLoading, onArticleClick, setRelevanceChanged, relevanceChanged, handlePastSearchSelectionSearchID, isMobile }) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
     const { getAPIPastSearchTitle, getCommentsByArticle, downloadURL } = apiCalls();
     const [comments, setComments] = useState<any[]>([]); // Comments state
@@ -54,9 +55,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     return (
         <div className={className}>
             {addArticleOpen ? <ArticleModal addArticleView={addArticleView} search_id={currentSearchId} handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}/> : <></>}
-            <div className="float-left p-12 max-w-sm
+            <div className={`float-left  ${!isMobile ? 'ml-4 p-12' : ''} max-w-sm
             sm:max-w-screen-sm
-            lg:max-w-screen-md xl:max-w-screen-lg">
+            lg:max-w-screen-md xl:max-w-screen-lg`}>
                 {results.length !== 0 ? (
                     <div>
                         <SearchHeader downloadURL={`${downloadURL}${currentSearchId}`}
@@ -83,7 +84,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             setRelevanceChanged={setRelevanceChanged}
                             relevanceChanged={relevanceChanged} 
                             handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}
-                            currentSearchID={currentSearchId}/>
+                            currentSearchID={currentSearchId}
+                            isMobile={isMobile}
+                            />
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''
