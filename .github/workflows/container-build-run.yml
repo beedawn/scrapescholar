@@ -43,29 +43,7 @@ jobs:
 
       - name: Build and Test with Docker Compose
         run: |
-          docker-compose -f docker/docker-compose-postgres.yml --env-file docker/.env up -d --build
-
-      - name: Verify Database and Table Setup
-        run: |
-          # Wait until PostgreSQL is ready
-          until docker exec container_scrapescholardb pg_isready -U $POSTGRES_USER; do
-            echo "Waiting for PostgreSQL to be ready..."
-            sleep 5
-          done
-          # Check for tables in the database
-          docker exec container_scrapescholardb psql -U $POSTGRES_USER -d $POSTGRES_DB -c "\dt"
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        shell: bash          
-
-      - name: Build FastAPI Backend
-        run: |
-          docker build -t fastapi-backend ./docker/fastapi
-
-      - name: Start FastAPI Backend
-        run: |
-          docker-compose -f docker/docker-compose-postgres.yml --env-file docker/.env up -d fastapi
+          docker-compose -f docker/docker-compose.yml --env-file docker/.env up -d --build
 
       - name: Wait for FastAPI Backend to Be Ready
         run: |
@@ -85,4 +63,4 @@ jobs:
           curl -X GET http://localhost:8000/users/get/1 || echo "Received expected error (e.g., 403)"
 
       - name: Stop and Remove Containers
-        run: docker-compose -f docker/docker-compose-postgres.yml down
+        run: docker-compose -f docker/docker-compose.yml down
