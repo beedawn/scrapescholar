@@ -43,7 +43,7 @@ jobs:
 
       - name: Build and Test with Docker Compose
         run: |
-          docker-compose -f docker/docker-compose.yml --env-file docker/.env up -d --build
+          docker-compose -f docker/docker-compose-scrapescholar.yml --env-file docker/.env up -d --build
 
       - name: Wait for FastAPI Backend to Be Ready
         run: |
