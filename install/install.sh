@@ -1,8 +1,8 @@
 #!/bin/bash
 
-filepath="testfile"
+filepath=".env"
 
-next_js_env="next_js_file_path"
+next_js_env=".next_env"
 
 
 echo 'Welcome to the scripted setup'
@@ -11,6 +11,15 @@ echo 'Setting up backend env file'
 echo  "Enter Science Direct API Key, the key can be obtained here: https://dev.elsevier.com/ :" 
 read sciencedirect_apikey
 echo -e "SCIENCEDIRECT_APIKEY=${sciencedirect_apikey}" > "$filepath"
+
+echo "Do you have a scopus institutional key obtained from scopus support? (If you don't know what this is the answer is N) Y/N?:"
+read scopus_inst_response
+if [[ $scopus_inst_response == "Y" || $scopus_inst_response == "y" ]]; then 
+	echo "Enter Scopus institutional key" 
+	read scopus_inst_key 
+	echo -e "SCOPUS_INSTTOKEN=${scopus_inst_key}">>"$filepath"
+fi
+	
 
 echo "Enter Scopus API Key, the key can be found at https://dev.elsevier.com/ :"
 read scopus_apikey
@@ -38,8 +47,12 @@ echo -e "POSTGRES_SERVER=${postgres_ip}">> "$filepath"
 
 echo "Enter postgres server Port:"
 read postgres_port
-echo -e "POSTGRES_SERVER=${postgres_port}">> "$filepath"
+echo -e "POSTGRES_PORT=${postgres_port}">> "$filepath"
 
+
+
+echo -e "DATABASE_URL=postgresql://${postgres_user}:${postgres_pass}@db:${postgres_port}/${postgres_db}" >> "$filepath"
+             
 
 echo "Enter Secret Key:"
 read secret_key
