@@ -9,11 +9,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 # Copy requirements and install dependencies
-COPY ../backend/requirements.txt /app/requirements.txt
+COPY backend/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
-COPY ../backend /app
+COPY backend /app
 
 # Expose the application port
 EXPOSE 8000
