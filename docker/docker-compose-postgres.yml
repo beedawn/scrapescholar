@@ -36,5 +36,29 @@ services:
     networks:
       default:
 
+  fastapi:
+    build:
+      context: ..
+      dockerfile: docker/fastapi/Dockerfile
+    container_name: fastapi_container
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      SCIENCEDIRECT_APIKEY: ${SCIENCEDIRECT_APIKEY}
+      SCOPUS_APIKEY: ${SCOPUS_APIKEY}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SERVER: db
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      default:
+
 volumes:
   db_data:
