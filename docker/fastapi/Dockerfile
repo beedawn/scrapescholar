@@ -8,12 +8,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Set the working directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY backend/requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the backend folder into the Docker build context
+COPY ../../backend /app
 
-# Copy the application code
-COPY backend /app
+# Install Python dependencies
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Expose the application port
 EXPOSE 8000
