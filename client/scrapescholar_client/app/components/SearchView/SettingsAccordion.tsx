@@ -5,9 +5,10 @@ interface SettingsAccordionProps {
     setOpenUserManagement: (item: boolean) => void;
     setDataFull: (item: boolean) => void;
     clearPages:()=>void;
+    setOpenMenu:(item:boolean)=>void;
 }
 
-const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull,clearPages }) => {
+const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull,clearPages, setOpenMenu }) => {
     const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
     const { isAdmin } = apiCalls();
     useEffect(() => {
@@ -34,6 +35,12 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
             [key]: "text-blue-400 underline",
         }));
     }
+    const clearLocalPages = () =>{
+        clearPages();
+        setOpenMenu(false);
+
+
+    }
 
     const [openIndex, setOpenIndex] = useState(null);
     const toggleAccordion = (index: any) => {
@@ -41,13 +48,13 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
     };
     const index = 1;
     return (
-        <div id="accordion-color">
+        <div id="accordion-color" className="flex">
             <div key={index}>
                 <h2 id={`accordion-color-heading-${index + 1}`}>
                     <button
                         type="button"
                         className={`flex items-center 
-                            w-full p-3 font-medium text-gray-500 
+                            w-full ml-3 p-2 font-medium text-gray-500 
                                 rounded-t-xl ${openIndex === index ? '' : ''}`}
                         onClick={() => toggleAccordion(index)}
                         aria-expanded={openIndex === index}
@@ -59,14 +66,14 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                 strokeWidth="2" d="M9 5 5 1 1 5" />
                         </svg>
-                        <span className="pl-3" >Settings</span>
+                        <span className="ml-3" >Settings</span>
                     </button>
                 </h2>
                 <div className={openIndex === index ? '' : 'hidden'} id={`accordion-color-body-${index + 1}`}
                     aria-labelledby={`accordion-color-heading-${index + 1}`}>
                     <div className="pl-5 dark:border-gray-700">
                         {isAdminUser ? <div key="1"  >
-                            <a href="#" onClick={() => { clearPages();setOpenUserManagement(true); }}
+                            <a href="#" onClick={() => { clearLocalPages();setOpenUserManagement(true); }}
                                 onMouseEnter={() => { updateHovered(1) }}
                                 onMouseLeave={() => { removeHovered(1) }}
                                 className={hoveredClasses[1]}
@@ -81,7 +88,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                                 API Keys
                             </a>
                         </div>
-                        <div key="3" onClick={() => {clearPages();setDataFull(true)}}  >
+                        <div key="3" onClick={() => {clearLocalPages();setDataFull(true)}}  >
                             <a href="#" onMouseEnter={() => { updateHovered(3) }}
                                 onMouseLeave={() => { removeHovered(3) }}
                                 className={hoveredClasses[3]}>
