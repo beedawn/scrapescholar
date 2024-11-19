@@ -49,7 +49,6 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
     # Query the last 300 searches for the authenticated user
     searches = get_300_search(db=db, current_user=current_user)
     shared_searches = get_shared_searches(db, current_user)
-    print(shared_searches)
 
     searches = searches + shared_searches
     #also need to get searches shared with user
@@ -96,20 +95,12 @@ def get_search_articles(db: Session = Depends(get_db), access_token: Annotated[s
 
     if search is None or search.user_id != user.user_id:
         searchshares = get_search_share_by_search(db, search_id)
-        print("search shares")
-        print(searchshares)
         if searchshares is None:
             raise HTTPException(status_code=401, detail="Unauthorized")
         for searchshare in searchshares:
-            print("Search Share ID")
-            print(searchshare.shared_with_user_id)
             if (searchshare.shared_with_user_id == user.user_id):
                 match_search = searchshare
                 break
-    print("Search")
-    print(search)
-    print("match search")
-    print(match_search)
     if (search is not None and search.user_id == user.user_id) or match_search is not None:
         articles = get_full_article_response(db=db, search_id=search_id)
 
@@ -229,9 +220,6 @@ def get_300_search(db, current_user):
 
 
 def get_shared_searches(db, current_user):
-    #TODO:
-    #need to get searches, from search that join/align with user's shared with sharesearch
-
     shared_searches = (
         db.query(Search)
         .join(SearchShare, Search.search_id == SearchShare.search_id)
@@ -239,23 +227,13 @@ def get_shared_searches(db, current_user):
         .order_by(Search.search_date.desc())
         .all()
     )
-
-    # shared_searches = (db.query(SearchShare)
-    #                    .filter(SearchShare.shared_with_user_id == current_user.user_id)
-    #                    .order_by(Search.search_date.desc())
-    #                    .all())
-    # #now need to take shared_searches and get their search ID's
-    # shared_searches_list=[]
-    # for shared_search in shared_searches:
-    #     search_result = (db.query(Search).filter(Search.search_id == shared_search.search_id).first())
-    #     shared_searches_list.append(search_result)
     return shared_searches
 
 
 def check_if_user_exceeded_search_amount(db: Session, current_user: User):
     #check if there are 300 searches if there are return true
     existing_searches = get_300_search(db=db, current_user=current_user)
-    if (len(existing_searches) >= 300):
+    if len(existing_searches) >= 300:
         print("amount exceeded!")
         return True
     else:

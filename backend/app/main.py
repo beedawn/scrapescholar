@@ -132,7 +132,7 @@ async def multiple_apis(keywords: str,
 
 @app.get("/academic_sources")
 async def academic_sources(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     database_list = await get_database_list('academic_databases/')
     return database_list
 
@@ -140,7 +140,7 @@ async def academic_sources(access_token: Annotated[str | None, Cookie()] = None,
 @app.get("/academic_sources_id")
 async def academic_sources(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
 
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     database_list = get_sources(db)
     list_of_sources = []
     for item in database_list:

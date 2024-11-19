@@ -31,17 +31,15 @@ async def create_new_article(
         access_token: Annotated[str | None, Cookie()] = None,
         db: Session = Depends(get_db)
 ):
-
-    print(article.search_id)
+    current_user = get_current_user_modular(access_token, db)
     search= get_search(db, article.search_id)
     relevance_score=algorithm_interface(" ".join(search.search_keywords),article.title,article.abstract)
 
-    print("ARTICLE DICT")
-    print(article.__dict__)
+
     article_data = article.__dict__.copy()
     article_data.pop("relevance_score", None)
     article_with_relevance_score = ArticleCreate(**article_data,relevance_score=relevance_score)
-    current_user = get_current_user_modular(access_token, db)
+
 
     created_article = create_article(db, article_with_relevance_score, user_id=current_user.user_id)
     create_user_data(db, current_user.user_id, created_article.article_id)

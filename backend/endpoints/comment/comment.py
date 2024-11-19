@@ -82,7 +82,12 @@ async def remove_comment(
 
 # Get all comments for an article
 @router.get("/article/{article_id}/comments", status_code=200)
-def get_comments(article_id: int, db: Session = Depends(get_db)):
+def get_comments(article_id: int, db: Session = Depends(get_db), access_token: str = Cookie(None)):
+    get_current_user_modular(db=db, token=access_token)
+    return get_comments_by_article(db, article_id=article_id)
+
+
+def get_comments_no_token(article_id: int, db: Session = Depends(get_db)):
     comments = get_comments_by_article(db, article_id=article_id)
     if comments:
         return comments

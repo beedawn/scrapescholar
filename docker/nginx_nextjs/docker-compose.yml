@@ -3,8 +3,8 @@ services:
   nextjs:
     # image: node:20 
     build:
-      context: ../../client/scrapescholar_client  # Context for Dockerfile
-      dockerfile: ../../docker/nextjs/Dockerfile  # Use your existing Dockerfile
+      context: ../../client/scrapescholar_client  
+      dockerfile: ../../docker/nextjs/Dockerfile 
     working_dir: /app
     volumes:
       - ../../client/scrapescholar_client:/app
@@ -23,6 +23,9 @@ services:
 
   nginx:
     image: nginx
+    build:
+      context: .
+      dockerfile: ../../docker/nginx/Dockerfile  
     volumes:
       - ./templates:/etc/nginx/templates
       - ./nginx.conf:/etc/nginx/nginx.conf
@@ -36,6 +39,7 @@ services:
     depends_on:
       - nextjs
       #need to chmod +x start_nginx.sh
+
     entrypoint: ["/docker-entrypoint.d/start_nginx.sh"] 
   certbot:
     image: certbot/certbot:latest

@@ -21,7 +21,7 @@ async def create_new_role(
     """
     API endpoint to create a new role.
     """
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     if not is_admin(access_token, db):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permission denied")
 
@@ -38,7 +38,7 @@ async def get_role_by_id(
     """
     API endpoint to get a role by its ID.
     """
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     role = get_role(db=db, role_id=role_id)
     return role
 
@@ -53,7 +53,7 @@ async def get_all_roles(
     """
     API endpoint to retrieve all roles.
     """
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     roles = get_roles(db=db, skip=skip, limit=limit)
     return roles
 
@@ -68,7 +68,7 @@ async def update_existing_role(
     """
     API endpoint to update an existing role.
     """
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     if not is_admin(access_token, db):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permission denied")
 
@@ -85,7 +85,7 @@ async def delete_existing_role(
     """
     API endpoint to delete a role by its ID.
     """
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     if not is_admin(access_token, db):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permission denied")
 
