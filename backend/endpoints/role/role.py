@@ -11,7 +11,6 @@ from typing import Annotated
 
 router = APIRouter()
 
-# Endpoint to create a new role - restricted to Admins
 @router.post("/create", response_model=RoleRead, status_code=status.HTTP_201_CREATED)
 async def create_new_role(
     role: RoleCreate,
@@ -28,7 +27,6 @@ async def create_new_role(
     new_role = create_role(db=db, role=role)
     return new_role
 
-# Endpoint to get a role by ID - available to any authenticated user
 @router.get("/get/{role_id}", response_model=RoleRead)
 async def get_role_by_id(
     role_id: int,
@@ -42,7 +40,6 @@ async def get_role_by_id(
     role = get_role(db=db, role_id=role_id)
     return role
 
-# Endpoint to retrieve all roles - available to any authenticated user
 @router.get("/get-all", response_model=List[RoleRead])
 async def get_all_roles(
     access_token: Annotated[str | None, Cookie()] = None,
@@ -57,7 +54,6 @@ async def get_all_roles(
     roles = get_roles(db=db, skip=skip, limit=limit)
     return roles
 
-# Endpoint to update an existing role - restricted to Admins
 @router.put("/update/{role_id}", response_model=RoleRead)
 async def update_existing_role(
     role_id: int,
@@ -75,7 +71,7 @@ async def update_existing_role(
     updated_role = update_role(db=db, role_id=role_id, role=role)
     return updated_role
 
-# Endpoint to delete a role by its ID - restricted to Admins
+
 @router.delete("/delete/{role_id}", response_model=RoleRead)
 async def delete_existing_role(
     role_id: int,

@@ -1,4 +1,3 @@
-#gets article title, article abstract, author keywords
 from algorithm.algorithm import algorithm
 
 

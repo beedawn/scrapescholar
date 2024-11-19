@@ -11,7 +11,6 @@ from auth_tools.get_user import get_current_user_modular
 router = APIRouter()
 
 
-# Add a comment to an article
 @router.post("/article/{article_id}", status_code=201)
 async def create_new_comment(
         article_id: int,
@@ -33,7 +32,6 @@ async def create_new_comment(
     return new_comment
 
 
-# Edit a comment
 @router.put("/{comment_id}")
 async def update_existing_comment(
         comment_id: int,
@@ -57,7 +55,6 @@ async def update_existing_comment(
     return updated_comment
 
 
-# Delete a comment
 @router.delete("/{comment_id}", status_code=204)
 async def remove_comment(
         comment_id: int,
@@ -80,7 +77,6 @@ async def remove_comment(
     return None
 
 
-# Get all comments for an article
 @router.get("/article/{article_id}/comments", status_code=200)
 def get_comments(article_id: int, db: Session = Depends(get_db), access_token: str = Cookie(None)):
     get_current_user_modular(db=db, token=access_token)
