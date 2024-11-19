@@ -138,7 +138,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 @router.get("/get_cookie")
 async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    print(access_token)
     user = get_current_user_modular(access_token, db)
     if access_token is None or user is None:
         raise HTTPException(status_code=404, detail="Cookie not found")
@@ -147,7 +146,7 @@ async def get_cookie(access_token: Annotated[str | None, Cookie()] = None, db: S
 
 @router.get("/is_admin")
 async def is_admin_endpoint(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-
+    get_current_user_modular(access_token, db)
     if is_admin(access_token, db):
         return True
     else:
@@ -160,12 +159,4 @@ def remove_cookie(response: Response):
     return {"message": "Cookie deleted"}
 
 
-#Protected route example
-@router.get("/protected_route")
-def protected_route(current_user: User = Depends(get_current_user)):
-    #probably want to add a token or cookie check here
-    return {
-        "user_id": current_user.user_id,
-        "username": current_user.username,
-        "email": current_user.email
-    }
+

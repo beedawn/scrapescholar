@@ -44,10 +44,8 @@ def calc_score(score, text_list):
         return round(score / len(text_list) * 100, 2)
 
 
-#add new function or modify this one to just break down each word and return a list of the substrings
 def score_word(word, synonyms_list, keywords_sliced_list, keyword_list):
     score = 0
-    #need a way to calculate weight based off total words in text for each score incrementation
     for keyword in keyword_list:
         if word == keyword:
             score += 1

@@ -23,17 +23,14 @@ def verify_hash(text: str, hashed_text: str) -> bool:
     return pwd_context.verify(text, hashed_text)
 
 
-# Helper function to encrypt fields
 def encrypt(text: str) -> str:
     return fernet.encrypt(text.encode()).decode()
 
 
-# Helper function to decrypt fields
 def decrypt(encrypted_text: str) -> str:
     return fernet.decrypt(encrypted_text.encode()).decode()
 
 
-# Helper function to verify passwords
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -65,10 +62,8 @@ def get_user_by_username(db: Session, username: str):
     users = db.query(User).all()
     for user in users:
         plaintext_user = decrypt(user.username)
-        print(plaintext_user)
         if plaintext_user == username:
             return user
-    user = db.query(User).filter(User.username == encrypted_username).first()
     return None
 
 

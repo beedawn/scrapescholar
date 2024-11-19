@@ -11,10 +11,7 @@ scopus_inst_token = os.getenv('SCOPUS_INSTTOKEN')
 
 
 def parse_data_scopus(response):
-    #get json data
     data = response.json()
-    #get search-results object
     search_results = data.get('search-results', {})
-    #get entries list
     articles = search_results.get('entry', [])
     return articles

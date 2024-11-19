@@ -127,7 +127,7 @@ def test_get_user_by_id(db_session):
     db_session.commit()
 
     # Retrieve the user by user_id using the GET endpoint
-    get_response = client.get(f"/users/get/{created_user_id}")
+    get_response = session.get(f"{base_url}/users/get/{created_user_id}")
 
     # Assert the response status is OK (200)
     assert get_response.status_code == 200
@@ -146,20 +146,3 @@ def test_get_user_by_id(db_session):
     # print(f"Retrieved User: {user}")
     delete_user(created_user_id, session, base_url)
 
-
-# Test protected route with mocked authentication
-@pytest.mark.user
-def test_protected_route_with_mocked_user(client_with_mocked_auth):
-    """
-    Test a protected route by mocking the authentication process.
-    """
-    # Simulate calling a protected route that requires authentication
-    response = client_with_mocked_auth.get("/auth/protected_route")  # Replace with your actual protected route
-
-    # Assert the request was successful and the mocked user was returned
-    assert response.status_code == 200
-    assert response.json() == {
-        "user_id": 1,
-        "username": "mockuser",
-        "email": "mockuser@example.com"
-    }

@@ -1,7 +1,7 @@
 # app/main.py
 from http.client import HTTPException
 
-from fastapi import FastAPI, Query,Cookie, Depends
+from fastapi import FastAPI, Query, Cookie, Depends
 from fastapi.responses import JSONResponse
 
 #needs these for globals call
@@ -31,6 +31,7 @@ from sqlalchemy.orm import Session
 from auth_tools.get_user import get_current_user_modular
 import dotenv
 import os
+
 app = FastAPI()
 dotenv.load_dotenv()
 host_ip = os.getenv('HOST_IP')
@@ -44,6 +45,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -51,9 +53,11 @@ def get_db():
     finally:
         db.close()
 
+
 @app.get("/health_check")
 async def health_check():
     return {"message": "Hello World"}
+
 
 db = get_db()
 # Include the auth routes in the main app
@@ -81,8 +85,6 @@ async def get_database_list(directory):
     return [folder.name for folder in Path(directory).iterdir() if folder.is_dir() and folder.name != "__pycache__"]
 
 
-#to get the cookie the cookie value needs to be the same as the cookie key
-#ie cookie key is access_token, so the parameter here needs to be access_token
 @app.get("/academic_data")
 async def multiple_apis(keywords: str,
                         academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None,
@@ -98,9 +100,8 @@ async def multiple_apis(keywords: str,
     keyword_limit = 20
     count_keyword = 0
     for word in keywords_list:
-        if word !="AND" and word != "OR" and word != "NOT":
+        if word != "AND" and word != "OR" and word != "NOT":
             count_keyword += 1
-            print(word)
     if count_keyword > keyword_limit:
         return JSONResponse(
             status_code=413,
@@ -114,10 +115,8 @@ async def multiple_apis(keywords: str,
             new_id = check_response(response, id)
             article_response, id = globals()[item].request_data(keywords, id=new_id, )
             response.extend(article_response)
-    #adds articles to db
     search_valid, search_id = post_search_no_route(keywords=keywords_list, articles=response,
-                                                         current_user=current_user, db=db)
-    #instead of returning articles we're going to get the search from the db and return that
+                                                   current_user=current_user, db=db)
     articles = initialize_full_article_response(current_user, db, search_id)
 
     if search_valid and search_id:
@@ -132,19 +131,17 @@ async def multiple_apis(keywords: str,
 
 @app.get("/academic_sources")
 async def academic_sources(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     database_list = await get_database_list('academic_databases/')
     return database_list
 
 
 @app.get("/academic_sources_id")
 async def academic_sources(access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
-
-    current_user = get_current_user_modular(token=access_token, db=db)
+    get_current_user_modular(token=access_token, db=db)
     database_list = get_sources(db)
     list_of_sources = []
     for item in database_list:
-        list_of_sources.append({"name":item.name, "source_id":item.source_id})
+        list_of_sources.append({"name": item.name, "source_id": item.source_id})
 
     return list_of_sources
-

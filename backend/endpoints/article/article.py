@@ -25,30 +25,25 @@ async def read_article(article_id: int, access_token: Annotated[str | None, Cook
 
 
 # Add a new article (authentication via token or cookie)
-@router.post("/",response_model=ArticleRead, status_code=201)
+@router.post("/", response_model=ArticleRead, status_code=201)
 async def create_new_article(
         article: ArticleCreate,
         access_token: Annotated[str | None, Cookie()] = None,
         db: Session = Depends(get_db)
 ):
+    current_user = get_current_user_modular(access_token, db)
+    search = get_search(db, article.search_id)
+    relevance_score = algorithm_interface(" ".join(search.search_keywords), article.title, article.abstract)
 
-    print(article.search_id)
-    search= get_search(db, article.search_id)
-    relevance_score=algorithm_interface(" ".join(search.search_keywords),article.title,article.abstract)
-
-    print("ARTICLE DICT")
-    print(article.__dict__)
     article_data = article.__dict__.copy()
     article_data.pop("relevance_score", None)
-    article_with_relevance_score = ArticleCreate(**article_data,relevance_score=relevance_score)
-    current_user = get_current_user_modular(access_token, db)
+    article_with_relevance_score = ArticleCreate(**article_data, relevance_score=relevance_score)
 
     created_article = create_article(db, article_with_relevance_score, user_id=current_user.user_id)
     create_user_data(db, current_user.user_id, created_article.article_id)
     return created_article
 
 
-# Update an article by ID (authentication via token or cookie)
 @router.put("/{article_id}", response_model=Article, status_code=200)
 async def update_existing_article(
         article_id: int,
@@ -67,7 +62,6 @@ async def update_existing_article(
     return updated_article
 
 
-# Delete an article by ID (authentication via token or cookie)
 @router.delete("/{article_id}", status_code=204)
 async def remove_article(
         article_id: int,
@@ -80,10 +74,8 @@ async def remove_article(
     if article is None:
         raise HTTPException(status_code=404, detail="Article not found")
 
-    # do we need this?
     if article.user_id != current_user.user_id:
         raise HTTPException(status_code=403, detail="You are not authorized to delete this article")
-
 
     user_data = get_user_data(db, article.article_id)
     delete_user_data(db, user_data.userdata_id)
