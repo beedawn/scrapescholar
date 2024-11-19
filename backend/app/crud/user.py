@@ -65,7 +65,6 @@ def get_user_by_username(db: Session, username: str):
     users = db.query(User).all()
     for user in users:
         plaintext_user = decrypt(user.username)
-        print(plaintext_user)
         if plaintext_user == username:
             return user
     user = db.query(User).filter(User.username == encrypted_username).first()

@@ -100,7 +100,6 @@ async def multiple_apis(keywords: str,
     for word in keywords_list:
         if word !="AND" and word != "OR" and word != "NOT":
             count_keyword += 1
-            print(word)
     if count_keyword > keyword_limit:
         return JSONResponse(
             status_code=413,
