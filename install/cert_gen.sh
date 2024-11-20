@@ -98,3 +98,6 @@ mkdir ../docker/nginx_nextjs/certbot/conf/live
 mkdir ../docker/nginx_nextjs/certbot/conf/live/$server_name
 mv certs/$server_name/fullchain.pem ../docker/nginx_nextjs/certbot/conf/live/$server_name/fullchain.pem
 mv certs/$server_name/privkey.pem ../docker/nginx_nextjs/certbot/conf/live/$server_name/privkey.pem
+
+chmod 644 ../docker/nginx_nextjs/certbot/conf/live/$server_name/fullchain.pem
+chmod 644 ../docker/nginx_nextjs/certbot/conf/live/$server_name/privkey.pem

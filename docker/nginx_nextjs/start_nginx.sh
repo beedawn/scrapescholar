@@ -22,10 +22,10 @@
 
 #chomd +x start_nginx.sh before running this script
 
-if [ -f /etc/nginx/ssl/live/${SERVER_NAME}/fullchain.pem ] && [ -f /etc/nginx/ssl/live/${SERVER_NAME}/privkey.pem ]; then
+if [ -f /etc/nginx/ssl/live/${NGINX_HOST}/fullchain.pem ] && [ -f /etc/nginx/ssl/live/${NGINX_HOST}/privkey.pem ]; then
     echo "SSL certificates found. Using SSL nginx template."
 
-    envsubst '\$SERVER_NAME' < /etc/nginx/templates/app-ssl.conf.template > /etc/nginx/conf.d/default.conf
+    envsubst '\$NGINX_HOST' < /etc/nginx/templates/app-ssl.conf.template > /etc/nginx/conf.d/default.conf
 else
     echo "No SSL certificates found, using basic template only port 80"
 

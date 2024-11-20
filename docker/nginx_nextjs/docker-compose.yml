@@ -14,7 +14,7 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
-      # - "443:443"
+      - "443:443"
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
@@ -23,10 +23,9 @@ services:
       - nextjs
       #need to chmod +x start_nginx.sh
     entrypoint: ["/bin/sh", "-c", "/wait-for-it.sh nextjs:3000 -- /docker-entrypoint.d/start_nginx.sh"]
-  
-
     networks:
       - mynetwork
+      
   certbot:
     image: certbot/certbot:latest
     volumes:
