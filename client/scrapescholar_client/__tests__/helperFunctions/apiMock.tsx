@@ -8,6 +8,8 @@ const host_ip = process.env.NEXT_PUBLIC_HOST_IP;
 let simulateInsufficientStorage = false;
 let deleteSearch = false;
 const fetchMock = jest.fn((url) => {
+
+  //maybe need to only have one?
   const academic_database_url = /^http:\/\/localhost:8000\/academic_data\?keywords\=/
   const academic_database_url_0 = /^http:\/\/0.0.0.0:8000\/academic_data\?keywords\=/
   if (academic_database_url.test(url)||academic_database_url_0.test(url)) {

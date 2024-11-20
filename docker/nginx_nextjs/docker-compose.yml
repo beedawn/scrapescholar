@@ -18,6 +18,7 @@ services:
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
+      - SERVER_NAME=localhost
     depends_on:
       - nextjs
       #need to chmod +x start_nginx.sh
