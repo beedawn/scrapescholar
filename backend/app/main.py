@@ -2,7 +2,7 @@
 from http.client import HTTPException
 
 from fastapi import FastAPI, Query,Cookie, Depends, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 
 #for oauth
 from authlib.integrations.starlette_client import OAuth
@@ -145,30 +145,45 @@ oauth.register(
     client_id=os.getenv('OAUTH_CLIENT_ID'),
     client_secret=os.getenv('OAUTH_CLIENT_SECRET'),
     authorize_url=os.getenv('OAUTH_AUTHORIZATION_URL'),
-    authorize_params=None,
-    access_token_url=os.getenv('AUTH_TOKEN_URL'),
-    access_token_params=None,
-    userinfo_endpoint=os.getenv("OAUTH_USER_INFO_URL"),
+    access_token_url=os.getenv('OAUTH_TOKEN_URL'),
     client_kwargs={'scope': 'openid profile email'},
+    server_metadata_url=f"https://login.microsoftonline.com/{os.getenv('OAUTH_TENANT_ID')}/v2.0/.well-known/openid-configuration",
 )
 
-app.add_middleware(SessionMiddleware, secret_key="your-session-secret")
+app.add_middleware(SessionMiddleware, secret_key="secret-key")
 
 @app.get("/login")
 async def login(request: Request):
-    redirect_uri = os.getenv("OAUTH_REDIRECT_URI")
-    return await oauth.azure.authorize_redirect(request, redirect_uri)
+    redirect_url = os.getenv("OAUTH_REDIRECT_URL")
+    return await oauth.azure.authorize_redirect(request, redirect_url)
 
 @app.get("/auth/callback")
 async def auth_callback(request: Request):
-    token = await oauth.azure.authorize_access_token(request)
-    user_info = await oauth.azure.parse_id_token(request, token)
-    return {"user": user_info}
+    global global_token
+    global global_email
+
+    global_token = await oauth.azure.authorize_access_token(request)               # This returns the access_token, id_token, and all userinfo
+    global_email = global_token['userinfo']['email']
+    
+    print("Token received: ", global_token)
+    print("User Email: ", global_token['userinfo']['email'])
+    print("[Token] received: ", global_token['id_token'])
+
+    # Bee feel free to give these a try. Unsure how they work or if they are even necessary. Delete if you do not need
+    # user_info = await oauth.azure.parse_id_token(request, token['id_token'])     # I think this is a query to azure to verify that the original token was created by azure
+    # print("User info after parse_id_token", user_info)  
+    # request.session['userinfo'] = user_info
+    # return {"message": "Login successful", "user": user_info}
 
 @app.get("/protected")
 async def protected(request: Request):
-    user_info = request.session.get("user_info")  # Or however you store session data
-    if user_info:
-        return {"message": "You are authenticated", "user": user_info}
+    print("Protected view ", global_email)
+    if global_email:        # Probably want to change this to something like 'if global_email in db' 
+        return {"message": "You are authenticated", "user": global_email}
     return {"message": "Not authenticated"}
 
+@app.get("/logout")                     # This link should help with logout https://stackoverflow.com/questions/66840607/how-to-logout-in-fastapi-login
+async def logout(request: Request):
+    request = RedirectResponse('*your login page*', status_code= 302)
+    request.delete_cookie(key ='*your access token name*')
+    return request
