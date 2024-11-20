@@ -9,7 +9,8 @@ let simulateInsufficientStorage = true;
 let deleteSearch = false;
 const fetchMock300 = jest.fn((url) => {
   const academic_database_url = /^http:\/\/localhost:8000\/academic_data\?keywords\=/
-  if (academic_database_url.test(url)) {
+  const academic_database_url_0 = /^http:\/\/0.0.0.0:8000\/academic_data\?keywords\=/
+  if (academic_database_url.test(url)||academic_database_url_0.test(url)) {
     if (simulateInsufficientStorage) {
       return Promise.resolve({
         ok: false,
@@ -35,7 +36,8 @@ const fetchMock300 = jest.fn((url) => {
   }
 
   const academic_sources_url = /^http:\/\/localhost:8000\/academic_sources/
-  if (academic_sources_url.test(url)) {
+  const academic_sources_url_0 = /^http:\/\/0.0.0.0:8000\/academic_sources/
+  if (academic_sources_url.test(url)||academic_sources_url_0.test(url)) {
     return Promise.resolve({
       ok: true,
       status: 200,
@@ -48,11 +50,12 @@ const fetchMock300 = jest.fn((url) => {
   }
 
   const past_search_title_url = /^http:\/\/localhost:8000\/search\/user\/search\/title\?search_id\=/
+  const past_search_title_url_0 = /^http:\/\/0.0.0.0:8000\/search\/user\/search\/title\?search_id\=/
   const response = {
     "title": itemsJson.articles[0].title,
     "keywords": ["test input"]
   }
-  if (past_search_title_url.test(url)) {
+  if (past_search_title_url.test(url)||past_search_title_url_0.test(url)) {
     return Promise.resolve({
       ok: true,
       status: 200,
@@ -66,8 +69,9 @@ const fetchMock300 = jest.fn((url) => {
   }
 
   const past_search_articles_url = /^http:\/\/localhost:8000\/search\/user\/articles\?search_id\=/
+   const past_search_articles_url_0 = /^http:\/\/0.0.0.0:8000\/search\/user\/articles\?search_id\=/
 
-  if (past_search_articles_url.test(url)) {
+  if (past_search_articles_url.test(url)||past_search_articles_url_0.test(url)) {
     return Promise.resolve({
       ok: true,
       status: 200,
@@ -79,8 +83,9 @@ const fetchMock300 = jest.fn((url) => {
   }
 
   const past_searches_url = /^http:\/\/localhost:8000\/search\/user\/searches/
+  const past_searches_url_0 = /^http:\/\/0.0.0.0:8000\/search\/user\/searches/
 
-  if (past_searches_url.test(url)) {
+  if (past_searches_url.test(url) || past_searches_url_0.test(url)) {
     if (simulateInsufficientStorage) {
       let threehundredSearches = [];
       for (let i = 0; i <= 300; i++) {
