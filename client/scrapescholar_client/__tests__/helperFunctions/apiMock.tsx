@@ -8,7 +8,7 @@ const host_ip = process.env.NEXT_PUBLIC_HOST_IP;
 let simulateInsufficientStorage = false;
 let deleteSearch = false;
 const fetchMock = jest.fn((url) => {
-  const academic_database_url = /^http:\/\/0.0.0.0:8000\/academic_data\?keywords\=/
+  const academic_database_url = /^http:\/\/localhost:8000\/academic_data\?keywords\=/
   if (academic_database_url.test(url)) {
     if (simulateInsufficientStorage) {
       return Promise.resolve({
@@ -33,7 +33,7 @@ const fetchMock = jest.fn((url) => {
     })
   }
 
-  const academic_sources_url = /^http:\/\/0.0.0.0:8000\/academic_sources/
+  const academic_sources_url = /^http:\/\/localhost:8000\/academic_sources/
   if (academic_sources_url.test(url)) {
     return Promise.resolve({
       ok: true,
@@ -46,7 +46,7 @@ const fetchMock = jest.fn((url) => {
     });
   }
 
-  const past_search_title_url = /^http:\/\/0.0.0.0:8000\/search\/user\/search\/title\?search_id\=/
+  const past_search_title_url = /^http:\/\/localhost:8000\/search\/user\/search\/title\?search_id\=/
   const response = {
     "title": itemsJson.articles[0].title,
     "keywords": ["test input"]
@@ -64,7 +64,7 @@ const fetchMock = jest.fn((url) => {
 
   }
 
-  const past_search_articles_url = /^http:\/\/0.0.0.0:8000\/search\/user\/articles\?search_id\=/
+  const past_search_articles_url = /^http:\/\/localhost:8000\/search\/user\/articles\?search_id\=/
 
   if (past_search_articles_url.test(url)) {
     return Promise.resolve({
@@ -77,7 +77,7 @@ const fetchMock = jest.fn((url) => {
     });
   }
 
-  const past_searches_url = /^http:\/\/0.0.0.0:8000\/search\/user\/searches/
+  const past_searches_url = /^http:\/\/localhost:8000\/search\/user\/searches/
 
   if (past_searches_url.test(url)) {
     if (simulateInsufficientStorage) {

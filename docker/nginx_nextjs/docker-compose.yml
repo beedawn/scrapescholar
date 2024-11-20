@@ -11,6 +11,7 @@ services:
       - ./default.conf:/etc/nginx/default.conf
       - ./start_nginx.sh:/docker-entrypoint.d/start_nginx.sh
       - ./wait-for-it.sh:/wait-for-it.sh 
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
       # - "443:443"

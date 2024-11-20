@@ -35,7 +35,7 @@ import os
 app = FastAPI()
 dotenv.load_dotenv()
 host_ip = os.getenv('HOST_IP')
-origins = [f"http://{host_ip}:3000", "http://localhost:3000"]
+origins = [f"http://{host_ip}:3000", "http://localhost:3000", "http://localhost", f"http://{host_ip}", "https://localhost", "https://localhost:3000", f"https://{host_ip}", f"https://{host_ip}:3000"]
 
 app.add_middleware(
     CORSMiddleware,
