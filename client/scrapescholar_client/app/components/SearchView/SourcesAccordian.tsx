@@ -6,12 +6,14 @@ interface SourcesAccordianProps {
     removeFromUserDatabaseList: (item: string) => void;
 }
 
+
 const SourcesAccordian: React.FC<SourcesAccordianProps> = ({ addToUserDatabaseList, removeFromUserDatabaseList }) => {
-    const { getAPIDatabases, postAPILogin, getAPIResults } = apiCalls();
-    const [databases, setDatabases] = useState([])
+    const { getAPIDatabases } = apiCalls();
+    const [databases, setDatabases] = useState<string[]>([])
     useEffect(() => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabases();
+          
             setDatabases(db_list);
             // Initialize checkboxes with default checked state
             const initialCheckboxes = db_list.reduce(
@@ -45,13 +47,13 @@ const SourcesAccordian: React.FC<SourcesAccordianProps> = ({ addToUserDatabaseLi
     }
     const index = 1;
     return (
-        <div id="accordion-color">
+        <div id="accordion-color" className="flex">
             <div key={index}>
                 <h2 id={`accordion-color-heading-${index + 1}`}>
                     <button
                         type="button"
                         className={`flex items-center 
-                            w-full p-3 font-medium text-gray-500 
+                            w-full ml-3 p-2 font-medium text-gray-500 
                                 rounded-t-xl ${openIndex === index ? '' : ''}`}
                         onClick={() => toggleAccordion(index)}
                         aria-expanded={openIndex === index}

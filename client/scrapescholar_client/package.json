@@ -18,12 +18,14 @@
   "dependencies": {
     "@eslint/config-array": "^0.18.0",
     "@eslint/object-schema": "^2.1.4",
+    "cross-spawn": "^7.0.5",
     "d3": "^7.9.0",
     "dompurify": "^3.1.7",
     "glob": "^11.0.0",
     "lru-cache": "^11.0.0",
     "next": "15.0.2",
     "react": "^18.3.1",
+    "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "rimraf": "^6.0.1"
   },

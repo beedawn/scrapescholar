@@ -23,7 +23,7 @@ class SearchUpdate(BaseModel):
 class SearchRead(SearchBase):
     search_id: int
     search_date: datetime
-    user_id: int  # This will be used when reading the search information
+    user_id: int
 
     class Config:
         orm_mode = True

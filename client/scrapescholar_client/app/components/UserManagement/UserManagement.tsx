@@ -20,7 +20,6 @@ const UserManagement: React.FC<UserManagementProps> =
 
             const user_list = await getUsers();
             setUsers(user_list)
-            console.log(user_list)
 
         }
         useEffect(()=>{
@@ -36,19 +35,6 @@ const UserManagement: React.FC<UserManagementProps> =
         };
 
         const [users,setUsers]=useState<any[]>([]);
-        // const handleSelectChange = (event: any) => {
-        //     const selectedOptions = Array.from(event.target.selectedOptions, option => (option as HTMLOptionElement).value);
-        //     setSelectedValue(selectedOptions);
-        //     console.log(selectedOptions)
-        // };
-        // const handleDeleteClick = async () => {
-        //     setLoading(true)
-        //     for (let item of selectedValue) {
-        //         const numItem = Number(item)
-        //         await deleteSearch(numItem)
-        //     }
-        //     setLoading(false)
-        // }
         return (
             <div className={"p-10"} data-testid="user_management">
             {deleteUserModalActive?<DeleteUserModal setDeleteUserModalActive={setDeleteUserModalActive} deleteUser={deleteUser}/>:<></>}
@@ -59,19 +45,21 @@ const UserManagement: React.FC<UserManagementProps> =
                 
                 </>:<>
                 
-                <p>UserManagement</p>
+              
                 <p><Button onClick={()=>{setAddUserModalActive(true)}} data-testid="new_user_button">New User</Button></p>
-                <div className={"flex flex-wrap-reverse"}>
-                    <div className={"m-5 float-left flex-none bg-white rounded text-black w-full"}>
-               {users.map((user)=>(<div className="p-2 flex w-full" key={user.user_id} data-testid="user_row">
+                <div className={"flex flex-wrap"}>
+                    <div className={"m-2 bg-white rounded text-black w-full"}>
+               {users.map((user)=>(
+                
+                <div key={user.user_id}>
+                <div className="p-2 flex flex-wrap" key={user.user_id} data-testid="user_row">
             
-               <div className="p-2 w-1/4" data-testid="user_username">{user.username}</div>
-               <div className="w-1/4" data-testid="user_role">
-               <span data-testid="user_role_text">{Role[user.role_id]}</span>
+               <div className="p-2" data-testid="user_username">{user.username}</div>
+               <div className="" data-testid="user_role">
                <DropdownSearchBox
                                             value={Role[user.role_id]}
                                             valueArray={["Student", "GradStudent", "Professor"]}
-                                            onDropdownChange={(e) => handleRoleChange(user.user_id, e.target.value)}  // Call handleRoleChange
+                                            onDropdownChange={(e) => handleRoleChange(user.user_id, e.target.value)}  
                                             defaultValue="Role"
                                             data-testid="role_dropdown"
                                         />
@@ -79,22 +67,25 @@ const UserManagement: React.FC<UserManagementProps> =
 
 
 
-                <div className="p-2 w-1/4" data-testid="user_permissions">
-                    <span data-testid="user_permissions_text">Permission details go here</span>  
+                <div className="p-2 " data-testid="user_permissions">
+                    <span data-testid="user_permissions_text"></span>  
                     <button className="bg-red-600 text-2xl p-1 rounded text-white" 
                     onClick={()=>{setDeleteUserModalActive(true); setDeleteUser(user)}} data-testid="delete_user_button">
                         ␡
                         </button>
                </div>
 
-               <div className="p-2 w-1/4">     
+               <div className="p-2 ">     
                 <Button className="" 
                 onClick={()=>{}}
                 data-testid="reset_password_button">
                     Reset Password
                     </Button>
                </div>
-               
+              
+               </div>
+               <div className="w-full h-2 bg-slate-800	">
+               </div>
                </div>))}
                     </div>
                  

@@ -5,12 +5,11 @@ from pydantic import Field
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 
 class Settings(BaseSettings):
-    # Configuration for the PostgreSQL database connection
     POSTGRES_USER: str = os.getenv("POSTGRES_USER")  # Loaded from .env
     POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")  # Loaded from .env
     POSTGRES_DB: str = os.getenv("POSTGRES_DB")  # Loaded from .env
@@ -38,7 +37,6 @@ def get_db_uri():
     return settings.database_url
 
 
-# The `get_db` function that provides a SQLAlchemy database session
 def get_db():
     from app.db.session import SessionLocal
     db = SessionLocal()

@@ -6,9 +6,9 @@ services:
       - ../../client/scrapescholar_client:/app
 
     #only need if you want to expose port 3000 and bypass nginx proxy
-    #ports:
-      #- "3000:3000"
-      
+    ports:
+      - "3000:3000"
+    
     command: "npm run dev"  #  "npm start" for production
     environment:
       - NODE_ENV=development  # "production" for production builds

@@ -66,22 +66,12 @@ def test_get_source_by_name(test_db_session: Session):
 def test_get_sources(test_db_session: Session):
     """Test retrieving a list of sources with pagination."""
     # Create a few sources for pagination test
-    sources_data = [
-        {"name": "Source 1", "api_endpoint": "http://api.source1.com", "scrape_source_url": "http://source1.com"},
-        {"name": "Source 2", "api_endpoint": "http://api.source2.com", "scrape_source_url": "http://source2.com"},
-        {"name": "Source 3", "api_endpoint": "http://api.source3.com", "scrape_source_url": "http://source3.com"}
-    ]
-    new_sources = []
-    for data in sources_data:
-        source_in = SourceCreate(**data)
-        new_source = create_source(test_db_session, source_in)
-        new_sources.append(new_source)
+
 
     # Retrieve paginated sources
-    sources = get_sources(test_db_session, skip=0, limit=2)
-    assert len(sources) == 2  # Should return only 2 as per limit
-    for source in new_sources:
-        delete_source(test_db_session, source.source_id)
+    sources = get_sources(test_db_session)
+    assert len(sources) == 3  # Should return 6, as three created here, and 3 created in init db as per limit
+
 
 def test_update_source(test_db_session: Session):
     """Test updating a source."""

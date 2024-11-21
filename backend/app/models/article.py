@@ -21,7 +21,6 @@ class Article(Base):
     document_type= Column(String, nullable=True)
     doi = Column(String, nullable=True)
 
-    # Relationships
     source = relationship("Source", back_populates="articles")
     search = relationship("Search", back_populates="articles")
     comments = relationship("Comment", back_populates="article", cascade="all, delete-orphan")

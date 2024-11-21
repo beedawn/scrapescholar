@@ -7,7 +7,7 @@ from typing import List, Annotated
 from sqlalchemy.orm import Session
 from auth_tools.get_user import get_current_user_modular
 import endpoints.search.search as search
-from endpoints.comment.comment import get_comments
+from endpoints.comment.comment import get_comments_no_token
 import csv
 from io import StringIO
 from typing import List, Dict, Generator
@@ -68,10 +68,10 @@ def build_fieldnames(data):
 
 
 def add_user_comments_to_list(row, db):
-    article_comment = get_comments(db=db, article_id=row.article_id)
+    article_comment = get_comments_no_token(db=db, article_id=row.article_id)
     row_data = vars(row)
     for i, comment_builder in enumerate(article_comment, start=1):
-        user = get_user(db, comment_builder.user_id)
+        user = get_user(db, comment_builder["user_id"])
         row_data[f"Username Comment {i}"] = decrypt(user.username)
-        row_data[f"Comment {i}"] = comment_builder.comment_text
+        row_data[f"Comment {i}"] = comment_builder["comment_text"]
     return row_data

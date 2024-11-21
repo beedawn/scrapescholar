@@ -56,6 +56,8 @@ def test_create_article():
 
     response = session.post(f"{base_url}/article", json=mock_article_data)
     assert response.status_code == 201
+    print("TITLE")
+    print(response.json())
     assert response.json()["title"] == mock_article_data["title"]
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
 

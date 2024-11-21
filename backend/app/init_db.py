@@ -10,7 +10,7 @@ from app.schemas.source import SourceCreate
 from app.schemas.search import SearchCreate
 from app.crud.user import create_user
 from app.crud.source import create_source
-from app.crud.search import create_search
+from app.crud.search import create_search, delete_search
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -96,13 +96,6 @@ def insert_test_data(db):
     )
     user = create_user(db=db, user=user_data)
 
-    # Insert a  Source
-    source_data = SourceCreate(
-        name="Sample Source",
-        api_endpoint="https://www.sampleapi.com",
-        scrape_source_url="https://scrapesource.com"
-    )
-    source = create_source(db=db, source=source_data)
 
     source_data = SourceCreate(
         name="Scopus",
@@ -117,16 +110,24 @@ def insert_test_data(db):
         scrape_source_url="https://api.elsevier.com/"
     )
     source = create_source(db=db, source=source_data)
+
+    source_data = SourceCreate(
+        name="Other",
+        api_endpoint="",
+        scrape_source_url=""
+    )
+    source = create_source(db=db, source=source_data)
     # Insert a test Search associated with the User
     search_data = SearchCreate(
         user_id=user.user_id,
         search_keywords=["test", "example"],
         title="Test Search"
     )
-    create_search(db=db, search=search_data)
+    created_search=create_search(db=db, search=search_data)
 
     db.commit()
     print("Test data inserted successfully.")
+    delete_search(db, created_search.search_id)
 
 
 if __name__ == "__main__":

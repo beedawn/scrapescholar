@@ -14,7 +14,7 @@ from app.schemas.user import UserCreate
 from app.crud.user import create_user, delete_user, get_user_by_username
 import time
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 professor_user = os.getenv('TEST_USER')
@@ -24,14 +24,12 @@ grad_student_cred = "testpass"
 grad_student_email = "t2_student@example.com"
 host_ip = os.getenv('HOST_IP')
 
-# Start a new database session
 db = SessionLocal()
 
 @pytest.fixture(scope="function")
 def setup_grad_student():
     """Fixture to create a graduate student user before the test and delete after."""
     try:
-        # Create a new Graduate Student user
         new_user = UserCreate(
             username=grad_student_user,
             password=grad_student_cred,
@@ -39,7 +37,7 @@ def setup_grad_student():
             role_id=2  # Assuming role_id 2 is for GradStudent
         )
         created_user = create_user(db, new_user)
-        yield created_user  # Run the test with created_user available
+        yield created_user
 
     finally:
         # Clean up: Delete the Graduate Student user after the test
@@ -50,14 +48,11 @@ def setup_grad_student():
 @pytest.mark.integration
 def test_role_based_access_control(setup_grad_student):
     try:
-        # Initialize the WebDriver
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         driver.get(f"http://{host_ip}:3000/")
         driver.maximize_window()
 
-        # Helper function to login
         def login(username, password):
-
             username_field = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.NAME, 'username_input'))
             )
@@ -74,12 +69,11 @@ def test_role_based_access_control(setup_grad_student):
             password_field.send_keys(password)
             login_button.click()
             time.sleep(5)
-            # Wait for navbar to confirm login
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='navbar']"))
             )
 
-        # Helper function to search for a keyword
+
         def search_keyword(keyword):
             search_input = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='search_input']"))
@@ -91,41 +85,33 @@ def test_role_based_access_control(setup_grad_student):
             )
             search_button.click()
             time.sleep(20)
-            # Wait for search results to appear
             WebDriverWait(driver, 15).until(
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']"))
             )
 
-        # Step 1: Graduate Student login, search for "cyber", and check for disabled dropdown
         login(grad_student_user, grad_student_cred)
-
         search_keyword("test")
         time.sleep(20)
-        # Check if the evaluation dropdown is disabled for Graduate Student
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" in dropdown.get_attribute("class")
 
-        # Log out Graduate Student
         logout_button = driver.find_element(By.CSS_SELECTOR, "[data-testid='logout-button']")
         logout_button.click()
 
-        # Step 2: Professor login, search for "cyber", and check for enabled dropdown
         login(professor_user, professor_pass)
 
         search_keyword("test")
         time.sleep(20)
-        # Check if the evaluation dropdown is enabled for Professor
+
         dropdown = driver.find_element(By.CSS_SELECTOR, "[data-testid^='evaluation-dropdown']")
         assert "opacity-50" not in dropdown.get_attribute("class")
 
-        # Optional: Interact with dropdown if needed
         dropdown.click()
         option_accept = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'bg-green-600') and text()='Accept']"))
         )
         option_accept.click()
 
-        # Verify that selection was successful (check for visual state or database change if available)
         assert dropdown.text == "Accept"
 
     except Exception as e:
@@ -133,5 +119,4 @@ def test_role_based_access_control(setup_grad_student):
         raise e
 
     finally:
-        # Close the WebDriver
         driver.quit()

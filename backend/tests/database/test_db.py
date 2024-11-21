@@ -63,23 +63,13 @@ def test_user_exists_in_db(db):
     for candidate in users:
         try:
             decrypted_username = decrypt_username(candidate.username)
-            # print(f"Decrypted username: {decrypted_username}")  # Debug output
             if decrypted_username == "testuser":
                 user = candidate
                 break
         except Exception as e:
-            # print(f"Error decrypting username: {str(e)}")
             continue
 
     assert user is not None
-
-    # print(f"Stored hashed password: {user.password}")
-    # print(f"Stored email: {user.email}")
-
-    # Removing this test for now
-    # Remove email verification as it's hashed and not reversible
-    # assert verify_hash("testuser@example.com", user.email)  
-    # assert verify_hash("testpassword", user.password)
 
 
 def test_article_creation_with_existing_user_and_source(db: Session):
@@ -99,7 +89,7 @@ def test_article_creation_with_existing_user_and_source(db: Session):
     assert user is not None
 
     # Get the test source from the database
-    source = db.query(Source).filter_by(name="Sample Source").first()
+    source = db.query(Source).filter_by(name="Other").first()
     assert source is not None
 
     # Create a new search associated with the test user

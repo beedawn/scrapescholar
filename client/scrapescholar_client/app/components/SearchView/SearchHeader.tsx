@@ -3,7 +3,6 @@ import Button from './../Button';
 import SearchTitleField from './SearchTitleField';
 import DOMPurify from 'dompurify';
 import ShareModal from './modal/ShareModal';
-import { Share } from 'next/font/google';
 
 interface SearchHeaderProps {
     downloadURL: string;
