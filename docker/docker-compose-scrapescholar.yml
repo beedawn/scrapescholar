@@ -74,7 +74,7 @@ services:
       - ./nginx_nextjs/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
-      # - "443:443"
+      - "443:443"
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80

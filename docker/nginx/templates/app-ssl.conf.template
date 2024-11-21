@@ -12,7 +12,7 @@ server {
 }
 
 server {
-    listen 443 ssl;
+    listen 443;
     server_name ${SERVER_NAME};
 
     ssl_certificate /etc/nginx/ssl/live/${SERVER_NAME}/fullchain.pem;
