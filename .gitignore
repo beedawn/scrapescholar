@@ -8,5 +8,5 @@
 .env_tristan
 .idea
 
-.pem
-.csr
+*.pem
+*.csr
