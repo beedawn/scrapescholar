@@ -12,7 +12,6 @@ COPY docker/.env /app/.env
 
 # Copy the init_db script to the Docker image
 COPY docker/postgres/init_db.sh /app/init_db.sh
-COPY docker/postgres/wait-for.sh /app/wait-for.sh
 
 # Install PostgreSQL client
 RUN apt-get update -o Acquire::http::Timeout=600 && apt-get install -y postgresql-client iputils-ping
@@ -22,7 +21,6 @@ RUN pip install --no-cache-dir -r /app/backend/requirements.txt --timeout 120
 
 # Make scripts executable
 RUN chmod +x /app/init_db.sh
-RUN chmod +x /app/init_db.sh /app/wait-for.sh
 
 # Entrypoint to initialize the database
 ENTRYPOINT ["/app/init_db.sh"]

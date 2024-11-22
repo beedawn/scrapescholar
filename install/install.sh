@@ -96,3 +96,4 @@ echo -e "HOST_IP=${host_ip}" >> "$filepath"
 echo -e "HOST_IP=${host_ip}" >> "$dockerfilepath"
 echo -e "NEXT_PUBLIC_HOST_IP=${host_ip}">> "$next_js_env"
 
+chmod +x ../docker/nginx_nextjs/start_nginx.sh

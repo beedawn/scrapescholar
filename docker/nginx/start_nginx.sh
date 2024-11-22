@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #chomd +x start_nginx.sh before running this script
 
