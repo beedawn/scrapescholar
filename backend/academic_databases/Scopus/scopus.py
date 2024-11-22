@@ -1,7 +1,7 @@
 import requests
 import datetime
 import csv
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 import random
 from api_tools.api_tools import scopus_api_key, scopus_inst_token, parse_data_scopus
 from academic_databases.SearchResult import SearchResult
@@ -9,6 +9,14 @@ from academic_databases.SearchResult import SearchResult
 from typing import List
 from algorithm.algorithm_interface import algorithm_interface
 
+
+def sanitize_link_scopus(untrusted_link):
+    parsed_untrusted_link = urlparse(untrusted_link)
+    if parsed_untrusted_link.scheme == "https" and parsed_untrusted_link.netloc == "www.scopus.com" and parsed_untrusted_link.path == "/inward/record.uri":
+        trusted_link = untrusted_link
+    else:
+        trusted_link = "Potentially malicious link detected. Blocked for user safety."
+    return trusted_link
 
 def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
     if scopus_inst_token is not None:
@@ -68,8 +76,11 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
             links = article.get('link')
             if links:
                 link = links[2].get('@href')
+                #Sanitize Link
+                sanitized_link = sanitize_link_scopus(link)                
             else:
-                link = ""
+                sanitized_link = "No link found."
+
             article_title = article.get('dc:title')
             article_abstract = article.get('dc:description')
             algorithm_score = 0
@@ -86,7 +97,7 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
             return_articles.append(SearchResult(
                 article_id=article_id,
                 title=article_title,
-                link=link,
+                link=sanitized_link,
                 date=article.get('prism:coverDate'),
                 citedby=article.get('citedby-count'),
                 source="Scopus",
