@@ -63,9 +63,6 @@ services:
   
   nginx:
     image: nginx
-    # build:
-    #   context: .
-    #   dockerfile: ../../docker/nginx/Dockerfile  
     volumes:
       - ./nginx_nextjs/templates:/etc/nginx/templates
       - ./nginx_nextjs/default.conf:/etc/nginx/default.conf
@@ -100,7 +97,7 @@ services:
     # image: node:20 
     build:
       context: ../client/scrapescholar_client  
-      dockerfile: ../../docker/nextjs/Dockerfile 
+      # dockerfile: ../../docker/nextjs/Dockerfile 
     working_dir: /app
     volumes:
       - ../client/scrapescholar_client:/app
@@ -109,7 +106,8 @@ services:
     #ports:
       #- "3000:3000"
   
-    command: "npm run dev -- --hostname 0.0.0.0"  #  "npm start" for production
+    command: >
+      sh -c "npm install && npm run dev -- --hostname 0.0.0.0"
     environment:
       - NODE_ENV=development  # "production" for production builds
     networks:
