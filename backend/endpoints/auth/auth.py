@@ -115,7 +115,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=False,
+        secure=True,
         path="/",
         domain=f"{host_ip}",
         samesite="Lax",

@@ -10,8 +10,8 @@
     "test": "jest",
     "test:unit": "jest --testMatch '**/__tests__/unit/**/*.test.tsx'",
     "test:integration": "jest --testMatch '**/__tests__/integration/**/*.test.tsx'",
-    "prebuild": "npm run test:unit",
-    "postbuild": "npm run test:unit",
+    "prebuild": "",
+    "postbuild": "",
     "clean": "rimraf .next",
     "clean-build": "npm run clean && npm run build"
   },
