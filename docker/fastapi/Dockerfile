@@ -12,7 +12,7 @@ WORKDIR /app
 COPY ../../backend /app
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt --timeout 120
 
 # Expose the application port
 EXPOSE 8000

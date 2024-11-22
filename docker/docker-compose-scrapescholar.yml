@@ -117,10 +117,10 @@ services:
       - mynetwork
     healthcheck:
       test: ["CMD", "curl", "--silent", "--fail", "http://localhost:3000/"]
-      interval: 10s
-      retries: 3
+      interval: 30s
+      retries: 5
       timeout: 5s
-      start_period: 30s
+      start_period: 60s
 
 networks:
   mynetwork:

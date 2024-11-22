@@ -15,10 +15,10 @@ COPY docker/postgres/init_db.sh /app/init_db.sh
 COPY docker/postgres/wait-for.sh /app/wait-for.sh
 
 # Install PostgreSQL client
-RUN apt-get update && apt-get install -y postgresql-client iputils-ping
+RUN apt-get update -o Acquire::http::Timeout=600 && apt-get install -y postgresql-client iputils-ping
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt --timeout 120
 
 # Make scripts executable
 RUN chmod +x /app/init_db.sh
