@@ -62,15 +62,15 @@ jobs:
         run: |
           # Query the Role table before restarting
           echo "Checking Role table before restart:"
-          docker exec container_scrapescholardb psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c 'SELECT * FROM public."Role";'
+          docker exec scrapescholar_db psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c 'SELECT * FROM public."Role";'
           # Restart the database container
           echo "Restarting database container..."
           docker-compose -f scrapescholar_docker/docker-compose-scrapescholar.yml restart db
           # Query the Role table after restarting
           echo "Checking Role table after restart:"
-          docker exec container_scrapescholardb psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c 'SELECT * FROM public."Role";'
+          docker exec scrapescholar_db psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c 'SELECT * FROM public."Role";'
           # UTAR-9.1
-          docker exec container_scrapescholardb psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c '\dt'
+          docker exec scrapescholar_db psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c '\dt'
         shell: bash
 # Test Test ID: UTAR-8.2
       - name: Test Backend Endpoint
