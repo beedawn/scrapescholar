@@ -75,14 +75,6 @@ const UserManagement: React.FC<UserManagementProps> =
                         </button>
                </div>
 
-               <div className="p-2 ">     
-                <Button className="" 
-                onClick={()=>{}}
-                data-testid="reset_password_button">
-                    Reset Password
-                    </Button>
-               </div>
-              
                </div>
                <div className="w-full h-2 bg-slate-800	">
                </div>
