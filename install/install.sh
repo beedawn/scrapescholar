@@ -96,4 +96,16 @@ echo -e "HOST_IP=${host_ip}" >> "$filepath"
 echo -e "HOST_IP=${host_ip}" >> "$dockerfilepath"
 echo -e "NEXT_PUBLIC_HOST_IP=${host_ip}">> "$next_js_env"
 
-chmod +x ../docker/nginx_nextjs/start_nginx.sh
+
+echo -e "ENVIRONMENT=PRODUCTION" >> "$filepath"
+echo -e "ENVIRONMENT=PRODUCTION" >> "$dockerfilepath"
+echo -e "NEXT_PUBLIC_ENVIRONMENT=PRODUCTION">> "$next_js_env"
+if [ "$host_ip" = "localhost" ]; then
+	echo "Running cert gen"
+	sh ./certs/cert_gen.sh
+
+else
+	echo "localhost not detected as IP, if serving locally, rerun script with localhost as the IP/domain the application will be served from"
+	echo "If serving publically, go to nginx directory, run docker compose up -d and then run ssl_generation_run_from_virtualmachine.sh" 
+fi
+

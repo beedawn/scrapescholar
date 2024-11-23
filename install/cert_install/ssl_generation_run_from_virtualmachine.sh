@@ -5,7 +5,7 @@
 # then run this script with yourdomain.com
 
 if [ -z "$(docker ps -q -f name=nginx)" ]; then 
-        echo "Nginx is not running, please run docker compose up -d, and try again."
+        echo "Nginx is not running, please run docker compose up -d from the nginx directory and try again."
         exit
 fi 
 

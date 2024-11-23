@@ -54,8 +54,14 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_SERVER: db
       POSTGRES_PORT: ${POSTGRES_PORT}
+      HOST_IP: ${HOST_IP}
+      ENVIRONMENT: ${ENVIRONMENT}
+    volumes:
+      - ./fastapi/start_fastapi.sh:/docker-entrypoint.d/start_fastapi.sh
+      - ./nginx_nextjs/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "8000:8000"
+    entrypoint: ["/bin/sh", "-c", "chmod +x /docker-entrypoint.d/start_fastapi.sh && /docker-entrypoint.d/start_fastapi.sh"]
     depends_on:
       db:
         condition: service_healthy
@@ -73,8 +79,9 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      - NGINX_HOST=localhost
-      - NGINX_PORT=80
+      - NGINX_HOST=${HOST_IP}
+      # - NGINX_PORT=80
+      - ENVIRONMENT=${ENVIRONMENT}
     depends_on:
       scrapescholar_nextjs:
         condition: service_healthy
