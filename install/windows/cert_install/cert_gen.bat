@@ -1,6 +1,38 @@
 @echo off
 setlocal enabledelayedexpansion
 
+SET OPENSSL_VERSION=Win64OpenSSL-3_0_0
+SET DOWNLOAD_URL=https://slproweb.com/download/Win64OpenSSL_Light-3_4_0.exe
+SET INSTALL_DIR=C:\Program Files\OpenSSL
+SET OPENSSL_BIN=%INSTALL_DIR%\bin
+if exist "%INSTALL_DIR%\bin\openssl.exe" (
+    echo OpenSSL is installed.
+    
+    set OPEN_SSL_EXE="%INSTALL_DIR%\bin\openssl.exe"
+    "%OPEN_SSL_EXE%" version
+    goto InstallCompleted
+)
+
+echo Downloading OpenSSL installer...this will take a while, go grab a coffee.
+powershell -Command "Invoke-WebRequest -Uri %DOWNLOAD_URL% -OutFile OpenSSL-installer.exe"
+
+echo Running installer...
+start /wait OpenSSL-installer.exe /silent /dir="%INSTALL_DIR%"
+
+@REM echo Adding OpenSSL to the PATH environment variable...
+@REM setx PATH "%PATH%;%INSTALL_DIR%\bin"
+
+@REM set PATH=%PATH%;%OPENSSL_BIN%
+
+echo Installation complete. Verifying OpenSSL installation...
+set OPEN_SSL_EXE=%INSTALL_DIR%\bin\openssl.exe
+"%OPEN_SSL_EXE%" version
+
+echo OpenSSL installed and configured successfully.
+set OPEN_SSL_EXE="%INSTALL_DIR%\bin\openssl.exe"
+
+
+:InstallCompleted
 set server_name=localhost
 
 set SSL_DIR=certs\%server_name%
@@ -13,21 +45,21 @@ if not exist "%SSL_DIR%" (
 )
 
 echo Generating private key...
-openssl genpkey -algorithm RSA -out "%KEY_FILE%"
+%OPEN_SSL_EXE% genpkey -algorithm RSA -out "%KEY_FILE%"
 if %errorlevel% neq 0 (
     echo Error generating private key.
     exit /b 1
 )
 
 echo Generating CSR...
-openssl req -new -key "%KEY_FILE%" -out "%SSL_DIR%\localhost.csr" -subj "/C=US/ST=Pennsylvania/L=Pittsburgh/O=ScrapeScholar/CN=%server_name%"
+%OPEN_SSL_EXE% req -new -key "%KEY_FILE%" -out "%SSL_DIR%\localhost.csr" -subj "/C=US/ST=Pennsylvania/L=Pittsburgh/O=ScrapeScholar/CN=%server_name%"
 if %errorlevel% neq 0 (
     echo Error generating CSR.
     exit /b 1
 )
 
 echo Generating self-signed certificate...
-openssl x509 -req -in "%SSL_DIR%\localhost.csr" -signkey "%KEY_FILE%" -out "%CRT_FILE%" -days 365
+%OPEN_SSL_EXE% x509 -req -in "%SSL_DIR%\localhost.csr" -signkey "%KEY_FILE%" -out "%CRT_FILE%" -days 365
 if %errorlevel% neq 0 (
     echo Error generating certificate.
     exit /b 1
