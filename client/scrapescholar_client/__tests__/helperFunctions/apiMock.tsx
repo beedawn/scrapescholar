@@ -5,7 +5,7 @@ import pastSearchesArticles from "../mockData/pastSearchesArticles";
 import httpStringGen from "../../app/api/httpString";
 import _ from "lodash";
 const host_ip = _.escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
-const ENVIRONMENT = process.env.NEXT_PUBLIC_ENVIRONMENT;
+
 
 let simulateInsufficientStorage = false;
 let deleteSearch = false;
