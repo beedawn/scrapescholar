@@ -1,5 +1,5 @@
 
-enum Role{
+enum Role {
     Role,
     Professor,
     GradStudent,

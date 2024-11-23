@@ -1,19 +1,18 @@
 import React from 'react';
 
-
 interface DropdownSearchBoxProps {
   value: string;
   onDropdownChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   className?: string;
   valueArray: any[];
-  defaultValue?:string;
+  defaultValue?: string;
 }
 const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
   ({ value,
     onDropdownChange,
     className = '',
     valueArray,
-    defaultValue=null
+    defaultValue = null
   }) => {
 
     return (
@@ -21,7 +20,7 @@ const DropdownSearchBox: React.FC<DropdownSearchBoxProps> =
         value={value}
         onChange={onDropdownChange}
         className={`text-black p-2 ${className}`}
-      >{defaultValue !== null  ? <><option key={0} >
+      >{defaultValue !== null ? <><option key={0} >
         {defaultValue}
       </option></> : <></>}
         {valueArray.map((option, index) => (

@@ -24,8 +24,8 @@ interface SearchResultsProps {
     setRelevanceChanged: (item: boolean) => void;
     relevanceChanged: boolean;
     handlePastSearchSelectionSearchID:
-    (search_id:number) => void;
-    isMobile:boolean;
+    (search_id: number) => void;
+    isMobile: boolean;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({
@@ -34,11 +34,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     setSearchName, searchName, currentSearchId, setDisplayInputs,
     setLoading, onArticleClick, setRelevanceChanged, relevanceChanged, handlePastSearchSelectionSearchID, isMobile }) => {
     const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
-    const { getAPIPastSearchTitle, getCommentsByArticle, downloadURL } = apiCalls();
-    const [comments, setComments] = useState<any[]>([]); // Comments state
-    const [commentsLoading, setCommentsLoading] = useState<boolean>(false);
+    const { getAPIPastSearchTitle, downloadURL } = apiCalls();
     const [addArticleOpen, setAddArticleOpen] = useState<boolean>(false);
-
     useEffect(() => {
         const fetchSearchName = async () => {
             await getAPIPastSearchTitle(
@@ -47,14 +44,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         }
         fetchSearchName();
     }, [])
-
     const addArticleView = () => {
         setAddArticleOpen(!addArticleOpen)
     }
-
     return (
         <div className={className}>
-            {addArticleOpen ? <ArticleModal addArticleView={addArticleView} search_id={currentSearchId} handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}/> : <></>}
+            {addArticleOpen ? <ArticleModal addArticleView={addArticleView} search_id={currentSearchId}
+                handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID} /> : <></>}
             <div className={`float-left  ${!isMobile ? 'ml-4 p-12' : ''} max-w-sm
             sm:max-w-screen-sm
             lg:max-w-screen-md xl:max-w-screen-lg`}>
@@ -79,14 +75,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                             results={results}
                             selectedArticle={selectedArticle}
                             setSelectedArticle={setSelectedArticle}
-                            setLoading={setLoading}
                             onArticleClick={onArticleClick}
                             setRelevanceChanged={setRelevanceChanged}
-                            relevanceChanged={relevanceChanged} 
+                            relevanceChanged={relevanceChanged}
                             handlePastSearchSelectionSearchID={handlePastSearchSelectionSearchID}
                             currentSearchID={currentSearchId}
                             isMobile={isMobile}
-                            />
+                        />
                     </div>
                 ) :
                     results.length === 0 && displayInputs[0] === ''

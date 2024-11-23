@@ -25,7 +25,6 @@ interface ResultsTableProps {
     setResults: (item: ResultItem[]) => void;
     selectedArticle: number | null; // Updated to allow null
     setSelectedArticle: (index: number | null) => void;  // Allow null
-    setLoading: (state: boolean) => void;
     onArticleClick: (articleId: number) => void;
     setRelevanceChanged: (item: boolean) => void;
     relevanceChanged: boolean;
@@ -62,13 +61,12 @@ export const sortResults = (array: ResultItem[],
 
 const ResultsTable: React.FC<ResultsTableProps> = ({
     results, selectedArticle, setSelectedArticle, setResults,
-    setLoading, onArticleClick,
+    onArticleClick,
     setRelevanceChanged, relevanceChanged,
     handlePastSearchSelectionSearchID, currentSearchID,
     isMobile
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
-
     let scrollBy = 350;
     if (isMobile) {
         scrollBy = 200;
@@ -99,7 +97,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         const sortedResults = sortResults([...results], field, sortDirection);
         setPressedSort(field);
         const orderedEditableResults = sortedResults.map(result => {
-            // Find the corresponding item in 'editableResults' by matching the 'id'
             return editableResults.find(editable =>
                 editable.article_id === result.article_id) || result;
         });
@@ -121,16 +118,11 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         const updatedCells: EditableCell[] = [...editableCells];
         const targetCell = updatedCells.find(cell => cell.article_id === article_id);
         if (targetCell) {
-            // Allow edit toggling only if the user is a Professor
             if (!isAdmin) {
                 console.warn("Only Professors can edit fields.");
                 return;
             }
-
-            // Toggle the field's editable state
             targetCell[field as keyof EditableCell] = !targetCell[field as keyof EditableCell];
-
-            // Update the state with the modified cells array
             setEditableCells(updatedCells);
         } else {
             console.error(`No editable cell found with article_id ${article_id}`);
@@ -149,12 +141,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         findAdmin();
     }, []);
     const handleFieldChange = (id: number, field: keyof EditableCell, value: string) => {
-
         const sanitizedValue = DOMPurify.sanitize(value);
         const updatedResults = editableResults.map(result =>
             result.article_id === id ? { ...result, [field]: sanitizedValue } : result
         );
-
         setEditableResults(updatedResults);
     }
     const { putUserData, isAdmin } = apiCalls();
@@ -177,7 +167,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
         setDeleteArticleModalActive(true);
         setArticleToDelete(article)
     }
-
     return (
         <>
             {deleteArticleModalActive && articleToDelete !== undefined ?
@@ -200,7 +189,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                     <thead>
                         <tr>
                             <th className="border border-gray-500">
-                                {/* delete */}
+                                {/* delete header spacer */}
                             </th>
                             <th className="border border-gray-500">
                                 Title
@@ -283,14 +272,12 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                     onArticleClick(result.article_id); // Call onArticleClick when an article is clicked
                                 }} data-testid='row'>
                                 <td className="border border-gray-500" >
-
                                     <button className="bg-red-600 text-2xl p-1 m-2 rounded text-white"
                                         onClick={() => {
                                             openDeleteArticleModal(result)
                                         }} data-testid="delete_article_button">
                                         ␡
                                     </button>
-
                                 </td>
                                 <td className="border border-gray-500" >
                                     <a href={result.link}>
@@ -356,7 +343,6 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                         handleFieldChange={handleFieldChange} index={index} />
                                 </td>
                             </tr>
-
                         ))}
                     </tbody>
                 </table>

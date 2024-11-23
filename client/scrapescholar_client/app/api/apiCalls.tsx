@@ -2,14 +2,11 @@ import { NewUser } from "../components/UserManagement/modal/AddUserModal";
 import httpStringGen from "@/app/api/httpString";
 import _ from 'lodash';
 const apiCalls = () => {
-
   const host = _.escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
-  const http_string =httpStringGen();
+  const http_string = httpStringGen();
 
-
-
-   interface NewArticle {
-    search_id:number,
+  interface NewArticle {
+    search_id: number,
     title: string,
     date: string,
     citedby: number,
@@ -17,7 +14,7 @@ const apiCalls = () => {
     document_type: string,
     abstract: string,
     link: string
-}
+  }
 
   const getAPIDatabases = async () => {
     const url = `${http_string}://${host}:8000/academic_sources`;
@@ -96,24 +93,18 @@ const apiCalls = () => {
         jsonData = await data.json()
         if (data.status === 507) {
           setDataFull(true);
-   
         }
       }
       catch (error: any) {
-        // jsonData = [{ "title": error.message, link: '' }]
         setError(error);
       }
     }
     if (jsonData !== undefined && jsonData.articles !== undefined && jsonData.articles.length > 0) {
-      //maybe should have this get searchname and keywords too?
-
       setResults(jsonData.articles)
       setCurrentSearchId(jsonData.search_id)
       return jsonData
     }
     else {
-      //set better error message
-      // setError(data)
       setResults([]);
       return []
     }
@@ -128,16 +119,12 @@ const apiCalls = () => {
       jsonData = await data.json()
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
     }
 
     if (jsonData !== undefined && jsonData.length > 0) {
       return jsonData;
     }
     else {
-      //set better error message
-      // setError(data)
       return [];
     }
   }
@@ -149,11 +136,8 @@ const apiCalls = () => {
       const url = `${http_string}://${host}:8000/search/user/articles?search_id=${search_id}`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
- 
-   
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
       setError(error);
     }
     if (jsonData !== undefined && jsonData.length > 0) {
@@ -161,8 +145,6 @@ const apiCalls = () => {
       return jsonData
     }
     else {
-      //set better error message
-      // setError(data)
       setResults([]);
       return []
     }
@@ -178,18 +160,13 @@ const apiCalls = () => {
         jsonData = await data.json()
       }
       catch (error: any) {
-        // jsonData = [{ "title": error.message, link: '' }]
-        // setError(error);
       }
-
       if (jsonData !== undefined && (jsonData.title !== undefined || jsonData.keywords !== undefined)) {
         setSearchName(jsonData.title);
         const joinedKeywords = jsonData.keywords.join(' ');
         setDisplayInputs(joinedKeywords);
       }
       else {
-        //set better error message
-        // setError(data)
         return [];
       }
     }
@@ -200,23 +177,8 @@ const apiCalls = () => {
     setLoading: (item: boolean) => void) => {
     let data: Response;
     let jsonData;
-    /* responds with 
-    {
-      "user_id": 1,
-      "search_keywords": [
-          "abcdefghijkl,mop",
-          "AND",
-          "123456789"
-      ],
-      "title": "new title new",
-      "search_date": null,
-      "search_id": 17,
-      "status": "active"
-  } 
-      */
     setLoading(true);
     try {
-
       const url = `${http_string}://${host}:8000/search/user/search/title?search_id=${search_id}`
       data = await fetch(url, {
         method: "PUT", credentials: "include", headers: {
@@ -229,16 +191,9 @@ const apiCalls = () => {
       jsonData = await data.json()
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
     }
-
     if (jsonData !== undefined && jsonData.title !== undefined) {
       setSearchName(jsonData.title);
-
-    }
-    else {
-      // console.log(jsonData)
     }
     setLoading(false)
   }
@@ -254,15 +209,6 @@ const apiCalls = () => {
       jsonData = await data.json()
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
-    }
-    if (jsonData !== undefined) {
-      // console.log("Search deleted")
-    }
-    else {
-      // console.log(jsonData)
-      //console.log("failure to delete search")
     }
   }
 
@@ -270,34 +216,20 @@ const apiCalls = () => {
   const putUserData = async (new_data: {}) => {
     let data: Response;
     let jsonData;
-
     try {
-
       const url = `${http_string}://${host}:8000/user_data/update`
       data = await fetch(url, {
         method: "PUT", credentials: "include", headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(
-           new_data 
+          new_data
         )
       })
       jsonData = await data.json()
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
     }
-
-    if (jsonData !== undefined && jsonData.title !== undefined) {
-      //hapy path
-
-    }
-    else {
-      //something went wrong!
-      // console.log(jsonData)
-    }
-
   }
 
   const getCommentsByArticle = async (articleId: number) => {
@@ -310,39 +242,34 @@ const apiCalls = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      // console.error("Error fetching comments:", error);
       return [];
     }
   }
 
-  // Add a new comment
   const addComment = async (articleId: number, commentText: string) => {
     try {
-        const url = `${http_string}://${host}:8000/comment/article/${articleId}`;
-        const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                comment_text: commentText
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error adding comment for article ${articleId}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data;
+      const url = `${http_string}://${host}:8000/comment/article/${articleId}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          comment_text: commentText
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Error adding comment for article ${articleId}: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
     } catch (error) {
-        console.error("Error adding comment:", error);
-        return null;
+      console.error("Error adding comment:", error);
+      return null;
     }
   }
 
-  // Edit an existing comment
   const editComment = async (commentId: number, updatedText: string) => {
     try {
       const url = `${http_string}://${host}:8000/comment/${commentId}`;
@@ -353,14 +280,12 @@ const apiCalls = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          comment_text: updatedText, 
+          comment_text: updatedText,
         }),
       });
-
       if (!response.ok) {
         throw new Error(`Error editing comment ${commentId}: ${response.statusText}`);
       }
-
       const data = await response.json();
       return data;  // Return the updated comment data
     } catch (error) {
@@ -369,7 +294,6 @@ const apiCalls = () => {
     }
   };
 
-  // Delete an existing comment
   const deleteComment = async (commentId: number) => {
     try {
       const url = `${http_string}://${host}:8000/comment/${commentId}`;
@@ -377,24 +301,19 @@ const apiCalls = () => {
         method: 'DELETE',
         credentials: 'include',
       });
-
       if (!response.ok) {
         throw new Error(`Error deleting comment ${commentId}: ${response.statusText}`);
       }
-
-      return true;  // Return true on successful deletion
+      return true;
     } catch (error) {
       console.error("Error deleting comment:", error);
       return false;
     }
   };
 
-
-
-  const getCookie= async ()=>{
+  const getCookie = async () => {
     let data;
     let jsonData
-
     try {
       const url = `${http_string}://${host}:8000/auth/get_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
@@ -402,15 +321,12 @@ const apiCalls = () => {
       return jsonData;
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
-      return {detail:"Cookie not found"};
+      return { detail: "Cookie not found" };
     }
 
   }
 
-
-  const isAdmin= async ()=>{
+  const isAdmin = async () => {
     let data;
     let textData
 
@@ -421,14 +337,12 @@ const apiCalls = () => {
       return textData;
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
-      return {detail:"Admin request failed"};
+      return { detail: "Admin request failed" };
     }
 
   }
 
-  const deleteCookie= async ()=>{
+  const deleteCookie = async () => {
     let data;
     let jsonData
 
@@ -439,35 +353,14 @@ const apiCalls = () => {
       return jsonData;
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
       return [];
     }
 
   }
-  
-  const putSearchShare = async (shared_with_user: string, search_id: number,
-  
-    // setLoading: (item: boolean) => void
-  ) => {
+
+  const putSearchShare = async (shared_with_user: string, search_id: number) => {
     let data: Response;
     let jsonData;
-    /* responds with 
-    {
-      "user_id": 1,
-      "search_keywords": [
-          "abcdefghijkl,mop",
-          "AND",
-          "123456789"
-      ],
-      "title": "new title new",
-      "search_date": null,
-      "search_id": 17,
-      "status": "active"
-  } 
-      */
-     //maybe different loading?
-    // setLoading(true);
     try {
       const url = `${http_string}://${host}:8000/search/share?search_id=${search_id}&share_user=${shared_with_user}`
       data = await fetch(url, {
@@ -475,49 +368,39 @@ const apiCalls = () => {
           'Content-Type': 'application/json'
         },
       })
-
       if (data.status === 404) {
-        // Handle 404 error specifically by returning false
         return false;
       }
       jsonData = await data.json()
       return true
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
       return false
     }
-
-    // setLoading(false)
   }
 
-  const downloadURL= `${http_string}://${host}:8000/download?search_id=`
+  const downloadURL = `${http_string}://${host}:8000/download?search_id=`
 
-
-  const addUser = async ( userBody: NewUser) => {
+  const addUser = async (userBody: NewUser) => {
     try {
-        const url = `${http_string}://${host}:8000/users/create`;
-        const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-                userBody
-            ),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error adding user: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data;
+      const url = `${http_string}://${host}:8000/users/create`;
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          userBody
+        ),
+      });
+      if (!response.ok) {
+        throw new Error(`Error adding user: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
     } catch (error) {
-        // console.error("Error adding User:", error);
-        return null;
+      return null;
     }
   }
 
@@ -528,9 +411,9 @@ const apiCalls = () => {
         method: 'GET',
         credentials: 'include',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         }
-    });
+      });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
@@ -553,10 +436,7 @@ const apiCalls = () => {
       jsonData = await data.json()
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
     }
-
   }
 
   const updateUserRole = async (userId: number, newRole: string) => {
@@ -580,33 +460,28 @@ const apiCalls = () => {
     }
   };
 
-
-  const addArticle = async ( articleBody:NewArticle) => {
+  const addArticle = async (articleBody: NewArticle) => {
     try {
-        const url = `${http_string}://${host}:8000/article`;
-        const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-                articleBody
-            ),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error adding user: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data;
+      const url = `${http_string}://${host}:8000/article`;
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          articleBody
+        ),
+      });
+      if (!response.ok) {
+        throw new Error(`Error adding user: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
     } catch (error) {
-        // console.error("Error adding User:", error);
-        return null;
+      return null;
     }
   }
-
 
   const deleteArticleAPI = async (article_id: number) => {
     let data: Response;
@@ -619,23 +494,22 @@ const apiCalls = () => {
       jsonData = await data.json()
     }
     catch (error: any) {
-      // jsonData = [{ "title": error.message, link: '' }]
-      // setError(error);
     }
 
   }
 
-  return { getAPIDatabases, postAPILogin, 
-    getAPIResults, getAPISearches, getAPIPastSearchResults, 
-    getAPIPastSearchTitle, putSearchTitle, 
-    deleteSearch, putUserData, getCookie, deleteCookie, 
+  return {
+    getAPIDatabases, postAPILogin,
+    getAPIResults, getAPISearches, getAPIPastSearchResults,
+    getAPIPastSearchTitle, putSearchTitle,
+    deleteSearch, putUserData, getCookie, deleteCookie,
     getCommentsByArticle,
     addComment,
     editComment,
-    deleteComment, downloadURL, putSearchShare, 
+    deleteComment, downloadURL, putSearchShare,
     isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole,
-    getAPIDatabasesAndIDs, addArticle,deleteArticleAPI  };
-
+    getAPIDatabasesAndIDs, addArticle, deleteArticleAPI
+  };
 }
 
 export default apiCalls;

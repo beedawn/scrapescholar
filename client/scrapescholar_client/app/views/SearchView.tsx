@@ -3,15 +3,12 @@ import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import SearchResults from "../components/SearchView/SearchResults";
 import NavBar from "../components/SearchView/NavBar";
 import Dropdown from "../types/DropdownType";
-import { queryAllByAltText } from '@testing-library/react';
 import apiCalls from '../api/apiCalls';
-import { filter } from 'd3';
 import DataFull from '../components/SearchView/DataFull';
 import CommentsSidebar from '../components/SearchView/CommentsSidebar';
 import Loading from '../components/Loading';
 import UserManagement from '../components/UserManagement/UserManagement';
 import Relevance from '../types/Relevance';
-import { init } from 'next/dist/compiled/webpack/webpack';
 import DOMPurify from 'dompurify';
 import windowWidth from '../components/responsive/windowWidth';
 
@@ -47,8 +44,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const [loading, setLoading] = useState<boolean>(false);
     const { getAPIDatabases, getAPIResults, getAPISearches, getAPIPastSearchResults, getAPIPastSearchTitle } = apiCalls();
     const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
-
-
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
     const [openUserManagement, setOpenUserManagement] = useState<boolean>(false);
     const [relevanceChanged, setRelevanceChanged] = useState<boolean>(false);
@@ -66,7 +61,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
         return sum
     }
-
     useEffect(() => {
         windowWidth(setWidth)
 
@@ -77,20 +71,16 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
 
     }, [width]);
-
-
     useEffect(() => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabases();
             setUserDatabaseList(db_list);
         };
-
         const fetchSearches = async () => {
             const search_list = await getAPISearches(setError);
             setSearches(search_list);
         };
         fetchSearches();
-
         if (searches.length >= 300) {
             setDataFull(true)
         } else {
@@ -98,18 +88,10 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
         fetchDatabases();
     }, [loading]);
-
-
-
-
-    //gets data from api and stores in results
     const [results, setResults] = useState<ResultItem[]>([]);
     const [dataFull, setDataFull] = useState<boolean>(false);
     const [isCommentButtonPressed, setIsCommentButtonPressed] = useState(false);
-    //inputs gets user inputs, update everytime user enters character
-
     const initBubblePlotData = (fetchResults: ResultItem[]) => {
-
         const possible_types = Object.keys(Relevance).filter((key) => isNaN(Number(key)));
         let data_array = []
         let color = {
@@ -125,9 +107,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 "name": type,
                 "sum": sumResults(fetchResults, type),
                 "color": color[type as keyof typeof color]
-
             })
-
         }
         let divider;
         if (fetchResults !== undefined) {
@@ -136,7 +116,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         else {
             divider = 25
         }
-
         const newBubbleInputs = data_array.map((keyword, i) => ({
             x: i < 2 ? i * .5 : 0,
             //all circles are on same y axis
@@ -155,9 +134,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 const newBubbleInputs = initBubblePlotData(fetchResults);
                 setBubbleInputs(newBubbleInputs);
             }
-            else {
-                // console.log("No search Id in graph refresh!")
-            }
         }
         getResults()
     }, [relevanceChanged])
@@ -175,36 +151,30 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
     const removeFromUserDatabaseList = (item: string) => {
         setUserDatabaseList(userDatabaseList.filter((array_item: any) => { return array_item != item }))
     }
+
     //string of inputs joined with ' '
     const [joinedInputsString, setJoinedInputsString] = useState<string[]>([]);
     //drop down array for dropdown values
     const [dropdown, setDropdown] = useState<Dropdown[]>([Dropdown.AND]);
-    //triggers when search is pressed so that UI is updated to loading
 
     const [error, setError] = useState<any>();
     const [searches, setSearches] = useState<any[]>([]);
-
-    //empty string variable to make code easier to read
     const emptyString = '';
     //adds input and drop down when plus is pressed
     const addInput = () => {
         setInputs([...inputs, emptyString]);
         setDropdown([...dropdown, Dropdown.AND]);
     }
-    //removes input when minus is pressed
     const removeInput = (index: number) => {
         const newInput = inputs.filter((_, input_index) => input_index !== index)
         setInputs([...newInput]);
     }
-    //updates inputs when input field is edited
     const handleSearchChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-
         const sanitizedValue = DOMPurify.sanitize(e.target.value);
         const newInputs = [...inputs];
         newInputs[index] = sanitizedValue;
         setInputs(newInputs);
     }
-
     const clearPages = () => {
         setOpenUserManagement(false)
         setDataFull(false)
@@ -214,21 +184,16 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         const selectedSearchId = event.target.value;
         await handlePastSearchSelectionSearchID(selectedSearchId)
     }
-
     const handlePastSearchSelectionSearchID = async (search_id: number) => {
-
         setCurrentSearchId(search_id)
         setSelectedSearchIdState(search_id)
         setDataFull(false)
-        //if someone makes a bunch of requests at once, with the exact same title, this breaks and finds every single search because the names collide in the db...
         if (search_id) {
             clearPages();
             setError(null);
             const search_results = await getAPIPastSearchResults(setResults, setError, search_id);
             await getAPIPastSearchTitle(search_id, setSearchName, setJoinedInputsString)
-            //need to add something here to update the searchname to the new name
             clearPages();
-            //empties bubble graphs for new search with no data, maybe need to put something here? yes we do
             const bubble_data = initBubblePlotData(search_results)
             setBubbleInputs(bubble_data);
         }
@@ -237,44 +202,28 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         }
 
     }
-    //updates data in dropdown array when and/or/not is selected
     const handleDropdownChange = (index: number, option: Dropdown) => {
         const newDropdown = [...dropdown];
         newDropdown[index] = option;
         setDropdown(newDropdown);
-
     }
     const handleArticleClick = async (articleId: number) => {
         setSelectedArticleId(articleId);
         setIsSidebarOpen(true);
-
-
-
     };
 
-    //runs when search is pressed
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        //sets loading to true which triggers "Loading" to show in UI
         setLoading(true);
         setError(null);
         setDataFull(false);
         setOpenUserManagement(false);
         setIsSidebarOpen(false);
-        //filters out empty input fields
         const filterBlankInputs = inputs.filter((input) => (input !== ''))
-        //declare empty array to combien user inputs and values from drop downs
-
         let inputsAndLogicalOperators: string[] = [];
-        //iterate through valid non blank inputs and append them and associated logical operator
         for (let i = 0; i < filterBlankInputs.length; i++) {
-            //add input value
             inputsAndLogicalOperators.push(filterBlankInputs[i]);
-            //make sure we aren't at end of array
-            if (i < filterBlankInputs.length - 1
-                //make sure there is more than 1 item in the inputs, if there is only one item we don't need a logical operator 
-                && filterBlankInputs.length > 1) {
-                //add logical operator under input field to array
+            if (i < filterBlankInputs.length - 1 && filterBlankInputs.length > 1) {
                 if (dropdown[i] == "NOT") {
                     inputsAndLogicalOperators.push("AND")
                 }
@@ -293,7 +242,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
         setSelectedSearchIdState(responseResult.search_id)
         setLoading(false);
     }
-
     return (
         <div className="flex md:flex-row flex-col pb-10 h-screen ">
             <div className=" xs:w-full  md: w-1/4 lg:w-1/4 xl:w-1/5 p-5">
@@ -301,11 +249,11 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     handleSearchChange={handleSearchChange} removeInput={removeInput}
                     setLoggedIn={setLoggedIn} dropdown={dropdown} handleDropdownChange={handleDropdownChange}
                     addToUserDatabaseList={addToUserDatabaseList} removeFromUserDatabaseList={removeFromUserDatabaseList}
-                    searches={searches} handlePastSearchSelection={handlePastSearchSelection} setOpenUserManagement={setOpenUserManagement}
+                    searches={searches} handlePastSearchSelection={handlePastSearchSelection}
+                    setOpenUserManagement={setOpenUserManagement}
                     setDataFull={setDataFull} clearPages={clearPages} isMobile={isMobile}
                 />
             </div>
-
             <div className={`flex-1 ${!isMobile ? 'm-10, ml-12' : 'm-2 p-2'} overflow-auto ${isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ? 'hidden' : ''}`}>
                 {error ? (<p>{error.message}</p>)
                     : loading ? <Loading /> : openUserManagement ? <><UserManagement /></> :
@@ -329,10 +277,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                                 isMobile={isMobile}
                             />}
             </div>
-
-  
             {isSidebarOpen && selectedArticleId !== null && (
-
                 <CommentsSidebar articleId={selectedArticleId} onClose={() => {
                     if (isMobile) {
                         setIsCommentButtonPressed(false)
@@ -342,7 +287,6 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 }} isMobile={isMobile}
                     setIsCommentButtonPressed={setIsCommentButtonPressed}
                     isCommentButtonPressed={isCommentButtonPressed} />
-
             )}
         </div>
     );

@@ -1,7 +1,7 @@
 enum Relevance {
-    Relevant,
-    SemiRelevant,
-    NotRelevant,
-  }
+  Relevant,
+  SemiRelevant,
+  NotRelevant,
+}
 
-  export default Relevance;
+export default Relevance;

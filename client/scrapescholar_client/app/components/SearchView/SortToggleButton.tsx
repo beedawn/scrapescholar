@@ -16,7 +16,6 @@ const SortToggleButton: React.FC<SortToggleButtonProps> = ({
         handleSort(field, direction)
         setPressed(!pressed)
     }
-
     const isPressed = pressedSort === field;
     return (
         <div className="inline-block">

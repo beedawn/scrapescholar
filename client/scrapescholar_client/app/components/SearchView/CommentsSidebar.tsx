@@ -25,7 +25,6 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
     const [error, setError] = useState<string | null>(null);
     const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
     const [editedText, setEditedText] = useState<string>('');
-    const [openComments, setOpenComments] = useState<boolean>(false);
     const { getCommentsByArticle, addComment, editComment, deleteComment } = apiCalls();
 
     useEffect(() => {
@@ -60,14 +59,14 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
 
     const handleEditClick = (comment: Comment) => {
         setEditingCommentId(comment.comment_id);
-        setEditedText(comment.comment_text); // Set the current text for editing
+        setEditedText(comment.comment_text);
     };
 
     const handleSaveEdit = async (comment_id: number) => {
         try {
             const updatedComment = await editComment(comment_id, editedText);
             setComments(comments.map(comment => comment.comment_id === comment_id ? updatedComment : comment));
-            setEditingCommentId(null); // Exit edit mode after saving
+            setEditingCommentId(null);
         } catch (err) {
             setError('Failed to edit comment');
         }
@@ -117,10 +116,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
                                     {comments.map((comment, index) => {
                                         let readableTime = "";
                                         if (comment !== null) {
-
                                             const createdAtDate = new Date(comment.created_at);
-
-
                                             readableTime = createdAtDate.toLocaleString('en-US', {
                                                 year: 'numeric',
                                                 month: 'numeric',
@@ -133,19 +129,17 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
                                         }
                                         return (
                                             <div key={comment?.comment_id || index} className="bg-white rounded m-2 px-2 pt-2">
-
                                                 <li className="mb-4">
-
                                                     <div >
-                                                        <strong>{comment?.username || "Unknown"}</strong><span className="text-slate-500"> @ {readableTime !== undefined ? readableTime : ""}</span>:&nbsp;
-
-
-
-
+                                                        <strong>{comment?.username || "Unknown"}</strong>
+                                                        <span className="text-slate-500">
+                                                            @ {readableTime !== undefined ? readableTime : ""}
+                                                        </span>
+                                                        :
+                                                        &nbsp;
                                                     </div>
                                                     <div className="">
                                                         {editingCommentId === comment.comment_id ? (
-                                                            // Save button after editing
                                                             <>
                                                                 <form onSubmit={(e) => { e.preventDefault(); handleSaveEdit(comment.comment_id); }}>
                                                                     <input
@@ -155,28 +149,27 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
                                                                     />
                                                                     <button type="submit" className="text-green-500">Save</button>
                                                                 </form>
-                                                                <button onClick={() => handleDeleteComment(comment.comment_id)} className="text-red-500">Delete</button>
-
-
+                                                                <button onClick={() => handleDeleteComment(comment.comment_id)} className="text-red-500">
+                                                                    Delete
+                                                                </button>
                                                             </>
                                                         ) : (
                                                             <>
                                                                 <div>{comment?.comment_text || "No comment text available"}</div>
-
-                                                                <button onClick={() => handleEditClick(comment)} className="text-blue-500">Edit</button>
+                                                                <button onClick={() => handleEditClick(comment)} className="text-blue-500">
+                                                                    Edit
+                                                                </button>
                                                             </>
                                                         )}
-
                                                     </div>
-
                                                 </li>
-
                                             </div>
                                         )
                                     })}
                                 </ul>
-                            ) : !loading && <p>No comments available.</p>}
-
+                            )
+                                :
+                                !loading && <p>No comments available.</p>}
                             <div className="mt-4">
                                 <form onSubmit={(e) => { e.preventDefault(); handleAddComment() }}>
                                     <input
@@ -185,15 +178,17 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
                                         placeholder="Add a comment"
                                         className="h-16 w-full p-2 border border-gray-300 rounded mb-2"
                                     />
-                                    <button type="submit" className={`bg-blue-500 text-white p-2 rounded ${newComment.trim() === '' ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={newComment.trim() === ''}>Add Comment</button>
+                                    <button type="submit"
+                                        className={`bg-blue-500 text-white p-2 rounded ${newComment.trim() === '' ?
+                                            'opacity-50 cursor-not-allowed' : ''}`} disabled={newComment.trim() === ''}>
+                                        Add Comment
+                                    </button>
                                 </form>
                             </div>
-
                         </div>
                     </div>
                 </>}
         </>
-
     );
 };
 
