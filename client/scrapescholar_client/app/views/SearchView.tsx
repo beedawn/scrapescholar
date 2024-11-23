@@ -306,7 +306,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                 />
             </div>
 
-            <div className={`flex-1 ${!isMobile ? 'm-5, p-5 pl-12' : 'm-2 p-2'} overflow-auto ${isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ? 'hidden' : ''}`}>
+            <div className={`flex-1 ${!isMobile ? 'm-10, ml-12' : 'm-2 p-2'} overflow-auto ${isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ? 'hidden' : ''}`}>
                 {error ? (<p>{error.message}</p>)
                     : loading ? <Loading /> : openUserManagement ? <><UserManagement /></> :
                         dataFull ? <> <DataFull searches={searches} setLoading={setLoading} /></> :
