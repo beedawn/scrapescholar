@@ -1,4 +1,3 @@
-# app/crud/searchshare.py
 from sqlalchemy.orm import Session
 from app.models.searchshare import SearchShare
 from app.schemas.searchshare import SearchShareCreate

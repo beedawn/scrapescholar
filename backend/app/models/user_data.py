@@ -1,5 +1,3 @@
-# app/models/user_data.py
-
 from sqlalchemy import Column, Integer, String, ForeignKey
 from app.db.session import Base
 

@@ -1,4 +1,3 @@
-# app/crud/comment.py
 from sqlalchemy.orm import Session
 from app.models.comment import Comment
 from app.models.user import User

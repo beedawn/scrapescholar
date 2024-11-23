@@ -1,4 +1,3 @@
-# app/schemas/researchquestion.py
 from pydantic import BaseModel
 
 

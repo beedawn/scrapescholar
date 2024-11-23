@@ -1,4 +1,3 @@
-# app/crud/articlescore.py
 from sqlalchemy.orm import Session
 from app.models.articlescore import ArticleScore
 from app.schemas.articlescore import ArticleScoreCreate, ArticleScoreUpdate

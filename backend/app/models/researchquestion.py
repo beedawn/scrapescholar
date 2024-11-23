@@ -1,4 +1,3 @@
-# app/models/researchquestion.py
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.orm import relationship
 from app.db.session import Base

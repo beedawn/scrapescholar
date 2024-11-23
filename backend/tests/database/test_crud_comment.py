@@ -31,15 +31,14 @@ def test_db_session():
 
 
 mock_comment_data = {
-
     "comment_text": "test comment"
-
 }
 
 mock_article_data = {
     "source_id": 1,
     "title": "test",
-    "date": date.today()}
+    "date": date.today()
+}
 
 
 def cleanup(test_db_session, created_comment, article, search):
@@ -71,7 +70,6 @@ def test_get_comment(test_db_session: Session):
     created_comment = create_comment(test_db_session, article.article_id, comment_in, user.user_id)
 
     fetched_comment = get_comment(test_db_session, created_comment["comment_id"])
-
 
     assert fetched_comment.comment_id == created_comment["comment_id"]
     assert fetched_comment.comment_text == created_comment["comment_text"]

@@ -1,5 +1,3 @@
-# app/dependencies.py
-
 from pydantic_settings import BaseSettings
 from pydantic import Field
 from dotenv import load_dotenv
@@ -10,14 +8,13 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER")  # Loaded from .env
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")  # Loaded from .env
-    POSTGRES_DB: str = os.getenv("POSTGRES_DB")  # Loaded from .env
-    POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER")  # Loaded from .env
-    POSTGRES_PORT: str = os.getenv("POSTGRES_PORT")  # Loaded from .env
-    DATABASE_URL: str = Field(default="", description="The database URL")  # Initialize with an empty string
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER")
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_DB: str = os.getenv("POSTGRES_DB")
+    POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER")
+    POSTGRES_PORT: str = os.getenv("POSTGRES_PORT")
+    DATABASE_URL: str = Field(default="", description="The database URL")
 
-    # Generate DATABASE_URL dynamically if not provided
     @property
     def database_url(self) -> str:
         if not self.DATABASE_URL:
@@ -26,7 +23,6 @@ class Settings(BaseSettings):
         return self.DATABASE_URL
 
 
-# Create a global settings object
 settings = Settings()
 
 

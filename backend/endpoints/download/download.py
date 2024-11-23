@@ -1,8 +1,7 @@
-# search/search.py
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
 from fastapi.responses import StreamingResponse
 from app.db.session import get_db
-from typing import List, Annotated
+from typing import  Annotated
 
 from sqlalchemy.orm import Session
 from auth_tools.get_user import get_current_user_modular
@@ -10,7 +9,7 @@ import endpoints.search.search as search
 from endpoints.comment.comment import get_comments_no_token
 import csv
 from io import StringIO
-from typing import List, Dict, Generator
+from typing import List, Generator
 from app.crud.user import get_user, decrypt
 
 router = APIRouter()
@@ -22,7 +21,6 @@ def get_download(db: Session = Depends(get_db), access_token: Annotated[str | No
     """
     Download a single search
     """
-    #verifies user has a token and is valid
     get_current_user_modular(token=access_token, db=db)
 
     articles = search.get_full_article_response(db=db, search_id=search_id)

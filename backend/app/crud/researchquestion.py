@@ -1,4 +1,3 @@
-# app/crud/rsearchquestion.py
 from sqlalchemy.orm import Session
 from app.models.researchquestion import ResearchQuestion
 from app.schemas.researchquestion import ResearchQuestionCreate, ResearchQuestionUpdate

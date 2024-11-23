@@ -1,4 +1,3 @@
-# auth/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie
 from sqlalchemy.orm import Session
 from app.db.session import get_db
@@ -12,9 +11,7 @@ import os
 from fastapi.responses import JSONResponse
 from typing import Annotated
 from datetime import timedelta
-
 from auth_tools.is_admin import is_admin
-
 from auth_tools.get_user import get_current_user_modular
 
 load_dotenv()
@@ -29,33 +26,29 @@ DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE
 if not SECRET:
     raise ValueError("SECRET_KEY environment variable is not set")
 
-# Password hashing context
+
 hash_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Setup login manager
+
 login_manager = LoginManager(SECRET, token_url="/auth/login")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-# Create an API router for auth
+
 router = APIRouter()
 
 
-# Hash password
 def hash_string(text: str):
     return hash_context.hash(text)
 
 
-# Verify password
 def verify_hash(plain_text, hashed_text: str):
     return hash_context.verify(plain_text, hashed_text)
 
 
-# Encrypt username
 def encrypt_username(username: str) -> str:
     return fernet.encrypt(username.encode()).decode()
 
 
-# Decrypt username
 def decrypt_username(encrypted_username: str) -> str:
     try:
         return fernet.decrypt(encrypted_username.encode()).decode()
@@ -65,7 +58,6 @@ def decrypt_username(encrypted_username: str) -> str:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid username")
 
 
-# Register the user_loader callback with the login_manager
 @login_manager.user_loader
 def load_user(user_id: str, db: Session = None):
     if db is None:
@@ -75,10 +67,8 @@ def load_user(user_id: str, db: Session = None):
     return db.query(User).filter(User.user_id == int(user_id)).first()
 
 
-# Login route
 @router.post("/login")
 def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    # Iterate through all users and decrypt their usernames for comparison
     user = None
     for candidate in db.query(User).all():
         try:
@@ -87,7 +77,7 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
                 user = candidate
                 break
         except HTTPException:
-            continue  # Skip if decryption fails
+            continue
 
     if not user:
         raise HTTPException(
@@ -95,7 +85,6 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
             detail="Invalid username"
         )
 
-    # Ensure that the password matches
     if not verify_hash(data.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -118,16 +107,15 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
         secure=True,
         path="/",
         domain=f"{host_ip}",
-        samesite="Lax",
+        samesite="lax",
         max_age=28800
     )
     return response
 
 
-# Get current user based on token
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:
-        user_id = login_manager.get_user_id(token)  # Retrieves user_id from the token
+        user_id = login_manager.get_user_id(token)
         user = load_user(user_id, db=db)
         if not user:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid authentication credentials")

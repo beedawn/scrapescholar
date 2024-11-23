@@ -1,4 +1,3 @@
-# app/crud/article.py
 from sqlalchemy.orm import Session
 from app.models.article import Article
 from app.schemas.article import ArticleCreate, ArticleUpdate
@@ -20,9 +19,7 @@ def get_article_by_search_id(db: Session, search_id: int):
     return articles
 
 
-# app/crud/article.py
 def get_articles(db: Session, skip: int = 0, limit: int = 10):
-    # Ordering by `article_id` to ensure consistent results
     return db.query(Article).order_by(Article.article_id).offset(skip).limit(limit).all()
 
 

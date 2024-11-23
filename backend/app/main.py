@@ -1,4 +1,3 @@
-# app/main.py
 from http.client import HTTPException
 
 from fastapi import FastAPI, Query, Cookie, Depends
