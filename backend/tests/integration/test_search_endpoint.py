@@ -229,7 +229,7 @@ def test_delete_valid_token_search_title_response_schema(db_session):
     """
 
     api_query = "test"
-    quersString = "&academic_database=Scopus&academic_database=ScienceDirect"
+    querystring = "&academic_database=Scopus&academic_database=ScienceDirect"
     search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{querystring}")
     search_request_json = search_request.json()
     search_id = search_request_json["search_id"]
