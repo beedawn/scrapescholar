@@ -102,7 +102,7 @@ echo -e "ENVIRONMENT=PRODUCTION" >> "$dockerfilepath"
 echo -e "NEXT_PUBLIC_ENVIRONMENT=PRODUCTION">> "$next_js_env"
 if [ "$host_ip" = "localhost" ]; then
 	echo "Running cert gen"
-	sh ./certs/cert_gen.sh
+	sh ./cert_install/cert_gen.sh
 
 else
 	echo "localhost not detected as IP, if serving locally, rerun script with localhost as the IP/domain the application will be served from"

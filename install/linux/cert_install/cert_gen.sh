@@ -34,7 +34,7 @@ fi
 
 # 2. Generate Certificate Signing Request (CSR)
 echo "Generating CSR..."
-openssl req -new -key "$KEY_FILE" -out "$SSL_DIR/localhost.csr" -subj "/C=US/ST=California/L=Los Angeles/O=MyCompany/CN=$SERVER_NAME"
+openssl req -new -key "$KEY_FILE" -out "$SSL_DIR/localhost.csr" -subj "/C=US/ST=Pennsylvania/L=Pittsburgh/O=ScrapeScholar/CN=$SERVER_NAME"
 if [[ $? -ne 0 ]]; then
   echo "Error generating CSR."
   exit 1
@@ -52,8 +52,10 @@ fi
 echo "Self-signed certificate and private key generated successfully!"
 echo "Files generated:"
 echo "  Private Key: $KEY_FILE"
-mkdir ../scrapescholar_docker/nginx_nextjs/certbot/conf/live
-mkdir ../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name
-mv certs/$server_name/fullchain.pem ../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name/fullchain.pem
-mv certs/$server_name/privkey.pem ../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name/privkey.pem
 
+
+mkdir ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live
+mkdir ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name
+mv certs/$server_name/fullchain.pem ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name/fullchain.pem
+mv certs/$server_name/privkey.pem ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name/privkey.pem
+rm -rf certs/
