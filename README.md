@@ -1,6 +1,6 @@
 # ScrapeScholar
 
-To run the front end navigate to client/scrape_scholar_client and run 
+To run the front end navigate to client/scrapescholar_client and run 
 
 ```bash
 npm install
