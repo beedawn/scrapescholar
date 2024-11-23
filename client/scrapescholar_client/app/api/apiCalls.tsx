@@ -1,17 +1,12 @@
 import { NewUser } from "../components/UserManagement/modal/AddUserModal";
 import httpStringGen from "@/app/api/httpString";
+import escapeRegExp from "./escapeRegExp";
 const apiCalls = () => {
 
   const host = escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
   const http_string =httpStringGen();
 
-  function escapeRegExp(str:string|undefined) {
-    if (str ===undefined){
-      return
-    }
-    else
-    return str.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&'); // Escape special characters
-  }
+
 
    interface NewArticle {
     search_id:number,

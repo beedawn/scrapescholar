@@ -3,8 +3,8 @@ import sourcesJson from "../mockData/DatabaseSourcesJson";
 import pastSearchesTitle from "../mockData/pastSearchesTitle";
 import pastSearchesArticles from "../mockData/pastSearchesArticles";
 import httpStringGen from "../../app/api/httpString";
-
-const host_ip = process.env.NEXT_PUBLIC_HOST_IP;
+import escapeRegExp from "@/app/api/escapeRegExp";
+const host_ip = escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
 
 let simulateInsufficientStorage = true;
 let deleteSearch = false;
