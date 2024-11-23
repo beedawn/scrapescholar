@@ -1,7 +1,5 @@
 from fastapi import FastAPI
-
 from fastapi.testclient import TestClient
-from tests.integration.tools.get_cookie import get_cookie
 from app.main import app
 
 client = TestClient(app)

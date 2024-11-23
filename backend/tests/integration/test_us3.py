@@ -1,4 +1,3 @@
-
 from fastapi.testclient import TestClient
 from app.main import app
 from tests.integration.tools.get_cookie import get_cookie
@@ -6,7 +5,6 @@ from tests.integration.tools.base_url import base_url
 
 client = TestClient(app)
 session = get_cookie()
-
 
 
 #UT-3.2
@@ -19,6 +17,7 @@ def test_academic_data_21_keywords():
 
     assert isinstance(message, str)
     assert message == "Too many keywords"
+
 
 #UT-3.3
 def test_academic_data_20_keywords():

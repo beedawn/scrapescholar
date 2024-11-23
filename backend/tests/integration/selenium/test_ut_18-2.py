@@ -1,4 +1,3 @@
-# backend/tests/integration/selenium/test_ut_18-2.py
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -10,10 +9,8 @@ from dotenv import load_dotenv
 import time
 import pytest
 
-# Load environment variables from .env file
 load_dotenv()
 
-# Test credentials for Professor/Admin
 professor_user = os.getenv('TEST_USER')
 professor_pass = os.getenv('TEST_PASSWORD')
 host_ip = os.getenv('HOST_IP')

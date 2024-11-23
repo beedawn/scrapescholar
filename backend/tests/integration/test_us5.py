@@ -1,16 +1,13 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import app
-
-client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
 session = get_cookie()
+client = TestClient(app)
 
 
 #UT-5.2
-
 def test_user_data_slash_update_put():
     searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     searchdata = searchdata.json()

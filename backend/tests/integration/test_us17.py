@@ -20,8 +20,6 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.db.session import get_db, SessionLocal
 
 client = TestClient(app)
-
-
 session = get_cookie()
 
 
@@ -58,7 +56,6 @@ def get_cookie_2():
     for section in cookie_separated:
         if section.startswith('access_token='):
             token_value = section.split('=')[1]
-    # Set a cookie in the session
     session.cookies.set('access_token', token_value)
     return session
 
@@ -67,7 +64,6 @@ def test_user_put(test_db_session):
     user_in = UserCreate(**mock_user_data)
     created_user = create_user(test_db_session, user_in)
     nonadmin_session = get_cookie_2()
-    #have user modify themselves?
     put_request = {
       "username": mock_user_data["username"],
       "email": mock_user_data["email"],
@@ -86,14 +82,6 @@ def test_user_delete(test_db_session):
     user_in = UserCreate(**mock_user_data)
     created_user = create_user(test_db_session, user_in)
     nonadmin_session = get_cookie_2()
-    #have user modify themselves?
-    put_request = {
-      "username": mock_user_data["username"],
-      "email": mock_user_data["email"],
-      "user_id": created_user.user_id,
-      "role_id": 1,
-      "registration_date": "2024-11-07T20:39:36.586Z"
-    }
     response = nonadmin_session.delete(f"{base_url}/users/delete/{created_user.user_id}")
     assert response.status_code == 401
 

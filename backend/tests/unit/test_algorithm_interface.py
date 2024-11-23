@@ -9,10 +9,10 @@ def word_set(tmpdir):
 
 
 def test_algorithm(word_set):
-    score = algorithm_interface.algorithm_interface("hello","hello")
+    score = algorithm_interface.algorithm_interface("hello", "hello")
     assert score == 100
 
 
 def test_algorithm_abstract(word_set):
-    score = algorithm_interface.algorithm_interface("hello","hello","hello")
+    score = algorithm_interface.algorithm_interface("hello", "hello", "hello")
     assert score == 100

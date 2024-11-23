@@ -33,11 +33,9 @@ def test_generate_data(test_db_session: Session):
     search_articles = []
     for item in articles:
         search_articles.append(SearchResult(**item))
-    #join generator into string
     csv_result = ""
     for chunk in csv_generator(search_articles, test_db_session):
         csv_result += chunk
-    #build field names
     fieldnames = build_fieldnames(search_articles)
     #generate csv
     buffer = StringIO()
@@ -61,10 +59,8 @@ def test_csv_filename_in_response():
     search_id = create_search()
     response = session.get(f"{base_url}/download?search_id={search_id}")
     content_disposition = response.headers["Content-Disposition"]
-    #get title
     response = session.get(f"{base_url}/search/user/search/title?search_id={search_id}")
     response = response.json()
     title = response["title"]
-    #compare search title to downloaded filed
     assert f'attachment; filename={title}' in content_disposition
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
