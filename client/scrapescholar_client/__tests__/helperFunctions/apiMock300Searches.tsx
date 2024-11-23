@@ -2,7 +2,7 @@ import itemsJson from "../mockData/ItemsTestJson";
 import sourcesJson from "../mockData/DatabaseSourcesJson";
 import pastSearchesTitle from "../mockData/pastSearchesTitle";
 import pastSearchesArticles from "../mockData/pastSearchesArticles";
-import httpStringGen from "./httpString";
+import httpStringGen from "../../app/api/httpString";
 
 const host_ip = process.env.NEXT_PUBLIC_HOST_IP;
 
