@@ -30,7 +30,7 @@ set OPEN_SSL_EXE=%INSTALL_DIR%\bin\openssl.exe
 
 echo OpenSSL installed and configured successfully.
 set OPEN_SSL_EXE="%INSTALL_DIR%\bin\openssl.exe"
-
+del /f /q OpenSSL-installer.exe
 
 :InstallCompleted
 set server_name=localhost
