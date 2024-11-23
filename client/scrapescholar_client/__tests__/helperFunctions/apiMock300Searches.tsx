@@ -70,7 +70,7 @@ const fetchMock300 = jest.fn((url) => {
 
   }
 
-  const past_search_articles_url = new RegExp(`^${http_string}:\/\/${host_ip}:8000\/search\/user\/articles\?search_id\=`);
+  const past_search_articles_url = new RegExp(`^${http_string}:\/\/${host_ip}:8000\/search\/user\/articles\\?search_id\=`);
 
 
   if (past_search_articles_url.test(url)) {
