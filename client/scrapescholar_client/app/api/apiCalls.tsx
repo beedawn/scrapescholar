@@ -1,9 +1,9 @@
 import { NewUser } from "../components/UserManagement/modal/AddUserModal";
 import httpStringGen from "@/app/api/httpString";
-import escapeRegExp from "./escapeRegExp";
+import _ from 'lodash';
 const apiCalls = () => {
 
-  const host = escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
+  const host = _.escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
   const http_string =httpStringGen();
 
 
