@@ -8,10 +8,10 @@ WORKDIR /app
 COPY ../../backend /app/backend
 
 # Copy the .env file
-COPY docker/.env /app/.env
+COPY scrapescholar_docker/.env /app/.env
 
 # Copy the init_db script to the Docker image
-COPY docker/postgres/init_db.sh /app/init_db.sh
+COPY scrapescholar_docker/postgres/init_db.sh /app/init_db.sh
 
 # Install PostgreSQL client
 RUN apt-get update -o Acquire::http::Timeout=600 && apt-get install -y postgresql-client iputils-ping

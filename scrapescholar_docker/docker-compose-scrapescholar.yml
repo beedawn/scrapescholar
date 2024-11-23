@@ -22,7 +22,7 @@ services:
   init_db:
     build:
       context: ..
-      dockerfile: docker/postgres/Dockerfile
+      dockerfile: scrapescholar_docker/postgres/Dockerfile
     container_name: scrapescholar_init_db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -41,7 +41,7 @@ services:
   scrapescholar_fastapi:
     build:
       context: ..
-      dockerfile: docker/fastapi/Dockerfile
+      dockerfile: scrapescholar_docker/fastapi/Dockerfile
     container_name: scrapescholar_fastapi
     environment:
       DATABASE_URL: ${DATABASE_URL}
@@ -95,7 +95,7 @@ services:
     # image: node:20 
     build:
       context: ../client/scrapescholar_client  
-      dockerfile: ../../docker/nextjs/Dockerfile 
+      dockerfile: ../../scrapescholar_docker/nextjs/Dockerfile 
     working_dir: /app
     volumes:
       - ../client/scrapescholar_client:/app

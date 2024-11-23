@@ -21,7 +21,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          cd docker/
+          cd scrapescholar_docker/
           echo "POSTGRES_USER=${{secrets.POSTGRES_USER}}" >> .env
           echo "POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}" >> .env
           echo "POSTGRES_DB=${{secrets.POSTGRES_DB}}" >> .env
@@ -43,7 +43,7 @@ jobs:
 
       - name: Build and Test with Docker Compose
         run: |
-          docker-compose -f docker/docker-compose-scrapescholar.yml --env-file docker/.env up -d --build
+          docker-compose -f scrapescholar_docker/docker-compose-scrapescholar.yml --env-file scrapescholar_docker/.env up -d --build
 # Test Test ID: UTAR-8.1
       - name: Wait for FastAPI Backend to Be Ready
         run: |
@@ -65,7 +65,7 @@ jobs:
           docker exec container_scrapescholardb psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c 'SELECT * FROM public."Role";'
           # Restart the database container
           echo "Restarting database container..."
-          docker-compose -f docker/docker-compose-scrapescholar.yml restart db
+          docker-compose -f scrapescholar_docker/docker-compose-scrapescholar.yml restart db
           # Query the Role table after restarting
           echo "Checking Role table after restart:"
           docker exec container_scrapescholardb psql -U ${{secrets.POSTGRES_USER}} -d ${{secrets.POSTGRES_DB}} -c 'SELECT * FROM public."Role";'
@@ -78,4 +78,4 @@ jobs:
           curl -X GET http://localhost:8000/users/get/1 || echo "Received expected error (e.g., 403)"
 
       - name: Stop and Remove Containers
-        run: docker-compose -f docker/docker-compose-scrapescholar.yml down
+        run: docker-compose -f scrapescholar_docker/docker-compose-scrapescholar.yml down
