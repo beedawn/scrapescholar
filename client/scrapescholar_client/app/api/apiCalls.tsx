@@ -1,8 +1,9 @@
 import { NewUser } from "../components/UserManagement/modal/AddUserModal";
-
+import httpStringGen from "@/__tests__/helperFunctions/httpString";
 const apiCalls = () => {
 
   const host = process.env.NEXT_PUBLIC_HOST_IP;
+  const http_string =httpStringGen();
 
    interface NewArticle {
     search_id:number,
@@ -16,7 +17,7 @@ const apiCalls = () => {
 }
 
   const getAPIDatabases = async () => {
-    const url = `http://${host}:8000/academic_sources`;
+    const url = `${http_string}://${host}:8000/academic_sources`;
     try {
       const response = await fetch(url, { method: "GET", credentials: "include" });
       if (!response.ok) {
@@ -30,7 +31,7 @@ const apiCalls = () => {
   }
 
   const getAPIDatabasesAndIDs = async () => {
-    const url = `http://${host}:8000/academic_sources_id`;
+    const url = `${http_string}://${host}:8000/academic_sources_id`;
     try {
       const response = await fetch(url, { method: "GET", credentials: "include" });
       if (!response.ok) {
@@ -44,7 +45,7 @@ const apiCalls = () => {
   }
 
   const postAPILogin = async (username: string, password: string) => {
-    const url = `http://${host}:8000/auth/login`;
+    const url = `${http_string}://${host}:8000/auth/login`;
     const formData = new URLSearchParams();
     formData.append('username', username);
     formData.append('password', password);
@@ -87,7 +88,7 @@ const apiCalls = () => {
       setInputs([...filterBlankInputs])
       const apiQuery = inputsAndLogicalOperators.join('%20')
       try {
-        const url = `http://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
+        const url = `${http_string}://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
         data = await fetch(url, { method: "GET", credentials: "include" })
         jsonData = await data.json()
         if (data.status === 507) {
@@ -119,7 +120,7 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
-      const url = `http://${host}:8000/search/user/searches`
+      const url = `${http_string}://${host}:8000/search/user/searches`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
     }
@@ -142,7 +143,7 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
-      const url = `http://${host}:8000/search/user/articles?search_id=${search_id}`
+      const url = `${http_string}://${host}:8000/search/user/articles?search_id=${search_id}`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
  
@@ -169,7 +170,7 @@ const apiCalls = () => {
     let jsonData;
     if (search_id > 0) {
       try {
-        const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
+        const url = `${http_string}://${host}:8000/search/user/search/title?search_id=${search_id}`
         data = await fetch(url, { method: "GET", credentials: "include" })
         jsonData = await data.json()
       }
@@ -213,7 +214,7 @@ const apiCalls = () => {
     setLoading(true);
     try {
 
-      const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
+      const url = `${http_string}://${host}:8000/search/user/search/title?search_id=${search_id}`
       data = await fetch(url, {
         method: "PUT", credentials: "include", headers: {
           'Content-Type': 'application/json'
@@ -243,7 +244,7 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
-      const url = `http://${host}:8000/search/user/search/title?search_id=${search_id}`
+      const url = `${http_string}://${host}:8000/search/user/search/title?search_id=${search_id}`
       data = await fetch(url, {
         method: "DELETE", credentials: "include"
       })
@@ -269,7 +270,7 @@ const apiCalls = () => {
 
     try {
 
-      const url = `http://${host}:8000/user_data/update`
+      const url = `${http_string}://${host}:8000/user_data/update`
       data = await fetch(url, {
         method: "PUT", credentials: "include", headers: {
           'Content-Type': 'application/json'
@@ -298,7 +299,7 @@ const apiCalls = () => {
 
   const getCommentsByArticle = async (articleId: number) => {
     try {
-      const url = `http://${host}:8000/comment/article/${articleId}/comments`;
+      const url = `${http_string}://${host}:8000/comment/article/${articleId}/comments`;
       const response = await fetch(url, { method: "GET", credentials: "include" });
       if (!response.ok) {
         throw new Error(`Error fetching comments for article ${articleId}: ${response.statusText}`);
@@ -314,7 +315,7 @@ const apiCalls = () => {
   // Add a new comment
   const addComment = async (articleId: number, commentText: string) => {
     try {
-        const url = `http://${host}:8000/comment/article/${articleId}`;
+        const url = `${http_string}://${host}:8000/comment/article/${articleId}`;
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'include',
@@ -341,7 +342,7 @@ const apiCalls = () => {
   // Edit an existing comment
   const editComment = async (commentId: number, updatedText: string) => {
     try {
-      const url = `http://${host}:8000/comment/${commentId}`;
+      const url = `${http_string}://${host}:8000/comment/${commentId}`;
       const response = await fetch(url, {
         method: 'PUT',
         credentials: 'include',
@@ -368,7 +369,7 @@ const apiCalls = () => {
   // Delete an existing comment
   const deleteComment = async (commentId: number) => {
     try {
-      const url = `http://${host}:8000/comment/${commentId}`;
+      const url = `${http_string}://${host}:8000/comment/${commentId}`;
       const response = await fetch(url, {
         method: 'DELETE',
         credentials: 'include',
@@ -392,7 +393,7 @@ const apiCalls = () => {
     let jsonData
 
     try {
-      const url = `http://${host}:8000/auth/get_cookie`
+      const url = `${http_string}://${host}:8000/auth/get_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
       return jsonData;
@@ -411,7 +412,7 @@ const apiCalls = () => {
     let textData
 
     try {
-      const url = `http://${host}:8000/auth/is_admin`
+      const url = `${http_string}://${host}:8000/auth/is_admin`
       data = await fetch(url, { method: "GET", credentials: "include" })
       textData = await data.text()
       return textData;
@@ -429,7 +430,7 @@ const apiCalls = () => {
     let jsonData
 
     try {
-      const url = `http://${host}:8000/auth/remove_cookie`
+      const url = `${http_string}://${host}:8000/auth/remove_cookie`
       data = await fetch(url, { method: "GET", credentials: "include" })
       jsonData = await data.json()
       return jsonData;
@@ -465,7 +466,7 @@ const apiCalls = () => {
      //maybe different loading?
     // setLoading(true);
     try {
-      const url = `http://${host}:8000/search/share?search_id=${search_id}&share_user=${shared_with_user}`
+      const url = `${http_string}://${host}:8000/search/share?search_id=${search_id}&share_user=${shared_with_user}`
       data = await fetch(url, {
         method: "PUT", credentials: "include", headers: {
           'Content-Type': 'application/json'
@@ -488,12 +489,12 @@ const apiCalls = () => {
     // setLoading(false)
   }
 
-  const downloadURL= `http://${host}:8000/download?search_id=`
+  const downloadURL= `${http_string}://${host}:8000/download?search_id=`
 
 
   const addUser = async ( userBody: NewUser) => {
     try {
-        const url = `http://${host}:8000/users/create`;
+        const url = `${http_string}://${host}:8000/users/create`;
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'include',
@@ -518,7 +519,7 @@ const apiCalls = () => {
   }
 
   const getUsers = async () => {
-    const url = `http://${host}:8000/users/get`;
+    const url = `${http_string}://${host}:8000/users/get`;
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -542,7 +543,7 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
-      const url = `http://${host}:8000/users/delete/${user_id}`
+      const url = `${http_string}://${host}:8000/users/delete/${user_id}`
       data = await fetch(url, {
         method: "DELETE", credentials: "include"
       })
@@ -556,7 +557,7 @@ const apiCalls = () => {
   }
 
   const updateUserRole = async (userId: number, newRole: string) => {
-    const url = `http://${host}:8000/users/update-role/${userId}`;
+    const url = `${http_string}://${host}:8000/users/update-role/${userId}`;
     try {
       const response = await fetch(url, {
         method: 'PUT',
@@ -579,7 +580,7 @@ const apiCalls = () => {
 
   const addArticle = async ( articleBody:NewArticle) => {
     try {
-        const url = `http://${host}:8000/article`;
+        const url = `${http_string}://${host}:8000/article`;
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'include',
@@ -608,7 +609,7 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     try {
-      const url = `http://${host}:8000/article/${article_id}`
+      const url = `${http_string}://${host}:8000/article/${article_id}`
       data = await fetch(url, {
         method: "DELETE", credentials: "include"
       })
