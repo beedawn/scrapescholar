@@ -2,13 +2,16 @@ import itemsJson from "../mockData/ItemsTestJson";
 import sourcesJson from "../mockData/DatabaseSourcesJson";
 import pastSearchesTitle from "../mockData/pastSearchesTitle";
 import pastSearchesArticles from "../mockData/pastSearchesArticles";
-
-const host_ip = process.env.NEXT_PUBLIC_HOST_IP;
+import httpStringGen from "../../app/api/httpString";
+import _ from "lodash";
+const host_ip = _.escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
 
 let simulateInsufficientStorage = true;
 let deleteSearch = false;
 const fetchMock300 = jest.fn((url) => {
-  const academic_database_url = /^http:\/\/0.0.0.0:8000\/academic_data\?keywords\=/
+  const http_string=httpStringGen();
+  const academic_database_url = new RegExp(`^${http_string}:\/\/${host_ip}:8000\/academic_data\\?keywords\\=`)
+
   if (academic_database_url.test(url)) {
     if (simulateInsufficientStorage) {
       return Promise.resolve({
@@ -34,7 +37,8 @@ const fetchMock300 = jest.fn((url) => {
     })
   }
 
-  const academic_sources_url = /^http:\/\/0.0.0.0:8000\/academic_sources/
+  const academic_sources_url = new RegExp(`^${http_string}:\/\/${host_ip}:8000\/academic_sources`)
+
   if (academic_sources_url.test(url)) {
     return Promise.resolve({
       ok: true,
@@ -47,7 +51,8 @@ const fetchMock300 = jest.fn((url) => {
     });
   }
 
-  const past_search_title_url = /^http:\/\/0.0.0.0:8000\/search\/user\/search\/title\?search_id\=/
+  const past_search_title_url = new RegExp(`^${http_string}:\/\/${host_ip}:8000\/search\/user\/search\/title\\?search_id\\=`);
+
   const response = {
     "title": itemsJson.articles[0].title,
     "keywords": ["test input"]
@@ -65,7 +70,8 @@ const fetchMock300 = jest.fn((url) => {
 
   }
 
-  const past_search_articles_url = /^http:\/\/0.0.0.0:8000\/search\/user\/articles\?search_id\=/
+  const past_search_articles_url = new RegExp(`^${http_string}:\/\/${host_ip}:8000\/search\/user\/articles\\?search_id\=`);
+
 
   if (past_search_articles_url.test(url)) {
     return Promise.resolve({
@@ -78,7 +84,8 @@ const fetchMock300 = jest.fn((url) => {
     });
   }
 
-  const past_searches_url = /^http:\/\/0.0.0.0:8000\/search\/user\/searches/
+  const past_searches_url = new RegExp(`^${http_string}:\/\/${host_ip}:8000\/search\/user\/searches`);
+
 
   if (past_searches_url.test(url)) {
     if (simulateInsufficientStorage) {

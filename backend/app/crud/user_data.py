@@ -1,4 +1,3 @@
-# app/crud/user_data.py
 from sqlalchemy.orm import Session
 from app.models.user_data import UserData
 from app.models.role import Role

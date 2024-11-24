@@ -1,4 +1,3 @@
-# app/crud/searchkeyword.py
 from sqlalchemy.orm import Session
 from app.models.searchkeyword import SearchKeyword
 from app.schemas.searchkeyword import SearchKeywordCreate

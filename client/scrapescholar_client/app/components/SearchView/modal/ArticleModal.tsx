@@ -15,21 +15,20 @@ enum DocumentType {
 
 enum Source {
     None,
-
-    Scopus=1,
-    ScienceDirect=2,
-    Other=3
+    Scopus = 1,
+    ScienceDirect = 2,
+    Other = 3
 }
 
 interface AddArticleModalProps {
     addArticleView: () => void;
-    search_id:number;
+    search_id: number;
     handlePastSearchSelectionSearchID:
-    (search_id:number) => void;
+    (search_id: number) => void;
 }
 
 export interface NewArticle {
-    search_id:number,
+    search_id: number,
     title: string,
     date: Date,
     citedby: string,
@@ -52,8 +51,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
         addArticleView();
     }
     const [databases, setDatabases] = useState<DatabaseItem[]>([])
-    const [startDate, setStartDate] = useState<Date| null>(new Date());
-
+    const [startDate, setStartDate] = useState<Date | null>(new Date());
     useEffect(() => {
         const fetchDatabases = async () => {
             const db_list = await getAPIDatabasesAndIDs();
@@ -63,23 +61,22 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
     }, []);
 
 
-    const blankArticle:NewArticle = {
-        search_id:search_id,
+    const blankArticle: NewArticle = {
+        search_id: search_id,
         title: "",
         date: new Date(),
         citedby: "",
         document_type: "",
         source_id: 0,
-        abstract:"",
-        link:""
+        abstract: "",
+        link: ""
     }
 
     const [newArticle, setNewArticle] = useState<NewArticle>(blankArticle);
     const [error, setError] = useState<boolean>(false);
 
-
     const updateArticleState = (item: any, value: any) => {
-        const sanitizedValue =  DOMPurify.sanitize(value);
+        const sanitizedValue = DOMPurify.sanitize(value);
         setNewArticle((prevState) => ({
             ...prevState,
             [item]: sanitizedValue
@@ -88,17 +85,13 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
 
     const submitArticle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (newArticle.title.length == 0 || newArticle.date == null || newArticle.citedby.length == 0 || newArticle.source_id ==0||newArticle.document_type.length == 0) {
+        if (newArticle.title.length == 0 || newArticle.date == null || newArticle.citedby.length == 0 || newArticle.source_id == 0 || newArticle.document_type.length == 0) {
             setError(true);
-           
-           
         } else {
-            const dateArticle = {...newArticle, "date":new Date(newArticle.date).toISOString().slice(0, 10), "citedby": parseInt(newArticle.citedby)}
+            const dateArticle = { ...newArticle, "date": new Date(newArticle.date).toISOString().slice(0, 10), "citedby": parseInt(newArticle.citedby) }
             const response = await addArticle(dateArticle);
-            // have articles reload?
             handlePastSearchSelectionSearchID(search_id)
             setNewArticle(blankArticle)
-         
             if (response === null) {
                 setError(true)
                 return
@@ -146,11 +139,10 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
         }
     }
 
-    const [linkValidationError,setLinkValidationError]=useState<string>('');
+    const [linkValidationError, setLinkValidationError] = useState<string>('');
 
     return (
         <div>
-
             <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                 <form onSubmit={(e) => { submitArticle(e) }}>
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -185,40 +177,38 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                             data-testid="new_article_title" />
                                     </div>
                                 </div>
-
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                     <div>URL</div>
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
                                         <input className="border rounded border-slate-800 text-center p-2"
-                                            placeholder="Link" value={newArticle.link} onClick={() => {clearErrorSuccessMsg() }} onChange={(e) => {
-                                                if(!e.target.value.startsWith("http://")&& !e.target.value.startsWith("https://")){
+                                            placeholder="Link" value={newArticle.link} onClick={() => { clearErrorSuccessMsg() }} onChange={(e) => {
+                                                if (!e.target.value.startsWith("http://") && !e.target.value.startsWith("https://")) {
                                                     setLinkValidationError("Link must begin with http:// or https://")
                                                 }
-                                                else{
+                                                else {
                                                     setLinkValidationError("")
                                                 }
                                                 updateArticleState("link", e.target.value)
                                             }}
                                             data-testid="new_article_link" />
-                                           
                                     </div>
-                                  
                                 </div>
                                 <div className="text-red-600 text-center">
-                                            {linkValidationError.length>0?<>{linkValidationError}</>:<></>}
-                                            </div>
+                                    {linkValidationError.length > 0 ? <>{linkValidationError}</> : <></>}
+                                </div>
                                 <div className="flex   w-full justify-center items-center text-center">
                                     <div className="flex flex-col items-center bg-gray-50 p-2 ">
                                         <label className="text-black mb-1 ">Date</label>
-                                        <DatePicker className="w-20" selected={startDate} onChange={(date) => {setStartDate(date); updateArticleState("date", date)}} />
+                                        <DatePicker className="w-20" selected={startDate} onChange={(date) => {
+                                            setStartDate(date); updateArticleState("date", date)
+                                        }} />
                                     </div>
-
                                     <div className="flex flex-col items-center bg-gray-50 p-2">
                                         <label className="text-black mb-1">Cited By</label>
                                         <input
-                                        type="number"
+                                            type="number"
                                             className="border w-14 rounded border-slate-800 text-center p-2"
                                             placeholder="Cited By"
                                             value={newArticle.citedby}
@@ -228,7 +218,6 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                         />
                                     </div>
                                 </div>
-
                                 <div className="bg-gray-50 px-2 py-1 flex  justify-center items-center text-black">
                                     <div>Abstract</div>
                                 </div>
@@ -244,7 +233,6 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                         />
                                     </div>
                                 </div>
-
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
                                         <DropdownSearchBox
@@ -258,14 +246,15 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                             data-testid="new_article_document_type" />
                                     </div>
                                 </div>
-
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <DropdownSearchBox value={Source[newArticle.source_id]} valueArray={databases.map((db) => db.name)} onDropdownChange={dropdownSourceChange} defaultValue="Source"
+                                        <DropdownSearchBox value={Source[newArticle.source_id]}
+                                            valueArray={databases.map((db) => db.name)}
+                                            onDropdownChange={dropdownSourceChange}
+                                            defaultValue="Source"
                                             data-testid="new_user_role" />
                                     </div>
                                 </div>
-
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div className="text-black">
                                         {error ? <div className="text-red-600">Error, please try again.</div> : <></>}
@@ -273,7 +262,7 @@ const AddArticleModal: React.FC<AddArticleModalProps> = ({ addArticleView, searc
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex justify-center items-center">
                                     <div>
-                                        <Button type="submit" onClick={() => {submitArticle }} data-testid="add_article_submit">Submit</Button>
+                                        <Button type="submit" onClick={() => { submitArticle }} data-testid="add_article_submit">Submit</Button>
                                     </div>
                                 </div>
                             </div>

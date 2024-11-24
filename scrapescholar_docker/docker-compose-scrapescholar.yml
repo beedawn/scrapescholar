@@ -1,0 +1,132 @@
+services:
+  db:
+    image: postgres:14
+    container_name: scrapescholar_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d","${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - scrapescholar_net
+
+  init_db:
+    build:
+      context: ..
+      dockerfile: scrapescholar_docker/postgres/Dockerfile
+    container_name: scrapescholar_init_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SERVER: ${POSTGRES_SERVER}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      DATABASE_URL: ${DATABASE_URL}
+    entrypoint: ["/app/init_db.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - scrapescholar_net
+
+  scrapescholar_fastapi:
+    build:
+      context: ..
+      dockerfile: scrapescholar_docker/fastapi/Dockerfile
+    container_name: scrapescholar_fastapi
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      SCIENCEDIRECT_APIKEY: ${SCIENCEDIRECT_APIKEY}
+      SCOPUS_APIKEY: ${SCOPUS_APIKEY}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SERVER: db
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      HOST_IP: ${HOST_IP}
+      ENVIRONMENT: ${ENVIRONMENT}
+    volumes:
+      - ./fastapi/start_fastapi.sh:/docker-entrypoint.d/start_fastapi.sh
+      - ./nginx_nextjs/certbot/conf/:/etc/nginx/ssl/:ro
+    ports:
+      - "8000:8000"
+    entrypoint: ["/bin/sh", "-c", "chmod +x /docker-entrypoint.d/start_fastapi.sh && /docker-entrypoint.d/start_fastapi.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - scrapescholar_net
+  
+  scrapescholar_nginx:
+    image: nginx
+    volumes:
+      - ./nginx_nextjs/templates:/etc/nginx/templates
+      - ./nginx_nextjs/default.conf:/etc/nginx/default.conf
+      - ./nginx_nextjs/start_nginx.sh:/docker-entrypoint.d/start_nginx.sh
+      - ./nginx_nextjs/certbot/conf/:/etc/nginx/ssl/:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_HOST=${HOST_IP}
+      # - NGINX_PORT=80
+      - ENVIRONMENT=${ENVIRONMENT}
+    depends_on:
+      scrapescholar_nextjs:
+        condition: service_healthy
+      #need to chmod +x start_nginx.sh
+    entrypoint: ["/bin/sh", "-c", "chmod +x /docker-entrypoint.d/start_nginx.sh && /docker-entrypoint.d/start_nginx.sh"]
+    networks:
+      - scrapescholar_net
+
+  scrapescholar_certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./nginx_nextjs/certbot/www/:/var/www/certbot/:rw
+      - ./nginx_nextjs/certbot/conf/:/etc/letsencrypt/:rw
+    networks:
+      - scrapescholar_net
+
+  scrapescholar_nextjs:
+    # image: node:20 
+    build:
+      context: ../client/scrapescholar_client  
+      dockerfile: ../../scrapescholar_docker/nextjs/Dockerfile 
+    working_dir: /app
+    volumes:
+      - ../client/scrapescholar_client:/app
+
+    #only need if you want to expose port 3000 and bypass nginx proxy
+    #ports:
+      #- "3000:3000"
+  
+    command: >
+      sh -c "npm install && npm run dev -- --hostname 0.0.0.0"
+    environment:
+      - NODE_ENV=development  # "production" for production builds
+    networks:
+      - scrapescholar_net
+    healthcheck:
+      test: ["CMD", "curl", "--silent", "--fail", "http://localhost:3000/"]
+      interval: 60s
+      retries: 10
+      timeout: 5s
+      start_period: 60s
+
+networks:
+  scrapescholar_net:
+    driver: bridge
+
+volumes:
+  db_data:

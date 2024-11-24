@@ -1,5 +1,3 @@
-# tests/integration/test_article_endpoint.py
-import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 from app.db.session import get_db, SessionLocal
@@ -37,10 +35,8 @@ mock_article_data = {
 
 def test_create_article():
 
-    # Step 5: Create a search and get the search ID
     search_id = create_search()
 
-    # Step 6: Create an article with dynamic search_id and user_id
     mock_article_data = {
         "title": "Test Article",
         "date": "2024-10-11",
@@ -51,7 +47,7 @@ def test_create_article():
         "citedby": 100,
         "document_type": "Journal",
         "source_id": 1,
-        "search_id": search_id  # Use dynamic search_id
+        "search_id": search_id
     }
 
     response = session.post(f"{base_url}/article", json=mock_article_data)
@@ -63,22 +59,15 @@ def test_create_article():
 
 
 def test_get_article():
-
-
-    # First, create a search and get the search ID
-    # Step 5: Create a search and get the search ID
     search_id = create_search()
 
-    # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
     mock_article_data_dynamic["search_id"] = search_id
 
-    # First, create the article
     response = session.post(f"{base_url}/article/", json=mock_article_data_dynamic)
     assert response.status_code == 201
     article_id = response.json()["article_id"]
 
-    # Fetch the article by ID
     response = session.get(f"{base_url}/article/{article_id}")
     assert response.status_code == 200
     assert response.json()["title"] == mock_article_data_dynamic["title"]
@@ -86,22 +75,15 @@ def test_get_article():
 
 
 def test_delete_article():
-
-
-    # First, create a search and get the search ID
-    # Step 5: Create a search and get the search ID
     search_id = create_search()
 
-    # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
     mock_article_data_dynamic["search_id"] = search_id
 
-    # First, create the article
     response = session.post(f"{base_url}/article/", json=mock_article_data_dynamic)
     assert response.status_code == 201
     article_id = response.json()["article_id"]
 
-    # Delete the article
     response = session.delete(f"{base_url}/article/{article_id}")
     assert response.status_code == 204
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
@@ -109,20 +91,15 @@ def test_delete_article():
 
 def test_update_article():
 
-    # First, create a search and get the search ID
-    # Step 5: Create a search and get the search ID
     search_id = create_search()
 
-    # Create the article with dynamic search_id and user_id
     mock_article_data_dynamic = mock_article_data.copy()
     mock_article_data_dynamic["search_id"] = search_id
 
-    # First, create the article
     response = session.post(f"{base_url}/article/", json=mock_article_data_dynamic)
     assert response.status_code == 201
     article_id = response.json()["article_id"]
 
-    # Update the article
     updated_data = {"title": "Updated Test Article"}
     response = session.put(f"{base_url}/article/{article_id}", json=updated_data)
     assert response.status_code == 200

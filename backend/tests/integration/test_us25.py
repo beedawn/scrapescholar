@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import app
-
-client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
 session = get_cookie()
+client = TestClient(app)
 
 
 #UT-5.2
@@ -37,6 +36,5 @@ def test_user_data_slash_update_put():
     data = response.json()
     new_relevance_score = data[0]["relevance_score"]
     assert article_relevance_score == new_relevance_score
-
 
     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")

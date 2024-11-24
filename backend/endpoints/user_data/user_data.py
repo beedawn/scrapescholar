@@ -1,4 +1,3 @@
-# endpoints/user_data/user_data.py
 from fastapi import APIRouter, Depends, HTTPException, Cookie
 from sqlalchemy.orm import Session
 from app.schemas.user_data import UserDataRead, UserDataUpdate
@@ -16,7 +15,7 @@ async def update_existing_user_data(
         access_token: str = Cookie(None)
 ):
     user = get_current_user_modular(token=access_token, db=db)
-    user_role = user.role.role_name  # Extract the role name
+    user_role = user.role.role_name
     if user_data.evaluation_criteria is not None and user_role != "Professor":
         raise HTTPException(status_code=403, detail="Only professors can edit evaluation criteria")
     updated_user_data = await update_user_data(db=db, user_data=user_data, user_role=user_role,

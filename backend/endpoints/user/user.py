@@ -1,5 +1,3 @@
-# user/user.py
-
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
 from sqlalchemy.orm import Session
 from app.schemas.user import UserCreate, UserUpdate, UserRead
@@ -17,7 +15,6 @@ from pydantic import BaseModel
 
 load_dotenv()
 
-# Load environment variable for encryption key
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 
 fernet = Fernet(ENCRYPTION_KEY)
@@ -36,7 +33,7 @@ class RoleUpdateRequest(BaseModel):
 @router.put("/update-role/{user_id}", response_model=UserRead)
 def update_user_role(
         user_id: int,
-        role_request: RoleUpdateRequest,  # Use RoleUpdateRequest as the request body
+        role_request: RoleUpdateRequest,
         access_token: Annotated[str | None, Cookie()] = None,
         db: Session = Depends(get_db)
 ):

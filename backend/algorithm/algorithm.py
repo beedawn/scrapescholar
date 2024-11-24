@@ -106,7 +106,7 @@ def algorithm(text, keywords):
     for keyword in keyword_list:
         synonyms_list.update(api_request(keyword))
         break_word_into_possible_words(keyword, keywords_sliced_list)
-    #flatten synonyms list since its not flat
+
     synonyms_list = flatten_list(synonyms_list)
     for synonym in synonyms_list:
         break_word_into_possible_words(synonym, synonyms_sliced_list)

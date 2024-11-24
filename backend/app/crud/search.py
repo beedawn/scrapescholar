@@ -1,4 +1,3 @@
-# app/crud/search.py
 from sqlalchemy.orm import Session
 from app.models.search import Search
 from app.schemas.search import SearchCreate, SearchUpdate

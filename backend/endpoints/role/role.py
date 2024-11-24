@@ -1,4 +1,3 @@
-# backend/endpoints/role/role.py
 from fastapi import APIRouter, Depends, status, Cookie, HTTPException
 from sqlalchemy.orm import Session
 from typing import List

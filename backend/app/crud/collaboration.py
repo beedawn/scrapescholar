@@ -1,4 +1,3 @@
-# app/crud/collaboration.py
 from sqlalchemy.orm import Session
 from app.models.collaboration import Collaboration
 from app.schemas.collaboration import CollaborationCreate

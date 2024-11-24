@@ -1,4 +1,3 @@
-# search/search.py
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie, Query, Body
 from app.db.session import get_db
 from app.models.search import Search
@@ -46,7 +45,6 @@ def get_last_300_searches(db: Session = Depends(get_db), access_token: Annotated
     return searches if searches else []
 
 
-#create search share
 @router.put("/share", status_code=status.HTTP_200_OK)
 def put_search_share(db: Session = Depends(get_db), access_token: Annotated[str | None, Cookie()] = None,
                      search_id: int = Query(None, description="ID of the specific search to retrieve"),
@@ -204,7 +202,6 @@ def get_shared_searches(db, current_user):
 
 
 def check_if_user_exceeded_search_amount(db: Session, current_user: User):
-    #check if there are 300 searches if there are return true
     existing_searches = get_300_search(db=db, current_user=current_user)
     if len(existing_searches) >= 300:
         print("amount exceeded!")

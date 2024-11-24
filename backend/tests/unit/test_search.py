@@ -1,2 +1,0 @@
-#need to test search.py and ensure it does not let user add searches after search amount hits 300,
-#need to test happy paths, when user is under 300 searches that it does add the search and related articles to the db

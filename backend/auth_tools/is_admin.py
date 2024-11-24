@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie
+from fastapi import Depends, Cookie
 from auth_tools.get_user import get_current_user_modular
 from sqlalchemy.orm import Session
 from app.db.session import get_db

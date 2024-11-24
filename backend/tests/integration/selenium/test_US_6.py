@@ -11,7 +11,7 @@ from tests.integration.tools.get_cookie import get_cookie
 from app.crud.search import get_search_by_title, delete_search
 from app.crud.user_data import delete_user_data_by_article
 from app.crud.article import get_article_by_search_id, delete_article
-from app.db.session import get_db, SessionLocal
+from app.db.session import SessionLocal
 
 load_dotenv()
 

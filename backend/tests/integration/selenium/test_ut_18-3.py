@@ -1,7 +1,5 @@
-# backend/tests/integration/selenium/test_ut_18-3.py
 import os
 import pytest
-from sqlalchemy.orm import Session
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -40,7 +38,6 @@ def setup_grad_student():
         yield created_user
 
     finally:
-        # Clean up: Delete the Graduate Student user after the test
         user = get_user_by_username(db, grad_student_user)
         if user:
             delete_user(db, user.user_id)

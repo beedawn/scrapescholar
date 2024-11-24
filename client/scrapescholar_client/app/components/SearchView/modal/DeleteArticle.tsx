@@ -7,25 +7,22 @@ interface DeleteArticleModalProps {
     setDeleteArticleModalActive: (item: boolean) => void;
     articleToDelete: ResultItem;
     handlePastSearchSelectionSearchID:
-    (search_id:number) => void;
-    currentSearchID:number;
+    (search_id: number) => void;
+    currentSearchID: number;
 }
-
 const { deleteArticleAPI } = apiCalls();
 
-const DeleteArticleModal: React.FC<DeleteArticleModalProps> = ({ setDeleteArticleModalActive, articleToDelete, handlePastSearchSelectionSearchID, currentSearchID }) => {
+const DeleteArticleModal: React.FC<DeleteArticleModalProps> = ({ setDeleteArticleModalActive, 
+    articleToDelete, handlePastSearchSelectionSearchID, currentSearchID }) => {
     const clearModal = () => {
         setDeleteArticleModalActive(false);
     }
-
     const submitDelete = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await deleteArticleAPI(articleToDelete.article_id)
         handlePastSearchSelectionSearchID(currentSearchID)
-        // refresh results?
         clearModal()
     }
-console.log(currentSearchID)
     return (
         <div>
             <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -60,7 +57,12 @@ console.log(currentSearchID)
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                     <div>
-                                        <Button type="submit" className="bg-red-600" onClick={() => { }}>Delete</Button>   <Button className="bg-stone-500 border" onClick={() => { clearModal() }}>Cancel</Button>
+                                        <Button type="submit" className="bg-red-600">
+                                            Delete
+                                        </Button>
+                                        <Button className="bg-stone-500 border" onClick={() => { clearModal() }}>
+                                            Cancel
+                                        </Button>
                                     </div>
                                 </div>
                             </div>

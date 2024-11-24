@@ -31,7 +31,8 @@ const DataFull: React.FC<DataFullProps> =
                 </p>
                 <div className={"flex flex-wrap-reverse"}>
                     <div className={"float-left flex-none"}>
-                        <select name="searches" id="searches" multiple style={{ color: "black" }} size={25} value={selectedValue} onChange={handleSelectChange} data-testid="datafull_select">
+                        <select name="searches" id="searches" multiple style={{ color: "black" }} size={25} 
+                        value={selectedValue} onChange={handleSelectChange} data-testid="datafull_select">
                             {searches.map((item, index) => (<option key={index} value={item.search_id} >{item.title}</option>))}
                         </select>
                     </div>

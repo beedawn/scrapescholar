@@ -1,4 +1,3 @@
-# app/models/search.py
 from sqlalchemy import Column, Integer, String, TIMESTAMP, ARRAY, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.session import Base

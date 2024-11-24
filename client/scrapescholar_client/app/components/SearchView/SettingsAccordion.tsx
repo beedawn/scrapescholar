@@ -4,11 +4,11 @@ import apiCalls from '@/app/api/apiCalls';
 interface SettingsAccordionProps {
     setOpenUserManagement: (item: boolean) => void;
     setDataFull: (item: boolean) => void;
-    clearPages:()=>void;
-    setOpenMenu:(item:boolean)=>void;
+    clearPages: () => void;
+    setOpenMenu: (item: boolean) => void;
 }
 
-const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull,clearPages, setOpenMenu }) => {
+const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull, clearPages, setOpenMenu }) => {
     const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
     const { isAdmin } = apiCalls();
     useEffect(() => {
@@ -20,28 +20,23 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
         }
         findAdmin();
     }, [])
-
-    const [hoveredClasses, setHoveredClasses] = useState<any>({ 1: "text-blue-400 underline", 2: "text-blue-400 underline" , 3:"text-blue-400 underline" });
+    const [hoveredClasses, setHoveredClasses] = useState<any>({ 1: "text-blue-400 underline", 2: "text-blue-400 underline", 3: "text-blue-400 underline" });
     const updateHovered = (key: number) => {
         setHoveredClasses((prevState: any) => ({
             ...prevState,
             [key]: "text-blue-200 underline",
         }));
     }
-
     const removeHovered = (key: number) => {
         setHoveredClasses((prevState: any) => ({
             ...prevState,
             [key]: "text-blue-400 underline",
         }));
     }
-    const clearLocalPages = () =>{
+    const clearLocalPages = () => {
         clearPages();
         setOpenMenu(false);
-
-
     }
-
     const [openIndex, setOpenIndex] = useState(null);
     const toggleAccordion = (index: any) => {
         setOpenIndex(openIndex === index ? null : index);
@@ -73,7 +68,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                     aria-labelledby={`accordion-color-heading-${index + 1}`}>
                     <div className="pl-5 dark:border-gray-700">
                         {isAdminUser ? <div key="1"  >
-                            <a href="#" onClick={() => { clearLocalPages();setOpenUserManagement(true); }}
+                            <a href="#" onClick={() => { clearLocalPages(); setOpenUserManagement(true); }}
                                 onMouseEnter={() => { updateHovered(1) }}
                                 onMouseLeave={() => { removeHovered(1) }}
                                 className={hoveredClasses[1]}
@@ -88,7 +83,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                                 API Keys
                             </a>
                         </div>
-                        <div key="3" onClick={() => {clearLocalPages();setDataFull(true)}}  >
+                        <div key="3" onClick={() => { clearLocalPages(); setDataFull(true) }}  >
                             <a href="#" onMouseEnter={() => { updateHovered(3) }}
                                 onMouseLeave={() => { removeHovered(3) }}
                                 className={hoveredClasses[3]}>

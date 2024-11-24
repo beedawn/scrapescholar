@@ -1,5 +1,3 @@
-# app/models/articlescore.py
-
 from sqlalchemy import Column, Integer, ForeignKey, Float, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime

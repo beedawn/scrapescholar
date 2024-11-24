@@ -1,9 +1,7 @@
-# endpoints/comment/comment.py
 from fastapi import APIRouter, HTTPException, Depends, Header, Cookie
 from sqlalchemy.orm import Session
-from typing import List
 from app.crud.comment import create_comment, update_comment, delete_comment, get_comments_by_article, get_comment
-from app.schemas.comment import CommentCreate, CommentUpdate, Comment
+from app.schemas.comment import CommentCreate, CommentUpdate
 from app.db.session import get_db
 
 from auth_tools.get_user import get_current_user_modular
@@ -59,8 +57,7 @@ async def update_existing_comment(
 async def remove_comment(
         comment_id: int,
         db: Session = Depends(get_db),
-        access_token: str = Cookie(None),
-        authorization: str = Header(None)
+        access_token: str = Cookie(None)
 ):
     current_user = get_current_user_modular(db=db, token=access_token)
 

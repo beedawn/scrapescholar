@@ -1,14 +1,13 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import app
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
 session = get_cookie()
-#UT-23.1
 client = TestClient(app)
 
 
+#UT-23.1
 def test_user_data_slash_update_put_valid_body():
     searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
     searchdata = searchdata.json()
@@ -37,9 +36,8 @@ def test_user_data_slash_update_put_valid_body():
             assert item["transparency"] == 1
             assert item["completeness"] == 1
 
-
-    putrequest=putrequest.json()
-    assert putrequest['user_id']== 1
+    putrequest = putrequest.json()
+    assert putrequest['user_id'] == 1
     assert isinstance(putrequest['article_id'], int)
     assert putrequest['article_id'] == article['article_id']
     assert putrequest['relevancy_color'] == 'Not Relevant'
@@ -67,8 +65,6 @@ def test_user_data_slash_update_put_no_cookie():
     }
     putrequest = client.put(f"{base_url}/user_data/update", json=data)
     assert putrequest.status_code == 401
-    # response = session.get(f"{base_url}/search/user/articles?search_id=1")
-    # assert response.status_code == 200
     data = putrequest.json()
 
     assert data["detail"] == "Invalid token"
@@ -84,8 +80,6 @@ def test_user_data_slash_update_put_invalid_body():
     }
     putrequest = session.put(f"{base_url}/user_data/update", json=data)
     assert putrequest.status_code == 422
-    # response = session.get(f"{base_url}/search/user/articles?search_id=1")
-    # assert response.status_code == 200
     data = putrequest.json()
 
     assert isinstance(data["detail"], list)

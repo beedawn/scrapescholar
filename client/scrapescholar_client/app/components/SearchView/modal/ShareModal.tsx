@@ -40,7 +40,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ setShareModalActive, search_id 
                                             </button>
                                         </div>
                                     </div>
-
                                     <div className="mt-2">
                                         <p className="text-sm text-gray-500 text-center">
                                             Please enter a username, or email address of the user you would like to share your search with

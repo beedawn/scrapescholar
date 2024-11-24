@@ -7,8 +7,8 @@ interface ButtonProps {
   type?: any;
 }
 
-const Button: React.FC<ButtonProps> = ({ 
-  children, onClick, className, type = 'button' 
+const Button: React.FC<ButtonProps> = ({
+  children, onClick, className, type = 'button'
 }) => {
   return (
     <button

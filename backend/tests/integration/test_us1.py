@@ -1,13 +1,11 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.main import app
-
-
-client = TestClient(app)
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 
+client = TestClient(app)
 session = get_cookie()
+
 
 #UT-1.2
 # does not work consistently as this test is entirely dependent on Scopus and ScienceDirect results, which can change
@@ -23,7 +21,6 @@ session = get_cookie()
 #     assert found_word == True
 #     search_id = searchdata["search_id"]
 #     session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
-
 
 
 def test_user_data_slash_relevant_results_casing():
@@ -58,9 +55,7 @@ def test_user_data_slash_relevant_results_casing():
                 "source": item["source"],
                 "evaluation_criteria": item["evaluation_criteria"],
                 "color": item["color"],
-
             }
-
             )
     assert searchdata_noid == searchdata_caps_noid
     search_id = searchdata["search_id"]

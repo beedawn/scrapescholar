@@ -1,4 +1,3 @@
-# app/models/searchkeyword.py
 from sqlalchemy import Column, Integer, ForeignKey
 from app.db.session import Base
 

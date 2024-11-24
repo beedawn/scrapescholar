@@ -23,7 +23,6 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
         encoded_keywords = quote(keywords)
         subject = quote(subject)
         min_year = quote(min_year)
-        # Other Parameters
         http_accept = "application/json"
         view = "COMPLETE"  # Note: COMPLETE view is needed to view abstract
         today = datetime.date.today()
@@ -32,7 +31,6 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
         count = "25"
         sort = "relevancy"
         insttoken = scopus_inst_token
-
         built_query = "https://api.elsevier.com/content/search/scopus?" \
                       + "apiKey=" + key \
                       + "&query=" + encoded_keywords \
@@ -47,7 +45,6 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
         encoded_keywords = quote(keywords)
         subject = quote(subject)
         min_year = quote(min_year)
-        # Other Parameters
         http_accept = "application/json"
         view = "STANDARD"  # Note: COMPLETE view is inaccessible with a standard token
         today = datetime.date.today()
@@ -64,10 +61,8 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                       + "&count=" + count \
                       + "&sort=" + sort \
                       + "&subj=" + subject
-
     response = requests.get(built_query)
     articles = parse_data_scopus(response)
-    #return entries to scopus endpoint response
     return_articles: List[SearchResult] = []
     article_id = id
     for article in articles:
@@ -90,10 +85,9 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
             #     algorithm_score = algorithm_interface(article_abstract, article_abstract)
 
             relevance_score = algorithm_interface(keywords, article_title)
-            # useless without lines 78-79 uncommented, but response is EXTREMELY SLOW
+            # useless without lines 88-90 uncommented, but response is EXTREMELY SLOW
             if algorithm_score > 0:
                 relevance_score = (relevance_score + algorithm_score) / 2
-            # end refactoring
             return_articles.append(SearchResult(
                 article_id=article_id,
                 title=article_title,

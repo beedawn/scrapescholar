@@ -9,8 +9,6 @@ interface BubblePlotData {
   radius: number,
   color: string,
   label: string,
-
-
 }
 interface BubblePlotProps {
   data: BubblePlotData[],
@@ -20,20 +18,10 @@ interface BubblePlotProps {
   marginRight?: number,
   marginBottom?: number,
   marginLeft?: number
-
   className?: string;
 }
 
-const LinePlot: React.FC<BubblePlotProps> = ({ data,
-  width2 = 440,
-  height2 = 200,
-  marginTop = 20,
-  marginRight = 20,
-  marginBottom = 20,
-  marginLeft = 20,
-  className
-}) => {
-
+const BubblePlot: React.FC<BubblePlotProps> = ({ data}) => {
   useEffect(() => {
     // set the dimensions and margins of the graph
     const margin = { top: 50, right: 20, bottom: 30, left: 50 },
@@ -65,6 +53,7 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
       .force("y", d3.forceY(d => y(d.y ?? 0)).strength(0.2))
       .force("collide", d3.forceCollide(d => z(d.x)))
       .on("tick", ticked);
+      
     // Add bubbles
     const bubbles = svg.append('g')
       .selectAll("dot")
@@ -109,7 +98,7 @@ const LinePlot: React.FC<BubblePlotProps> = ({ data,
   );
 };
 
-export default LinePlot;
+export default BubblePlot;
 
 
 

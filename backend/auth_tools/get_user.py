@@ -1,30 +1,23 @@
-# search/search.py
 from fastapi import Depends, HTTPException, status
 from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer
-
-import jwt  # Import JWT
+import jwt
 from dotenv import load_dotenv
-
 import os
-
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 
-# Load environment variables
 load_dotenv()
 
-# Define OAuth2PasswordBearer scheme
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-# Get the SECRET key from the environment
+
 SECRET = os.getenv("SECRET_KEY")
 DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE"
 
 
-#could be broken up into a validate token function and then get user? using it elsewhere for this purpose now
 def get_current_user_modular(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    print(f"Decoding token: {token}")
     try:
         if DEBUG_SCRAPESCHOLAR:
             print(f"Decoding token: {token}")

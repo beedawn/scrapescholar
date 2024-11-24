@@ -1,4 +1,3 @@
-# app/crud/keyword.py
 from sqlalchemy.orm import Session
 from app.models.keyword import Keyword
 from app.schemas.keyword import KeywordCreate, KeywordUpdate

@@ -1,4 +1,3 @@
-# endpoints/article/article.py
 from fastapi import APIRouter, HTTPException, Depends, Cookie
 from sqlalchemy.orm import Session
 from app.crud.article import create_article, get_article, delete_article, update_article
@@ -13,7 +12,6 @@ from algorithm.algorithm_interface import algorithm_interface
 router = APIRouter()
 
 
-# Get an article by ID
 @router.get("/{article_id}", response_model=Article, status_code=200)
 async def read_article(article_id: int, access_token: Annotated[str | None, Cookie()] = None,
                        db: Session = Depends(get_db)):
@@ -24,7 +22,6 @@ async def read_article(article_id: int, access_token: Annotated[str | None, Cook
     return article
 
 
-# Add a new article (authentication via token or cookie)
 @router.post("/", response_model=ArticleRead, status_code=201)
 async def create_new_article(
         article: ArticleCreate,

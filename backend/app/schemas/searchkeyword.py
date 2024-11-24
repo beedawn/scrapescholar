@@ -1,4 +1,3 @@
-# app/schemas/searchkeyword.py
 from pydantic import BaseModel
 
 

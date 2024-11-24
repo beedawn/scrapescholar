@@ -1,12 +1,12 @@
 "use client";
-import React, { useState, Dispatch, SetStateAction} from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import apiCalls from '../api/apiCalls';
 import DOMPurify from 'dompurify';
 interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     setToken: (item: string) => void;
 }
-const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
+const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken }) => {
     const { postAPILogin } = apiCalls();
 
     const [username, setUserName] = useState<string>('');
@@ -15,9 +15,8 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
-
-        const sanitizedUsername =  DOMPurify.sanitize(username);
-        const sanitizedPassword =  DOMPurify.sanitize(password);
+        const sanitizedUsername = DOMPurify.sanitize(username);
+        const sanitizedPassword = DOMPurify.sanitize(password);
         const tokenResponse = await postAPILogin(sanitizedUsername, sanitizedPassword);
         if (tokenResponse && typeof tokenResponse === 'string') {
             setToken(tokenResponse);
@@ -30,7 +29,6 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken}) => {
     return (
         <div className="flex flex-col mt-40 sm:flex-row sm:mx-12 justify-center items-center">
             <div className="flex-1 sm:mx-12 w-full flex justify-center">
-
                 <form onSubmit={(e) => handleLogin(e)}>
                     <div className="py-3">
                         <label>

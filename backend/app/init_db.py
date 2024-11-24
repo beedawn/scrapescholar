@@ -1,4 +1,3 @@
-# backend/app/init_db.py
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
@@ -17,14 +16,12 @@ load_dotenv()
 test_user = os.getenv("TEST_USER")
 test_password = os.getenv("TEST_PASSWORD")
 
-# Retrieve the database URI
 SQLALCHEMY_DATABASE_URL = get_db_uri()
 
-# Create a new SQLAlchemy engine instance
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 
-# Create a session maker
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 def create_default_roles(db: Session):
     role_names = ["Professor", "GradStudent", "Student"]
@@ -33,6 +30,7 @@ def create_default_roles(db: Session):
         if not existing_role:
             db.add(Role(role_name=name))
     db.commit()
+
 
 def init_db():
     """
@@ -81,13 +79,11 @@ def insert_test_data(db):
     """
     Insert test data into the database for testing purposes.
     """
-    # Insert Roles (if needed)
     admin_role = Role(role_name="admin")
     user_role = Role(role_name="user")
     db.add_all([admin_role, user_role])
     db.commit()
 
-    # Insert a test User
     user_data = UserCreate(
         username=test_user,
         password=test_password,
@@ -95,7 +91,6 @@ def insert_test_data(db):
         role_id=1
     )
     user = create_user(db=db, user=user_data)
-
 
     source_data = SourceCreate(
         name="Scopus",
@@ -123,7 +118,7 @@ def insert_test_data(db):
         search_keywords=["test", "example"],
         title="Test Search"
     )
-    created_search=create_search(db=db, search=search_data)
+    created_search = create_search(db=db, search=search_data)
 
     db.commit()
     print("Test data inserted successfully.")

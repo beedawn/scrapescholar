@@ -25,9 +25,6 @@ def get_cookie():
     for section in cookie_separated:
         if section.startswith('access_token='):
             token_value = section.split('=')[1]
-    # Set a cookie in the session
     session.cookies.set('access_token', token_value)
     return session
 
-# if __name__ == "__main__":
-#     make_a_cookie()

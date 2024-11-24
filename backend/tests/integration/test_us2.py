@@ -1,15 +1,12 @@
-from fastapi import FastAPI
-
 from fastapi.testclient import TestClient
-from api_tools.api_tools import scopus_api_key, scopus_inst_token, parse_data_scopus
+from api_tools.api_tools import scopus_inst_token
 from app.main import app
-from app.main import check_response
 from tests.integration.tools.get_cookie import get_cookie
 from typing import List
-import time
+from tests.integration.tools.base_url import base_url
+
 client = TestClient(app)
 session = get_cookie()
-from tests.integration.tools.base_url import base_url
 
 #UT-2.3
 def test_academic_data_and():

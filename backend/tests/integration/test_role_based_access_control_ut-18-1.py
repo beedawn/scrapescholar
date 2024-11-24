@@ -1,5 +1,3 @@
-# backend/tests/unit/test_ut-18.1.py
-
 import pytest
 import time
 from fastapi.testclient import TestClient
@@ -54,7 +52,6 @@ def cleanup_users():
 
     yield _create_user
 
-    # Cleanup: delete users after the test
     for user_id in user_ids:
         session.delete(f"{base_url}/users/delete/{user_id}")
 
@@ -70,7 +67,6 @@ def get_role_id_by_name(role_name):
 def test_role_based_access_control(ensure_roles_exist, cleanup_users):
     create_user = cleanup_users
 
-    # Create unique users with different roles
     prof_user_data = {
         "username": unique_username("professoruser"),
         "email": f"{unique_username('professoruser')}@example.com",
@@ -97,50 +93,42 @@ def test_role_based_access_control(ensure_roles_exist, cleanup_users):
     student_user_id = create_user(student_user_data)
     target_user_id = create_user(target_user_data)
 
-    # Assign roles to the created users
     session.put(f"{base_url}/users/update-role/{prof_user_id}", json={"role_name": "Professor"})
     session.put(f"{base_url}/users/update-role/{grad_user_id}", json={"role_name": "GradStudent"})
     session.put(f"{base_url}/users/update-role/{student_user_id}", json={"role_name": "Student"})
 
-    # Generate tokens to simulate individual user access
     prof_token = login_manager.create_access_token(data={"sub": str(prof_user_id)})
     grad_token = login_manager.create_access_token(data={"sub": str(grad_user_id)})
     student_token = login_manager.create_access_token(data={"sub": str(student_user_id)})
 
-    # Fetch the role IDs to validate
     grad_student_role_id = get_role_id_by_name("GradStudent")
 
-    # Role assignment verification
     response = session.get(f"{base_url}/users/get/{target_user_id}")
     assert response.status_code == 200
     initial_role_name = "Student"
 
-    # Step 1: Professor assigns "GradStudent" role to target user (should succeed)
     response = session.put(
         f"{base_url}/users/update-role/{target_user_id}",
         json={"role_name": "GradStudent"},
-        cookies={"access_token": prof_token}  # Use Professor's token
+        cookies={"access_token": prof_token}
     )
     assert response.status_code == 200
-    assert response.json()["role_id"] == grad_student_role_id  # Validate against GradStudent role ID
+    assert response.json()["role_id"] == grad_student_role_id
 
-    # Step 2: Graduate Student attempts to update the role of target user (should fail)
     response = session.put(
         f"{base_url}/users/update-role/{target_user_id}",
         json={"role_name": "Professor"},
-        cookies={"access_token": grad_token}  # Use Graduate Student's token
+        cookies={"access_token": grad_token}
     )
-    assert response.status_code == 403  # Forbidden
+    assert response.status_code == 403
 
-    # Step 3: Student attempts to update the role of target user (should fail)
     response = session.put(
         f"{base_url}/users/update-role/{target_user_id}",
         json={"role_name": "Professor"},
-        cookies={"access_token": student_token}  # Use Student's token
+        cookies={"access_token": student_token}
     )
-    assert response.status_code == 403  # Forbidden
+    assert response.status_code == 403
 
-    # Step 4: Professor changes target user back to initial role (should succeed)
     response = session.put(
         f"{base_url}/users/update-role/{target_user_id}",
         json={"role_name": initial_role_name},
