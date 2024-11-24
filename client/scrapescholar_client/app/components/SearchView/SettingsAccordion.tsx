@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import apiCalls from '@/app/api/apiCalls';
-
+import APIKeyModal, { APIKeyInterface } from './modal/APIKeyModal';
 interface SettingsAccordionProps {
     setOpenUserManagement: (item: boolean) => void;
     setDataFull: (item: boolean) => void;
     clearPages: () => void;
     setOpenMenu: (item: boolean) => void;
+    setAPIKey:(item:APIKeyInterface)=>void;
 }
 
-const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull, clearPages, setOpenMenu }) => {
+const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull, clearPages, setOpenMenu,setAPIKey }) => {
     const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
     const { isAdmin } = apiCalls();
     useEffect(() => {
@@ -38,11 +39,12 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
         setOpenMenu(false);
     }
     const [openIndex, setOpenIndex] = useState(null);
+    const [apiKeyModalActive, setAPIKeyModalActive]=useState<boolean>(false);
     const toggleAccordion = (index: any) => {
         setOpenIndex(openIndex === index ? null : index);
     };
     const index = 1;
-    return (
+    return (<>{apiKeyModalActive?<><APIKeyModal setAPIKeyModalActive={setAPIKeyModalActive} setAPIKey={setAPIKey} /></>:<>
         <div id="accordion-color" className="flex">
             <div key={index}>
                 <h2 id={`accordion-color-heading-${index + 1}`}>
@@ -76,7 +78,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                                 User Management
                             </a>
                         </div> : <></>}
-                        <div key="2" onClick={() => alert("api keys")}  >
+                        <div key="2" onClick={() => setAPIKeyModalActive(true)}  >
                             <a href="#" onMouseEnter={() => { updateHovered(2) }}
                                 onMouseLeave={() => { removeHovered(2) }}
                                 className={hoveredClasses[2]}>
@@ -94,6 +96,8 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
                 </div>
             </div>
         </div>
+        </>}
+        </>
     )
 };
 

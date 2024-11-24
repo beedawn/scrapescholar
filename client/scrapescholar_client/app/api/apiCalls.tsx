@@ -498,6 +498,38 @@ const apiCalls = () => {
 
   }
 
+
+  const verifyAPIKey = async (APIKey: string, academicSource:string) => {
+    let data: Response;
+    let status;
+    let academic_url;
+    switch(academicSource){
+      case 'scopus':
+        academic_url="https://api.elsevier.com/content/search/scopus?query=all(gene)&apiKey="
+        break;
+      case 'sciencedirect':
+        academic_url="https://api.elsevier.com/content/search/sciencedirect?query=gene&apiKey=";
+        break;
+      default:
+        return false
+    }
+    try {
+      const url = `${academic_url}${APIKey}`
+      data = await fetch(url, {
+        method: "GET"
+      })
+      status=data.status;
+      if (status==200){
+        return true
+      } else{
+        return false
+      }
+    }
+    catch (error: any) {
+    }
+
+  }
+
   return {
     getAPIDatabases, postAPILogin,
     getAPIResults, getAPISearches, getAPIPastSearchResults,
@@ -508,7 +540,7 @@ const apiCalls = () => {
     editComment,
     deleteComment, downloadURL, putSearchShare,
     isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole,
-    getAPIDatabasesAndIDs, addArticle, deleteArticleAPI
+    getAPIDatabasesAndIDs, addArticle, deleteArticleAPI, verifyAPIKey
   };
 }
 

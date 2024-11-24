@@ -8,6 +8,7 @@ import apiCalls from '@/app/api/apiCalls';
 import SettingsAccordian from './SettingsAccordion';
 import ScrapeScholarHeader from './ScrapeScholarHeader';
 import HamburgerIcon from '../HamburgerIcon';
+import { APIKeyInterface } from './modal/APIKeyModal';
 interface NavBarProps {
     handleResults: (event: React.FormEvent<HTMLFormElement>) => void;
     addInput: () => void;
@@ -27,13 +28,14 @@ interface NavBarProps {
     setDataFull: (item: boolean) => void;
     clearPages: () => void;
     isMobile: boolean;
+    setAPIKey:(item:APIKeyInterface)=>void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
     addInput, inputs, handleSearchChange, removeInput,
     setLoggedIn, dropdown, handleDropdownChange,
     addToUserDatabaseList, removeFromUserDatabaseList,
-    searches, handlePastSearchSelection, setOpenUserManagement, setDataFull, clearPages, isMobile }) => {
+    searches, handlePastSearchSelection, setOpenUserManagement, setDataFull, clearPages, isMobile, setAPIKey }) => {
 
     const { deleteCookie } = apiCalls();
     const handleLogout = async () => {
@@ -73,7 +75,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                         </div>
                         <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                             removeFromUserDatabaseList={removeFromUserDatabaseList} />
-                        <SettingsAccordian setOpenUserManagement={setOpenUserManagement} setDataFull={setDataFull} clearPages={clearPages} setOpenMenu={setOpenMenu} />
+                        <SettingsAccordian setOpenUserManagement={setOpenUserManagement} setDataFull={setDataFull} clearPages={clearPages} setOpenMenu={setOpenMenu} setAPIKey={setAPIKey}/>
                         <DropdownSearchBox value="past search dropdown"
                             onDropdownChange={(selectedTitle) => {
                                 handlePastSearchSelection(selectedTitle); setOpenMenu(false)
