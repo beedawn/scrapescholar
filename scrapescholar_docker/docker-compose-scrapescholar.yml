@@ -72,7 +72,7 @@ services:
     image: nginx
     volumes:
       - ./nginx/templates:/etc/nginx/templates
-      - ./nginx/default.conf:/etc/nginx/default.conf
+      # - ./nginx/default.conf:/etc/nginx/default.conf
       - ./nginx/start_nginx.sh:/docker-entrypoint.d/start_nginx.sh
       - ./nginx/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
