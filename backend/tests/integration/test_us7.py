@@ -10,7 +10,7 @@ from app.crud.searchshare import delete_search_share
 from app.models import SearchShare
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
-
+from tests.integration.tools.blankAPIKey import request_body
 client = TestClient(app)
 session = get_cookie()
 
@@ -60,7 +60,7 @@ def test_sharing_works_between_users(test_db_session):
 
     created_user_id = response.json()["user_id"]
 
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     searchdata = searchdata.json()
     search_id = searchdata["search_id"]
 
@@ -90,7 +90,7 @@ def test_401_when_not_shared(test_db_session):
 
     created_user_id = response.json()["user_id"]
 
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     searchdata = searchdata.json()
     search_id = searchdata["search_id"]
 

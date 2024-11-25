@@ -8,6 +8,7 @@ from academic_databases.SearchResult import SearchResult
 from io import StringIO
 from tests.integration.tools.create_search import create_search
 import csv
+from tests.integration.tools.blankAPIKey import request_body
 
 session = get_cookie()
 
@@ -26,7 +27,7 @@ def test_db_session():
 def test_generate_data(test_db_session: Session):
     api_query = "test"
     query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{query_string}", json=request_body)
     search_request = search_request.json()
     search_id = search_request["search_id"]
     articles = search_request["articles"]

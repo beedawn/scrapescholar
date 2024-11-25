@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
-
+from tests.integration.tools.blankAPIKey import request_body
 client = TestClient(app)
 session = get_cookie()
 
@@ -11,7 +11,7 @@ session = get_cookie()
 # does not work consistently as this test is entirely dependent on Scopus and ScienceDirect results, which can change
 # def test_user_data_slash_relevant_results():
 #     test_word = "test"
-#     searchdata = session.get(f"{base_url}/academic_data?keywords={test_word}&academic_database=Scopus&academic_database=ScienceDirect")
+#     searchdata = session.post(f"{base_url}/academic_data?keywords={test_word}&academic_database=Scopus&academic_database=ScienceDirect", json=request_body)
 #     searchdata = searchdata.json()
 #     found_word = False
 #     for item in searchdata["articles"]:
@@ -24,8 +24,8 @@ session = get_cookie()
 
 
 def test_user_data_slash_relevant_results_casing():
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
-    searchdata_caps = session.get(f"{base_url}/academic_data?keywords=Test&academic_database=Scopus")
+    searchdata = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
+    searchdata_caps = session.post(f"{base_url}/academic_data?keywords=Test&academic_database=Scopus", json=request_body)
     searchdata = searchdata.json()
     searchdata_caps = searchdata_caps.json()
     searchdata_noid = []

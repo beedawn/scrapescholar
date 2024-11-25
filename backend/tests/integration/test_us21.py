@@ -9,7 +9,7 @@ from app.schemas.search import SearchCreate
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 from endpoints.search.search import post_search_no_route
-
+from tests.integration.tools.blankAPIKey import request_body
 client = TestClient(app)
 session = get_cookie()
 
@@ -42,7 +42,7 @@ def test_deny_after_300_searches_exist(test_db_session):
 
     api_query = "test"
     query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{query_string}", json=request_body)
     assert search_request.status_code == 507
     search_response = search_request.json()
     assert search_response[

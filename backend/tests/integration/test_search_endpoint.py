@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.delete_user import delete_user
 from tests.integration.tools.base_url import base_url
+from tests.integration.tools.blankAPIKey import request_body
 
 client = TestClient(app)
 
@@ -93,7 +94,7 @@ def test_get_valid_token_academic_data_response_schema(db_session):
     apiQuery = "test"
     queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
 
-    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={apiQuery}{queryString}", json=request_body)
     assert search_request.status_code == 200
     data = search_request.json()
     assert isinstance(data["search_id"], int)
@@ -140,7 +141,7 @@ def test_get_valid_token_past_search_response_schema(db_session):
     api_query = "test"
     query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
 
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{query_string}", json=request_body)
     search_request_data = search_request.json()
     search_id = search_request_data["search_id"]
     past_search = session.get(f"{base_url}/search/user/articles?search_id={search_id}")
@@ -148,7 +149,6 @@ def test_get_valid_token_past_search_response_schema(db_session):
     assert search_request.status_code == 200
     assert past_search.status_code == 200
     data = past_search.json()
-
     assert isinstance(data, list)
     assert isinstance(data[0]["title"], str)
     assert isinstance(data[0]["date"], str)
@@ -179,7 +179,7 @@ def test_get_valid_token_search_title_response_schema(db_session):
     apiQuery = "test"
     queryString = "&academic_database=Scopus&academic_database=ScienceDirect"
 
-    search_request = session.get(f"{base_url}/academic_data?keywords={apiQuery}{queryString}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={apiQuery}{queryString}", json=request_body)
     search_request_data = search_request.json()
     title = session.get(f"{base_url}/search/user/search/title?search_id={search_request_data['search_id']}")
 
@@ -202,7 +202,7 @@ def test_put_valid_token_search_title_response_schema(db_session):
     api_query = "test"
     querystring = "&academic_database=Scopus&academic_database=ScienceDirect"
 
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{querystring}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{querystring}", json=request_body)
     search_request_data = search_request.json()
     search_id = search_request_data['search_id']
     new_title = session.put(f"{base_url}/search/user/search/title?search_id={search_id}", json=body)
@@ -230,7 +230,7 @@ def test_delete_valid_token_search_title_response_schema(db_session):
 
     api_query = "test"
     querystring = "&academic_database=Scopus&academic_database=ScienceDirect"
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{querystring}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{querystring}", json=request_body)
     search_request_json = search_request.json()
     search_id = search_request_json["search_id"]
     delete = session.delete(f"{base_url}/search/user/search/title?search_id={search_id}")
@@ -255,7 +255,7 @@ def test_get_searches_non_empty_result(db_session):
     api_query = "test"
     querystring = "&academic_database=Scopus&academic_database=ScienceDirect"
 
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{querystring}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{querystring}", json=request_body)
     search_history_response = session.get(f"{base_url}/search/user/searches")
 
     assert search_history_response.status_code == 200

@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
+from tests.integration.tools.blankAPIKey import request_body
 
 session = get_cookie()
 client = TestClient(app)
@@ -9,7 +10,7 @@ client = TestClient(app)
 
 #UT-5.2
 def test_user_data_slash_update_put():
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     searchdata = searchdata.json()
     article_id = searchdata["articles"][0]["article_id"]
     search_id = searchdata["search_id"]

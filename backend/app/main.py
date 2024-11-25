@@ -48,8 +48,8 @@ app.add_middleware(
 
 
 class APIKey(BaseModel):
-    scopus: str
-    sciencedirect: str
+    scopus: str=""
+    sciencedirect: str=""
 
 
 def get_db():
