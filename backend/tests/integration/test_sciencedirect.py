@@ -177,7 +177,7 @@ def test_sciencedirect_apiKey_env_is_filled():
 def test_mock_sciencedirect(setup_mock_get):
     query = "test"
     start_id = 1
-    result_articles, article_id = request_data(query, start_id, apiKey=request_body)
+    result_articles, article_id, status_code = request_data(query, start_id, apiKey=request_body)
 
     assert len(result_articles) == 1
     assert isinstance(result_articles[0], SearchResult)

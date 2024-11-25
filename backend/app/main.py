@@ -120,22 +120,29 @@ async def multiple_apis(keywords: str, body: APIKey = Body(...),
     response = []
     id = 0
     database_list = await get_database_list('academic_databases/')
+    status_codes =[]
     for item in database_list:
         if item in academic_databases:
             new_id = check_response(response, id)
-            #need to add api key here somehow
             apiKey = getattr(body, item.lower(), None)
-            print("item and api key")
-            print(item)
-            print(apiKey)
-            article_response, id = globals()[item].request_data(keywords, id=new_id, apiKey=apiKey)
+            article_response, id, status_code = globals()[item].request_data(keywords, id=new_id, apiKey=apiKey)
             response.extend(article_response)
+            status_codes.append(status_code)
     search_valid, search_id = post_search_no_route(keywords=keywords_list, articles=response,
                                                    current_user=current_user, db=db)
     articles = initialize_full_article_response(current_user, db, search_id)
 
     if search_valid and search_id:
         return {"search_id": search_id, "articles": articles}
+    response_list = []
+    for status_code, source in status_codes:
+        if status_code == 429:
+            response_list.append(f"API Key for {source} is exhausted")
+    if len(response_list) > 0:
+        return JSONResponse(
+            status_code=429,
+            content={"message": response_list}
+        )
 
     else:
         return JSONResponse(

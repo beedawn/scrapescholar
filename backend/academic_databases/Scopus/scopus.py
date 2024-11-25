@@ -120,4 +120,4 @@ def request_data(keywords: str, id: int, apiKey: str= None, key: str = scopus_ap
                 transparency=0
             ))
         article_id += 1
-    return return_articles, article_id
+    return return_articles, article_id, (response.status_code,"scopus")

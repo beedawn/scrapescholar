@@ -104,6 +104,8 @@ const apiCalls = () => {
         if (data.status === 507) {
           setDataFull(true);
         }
+        if (data.status  === 429)
+        {setError(`${jsonData}, please use the API Keys link under the Settings menu to provide your own API key.`)}
       }
       catch (error: any) {
         setError(error);

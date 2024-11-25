@@ -13,13 +13,12 @@ def verify_api_key(api_key):
 
 
 def request_data(keywords: str, id: int, apiKey:str):
+    sciencedirect_api_key = default_sciencedirect_api_key
     if apiKey is not "" and apiKey is not None:
         print("using user api key science direct")
         if(verify_api_key(apiKey)):
             sciencedirect_api_key = apiKey
 
-    else:
-        sciencedirect_api_key = default_sciencedirect_api_key
     response = requests.get(
         f"https://api.elsevier.com/content/search/sciencedirect?query={keywords}&apiKey={sciencedirect_api_key}")
     articles = parse_data_scopus(response)
@@ -53,4 +52,4 @@ def request_data(keywords: str, id: int, apiKey:str):
                 transparency=0
             ))
         article_id += 1
-    return return_articles, id
+    return return_articles, id, (response.status_code, "sciencedirect")
