@@ -58,7 +58,7 @@ services:
       ENVIRONMENT: ${ENVIRONMENT}
     volumes:
       - ./fastapi/start_fastapi.sh:/docker-entrypoint.d/start_fastapi.sh
-      - ./nginx_nextjs/certbot/conf/:/etc/nginx/ssl/:ro
+      - ./nginx/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "8000:8000"
     entrypoint: ["/bin/sh", "-c", "chmod +x /docker-entrypoint.d/start_fastapi.sh && /docker-entrypoint.d/start_fastapi.sh"]
@@ -71,10 +71,10 @@ services:
   scrapescholar_nginx:
     image: nginx
     volumes:
-      - ./nginx_nextjs/templates:/etc/nginx/templates
-      - ./nginx_nextjs/default.conf:/etc/nginx/default.conf
-      - ./nginx_nextjs/start_nginx.sh:/docker-entrypoint.d/start_nginx.sh
-      - ./nginx_nextjs/certbot/conf/:/etc/nginx/ssl/:ro
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/default.conf:/etc/nginx/default.conf
+      - ./nginx/start_nginx.sh:/docker-entrypoint.d/start_nginx.sh
+      - ./nginx/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
       - "443:443"
@@ -93,8 +93,8 @@ services:
   scrapescholar_certbot:
     image: certbot/certbot:latest
     volumes:
-      - ./nginx_nextjs/certbot/www/:/var/www/certbot/:rw
-      - ./nginx_nextjs/certbot/conf/:/etc/letsencrypt/:rw
+      - ./nginx/certbot/www/:/var/www/certbot/:rw
+      - ./nginx/certbot/conf/:/etc/letsencrypt/:rw
     networks:
       - scrapescholar_net
 
