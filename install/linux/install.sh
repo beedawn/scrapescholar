@@ -1,7 +1,7 @@
 #!/bin/bash
 
-filepath=".env"
-dockerfilepath=".dockerenv"
+filepath="../client/scrapescholar_client/.env"
+dockerfilepath="../scrapescholar_docker/.env"
 
 next_js_env=".next_env"
 

@@ -10,10 +10,7 @@ server {
         <br />
         <p>Please review the documentation, and try running the script in /install/linux/cert_gen.sh or /install/windows/cert_gen.bat of the project's directory, to create a self signed certificate.</p>
         <p>If you intend to serve the application publically, then run the install/linux/ssl_generation_run_from_virtualmachine.sh file to get a cert from Let's Encrypt.</p>
-        
-        
-        
-        
+        <p>If an SSL cert is installed, then you might be missing the ENVIRONMENT=PRODUCTION variable from the scrapescholar_docker/.env file, please add that, and add NEXT_PUBLIC_ENVIRONMENT=PRODUCTION to the client/scrapescholar_client/.env</p>
         </body></html>";
     }
 
