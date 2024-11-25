@@ -3,12 +3,18 @@ server {
     server_name  _;
 
     location / {
-        proxy_pass http://scrapescholar_nextjs:3000;  # Forward requests to the Next.js server
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
+ add_header Content-Type text/html;
+        return 200 "<html><body><h1>Uh oh!</h1>
+        <br />
+        <p>Nginx loaded the default template, this means that an SSL cert is not installed.</p>
+        <br />
+        <p>Please review the documentation, and try running the script in /install/linux/cert_gen.sh or /install/windows/cert_gen.bat of the project's directory, to create a self signed certificate.</p>
+        <p>If you intend to serve the application publically, then run the install/linux/ssl_generation_run_from_virtualmachine.sh file to get a cert from Let's Encrypt.</p>
+        
+        
+        
+        
+        </body></html>";
     }
 
     error_page 500 502 503 504 /50x.html;
