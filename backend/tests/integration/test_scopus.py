@@ -119,7 +119,7 @@ def test_mock_scopus(setup_mock_scopus):
     subject = "COMP"
     min_year = "1990"
 
-    result_articles, article_id = request_data(keywords, id, key, subject, min_year)
+    result_articles, article_id = request_data(keywords=keywords, id=id, key=key, subject=subject, min_year=min_year)
 
     assert len(result_articles) == 1
     assert isinstance(result_articles[0], SearchResult)

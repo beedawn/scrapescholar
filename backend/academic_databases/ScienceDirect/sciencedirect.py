@@ -4,7 +4,11 @@ from academic_databases.SearchResult import SearchResult
 from algorithm.algorithm_interface import algorithm_interface
 
 
-def request_data(keywords: str, id: int):
+def request_data(keywords: str, id: int, apiKey:str):
+    if apiKey is not "":
+        print("using user api key science direct")
+        sciencedirect_api_key = apiKey
+
     response = requests.get(
         f"https://api.elsevier.com/content/search/sciencedirect?query={keywords}&apiKey={sciencedirect_api_key}")
     articles = parse_data_scopus(response)

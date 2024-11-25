@@ -18,7 +18,12 @@ def sanitize_link_scopus(untrusted_link):
         trusted_link = "Potentially malicious link detected. Blocked for user safety."
     return trusted_link
 
-def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
+
+def request_data(keywords: str, id: int, apiKey: str= None, key: str = scopus_api_key, subject: str = "",
+                 min_year: str = "1900"):
+    if apiKey is not "" and apiKey is not None:
+        print("using user api key scopus")
+        key = apiKey
     if scopus_inst_token is not None:
         encoded_keywords = quote(keywords)
         subject = quote(subject)
@@ -72,7 +77,7 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
             if links:
                 link = links[2].get('@href')
                 #Sanitize Link
-                sanitized_link = sanitize_link_scopus(link)                
+                sanitized_link = sanitize_link_scopus(link)
             else:
                 sanitized_link = "No link found."
 

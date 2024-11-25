@@ -29,13 +29,14 @@ interface NavBarProps {
     clearPages: () => void;
     isMobile: boolean;
     setAPIKey:(item:APIKeyInterface)=>void;
+    APIKey:APIKeyInterface;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ handleResults,
     addInput, inputs, handleSearchChange, removeInput,
     setLoggedIn, dropdown, handleDropdownChange,
     addToUserDatabaseList, removeFromUserDatabaseList,
-    searches, handlePastSearchSelection, setOpenUserManagement, setDataFull, clearPages, isMobile, setAPIKey }) => {
+    searches, handlePastSearchSelection, setOpenUserManagement, setDataFull, clearPages, isMobile, setAPIKey, APIKey }) => {
 
     const { deleteCookie } = apiCalls();
     const handleLogout = async () => {
@@ -75,7 +76,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleResults,
                         </div>
                         <SourcesAccordian addToUserDatabaseList={addToUserDatabaseList}
                             removeFromUserDatabaseList={removeFromUserDatabaseList} />
-                        <SettingsAccordian setOpenUserManagement={setOpenUserManagement} setDataFull={setDataFull} clearPages={clearPages} setOpenMenu={setOpenMenu} setAPIKey={setAPIKey}/>
+                        <SettingsAccordian setOpenUserManagement={setOpenUserManagement} setDataFull={setDataFull} clearPages={clearPages} setOpenMenu={setOpenMenu} setAPIKey={setAPIKey} APIKey={APIKey}/>
                         <DropdownSearchBox value="past search dropdown"
                             onDropdownChange={(selectedTitle) => {
                                 handlePastSearchSelection(selectedTitle); setOpenMenu(false)

@@ -6,13 +6,14 @@ import DOMPurify from 'dompurify';
 interface APIKeyModalProps {
     setAPIKeyModalActive: (item: boolean) => void;
     setAPIKey: (item: APIKeyInterface) => void;
+    APIKey:APIKeyInterface;
 }
 export interface APIKeyInterface {
     scopus: string,
     sciencedirect: string
 }
 const { verifyAPIKey } = apiCalls();
-const APIKeyModal: React.FC<APIKeyModalProps> = ({ setAPIKeyModalActive, setAPIKey }) => {
+const APIKeyModal: React.FC<APIKeyModalProps> = ({ setAPIKeyModalActive, setAPIKey, APIKey }) => {
     const clearModal = () => {
         setAPIKeyModalActive(false);
     }
@@ -24,12 +25,16 @@ const APIKeyModal: React.FC<APIKeyModalProps> = ({ setAPIKeyModalActive, setAPIK
     });
 
     const handleAPIKeyInput = (value: string, field: string) => {
-
+        console.log(field)
+        console.log(value)
+        console.log(value!=="")
+        if (value !==""){
         const newAPIKey = {
-            ...apiKeyInput,
+            ...APIKey,
             [field]: DOMPurify.sanitize(value)
         }
         setAPIKeyInput(newAPIKey)
+    }
     }
     const handleSubmit = async () => {
         var keyNames = Object.keys(apiKeyInput) as Array<keyof APIKeyInterface>;

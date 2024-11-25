@@ -7,9 +7,10 @@ interface SettingsAccordionProps {
     clearPages: () => void;
     setOpenMenu: (item: boolean) => void;
     setAPIKey:(item:APIKeyInterface)=>void;
+    APIKey:APIKeyInterface;
 }
 
-const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull, clearPages, setOpenMenu,setAPIKey }) => {
+const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManagement, setDataFull, clearPages, setOpenMenu,setAPIKey, APIKey }) => {
     const [isAdminUser, setIsAdminUser] = useState<boolean>(false);
     const { isAdmin } = apiCalls();
     useEffect(() => {
@@ -44,7 +45,7 @@ const SettingsAccordian: React.FC<SettingsAccordionProps> = ({ setOpenUserManage
         setOpenIndex(openIndex === index ? null : index);
     };
     const index = 1;
-    return (<>{apiKeyModalActive?<><APIKeyModal setAPIKeyModalActive={setAPIKeyModalActive} setAPIKey={setAPIKey} /></>:<>
+    return (<>{apiKeyModalActive?<><APIKeyModal setAPIKeyModalActive={setAPIKeyModalActive} setAPIKey={setAPIKey} APIKey={APIKey} /></>:<>
         <div id="accordion-color" className="flex">
             <div key={index}>
                 <h2 id={`accordion-color-heading-${index + 1}`}>
