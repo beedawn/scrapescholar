@@ -1,8 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set filepath=.env
-set dockerfilepath=.dockerenv
+set filepath=../client/scrapescholar_client/.env
+set dockerfilepath=../scrapescholar_docker/.env
 set next_js_env=.next_env
 
 
