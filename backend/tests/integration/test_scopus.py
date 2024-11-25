@@ -7,7 +7,7 @@ from app.main import app
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
 from api_tools.api_tools import scopus_api_key, scopus_inst_token
-
+from tests.integration.tools.blankAPIKey import request_body
 mock_scopus_response = {
     "search-results": {
         "opensearch:totalResults": "959738",
@@ -147,7 +147,7 @@ session = get_cookie()
 
 
 def test_scopus_response_returns_correct_elements():
-    response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    response = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
@@ -183,7 +183,7 @@ def test_scopus_response_returns_correct_elements():
 
 
 def test_scopus_student_rating_information_available():
-    response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    response = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
@@ -206,8 +206,8 @@ def test_scopus_student_rating_information_available():
 
 
 def test_scopus_empty_response_is_empty():
-    response = session.get(
-        f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus")
+    response = session.post(
+        f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=Scopus", json=request_body)
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)

@@ -5,12 +5,14 @@ from api_tools.api_tools import sciencedirect_api_key
 from academic_databases.ScienceDirect.sciencedirect import request_data
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
+from tests.integration.tools.blankAPIKey import request_body
 
 session = get_cookie()
 
 
 def test_sciencedirect_response_returns_correct_elements():
-    response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
+
+    response = session.post(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect", json=request_body)
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
@@ -44,7 +46,7 @@ def test_sciencedirect_response_returns_correct_elements():
 
 
 def test_sciencedirect_student_rating_information_available():
-    response = session.get(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect")
+    response = session.post(f"{base_url}/academic_data?keywords=test&academic_database=ScienceDirect", json=request_body)
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
@@ -67,8 +69,8 @@ def test_sciencedirect_student_rating_information_available():
 
 
 def test_sciencedirect_empty_response_is_empty():
-    response = session.get(
-        f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=ScienceDirect")
+    response = session.post(
+        f"{base_url}/academic_data?keywords=abcdefg+AND+hijklmnop+AND+12345&academic_database=ScienceDirect", json=request_body)
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data["articles"], list)
@@ -175,7 +177,7 @@ def test_sciencedirect_apiKey_env_is_filled():
 def test_mock_sciencedirect(setup_mock_get):
     query = "test"
     start_id = 1
-    result_articles, article_id = request_data(query, start_id)
+    result_articles, article_id = request_data(query, start_id, apiKey=request_body)
 
     assert len(result_articles) == 1
     assert isinstance(result_articles[0], SearchResult)
