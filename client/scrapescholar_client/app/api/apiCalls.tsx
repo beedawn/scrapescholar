@@ -536,6 +536,7 @@ const apiCalls = () => {
       }
     }
     catch (error: any) {
+      return false
     }
 
   }

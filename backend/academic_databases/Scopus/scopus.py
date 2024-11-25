@@ -10,6 +10,14 @@ from typing import List
 from algorithm.algorithm_interface import algorithm_interface
 
 
+def verify_api_key(api_key):
+    response = requests.get(
+        f"https://api.elsevier.com/content/search/scopus?query=all(gene)&apiKey={api_key}")
+    if(response.status_code == 200):
+        return True
+    else:
+        return False
+
 def sanitize_link_scopus(untrusted_link):
     parsed_untrusted_link = urlparse(untrusted_link)
     if parsed_untrusted_link.scheme == "https" and parsed_untrusted_link.netloc == "www.scopus.com" and parsed_untrusted_link.path == "/inward/record.uri":
@@ -23,7 +31,8 @@ def request_data(keywords: str, id: int, apiKey: str= None, key: str = scopus_ap
                  min_year: str = "1900"):
     if apiKey is not "" and apiKey is not None:
         print("using user api key scopus")
-        key = apiKey
+        if(verify_api_key(apiKey)):
+            key = apiKey
     if scopus_inst_token is not None:
         encoded_keywords = quote(keywords)
         subject = quote(subject)

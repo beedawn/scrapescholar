@@ -41,7 +41,8 @@ const APIKeyModal: React.FC<APIKeyModalProps> = ({ setAPIKeyModalActive, setAPIK
         for (let key of keyNames) {
             if (apiKeyInput[key] !== '') {
                 const valid = await verifyAPIKey(apiKeyInput[key], key)
-                if (!valid) {
+     
+                if (!valid||valid==undefined) {
                     setResult(false)
                     return
                 }
@@ -62,7 +63,7 @@ const APIKeyModal: React.FC<APIKeyModalProps> = ({ setAPIKeyModalActive, setAPIK
                         transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                     <div className="flex items-start justify-between">
-                                        <h3 className="text-base font-semibold text-gray-900" id="modal-title">Share Search</h3>
+                                        <h3 className="text-base font-semibold text-gray-900" id="modal-title">API Keys</h3>
                                         <div className="text-right">
                                             <button type="button" onClick={() => clearModal()} className="mt-3 
                                         inline-flex w-full justify-center 
@@ -82,22 +83,22 @@ const APIKeyModal: React.FC<APIKeyModalProps> = ({ setAPIKeyModalActive, setAPIK
                                 <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                     <div>
                                         <input className="border rounded border-slate-800 text-center p-2"
-                                            placeholder="Scopus API Key" onClick={() => { setResult(null) }} onChange={(e) => { handleAPIKeyInput(e.target.value, 'scopus') }} />
+                                            placeholder="Scopus API Key" onClick={() => { setResult(null) }} onChange={(e) => { handleAPIKeyInput(e.target.value, 'scopus') }} data-testid="scopus-api-input"/>
                                     </div>
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                     <div>
                                         <input className="border rounded border-slate-800 text-center p-2"
-                                            placeholder="Science Direct API Key" onClick={() => { setResult(null) }} onChange={(e) => { handleAPIKeyInput(e.target.value, 'sciencedirect') }} />
+                                            placeholder="Science Direct API Key" onClick={() => { setResult(null) }} onChange={(e) => { handleAPIKeyInput(e.target.value, 'sciencedirect') }} data-testid="sciencedirect-api-input" />
                                     </div>
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
                                     <div>
-                                        {result == null ? <></> : result ? <div className="text-green-600">Success</div> : <div className="text-red-600">Failure</div>}
+                                        {result == null ? <></> : result ? <div className="text-green-600">Success</div> : <div className="text-red-600" data-testid="api-failure">Failure</div>}
                                     </div>
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 flex  justify-center items-center">
-                                    <div>
+                                    <div data-testid="api-key-submit">
                                         <Button type="submit" >Submit</Button>
                                     </div>
                                 </div>
