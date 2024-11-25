@@ -18,8 +18,8 @@ def request_data(keywords: str, id: int, apiKey:str):
         if(verify_api_key(apiKey)):
             sciencedirect_api_key = apiKey
 
-        else:
-            sciencedirect_api_key = default_sciencedirect_api_key
+    else:
+        sciencedirect_api_key = default_sciencedirect_api_key
     response = requests.get(
         f"https://api.elsevier.com/content/search/sciencedirect?query={keywords}&apiKey={sciencedirect_api_key}")
     articles = parse_data_scopus(response)
