@@ -25,9 +25,6 @@ const APIKeyModal: React.FC<APIKeyModalProps> = ({ setAPIKeyModalActive, setAPIK
     });
 
     const handleAPIKeyInput = (value: string, field: string) => {
-        console.log(field)
-        console.log(value)
-        console.log(value!=="")
         if (value !==""){
         const newAPIKey = {
             ...APIKey,

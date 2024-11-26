@@ -178,7 +178,6 @@ def test_mock_sciencedirect(setup_mock_get):
     query = "test"
     start_id = 1
     result_articles, article_id, status_code = request_data(query, start_id, apiKey=request_body)
-
     assert len(result_articles) == 1
     assert isinstance(result_articles[0], SearchResult)
     assert result_articles[0].article_id is not None

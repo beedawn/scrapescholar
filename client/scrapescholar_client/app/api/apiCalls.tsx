@@ -82,7 +82,6 @@ const apiCalls = () => {
     let data: Response;
     let jsonData;
     let queryString = '';
-    console.log(apiKey)
     for (let item of userDatabaseList) {
       queryString += `&academic_database=${item}`;
     }

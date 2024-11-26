@@ -102,10 +102,6 @@ async def multiple_apis(keywords: str, body: APIKey = Body(...),
             status_code=507,
             content={"message": "Insufficient storage, you have 300 saved searches. Please delete some to continue"}
         )
-    print("BODY")
-    print(body)
-    print(body.scopus)
-    print(body.sciencedirect)
     keywords_list = keywords.split()
     keyword_limit = 20
     count_keyword = 0
