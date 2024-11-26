@@ -1,0 +1,28 @@
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ../../../scrapescholar_docker/nginx/templates:/etc/nginx/templates
+      - ../../../scrapescholar_docker/nginx/start_nginx.sh:/docker-entrypoint.d/start_nginx.sh:ro
+      - ../../../scrapescholar_docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:rw
+      - ../../../scrapescholar_docker/nginx/nginx.conf:/etc/nginx/nginx.conf:rw
+      - ../../../scrapescholar_docker/nginx/certbot/www/:/var/www/certbot/:ro
+      # if certbot/conf has the following dirs: accounts, archive, live, renewal, renewal-hooks 
+      # then we need this turned on
+      - ../../../scrapescholar_docker/nginx/certbot/conf/:/etc/nginx/ssl/:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+      - SERVER_NAME=scrapescholar.me
+    # chmod +x start_nginx.sh before running
+    # if certbot/conf has the following dirs: accounts, archive, live, renewal, renewal-hooks 
+    # then we need this turned off and to run a different script to generate the nginx config template
+    entrypoint: ["/docker-entrypoint.d/start_nginx.sh"]
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ../../../scrapescholar_docker/nginx/certbot/www/:/var/www/certbot/:rw
+      - ../../../scrapescholar_docker/nginx/certbot/conf/:/etc/letsencrypt/:rw
