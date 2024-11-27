@@ -1,2 +1,2 @@
 #!/bin/bash
-docker compose -f docker docker-compose-scrapescholar.yml --build
+docker compose -f docker-compose-scrapescholar.yml up --build

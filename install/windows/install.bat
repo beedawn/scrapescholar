@@ -1,9 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set filepath=../backend/.env
-set dockerfilepath=../scrapescholar_docker/.env
-set next_js_env=../client/scrapescholar_client/.env
+set filepath=../../backend/.env
+set dockerfilepath=../../scrapescholar_docker/.env
+set next_js_env=../../client/scrapescholar_client/.env
 
 
 echo Welcome to the scripted setup
