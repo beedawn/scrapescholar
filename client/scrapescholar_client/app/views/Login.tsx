@@ -2,6 +2,12 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import apiCalls from '../api/apiCalls';
 import DOMPurify from 'dompurify';
+import _ from 'lodash';
+import httpStringGen from "@/app/api/httpString";
+
+
+  const host = _.escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
+  const http_string = httpStringGen();
 interface LoginProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     setToken: (item: string) => void;
@@ -27,7 +33,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken }) => {
         setError('Invalid Login');
     }
     return (
-        <div className="flex flex-col mt-40 sm:flex-row sm:mx-12 justify-center items-center">
+        <div className="flex flex-col mt-40 sm:mx-12 justify-center items-center">
             <div className="flex-1 sm:mx-12 w-full flex justify-center">
                 <form onSubmit={(e) => handleLogin(e)}>
                     <div className="py-3">
@@ -60,7 +66,15 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn, setToken }) => {
                         {error}
                     </div>
                 </form>
+              
             </div>
+            <div className="flex justify-center ">
+                <a href={`${http_string}://${host}:8000/azure/login`}><button name="azure_button" className={
+                            "m-1 px-4 py-2 bg-blue-500 text-white rounded items-center"
+                        }>
+                            Sign in with Azure AD
+                        </button></a>
+                </div>
         </div>
     );
 }

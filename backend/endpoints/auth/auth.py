@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie
 from sqlalchemy.orm import Session
-from app.db.session import get_db
+from app.db.session import get_db, SessionLocal
 from app.models.user import User
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi_login import LoginManager
@@ -13,6 +13,7 @@ from typing import Annotated
 from datetime import timedelta
 from auth_tools.is_admin import is_admin
 from auth_tools.get_user import get_current_user_modular
+from fastapi.responses import RedirectResponse
 
 load_dotenv()
 
@@ -21,18 +22,13 @@ ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 host_ip = os.getenv("HOST_IP")
 fernet = Fernet(ENCRYPTION_KEY)
 
-DEBUG_SCRAPESCHOLAR = os.getenv("DEBUG_SCRAPESCHOLAR", "FALSE").upper() == "TRUE"
-
 if not SECRET:
     raise ValueError("SECRET_KEY environment variable is not set")
 
-
 hash_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 login_manager = LoginManager(SECRET, token_url="/auth/login")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-
 
 router = APIRouter()
 
@@ -53,8 +49,6 @@ def decrypt_username(encrypted_username: str) -> str:
     try:
         return fernet.decrypt(encrypted_username.encode()).decode()
     except Exception as e:
-        if DEBUG_SCRAPESCHOLAR:
-            print(f"Decryption failed: {str(e)}")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid username")
 
 
@@ -62,22 +56,35 @@ def decrypt_username(encrypted_username: str) -> str:
 def load_user(user_id: str, db: Session = None):
     if db is None:
         db = next(get_db())
-    if DEBUG_SCRAPESCHOLAR:
-        print(f"Loading user by user_id: {user_id}")
     return db.query(User).filter(User.user_id == int(user_id)).first()
 
 
 @router.post("/login")
 def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    access_token = build_access_token(data.username, data.password)
+
+    return cookie_response(access_token)
+
+
+def build_access_token(username, password, azure_token=None):
+    db: Session = SessionLocal()
     user = None
     for candidate in db.query(User).all():
         try:
             decrypted_username = decrypt_username(candidate.username)
-            if decrypted_username == data.username:
+            if decrypted_username == username:
+                user = candidate
+                break
+            if verify_hash(username, candidate.email):
                 user = candidate
                 break
         except HTTPException:
             continue
+    if not user and azure_token is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please contact your professor to create an account for you"
+        )
 
     if not user:
         raise HTTPException(
@@ -85,21 +92,29 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
             detail="Invalid username"
         )
 
-    if not verify_hash(data.password, user.password):
+
+    if not verify_hash(password, user.password) and azure_token is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid password"
         )
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid username"
+        )
 
-    if DEBUG_SCRAPESCHOLAR:
-        print(f"User found: ID={user.user_id}, Username={user.username}, Email={user.email}")
     access_token = login_manager.create_access_token(data={"sub": str(user.user_id)}, expires=timedelta(hours=8))
-    if DEBUG_SCRAPESCHOLAR:
-        print(f"Access Token Generated: {access_token}")
+    return access_token
 
+
+def cookie_response(access_token: str, azure_token=None):
     content = {"access_token": access_token, "token_type": "bearer"}
+
     response = JSONResponse(content=content)
-    # will need to change this to secure for deployment
+    if azure_token:
+        redirect_url=f"http://{host_ip}:3000/"
+        response = RedirectResponse(url=redirect_url)
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -145,6 +160,3 @@ async def is_admin_endpoint(access_token: Annotated[str | None, Cookie()] = None
 def remove_cookie(response: Response):
     response.delete_cookie("access_token")
     return {"message": "Cookie deleted"}
-
-
-

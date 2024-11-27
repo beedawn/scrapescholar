@@ -10,8 +10,6 @@ if [ -z "$(docker ps -q -f name=nginx)" ]; then
 fi 
 
 
-
-
 printf "%s" "enter domain name(ie google.com, no www): "
 read server_name
 docker compose run --rm certbot certonly --webroot \
