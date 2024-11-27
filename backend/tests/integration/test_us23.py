@@ -2,14 +2,14 @@ from fastapi.testclient import TestClient
 from app.main import app
 from tests.integration.tools.get_cookie import get_cookie
 from tests.integration.tools.base_url import base_url
-
+from tests.integration.tools.blankAPIKey import request_body
 session = get_cookie()
 client = TestClient(app)
 
 
 #UT-23.1
 def test_user_data_slash_update_put_valid_body():
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     searchdata = searchdata.json()
     article = searchdata['articles'][0]
     data = {
@@ -53,7 +53,7 @@ def test_user_data_slash_update_put_valid_body():
 
 #UT-23.2
 def test_user_data_slash_update_put_no_cookie():
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     data = {
         "article_id": 1,
         "relevancy_color": "Not Relevant",
@@ -74,7 +74,7 @@ def test_user_data_slash_update_put_no_cookie():
 
 #UT-23.3     
 def test_user_data_slash_update_put_invalid_body():
-    searchdata = session.get(f"{base_url}/academic_data?keywords=test&academic_database=Scopus")
+    searchdata = session.post(f"{base_url}/academic_data?keywords=test&academic_database=Scopus", json=request_body)
     data = {
         "relevancy_color": "Not Relevant",
     }

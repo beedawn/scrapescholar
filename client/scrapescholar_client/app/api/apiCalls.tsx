@@ -1,6 +1,7 @@
 import { NewUser } from "../components/UserManagement/modal/AddUserModal";
 import httpStringGen from "@/app/api/httpString";
 import _ from 'lodash';
+import { APIKeyInterface } from "../components/SearchView/modal/APIKeyModal";
 const apiCalls = () => {
   const host = _.escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
   const http_string = httpStringGen();
@@ -72,10 +73,12 @@ const apiCalls = () => {
     }
   }
 
-  const getAPIResults = async (userDatabaseList: string[], inputsAndLogicalOperators: string[],
+  const getAPIResults = async (
+    userDatabaseList: string[], inputsAndLogicalOperators: string[],
     emptyString: string, setInputs: any, setResults: any, setError: any,
     filterBlankInputs: string[], inputs: any, setDataFull: (item: boolean) => void,
-    setCurrentSearchId: (item: number) => void) => {
+    setCurrentSearchId: (item: number) => void, apiKey:APIKeyInterface
+  ) => {
     let data: Response;
     let jsonData;
     let queryString = '';
@@ -87,13 +90,21 @@ const apiCalls = () => {
     else {
       setInputs([...filterBlankInputs])
       const apiQuery = inputsAndLogicalOperators.join('%20')
+      
       try {
         const url = `${http_string}://${host}:8000/academic_data?keywords=${apiQuery}${queryString}`
-        data = await fetch(url, { method: "GET", credentials: "include" })
+        
+        data = await fetch(url, { 
+          method: "POST", 
+          credentials: "include", 
+          headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(apiKey) })
         jsonData = await data.json()
         if (data.status === 507) {
           setDataFull(true);
         }
+        if (data.status  === 429)
+        {setError(`${jsonData}, please use the API Keys link under the Settings menu to provide your own API key.`)}
       }
       catch (error: any) {
         setError(error);
@@ -498,6 +509,39 @@ const apiCalls = () => {
 
   }
 
+
+  const verifyAPIKey = async (APIKey: string, academicSource: string) => {
+    let data: Response;
+    let status;
+    let academic_url;
+    switch (academicSource) {
+      case 'scopus':
+        academic_url = "https://api.elsevier.com/content/search/scopus?query=all(gene)&apiKey="
+        break;
+      case 'sciencedirect':
+        academic_url = "https://api.elsevier.com/content/search/sciencedirect?query=gene&apiKey=";
+        break;
+      default:
+        return false
+    }
+    try {
+      const url = `${academic_url}${APIKey}`
+      data = await fetch(url, {
+        method: "GET"
+      })
+      status = data.status;
+      if (status == 200) {
+        return true
+      } else {
+        return false
+      }
+    }
+    catch (error: any) {
+      return false
+    }
+
+  }
+
   return {
     getAPIDatabases, postAPILogin,
     getAPIResults, getAPISearches, getAPIPastSearchResults,
@@ -508,7 +552,7 @@ const apiCalls = () => {
     editComment,
     deleteComment, downloadURL, putSearchShare,
     isAdmin, addUser, getUsers, deleteUserAPI, updateUserRole,
-    getAPIDatabasesAndIDs, addArticle, deleteArticleAPI
+    getAPIDatabasesAndIDs, addArticle, deleteArticleAPI, verifyAPIKey
   };
 }
 

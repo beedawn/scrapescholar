@@ -117,6 +117,8 @@ const fetchMock = jest.fn((url) => {
       statusText: 'OK',
     });
   }
+
+
   return Promise.reject(new Error('Invalid URL'));
 }) as jest.Mock;
 

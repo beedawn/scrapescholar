@@ -54,8 +54,8 @@ echo "Files generated:"
 echo "  Private Key: $KEY_FILE"
 
 
-mkdir ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live
-mkdir ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name
-mv certs/$server_name/fullchain.pem ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name/fullchain.pem
-mv certs/$server_name/privkey.pem ../../../scrapescholar_docker/nginx_nextjs/certbot/conf/live/$server_name/privkey.pem
+mkdir ../../../scrapescholar_docker/nginx/certbot/conf/live
+mkdir ../../../scrapescholar_docker/nginx/certbot/conf/live/$server_name
+mv certs/$server_name/fullchain.pem ../../../scrapescholar_docker/nginx/certbot/conf/live/$server_name/fullchain.pem
+mv certs/$server_name/privkey.pem ../../../scrapescholar_docker/nginx/certbot/conf/live/$server_name/privkey.pem
 rm -rf certs/

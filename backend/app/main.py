@@ -1,7 +1,8 @@
 from http.client import HTTPException
 
-from fastapi import FastAPI, Query, Cookie, Depends
+from fastapi import FastAPI, Query, Cookie, Depends, Body
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 #needs these for globals call
 import academic_databases.ScienceDirect.sciencedirect as ScienceDirect
@@ -34,7 +35,8 @@ import os
 app = FastAPI()
 dotenv.load_dotenv()
 host_ip = os.getenv('HOST_IP')
-origins = [f"http://{host_ip}:3000", "http://localhost:3000", "http://localhost", f"http://{host_ip}", "https://localhost", "https://localhost:3000", f"https://{host_ip}", f"https://{host_ip}:3000"]
+origins = [f"http://{host_ip}:3000", "http://localhost:3000", "http://localhost", f"http://{host_ip}",
+           "https://localhost", "https://localhost:3000", f"https://{host_ip}", f"https://{host_ip}:3000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -43,6 +45,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class APIKey(BaseModel):
+    scopus: str=""
+    sciencedirect: str=""
 
 
 def get_db():
@@ -84,8 +91,8 @@ async def get_database_list(directory):
     return [folder.name for folder in Path(directory).iterdir() if folder.is_dir() and folder.name != "__pycache__"]
 
 
-@app.get("/academic_data")
-async def multiple_apis(keywords: str,
+@app.post("/academic_data")
+async def multiple_apis(keywords: str, body: APIKey = Body(...),
                         academic_databases: Annotated[List[str] | None, Query(alias="academic_database")] = None,
                         access_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)):
     current_user = get_current_user_modular(token=access_token, db=db)
@@ -109,17 +116,29 @@ async def multiple_apis(keywords: str,
     response = []
     id = 0
     database_list = await get_database_list('academic_databases/')
+    status_codes =[]
     for item in database_list:
         if item in academic_databases:
             new_id = check_response(response, id)
-            article_response, id = globals()[item].request_data(keywords, id=new_id, )
+            apiKey = getattr(body, item.lower(), None)
+            article_response, id, status_code = globals()[item].request_data(keywords, id=new_id, apiKey=apiKey)
             response.extend(article_response)
+            status_codes.append(status_code)
     search_valid, search_id = post_search_no_route(keywords=keywords_list, articles=response,
                                                    current_user=current_user, db=db)
     articles = initialize_full_article_response(current_user, db, search_id)
 
     if search_valid and search_id:
         return {"search_id": search_id, "articles": articles}
+    response_list = []
+    for status_code, source in status_codes:
+        if status_code == 429:
+            response_list.append(f"API Key for {source} is exhausted")
+    if len(response_list) > 0:
+        return JSONResponse(
+            status_code=429,
+            content={"message": response_list}
+        )
 
     else:
         return JSONResponse(

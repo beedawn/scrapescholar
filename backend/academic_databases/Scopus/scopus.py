@@ -10,6 +10,14 @@ from typing import List
 from algorithm.algorithm_interface import algorithm_interface
 
 
+def verify_api_key(api_key):
+    response = requests.get(
+        f"https://api.elsevier.com/content/search/scopus?query=all(gene)&apiKey={api_key}")
+    if(response.status_code == 200):
+        return True
+    else:
+        return False
+
 def sanitize_link_scopus(untrusted_link):
     parsed_untrusted_link = urlparse(untrusted_link)
     if parsed_untrusted_link.scheme == "https" and parsed_untrusted_link.netloc == "www.scopus.com" and parsed_untrusted_link.path == "/inward/record.uri":
@@ -18,7 +26,13 @@ def sanitize_link_scopus(untrusted_link):
         trusted_link = "Potentially malicious link detected. Blocked for user safety."
     return trusted_link
 
-def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str = "", min_year: str = "1900"):
+
+def request_data(keywords: str, id: int, apiKey: str= None, key: str = scopus_api_key, subject: str = "",
+                 min_year: str = "1900"):
+    if apiKey is not "" and apiKey is not None:
+        print("using user api key scopus")
+        if(verify_api_key(apiKey)):
+            key = apiKey
     if scopus_inst_token is not None:
         encoded_keywords = quote(keywords)
         subject = quote(subject)
@@ -72,7 +86,7 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
             if links:
                 link = links[2].get('@href')
                 #Sanitize Link
-                sanitized_link = sanitize_link_scopus(link)                
+                sanitized_link = sanitize_link_scopus(link)
             else:
                 sanitized_link = "No link found."
 
@@ -106,4 +120,4 @@ def request_data(keywords: str, id: int, key: str = scopus_api_key, subject: str
                 transparency=0
             ))
         article_id += 1
-    return return_articles, article_id
+    return return_articles, article_id, (response.status_code,"scopus")

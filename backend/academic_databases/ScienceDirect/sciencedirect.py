@@ -1,10 +1,24 @@
 import requests
-from api_tools.api_tools import sciencedirect_api_key, parse_data_scopus
+from api_tools.api_tools import sciencedirect_api_key as default_sciencedirect_api_key, parse_data_scopus
 from academic_databases.SearchResult import SearchResult
 from algorithm.algorithm_interface import algorithm_interface
 
+def verify_api_key(api_key):
+    response = requests.get(
+        f"https://api.elsevier.com/content/search/sciencedirect?query=gene&apiKey={api_key}")
+    if(response.status_code == 200):
+        return True
+    else:
+        return False
 
-def request_data(keywords: str, id: int):
+
+def request_data(keywords: str, id: int, apiKey:str):
+    sciencedirect_api_key = default_sciencedirect_api_key
+    if apiKey is not "" and apiKey is not None:
+        print("using user api key science direct")
+        if(verify_api_key(apiKey)):
+            sciencedirect_api_key = apiKey
+
     response = requests.get(
         f"https://api.elsevier.com/content/search/sciencedirect?query={keywords}&apiKey={sciencedirect_api_key}")
     articles = parse_data_scopus(response)
@@ -38,4 +52,4 @@ def request_data(keywords: str, id: int):
                 transparency=0
             ))
         article_id += 1
-    return return_articles, id
+    return return_articles, id, (response.status_code, "sciencedirect")

@@ -4,7 +4,7 @@ from app.main import app
 from tests.integration.tools.get_cookie import get_cookie
 from typing import List
 from tests.integration.tools.base_url import base_url
-
+from tests.integration.tools.blankAPIKey import request_body
 client = TestClient(app)
 session = get_cookie()
 
@@ -14,7 +14,7 @@ def test_academic_data_and():
     keyword_two="milk"
     api_query = f"{keyword_one}%20AND%20{keyword_two}"
     query_string = "&academic_database=Scopus&academic_database=ScienceDirect"
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{query_string}", json=request_body)
     assert search_request.status_code ==200
     search_request_data = search_request.json()
     search_id = search_request_data["search_id"]
@@ -37,7 +37,7 @@ def test_academic_data_NOT():
     keyword_two="pizza"
     api_query = f"{keyword_one}%20AND%20NOT%20{keyword_two}"
     query_string = "&academic_database=Scopus"
-    search_request = session.get(f"{base_url}/academic_data?keywords={api_query}{query_string}")
+    search_request = session.post(f"{base_url}/academic_data?keywords={api_query}{query_string}", json=request_body)
     assert search_request.status_code ==200
     search_request_data = search_request.json()
     search_id = search_request_data["search_id"]

@@ -12,6 +12,8 @@ import Relevance from '../types/Relevance';
 import DOMPurify from 'dompurify';
 import windowWidth from '../components/responsive/windowWidth';
 
+import { APIKeyInterface } from '../components/SearchView/modal/APIKeyModal';
+
 interface SearchViewProps {
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     disableD3?: boolean;
@@ -38,6 +40,7 @@ export interface ResultItem {
 }
 
 const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false }) => {
+    const[APIKey, setAPIKey]=useState<APIKeyInterface>({scopus:"",sciencedirect:""});
     const [inputs, setInputs] = useState<string[]>(['']);
     const [currentSearchId, setCurrentSearchId] = useState<number>(-1);
     const [searchName, setSearchName] = useState("search name");
@@ -236,7 +239,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
             inputsAndLogicalOperators, emptyString,
             setInputs, setResults, setError,
             filterBlankInputs, inputs,
-            setDataFull, setCurrentSearchId);
+            setDataFull, setCurrentSearchId, APIKey);
         const bubblePlot = initBubblePlotData(responseResult.articles)
         setBubbleInputs(bubblePlot)
         setSelectedSearchIdState(responseResult.search_id)
@@ -252,6 +255,7 @@ const SearchView: React.FC<SearchViewProps> = ({ setLoggedIn, disableD3 = false 
                     searches={searches} handlePastSearchSelection={handlePastSearchSelection}
                     setOpenUserManagement={setOpenUserManagement}
                     setDataFull={setDataFull} clearPages={clearPages} isMobile={isMobile}
+                    setAPIKey={setAPIKey} APIKey={APIKey}
                 />
             </div>
             <div className={`flex-1 ${!isMobile ? 'm-10, ml-12' : 'm-2 p-2'} overflow-auto ${isMobile && isSidebarOpen && selectedArticleId !== null && isCommentButtonPressed ? 'hidden' : ''}`}>
