@@ -1,5 +1,3 @@
-from http.client import HTTPException
-
 from fastapi import FastAPI, Query, Cookie, Depends, Body
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -22,6 +20,7 @@ from endpoints.search import search
 from endpoints.article import article
 from endpoints.comment import comment
 from endpoints.download import download
+from endpoints.azure import azure_oauth
 from typing import List, Annotated
 from pathlib import Path
 from endpoints.search.search import post_search_no_route, check_if_user_exceeded_search_amount, \
@@ -32,9 +31,14 @@ from auth_tools.get_user import get_current_user_modular
 import dotenv
 import os
 
+from authlib.integrations.starlette_client import OAuth
+from starlette.middleware.sessions import SessionMiddleware
+
 app = FastAPI()
 dotenv.load_dotenv()
 host_ip = os.getenv('HOST_IP')
+azure_client_id = os.getenv('AZURE_CLIENT_ID')
+azure_tenant_id = os.getenv('OAUTH_TENANT_ID')
 origins = [f"http://{host_ip}:3000", "http://localhost:3000", "http://localhost", f"http://{host_ip}",
            "https://localhost", "https://localhost:3000", f"https://{host_ip}", f"https://{host_ip}:3000"]
 
@@ -48,8 +52,8 @@ app.add_middleware(
 
 
 class APIKey(BaseModel):
-    scopus: str=""
-    sciencedirect: str=""
+    scopus: str = ""
+    sciencedirect: str = ""
 
 
 def get_db():
@@ -58,11 +62,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-@app.get("/health_check")
-async def health_check():
-    return {"message": "Hello World"}
 
 
 db = get_db()
@@ -77,6 +76,20 @@ app.include_router(user_data.router, prefix="/user_data", tags=["UserData"])
 
 app.include_router(download.router, prefix="/download", tags=["Download"])
 
+app.include_router(azure_oauth.router, prefix="/azure", tags=["Azure"])
+
+oauth = OAuth()
+oauth.register(
+    name='azure',
+    client_id=os.getenv('OAUTH_CLIENT_ID'),
+    client_secret=os.getenv('OAUTH_CLIENT_SECRET'),
+    authorize_url=os.getenv('OAUTH_AUTHORIZATION_URL'),
+    access_token_url=os.getenv('OAUTH_TOKEN_URL'),
+    client_kwargs={'scope': 'openid profile email'},
+    server_metadata_url=f"https://login.microsoftonline.com/{azure_tenant_id}/v2.0/.well-known/openid-configuration",
+)
+app.add_middleware(SessionMiddleware, secret_key="secret-key")
+
 
 def check_response(response: List, id: int):
     if len(response) > 0 and response[-1].article_id is not None:
@@ -89,6 +102,11 @@ def check_response(response: List, id: int):
 async def get_database_list(directory):
     # Get a list of all folders in the specified directory
     return [folder.name for folder in Path(directory).iterdir() if folder.is_dir() and folder.name != "__pycache__"]
+
+
+@app.get("/health_check")
+async def health_check():
+    return {"message": "Hello World"}
 
 
 @app.post("/academic_data")
@@ -116,7 +134,7 @@ async def multiple_apis(keywords: str, body: APIKey = Body(...),
     response = []
     id = 0
     database_list = await get_database_list('academic_databases/')
-    status_codes =[]
+    status_codes = []
     for item in database_list:
         if item in academic_databases:
             new_id = check_response(response, id)
@@ -161,5 +179,4 @@ async def academic_sources(access_token: Annotated[str | None, Cookie()] = None,
     list_of_sources = []
     for item in database_list:
         list_of_sources.append({"name": item.name, "source_id": item.source_id})
-
     return list_of_sources
