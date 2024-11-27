@@ -30,6 +30,11 @@ export default function Home() {
     }
     }
     fetchCookie();
+
+  
+      const intervalId = setInterval(fetchCookie, 60000);
+
+      return () => clearInterval(intervalId);
     
 },[])
   
