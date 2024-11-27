@@ -1,5 +1,19 @@
 # ScrapeScholar
 
+This is a web application to assist with systematic literature reviews. It utilizes Next.js, FastAPI, and Postgres.
+
+This application has also been dockerized. Since it is dockerized, all you will need to do is set up the proper environment variables and run the docker compose file in scrapescholar_docker/.
+
+To build the proper environment variable files, you can navigate to install/ and select the windows or linux directories. The linux scripts also work on MacOS. Once in one of these directories, run the install file for your OS (Linux/Mac: install.sh, Windows: install.bat). For Linux/mac you will also need to run:
+```
+chmod +x install.sh
+```
+Before executiing the install script. The install script will also create self signed certs, these are primarily for local deployment. If you intend to serve this application publically, then enter the domain you intend to host the site on when prompted during the install script.
+
+You will then need to clone this repo onto the machine that will host the website and run the install/linux/cert_install/ssl_generation_run_from_virtualmachine.sh script from that machine. Please see the readme in the cert_install/ directory for more details.
+
+## For development purposes you can review the below section on how to run pieces of the application.
+
 To run the front end navigate to client/scrape_scholar_client and run 
 
 ```bash
@@ -67,7 +81,7 @@ npm run test:unit -- --coverage
 
 
 To create test database please do the following 
-
+```
 CREATE DATABASE scrapescholartestdb;
 
 CREATE USER student WITH PASSWORD 'student';
@@ -75,18 +89,8 @@ CREATE USER student WITH PASSWORD 'student';
 GRANT ALL PRIVILEGES ON DATABASE scrapescholartestdb TO student;
 
 python -m app.init_db
+```
 
-create user curl
-curl -X 'POST' \
-  'http://localhost:8000/users/create' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "username": "admin",
-  "email": "admin@example.com",
-  "password": "admin1234",
-  "role_id": 1
-}'
 
 
 login curl:
