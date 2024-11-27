@@ -62,30 +62,6 @@ def load_user(user_id: str, db: Session = None):
 @router.post("/login")
 def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     access_token = build_access_token(data.username, data.password)
-    # user = None
-    # for candidate in db.query(User).all():
-    #     try:
-    #         decrypted_username = decrypt_username(candidate.username)
-    #         if decrypted_username == data.username:
-    #             user = candidate
-    #             break
-    #         if verify_hash(data.username, candidate.email):
-    #             user = candidate
-    #             break
-    #     except HTTPException:
-    #         continue
-    #
-    # if not user:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_400_BAD_REQUEST,
-    #         detail="Invalid username"
-    #     )
-    #
-    # if not verify_hash(data.password, user.password):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_400_BAD_REQUEST,
-    #         detail="Invalid password"
-    #     )
 
     return cookie_response(access_token)
 

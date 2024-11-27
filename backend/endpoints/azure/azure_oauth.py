@@ -11,8 +11,8 @@ host_ip = os.getenv('HOST_IP')
 azure_client_id = os.getenv('AZURE_CLIENT_ID')
 azure_tenant_id = os.getenv('AZURE_TENANT_ID')
 client_secret = os.getenv('AZURE_CLIENT_SECRET')
-authorize_url = os.getenv('AZURE_AUTHORIZATION_URL')
-access_token_url = os.getenv('AZURE_TOKEN_URL')
+authorize_url = f"https://login.microsoftonline.com/{azure_tenant_id}/oauth2/v2.0/authorize"
+access_token_url = f"https://login.microsoftonline.com/{azure_tenant_id}/oauth2/v2.0/token"
 origins = [f"http://{host_ip}:3000", "http://localhost:3000", "http://localhost", f"http://{host_ip}",
            "https://localhost", "https://localhost:3000", f"https://{host_ip}", f"https://{host_ip}:3000"]
 
