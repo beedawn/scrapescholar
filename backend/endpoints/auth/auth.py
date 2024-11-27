@@ -108,12 +108,19 @@ def build_access_token(username, password, azure_token=None):
     return access_token
 
 
-def cookie_response(access_token: str,  request: Request = None, azure_token=None):
+def cookie_response(access_token: str,  request: Request = None, azure_token=None,):
     content = {"access_token": access_token, "token_type": "bearer"}
+
     response = JSONResponse(content=content)
     if azure_token:
         scheme = request.url.scheme
-        redirect_uri = f"{scheme}://{host_ip}:8000/azure/auth/callback"
+        redirect_uri = f"{scheme}://{host_ip}/"
+        print("ENVIRONMENT VARIABLE")
+        print(ENVIRONMENT)
+        if ENVIRONMENT is None or (ENVIRONMENT.lower() != "prod" and ENVIRONMENT.lower() != "production"):
+            redirect_uri = f"{scheme}://{host_ip}:3000/"
+        print("redirect uri")
+        print(redirect_uri)
         response = RedirectResponse(url=redirect_uri)
     response.set_cookie(
         key="access_token",
