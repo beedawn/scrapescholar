@@ -25,7 +25,7 @@ def test_login_us_4():
         azure_button.click()
         time.sleep(5)
 
-        first_input = driver.find_element("css selector", "input")
+        first_input = driver.find_element("id", "i0116")
         first_input.send_keys(f"{testuser}@{testuser}.com")
 
         submit_button = driver.find_element("id", "idSIButton9")
