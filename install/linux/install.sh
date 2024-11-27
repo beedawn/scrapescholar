@@ -1,9 +1,9 @@
 #!/bin/bash
 
-filepath="../client/scrapescholar_client/.env"
-dockerfilepath="../scrapescholar_docker/.env"
+filepath="../../backend/.env"
+dockerfilepath="../../scrapescholar_docker/.env"
 
-next_js_env=".next_env"
+next_js_env="../../client/scrapescholar_client/.env"
 
 
 echo 'Welcome to the scripted setup'
@@ -94,7 +94,7 @@ echo "Enter IP/domain the application will be served from:"
 read host_ip
 echo -e "HOST_IP=${host_ip}" >> "$filepath"
 echo -e "HOST_IP=${host_ip}" >> "$dockerfilepath"
-echo -e "NEXT_PUBLIC_HOST_IP=${host_ip}">> "$next_js_env"
+echo -e "NEXT_PUBLIC_HOST_IP=${host_ip}"> "$next_js_env"
 
 
 echo -e "ENVIRONMENT=PRODUCTION" >> "$filepath"
@@ -115,13 +115,14 @@ echo -e "AZURE_TENANT_ID=${azure_tenant_id}" >> "$dockerfilepath"
 echo "Azure Client Secret (for OAUTH, if none needed leave blank):"
 read azure_client_secret
 echo -e "AZURE_CLIENT_SECRET=${azure_client_secret}" >> "$filepath"
-echo -e "AZURE_CLIENT_SCRET=${azure_client_secret}" >> "$dockerfilepath"
+echo -e "AZURE_CLIENT_SECRET=${azure_client_secret}" >> "$dockerfilepath"
 
 
 
 if [ "$host_ip" = "localhost" ]; then
 	echo "Running cert gen"
-	sh ./cert_install/cert_gen.sh
+	cd cert_install
+	sh ./cert_gen.sh
 
 else
 	echo "localhost not detected as IP, if serving locally, rerun script with localhost as the IP/domain the application will be served from"

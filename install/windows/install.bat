@@ -1,9 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set filepath=../client/scrapescholar_client/.env
+set filepath=../backend/.env
 set dockerfilepath=../scrapescholar_docker/.env
-set next_js_env=.next_env
+set next_js_env=../client/scrapescholar_client/.env
 
 
 echo Welcome to the scripted setup
@@ -71,7 +71,7 @@ echo TEST_PASSWORD=%admin_pass% >> "%dockerfilepath%"
 set /p host_ip=Enter IP/domain the application will be served from:
 echo HOST_IP=%host_ip% >> "%filepath%"
 echo HOST_IP=%host_ip% >> "%dockerfilepath%"
-echo NEXT_PUBLIC_HOST_IP=%host_ip% >> "%next_js_env%"
+echo NEXT_PUBLIC_HOST_IP=%host_ip% > "%next_js_env%"
 
 
 
@@ -93,7 +93,8 @@ echo NEXT_PUBLIC_ENVIRONMENT=PRODUCTION >> "%next_js_env%"
 
 if "%host_ip%"=="localhost" (
     echo Running cert gen
-    call .\cert_install\cert_gen.bat
+    cd cert_install
+    call .\cert_gen.bat
 ) else (
     echo localhost not detected as IP, if serving locally, rerun script with localhost as the IP/domain the application will be served from.
     echo If serving publicly, go to nginx directory, run docker compose up -d and then run ssl_generation_run_from_virtualmachine.bat
