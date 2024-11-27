@@ -38,7 +38,11 @@ app = FastAPI()
 dotenv.load_dotenv()
 host_ip = os.getenv('HOST_IP')
 azure_client_id = os.getenv('AZURE_CLIENT_ID')
-azure_tenant_id = os.getenv('OAUTH_TENANT_ID')
+azure_tenant_id = os.getenv('AZURE_TENANT_ID')
+client_secret = os.getenv('AZURE_CLIENT_SECRET')
+authorize_url = os.getenv('AZURE_AUTHORIZATION_URL')
+access_token_url = os.getenv('AZURE_TOKEN_URL')
+
 origins = [f"http://{host_ip}:3000", "http://localhost:3000", "http://localhost", f"http://{host_ip}",
            "https://localhost", "https://localhost:3000", f"https://{host_ip}", f"https://{host_ip}:3000"]
 
@@ -81,10 +85,10 @@ app.include_router(azure_oauth.router, prefix="/azure", tags=["Azure"])
 oauth = OAuth()
 oauth.register(
     name='azure',
-    client_id=os.getenv('OAUTH_CLIENT_ID'),
-    client_secret=os.getenv('OAUTH_CLIENT_SECRET'),
-    authorize_url=os.getenv('OAUTH_AUTHORIZATION_URL'),
-    access_token_url=os.getenv('OAUTH_TOKEN_URL'),
+    client_id=azure_client_id,
+    client_secret=client_secret,
+    authorize_url=authorize_url,
+    access_token_url=access_token_url,
     client_kwargs={'scope': 'openid profile email'},
     server_metadata_url=f"https://login.microsoftonline.com/{azure_tenant_id}/v2.0/.well-known/openid-configuration",
 )
