@@ -13,8 +13,6 @@ azure_tenant_id = os.getenv('AZURE_TENANT_ID')
 client_secret = os.getenv('AZURE_CLIENT_SECRET')
 authorize_url = f"https://login.microsoftonline.com/{azure_tenant_id}/oauth2/v2.0/authorize"
 access_token_url = f"https://login.microsoftonline.com/{azure_tenant_id}/oauth2/v2.0/token"
-origins = [f"http://{host_ip}:3000", "http://localhost:3000", "http://localhost", f"http://{host_ip}",
-           "https://localhost", "https://localhost:3000", f"https://{host_ip}", f"https://{host_ip}:3000"]
 
 
 def get_db():
@@ -46,7 +44,10 @@ async def login(request: Request):
     """
    Login Azure
    """
-    return await oauth.azure.authorize_redirect(request, "http://localhost:8000/azure/auth/callback")
+    scheme = request.url.scheme
+    redirect_uri = f"{scheme}://{host_ip}:8000/azure/auth/callback"
+
+    return await oauth.azure.authorize_redirect(request, redirect_uri)
 
 
 @router.get("/auth/callback")
@@ -57,7 +58,7 @@ async def auth_callback(request: Request):
     id_token = token['id_token']
     if token is not None:
         access_token = build_access_token(email, "", id_token)
-        return cookie_response(access_token, True)
+        return cookie_response(access_token=access_token, request=request,azure_token=True)
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
