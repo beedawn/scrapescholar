@@ -39,7 +39,7 @@ def get_cookie_2():
         username=user_data["username"],
         password=user_data["password"],
     )
-    login_response = login(login_credentials, db)
+    login_response = login(data=login_credentials)
 
     cookie = login_response.headers.get('set-cookie')
 

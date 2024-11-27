@@ -61,7 +61,7 @@ def load_user(user_id: str, db: Session = None):
 
 
 @router.post("/login")
-def login(request: Request, data: OAuth2PasswordRequestForm = Depends()):
+def login(request: Request=None, data: OAuth2PasswordRequestForm = Depends()):
     access_token = build_access_token(data.username, data.password)
 
     return cookie_response(access_token=access_token, request=request)
