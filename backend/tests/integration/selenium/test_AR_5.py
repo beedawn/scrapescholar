@@ -15,8 +15,8 @@ testpass = os.getenv('TEST_PASSWORD')
 host_ip = os.getenv('HOST_IP')
 
 
-#UT-4.5
-def test_login_us_4():
+#UT-5.4
+def test_ar_5():
     try:
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         driver.get(f"http://{host_ip}:3000/")
