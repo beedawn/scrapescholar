@@ -82,16 +82,7 @@ app.include_router(download.router, prefix="/download", tags=["Download"])
 
 app.include_router(azure_oauth.router, prefix="/azure", tags=["Azure"])
 
-oauth = OAuth()
-oauth.register(
-    name='azure',
-    client_id=azure_client_id,
-    client_secret=client_secret,
-    authorize_url=authorize_url,
-    access_token_url=access_token_url,
-    client_kwargs={'scope': 'openid profile email'},
-    server_metadata_url=f"https://login.microsoftonline.com/{azure_tenant_id}/v2.0/.well-known/openid-configuration",
-)
+
 app.add_middleware(SessionMiddleware, secret_key="secret-key")
 
 
