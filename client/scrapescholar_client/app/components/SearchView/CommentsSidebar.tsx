@@ -131,7 +131,7 @@ const CommentsSidebar: React.FC<CommentsSidebarProps> = ({ articleId, onClose, i
                                             <div key={comment?.comment_id || index} className="bg-white rounded m-2 px-2 pt-2">
                                                 <li className="mb-4">
                                                     <div >
-                                                        <strong>{comment?.username || "Unknown"}</strong>
+                                                        <strong>{comment?.username || "Unknown"} </strong>
                                                         <span className="text-slate-500">
                                                             @ {readableTime !== undefined ? readableTime : ""}
                                                         </span>
