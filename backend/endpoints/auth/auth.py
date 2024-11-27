@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Cookie, Request
 from sqlalchemy.orm import Session
 from app.db.session import get_db, SessionLocal
 from app.models.user import User
@@ -21,6 +21,7 @@ SECRET = os.getenv("SECRET_KEY")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 host_ip = os.getenv("HOST_IP")
 fernet = Fernet(ENCRYPTION_KEY)
+ENVIRONMENT = os.getenv("ENVIRONMENT")
 
 if not SECRET:
     raise ValueError("SECRET_KEY environment variable is not set")
@@ -60,10 +61,10 @@ def load_user(user_id: str, db: Session = None):
 
 
 @router.post("/login")
-def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login(request: Request=None, data: OAuth2PasswordRequestForm = Depends()):
     access_token = build_access_token(data.username, data.password)
 
-    return cookie_response(access_token)
+    return cookie_response(access_token=access_token, request=request)
 
 
 def build_access_token(username, password, azure_token=None):
@@ -92,7 +93,6 @@ def build_access_token(username, password, azure_token=None):
             detail="Invalid username"
         )
 
-
     if not verify_hash(password, user.password) and azure_token is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -108,13 +108,20 @@ def build_access_token(username, password, azure_token=None):
     return access_token
 
 
-def cookie_response(access_token: str, azure_token=None):
+def cookie_response(access_token: str,  request: Request = None, azure_token=None,):
     content = {"access_token": access_token, "token_type": "bearer"}
 
     response = JSONResponse(content=content)
     if azure_token:
-        redirect_url=f"http://{host_ip}:3000/"
-        response = RedirectResponse(url=redirect_url)
+        scheme = request.url.scheme
+        redirect_uri = f"{scheme}://{host_ip}/"
+        print("ENVIRONMENT VARIABLE")
+        print(ENVIRONMENT)
+        if ENVIRONMENT is None or (ENVIRONMENT.lower() != "prod" and ENVIRONMENT.lower() != "production"):
+            redirect_uri = f"{scheme}://{host_ip}:3000/"
+        print("redirect uri")
+        print(redirect_uri)
+        response = RedirectResponse(url=redirect_uri)
     response.set_cookie(
         key="access_token",
         value=access_token,

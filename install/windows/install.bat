@@ -73,10 +73,23 @@ echo HOST_IP=%host_ip% >> "%filepath%"
 echo HOST_IP=%host_ip% >> "%dockerfilepath%"
 echo NEXT_PUBLIC_HOST_IP=%host_ip% >> "%next_js_env%"
 
+
+
+set /p azure_client_id=Azure Client ID (for OAUTH, if none needed leave blank):
+echo AZURE_CLIENT_ID=%azure_client_id% >> "%filepath%"
+echo AZURE_CLIENT_ID=%azure_client_id% >> "%dockerfilepath%"
+
+set /p azure_tenant_id=Azure Tenant ID (for OAUTH, if none needed leave blank):
+echo AZURE_TENANT_ID=%azure_tenant_id% >> "%filepath%"
+echo AZURE_TENANT_ID=%azure_tenant_id% >> "%dockerfilepath%"
+
+set /p azure_client_secret=Azure Client Secret (for OAUTH, if none needed leave blank):
+echo AZURE_CLIENT_SECRET=%azure_client_secret% >> "%filepath%"
+echo AZURE_CLIENT_SECRET=%azure_client_secret% >> "%dockerfilepath%"
+
 echo ENVIRONMENT=PRODUCTION >> "%filepath%"
 echo ENVIRONMENT=PRODUCTION >> "%dockerfilepath%"
 echo NEXT_PUBLIC_ENVIRONMENT=PRODUCTION >> "%next_js_env%"
-
 
 if "%host_ip%"=="localhost" (
     echo Running cert gen

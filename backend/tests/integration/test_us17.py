@@ -48,7 +48,7 @@ def get_cookie_2():
         username=mock_user_data["username"],
         password=mock_user_data["password"],
     )
-    login_response = login(login_credentials, db)
+    login_response = login(data=login_credentials)
 
     cookie = login_response.headers.get('set-cookie')
 

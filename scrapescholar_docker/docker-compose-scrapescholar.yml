@@ -56,6 +56,9 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       HOST_IP: ${HOST_IP}
       ENVIRONMENT: ${ENVIRONMENT}
+      AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET}
+      AZURE_CLIENT_ID: ${AZURE_CLIENT_ID}
+      AZURE_TENANT_ID: ${AZURE_TENANT_ID}
     volumes:
       - ./fastapi/start_fastapi.sh:/docker-entrypoint.d/start_fastapi.sh
       - ./nginx/certbot/conf/:/etc/nginx/ssl/:ro

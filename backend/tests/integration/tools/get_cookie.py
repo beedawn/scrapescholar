@@ -17,7 +17,7 @@ def get_cookie():
         username=test_user,
         password=test_password
     )
-    login_response = login(login_credentials, db)
+    login_response = login(data=login_credentials)
 
     cookie = login_response.headers.get('set-cookie')
 

@@ -100,6 +100,25 @@ echo -e "NEXT_PUBLIC_HOST_IP=${host_ip}">> "$next_js_env"
 echo -e "ENVIRONMENT=PRODUCTION" >> "$filepath"
 echo -e "ENVIRONMENT=PRODUCTION" >> "$dockerfilepath"
 echo -e "NEXT_PUBLIC_ENVIRONMENT=PRODUCTION">> "$next_js_env"
+
+echo "Azure Client ID (for OAUTH, if none needed leave blank):"
+read azure_client_id
+echo -e "AZURE_CLIENT_ID=${azure_client_id}" >> "$filepath"
+echo -e "AZURE_CLIENT_ID=${azure_client_id}" >> "$dockerfilepath"
+
+echo "Azure Tenant ID (for OAUTH, if none needed leave blank):"
+read azure_tenant_id
+echo -e "AZURE_TENANT_ID=${azure_tenant_id}" >> "$filepath"
+echo -e "AZURE_TENANT_ID=${azure_tenant_id}" >> "$dockerfilepath"
+
+
+echo "Azure Client Secret (for OAUTH, if none needed leave blank):"
+read azure_client_secret
+echo -e "AZURE_CLIENT_SECRET=${azure_client_secret}" >> "$filepath"
+echo -e "AZURE_CLIENT_SCRET=${azure_client_secret}" >> "$dockerfilepath"
+
+
+
 if [ "$host_ip" = "localhost" ]; then
 	echo "Running cert gen"
 	sh ./cert_install/cert_gen.sh
