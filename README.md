@@ -8,7 +8,7 @@ To build the proper environment variable files, you can navigate to install/ and
 ```
 chmod +x install.sh
 ```
-Before executiing the install script. The install script will also create self signed certs, these are primarily for local deployment. If you intend to serve this application publically, then enter the domain you intend to host the site on when prompted during the install script.
+Before executing the install script. The install script will also create self signed certs, these are primarily for local deployment. If you intend to serve this application publically, then enter the domain you intend to host the site on when prompted during the install script.
 
 You will then need to clone this repo onto the machine that will host the website and run the install/linux/cert_install/ssl_generation_run_from_virtualmachine.sh script from that machine. Please see the readme in the cert_install/ directory for more details.
 
