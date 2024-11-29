@@ -1,5 +1,6 @@
 # ScrapeScholar
 
+
 This is a web application to assist with systematic literature reviews. It utilizes Next.js, FastAPI, and Postgres.
 
 This application has also been dockerized. Since it is dockerized, all you will need to do is set up the proper environment variables and run the docker compose file in scrapescholar_docker/.
@@ -14,7 +15,8 @@ You will then need to clone this repo onto the machine that will host the websit
 
 ## For development purposes you can review the below section on how to run pieces of the application.
 
-To run the front end navigate to client/scrape_scholar_client and run 
+To run the front end navigate to client/scrapescholar_client and run 
+
 
 ```bash
 npm install
@@ -92,10 +94,3 @@ python -m app.init_db
 ```
 
 
-
-login curl:
-curl -X 'POST' \
-  'http://localhost:8000/auth/login' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
-  -d 'grant_type=password&username=admin&password=admin1234&scope=&client_id=string&client_secret=string'
