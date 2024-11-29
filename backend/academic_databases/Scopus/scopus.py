@@ -29,7 +29,7 @@ def sanitize_link_scopus(untrusted_link):
 
 def request_data(keywords: str, id: int, apiKey: str= None, key: str = scopus_api_key, subject: str = "",
                  min_year: str = "1900"):
-    if apiKey is not "" and apiKey is not None:
+    if apiKey != "" and apiKey is not None:
         print("using user api key scopus")
         if(verify_api_key(apiKey)):
             key = apiKey
