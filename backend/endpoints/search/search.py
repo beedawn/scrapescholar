@@ -125,10 +125,14 @@ def delete_search_title(db: Session = Depends(get_db), access_token: Annotated[s
     delete a search and associated articles
     """
     current_user = get_current_user_modular(token=access_token, db=db)
+
     search = find_search(db=db, current_user=current_user, search_id=search_id)
     if search is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Search not found")
-
+    search_shares = get_search_share_by_search(db, search_id)
+    for share in search_shares:
+        if share.shared_by_user_id == current_user.user_id:
+            db.delete(share)
     articles = find_search_articles(db, search_id)
     for article in articles:
         user_data = find_user_data(db, article.article_id)
