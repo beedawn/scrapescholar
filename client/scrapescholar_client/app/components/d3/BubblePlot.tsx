@@ -44,8 +44,8 @@ const BubblePlot: React.FC<BubblePlotProps> = ({ data }) => {
     const z = d3.scaleLinear().domain([0, zMax]).range([5, 30]);
 
     const simulation = d3.forceSimulation(data)
-      .force("x", d3.forceX(d => x(d.x)).strength(0.1))
-      .force("y", d3.forceY(d => y(d.y)).strength(0.1))
+      .force("x", d3.forceX(d => x(d.x ?? 0)).strength(0.1))
+      .force("y", d3.forceY(d => y(d.y ?? 0)).strength(0.1))
       .force("collide", d3.forceCollide(d => z(d.radius)))
       .on("tick", ticked);
     const bubbles = svg.append('g')
