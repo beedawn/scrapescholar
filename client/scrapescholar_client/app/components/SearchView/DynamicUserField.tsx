@@ -41,6 +41,7 @@ const DynamicUserField: React.FC<DynamicUserFieldProps> =
                         handleCellClick(result.article_id, field)
                     }}>
                         <input style={{ color: "black", width: "75%" }}
+                        type="number"
                             value={currentResult ? currentResult[field] : ''}
                             onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                 handleFieldChange(result.article_id, field, e.target.value)
