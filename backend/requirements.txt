@@ -51,7 +51,7 @@ PySocks==1.7.1
 pytest==8.3.3
 pytest-asyncio==0.24.0
 python-dotenv==1.0.1
-python-multipart==0.0.9
+python-multipart==0.0.18
 PyYAML==6.0.2
 requests==2.32.3
 rich==13.8.0
