@@ -23,6 +23,9 @@ import os
 from datetime import datetime
 from sqlalchemy.orm import Session
 from auth_tools.get_user import get_current_user_modular
+from academic_databases.Scopus.scopus import sanitize_link_scopus
+from academic_databases.ScienceDirect.sciencedirect import sanitize_link_sciencedirect
+import validators
 
 load_dotenv()
 
@@ -281,12 +284,23 @@ def initialize_full_article_response(current_user: User, db, search_id):
     for article in articles:
         user_data = create_user_data(db=db, user_id=current_user.user_id, article_id=article.article_id)
         source_name = get_source(db, article.source_id)
+        if source_name == "Scopus":
+            parsed_link = sanitize_link_scopus(article.link)
+        elif source_name == "ScienceDirect":
+            parsed_link = sanitize_link_sciencedirect(article.link)
+
+
+        else:
+            if validators.url(article.link):
+                parsed_link = article.link
+            else:
+                parsed_link = "Potentially malicious link detected. Blocked for user safety.""
         article_data = SearchResult(
             article_id=article.article_id,
             title=article.title,
             date=article.date,
             citedby=article.citedby if article.citedby is not None else "?",
-            link=article.link,
+            link=parsed_link,
             abstract=article.abstract,
             document_type=article.document_type,
             source=source_name.name,
