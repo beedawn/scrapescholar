@@ -287,9 +287,10 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                 <td className="border border-gray-500" >{result.date}</td>
                                 <td className="border border-gray-500" >{result.citedby}</td>
                                 <td className="border border-gray-500" >
-                                    <a href={result.link}>
+                                {result.link.endsWith("Blocked for user safety.")?<>{result.link}</>:<a href={result.link}>
                                         {result.link}
-                                    </a>
+                                    </a>}
+                                    
                                 </td>
                                 <td className="border border-gray-500">
                                     {result.abstract != null && result.abstract.length > 0 ? (
