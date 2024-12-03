@@ -34,6 +34,7 @@ import os
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
 
+
 app = FastAPI()
 dotenv.load_dotenv()
 host_ip = os.getenv('HOST_IP')

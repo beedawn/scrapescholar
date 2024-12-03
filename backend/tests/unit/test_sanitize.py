@@ -12,11 +12,11 @@ def test_safe_link():
 def test_failed_scheme():
     link = "http://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=85195248704&origin=inward"
     sanitized_link = sanitize_link_scopus(link)
-    assert sanitized_link == "Potentially malicious link detected. Blocked for user safety."
+    assert sanitized_link == "http://null"
 
 
 #Test Case 22.3
 def test_failed_netloc():
     link = "https://scammer.site.com/inward/record.uri?partnerID=HzOxMe3b&scp=85195248704&origin=inward"
     sanitized_link = sanitize_link_scopus(link)
-    assert sanitized_link == "Potentially malicious link detected. Blocked for user safety."
+    assert sanitized_link == "http://null"

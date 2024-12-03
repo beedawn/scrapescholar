@@ -23,6 +23,9 @@ import os
 from datetime import datetime
 from sqlalchemy.orm import Session
 from auth_tools.get_user import get_current_user_modular
+from academic_databases.Scopus.scopus import sanitize_link_scopus
+from academic_databases.ScienceDirect.sciencedirect import sanitize_link_sciencedirect
+import validators
 
 load_dotenv()
 
@@ -230,12 +233,13 @@ def post_search_no_route(keywords: List[str], articles: List[ArticleBase], db: S
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords, title=title)
     created_search = create_search(search=search, db=db)
     date_format = "%Y-%m-%d"
+
     for article in articles:
         source = get_source_by_name(db, article.source)
         format_article = ArticleCreate(
             title=article.title,
             date=datetime.strptime(article.date, date_format).date(),
-            link=HttpUrl(article.link),
+            link=article.link,
             relevance_score=article.relevance_score,
             abstract=article.abstract,
             citedby=article.citedby,
@@ -252,14 +256,14 @@ def get_full_article_response(db, search_id):
     response = []
     for article in articles:
         user_data = get_user_data(db=db, article_id=article.article_id)
-
         source_name = get_source(db, article.source_id)
+        parsed_link = validate_links(source_name, article.link)
         article_data = SearchResult(
             article_id=article.article_id,
             title=article.title,
             date=article.date,
             citedby=article.citedby if article.citedby is not None else "?",
-            link=article.link,
+            link=parsed_link,
             abstract=article.abstract,
             document_type=article.document_type,
             source=source_name.name,
@@ -274,6 +278,17 @@ def get_full_article_response(db, search_id):
         response.append(article_data)
     return response
 
+def validate_links(source_name, link):
+    if source_name == "Scopus":
+        parsed_link = sanitize_link_scopus(link)
+    elif source_name == "ScienceDirect":
+        parsed_link = sanitize_link_sciencedirect(link)
+
+    elif validators.url(link):
+        parsed_link = link
+    else:
+        parsed_link = "http://null"
+    return parsed_link
 
 def initialize_full_article_response(current_user: User, db, search_id):
     articles = find_search_articles(db, search_id)
@@ -281,12 +296,13 @@ def initialize_full_article_response(current_user: User, db, search_id):
     for article in articles:
         user_data = create_user_data(db=db, user_id=current_user.user_id, article_id=article.article_id)
         source_name = get_source(db, article.source_id)
+        parsed_link = validate_links(source_name, article.link)
         article_data = SearchResult(
             article_id=article.article_id,
             title=article.title,
             date=article.date,
             citedby=article.citedby if article.citedby is not None else "?",
-            link=article.link,
+            link=parsed_link,
             abstract=article.abstract,
             document_type=article.document_type,
             source=source_name.name,
