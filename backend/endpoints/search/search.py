@@ -294,7 +294,7 @@ def initialize_full_article_response(current_user: User, db, search_id):
             if validators.url(article.link):
                 parsed_link = article.link
             else:
-                parsed_link = "Potentially malicious link detected. Blocked for user safety.""
+                parsed_link = "Potentially malicious link detected. Blocked for user safety."
         article_data = SearchResult(
             article_id=article.article_id,
             title=article.title,
