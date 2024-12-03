@@ -287,7 +287,7 @@ const ResultsTable: React.FC<ResultsTableProps> = ({
                                 <td className="border border-gray-500" >{result.date}</td>
                                 <td className="border border-gray-500" >{result.citedby}</td>
                                 <td className="border border-gray-500" >
-                                {result.link.endsWith("Blocked for user safety.")?<>{result.link}</>:<a href={result.link}>
+                                {result.link=="http://null"?<>Potentially malicious link detected. Blocked for user safety.</>:<a href={result.link}>
                                         {result.link}
                                     </a>}
                                     

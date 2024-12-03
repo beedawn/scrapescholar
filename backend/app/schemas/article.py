@@ -7,7 +7,7 @@ class ArticleBase(BaseModel):
     source_id: int
     title: str
     date: date
-    link: Optional[str] = None
+    link: Optional[HttpUrl] = None
     relevance_score: Optional[float] = None
 
     abstract: Optional[str] = None
@@ -24,7 +24,7 @@ class ArticleUpdate(BaseModel):
     title: Optional[str] = None
     publication_date: Optional[date] = None
     journal: Optional[str] = None
-    url: Optional[str] = None
+    url: Optional[HttpUrl] = None
     relevance_score: Optional[float] = None
     review_status: Optional[str] = None
     abstract: Optional[str] = None

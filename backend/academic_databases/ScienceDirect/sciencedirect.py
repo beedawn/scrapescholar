@@ -18,7 +18,7 @@ def sanitize_link_sciencedirect(untrusted_link):
     if parsed_untrusted_link.scheme == "https" and parsed_untrusted_link.netloc == "www.sciencedirect.com":
         trusted_link = untrusted_link
     else:
-        trusted_link = "Potentially malicious link detected. Blocked for user safety."
+        trusted_link = "http://null"
     return trusted_link
 
 def request_data(keywords: str, id: int, apiKey:str):

@@ -287,7 +287,7 @@ def validate_links(source_name, link):
     elif validators.url(link):
         parsed_link = link
     else:
-        parsed_link = "Potentially malicious link detected. Blocked for user safety."
+        parsed_link = "http://null"
     return parsed_link
 
 def initialize_full_article_response(current_user: User, db, search_id):
