@@ -233,8 +233,11 @@ def post_search_no_route(keywords: List[str], articles: List[ArticleBase], db: S
     search = SearchCreate(user_id=current_user.user_id, search_keywords=keywords, title=title)
     created_search = create_search(search=search, db=db)
     date_format = "%Y-%m-%d"
+
     for article in articles:
         source = get_source_by_name(db, article.source)
+        print("article link")
+        print(article.link)
         format_article = ArticleCreate(
             title=article.title,
             date=datetime.strptime(article.date, date_format).date(),
@@ -255,7 +258,6 @@ def get_full_article_response(db, search_id):
     response = []
     for article in articles:
         user_data = get_user_data(db=db, article_id=article.article_id)
-
         source_name = get_source(db, article.source_id)
         article_data = SearchResult(
             article_id=article.article_id,

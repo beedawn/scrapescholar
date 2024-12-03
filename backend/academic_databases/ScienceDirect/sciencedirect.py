@@ -15,7 +15,7 @@ def verify_api_key(api_key):
 
 def sanitize_link_sciencedirect(untrusted_link):
     parsed_untrusted_link = urlparse(untrusted_link)
-    if parsed_untrusted_link.scheme == "https" and parsed_untrusted_link.netloc == "www.sciencedirect.com" and parsed_untrusted_link.path == "/inward/record.uri":
+    if parsed_untrusted_link.scheme == "https" and parsed_untrusted_link.netloc == "www.sciencedirect.com":
         trusted_link = untrusted_link
     else:
         trusted_link = "Potentially malicious link detected. Blocked for user safety."
