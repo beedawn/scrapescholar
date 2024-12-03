@@ -236,12 +236,10 @@ def post_search_no_route(keywords: List[str], articles: List[ArticleBase], db: S
 
     for article in articles:
         source = get_source_by_name(db, article.source)
-        print("article link")
-        print(article.link)
         format_article = ArticleCreate(
             title=article.title,
             date=datetime.strptime(article.date, date_format).date(),
-            link=HttpUrl(article.link),
+            link=article.link,
             relevance_score=article.relevance_score,
             abstract=article.abstract,
             citedby=article.citedby,
@@ -259,12 +257,13 @@ def get_full_article_response(db, search_id):
     for article in articles:
         user_data = get_user_data(db=db, article_id=article.article_id)
         source_name = get_source(db, article.source_id)
+        parsed_link = validate_links(source_name, article.link)
         article_data = SearchResult(
             article_id=article.article_id,
             title=article.title,
             date=article.date,
             citedby=article.citedby if article.citedby is not None else "?",
-            link=article.link,
+            link=parsed_link,
             abstract=article.abstract,
             document_type=article.document_type,
             source=source_name.name,
@@ -279,6 +278,17 @@ def get_full_article_response(db, search_id):
         response.append(article_data)
     return response
 
+def validate_links(source_name, link):
+    if source_name == "Scopus":
+        parsed_link = sanitize_link_scopus(link)
+    elif source_name == "ScienceDirect":
+        parsed_link = sanitize_link_sciencedirect(link)
+
+    elif validators.url(link):
+        parsed_link = link
+    else:
+        parsed_link = "Potentially malicious link detected. Blocked for user safety."
+    return parsed_link
 
 def initialize_full_article_response(current_user: User, db, search_id):
     articles = find_search_articles(db, search_id)
@@ -286,17 +296,7 @@ def initialize_full_article_response(current_user: User, db, search_id):
     for article in articles:
         user_data = create_user_data(db=db, user_id=current_user.user_id, article_id=article.article_id)
         source_name = get_source(db, article.source_id)
-        if source_name == "Scopus":
-            parsed_link = sanitize_link_scopus(article.link)
-        elif source_name == "ScienceDirect":
-            parsed_link = sanitize_link_sciencedirect(article.link)
-
-
-        else:
-            if validators.url(article.link):
-                parsed_link = article.link
-            else:
-                parsed_link = "Potentially malicious link detected. Blocked for user safety."
+        parsed_link = validate_links(source_name, article.link)
         article_data = SearchResult(
             article_id=article.article_id,
             title=article.title,
