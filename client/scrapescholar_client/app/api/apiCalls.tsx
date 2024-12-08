@@ -3,7 +3,7 @@ import httpStringGen from "@/app/api/httpString";
 import _ from 'lodash';
 import { APIKeyInterface } from "../components/SearchView/modal/APIKeyModal";
 const apiCalls = () => {
-  const host = _.escapeRegExp(process.env.NEXT_PUBLIC_HOST_IP);
+  const host = process.env.NEXT_PUBLIC_HOST_IP;
   const http_string = httpStringGen();
 
   interface NewArticle {
