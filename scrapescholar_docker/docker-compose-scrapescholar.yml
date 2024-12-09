@@ -8,6 +8,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     # ports:
     #   - "5432:5432"
+    restart: unless-stopped
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
@@ -59,6 +60,7 @@ services:
       AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET}
       AZURE_CLIENT_ID: ${AZURE_CLIENT_ID}
       AZURE_TENANT_ID: ${AZURE_TENANT_ID}
+    restart: unless-stopped
     volumes:
       - ./fastapi/start_fastapi.sh:/docker-entrypoint.d/start_fastapi.sh
       - ./nginx/certbot/conf/:/etc/nginx/ssl/:ro
@@ -73,6 +75,7 @@ services:
   
   scrapescholar_nginx:
     image: nginx
+    restart: unless-stopped
     volumes:
       - ./nginx/templates:/etc/nginx/templates
       # - ./nginx/default.conf:/etc/nginx/default.conf
@@ -106,6 +109,7 @@ services:
       context: ../client/scrapescholar_client  
       dockerfile: ../../scrapescholar_docker/nextjs/Dockerfile 
     working_dir: /app
+    restart: unless-stopped
     volumes:
       - ../client/scrapescholar_client:/app
 
