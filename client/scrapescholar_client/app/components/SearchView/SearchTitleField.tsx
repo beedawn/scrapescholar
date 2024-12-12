@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import apiCalls from '@/app/api/apiCalls';
 interface SearchTitleFieldProps {
     searchName: string;
@@ -20,6 +20,10 @@ const SearchTitleField: React.FC<SearchTitleFieldProps> =
         const handleClick = () => {
             setEditable(!editable)
         }
+
+    useEffect(()=>{
+    setEditableSearchName(searchName)
+    },[searchName])
         return (
             <>
                 <div data-testid="search-title">
